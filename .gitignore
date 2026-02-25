@@ -30,3 +30,6 @@ SeedSearch.iml
 # maven
 target/
 dependency-reduced-pom.xml
+
+# MacOS
+.DS_Store
