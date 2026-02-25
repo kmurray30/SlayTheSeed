@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.appender.rolling.action;
 
 import java.nio.file.Path;
@@ -8,14 +5,13 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 
 public interface PathCondition {
-    public static final PathCondition[] EMPTY_ARRAY = new PathCondition[0];
+   PathCondition[] EMPTY_ARRAY = new PathCondition[0];
 
-    public static PathCondition[] copy(PathCondition ... source) {
-        return source == null || source.length == 0 ? EMPTY_ARRAY : Arrays.copyOf(source, source.length);
-    }
+   static PathCondition[] copy(PathCondition... source) {
+      return source != null && source.length != 0 ? Arrays.copyOf(source, source.length) : EMPTY_ARRAY;
+   }
 
-    public void beforeFileTreeWalk();
+   void beforeFileTreeWalk();
 
-    public boolean accept(Path var1, Path var2, BasicFileAttributes var3);
+   boolean accept(final Path baseDir, final Path relativePath, final BasicFileAttributes attrs);
 }
-

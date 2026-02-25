@@ -1,15 +1,11 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.lookup;
 
 import org.apache.logging.log4j.core.LogEvent;
 
 public interface StrLookup {
-    public static final String CATEGORY = "Lookup";
+   String CATEGORY = "Lookup";
 
-    public String lookup(String var1);
+   String lookup(String key);
 
-    public String lookup(LogEvent var1, String var2);
+   String lookup(LogEvent event, String key);
 }
-

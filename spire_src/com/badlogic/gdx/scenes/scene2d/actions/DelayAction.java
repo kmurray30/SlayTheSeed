@@ -1,61 +1,53 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.scenes.scene2d.actions;
 
-import com.badlogic.gdx.scenes.scene2d.actions.DelegateAction;
+public class DelayAction extends DelegateAction {
+   private float duration;
+   private float time;
 
-public class DelayAction
-extends DelegateAction {
-    private float duration;
-    private float time;
+   public DelayAction() {
+   }
 
-    public DelayAction() {
-    }
+   public DelayAction(float duration) {
+      this.duration = duration;
+   }
 
-    public DelayAction(float duration) {
-        this.duration = duration;
-    }
+   @Override
+   protected boolean delegate(float delta) {
+      if (this.time < this.duration) {
+         this.time += delta;
+         if (this.time < this.duration) {
+            return false;
+         }
 
-    @Override
-    protected boolean delegate(float delta) {
-        if (this.time < this.duration) {
-            this.time += delta;
-            if (this.time < this.duration) {
-                return false;
-            }
-            delta = this.time - this.duration;
-        }
-        if (this.action == null) {
-            return true;
-        }
-        return this.action.act(delta);
-    }
+         delta = this.time - this.duration;
+      }
 
-    public void finish() {
-        this.time = this.duration;
-    }
+      return this.action == null ? true : this.action.act(delta);
+   }
 
-    @Override
-    public void restart() {
-        super.restart();
-        this.time = 0.0f;
-    }
+   public void finish() {
+      this.time = this.duration;
+   }
 
-    public float getTime() {
-        return this.time;
-    }
+   @Override
+   public void restart() {
+      super.restart();
+      this.time = 0.0F;
+   }
 
-    public void setTime(float time) {
-        this.time = time;
-    }
+   public float getTime() {
+      return this.time;
+   }
 
-    public float getDuration() {
-        return this.duration;
-    }
+   public void setTime(float time) {
+      this.time = time;
+   }
 
-    public void setDuration(float duration) {
-        this.duration = duration;
-    }
+   public float getDuration() {
+      return this.duration;
+   }
+
+   public void setDuration(float duration) {
+      this.duration = duration;
+   }
 }
-

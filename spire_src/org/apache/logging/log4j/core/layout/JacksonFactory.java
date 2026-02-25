@@ -1,18 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.fasterxml.jackson.core.PrettyPrinter
- *  com.fasterxml.jackson.core.util.DefaultPrettyPrinter
- *  com.fasterxml.jackson.core.util.MinimalPrettyPrinter
- *  com.fasterxml.jackson.databind.ObjectMapper
- *  com.fasterxml.jackson.databind.ObjectWriter
- *  com.fasterxml.jackson.databind.ser.FilterProvider
- *  com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter
- *  com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider
- *  com.fasterxml.jackson.dataformat.xml.util.DefaultXmlPrettyPrinter
- *  org.codehaus.stax2.XMLStreamWriter2
- */
 package org.apache.logging.log4j.core.layout;
 
 import com.fasterxml.jackson.core.PrettyPrinter;
@@ -20,11 +5,11 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.core.util.MinimalPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.dataformat.xml.util.DefaultXmlPrettyPrinter;
 import java.util.HashSet;
+import java.util.Set;
 import javax.xml.stream.XMLStreamException;
 import org.apache.logging.log4j.core.impl.Log4jLogEvent;
 import org.apache.logging.log4j.core.jackson.Log4jJsonObjectMapper;
@@ -33,221 +18,218 @@ import org.apache.logging.log4j.core.jackson.Log4jYamlObjectMapper;
 import org.codehaus.stax2.XMLStreamWriter2;
 
 abstract class JacksonFactory {
-    JacksonFactory() {
-    }
+   protected abstract String getPropertyNameForTimeMillis();
 
-    protected abstract String getPropertyNameForTimeMillis();
+   protected abstract String getPropertyNameForInstant();
 
-    protected abstract String getPropertyNameForInstant();
+   protected abstract String getPropertNameForContextMap();
 
-    protected abstract String getPropertNameForContextMap();
+   protected abstract String getPropertNameForSource();
 
-    protected abstract String getPropertNameForSource();
+   protected abstract String getPropertNameForNanoTime();
 
-    protected abstract String getPropertNameForNanoTime();
+   protected abstract PrettyPrinter newCompactPrinter();
 
-    protected abstract PrettyPrinter newCompactPrinter();
+   protected abstract ObjectMapper newObjectMapper();
 
-    protected abstract ObjectMapper newObjectMapper();
+   protected abstract PrettyPrinter newPrettyPrinter();
 
-    protected abstract PrettyPrinter newPrettyPrinter();
+   ObjectWriter newWriter(final boolean locationInfo, final boolean properties, final boolean compact) {
+      return this.newWriter(locationInfo, properties, compact, false);
+   }
 
-    ObjectWriter newWriter(boolean locationInfo, boolean properties, boolean compact) {
-        return this.newWriter(locationInfo, properties, compact, false);
-    }
+   ObjectWriter newWriter(final boolean locationInfo, final boolean properties, final boolean compact, final boolean includeMillis) {
+      SimpleFilterProvider filters = new SimpleFilterProvider();
+      Set<String> except = new HashSet<>(3);
+      if (!locationInfo) {
+         except.add(this.getPropertNameForSource());
+      }
 
-    ObjectWriter newWriter(boolean locationInfo, boolean properties, boolean compact, boolean includeMillis) {
-        SimpleFilterProvider filters = new SimpleFilterProvider();
-        HashSet<String> except = new HashSet<String>(3);
-        if (!locationInfo) {
-            except.add(this.getPropertNameForSource());
-        }
-        if (!properties) {
-            except.add(this.getPropertNameForContextMap());
-        }
-        if (includeMillis) {
-            except.add(this.getPropertyNameForInstant());
-        } else {
-            except.add(this.getPropertyNameForTimeMillis());
-        }
-        except.add(this.getPropertNameForNanoTime());
-        filters.addFilter(Log4jLogEvent.class.getName(), SimpleBeanPropertyFilter.serializeAllExcept(except));
-        ObjectWriter writer = this.newObjectMapper().writer(compact ? this.newCompactPrinter() : this.newPrettyPrinter());
-        return writer.with((FilterProvider)filters);
-    }
+      if (!properties) {
+         except.add(this.getPropertNameForContextMap());
+      }
 
-    static class Log4jXmlPrettyPrinter
-    extends DefaultXmlPrettyPrinter {
-        private static final long serialVersionUID = 1L;
+      if (includeMillis) {
+         except.add(this.getPropertyNameForInstant());
+      } else {
+         except.add(this.getPropertyNameForTimeMillis());
+      }
 
-        Log4jXmlPrettyPrinter(int nesting) {
-            this._nesting = nesting;
-        }
+      except.add(this.getPropertNameForNanoTime());
+      filters.addFilter(Log4jLogEvent.class.getName(), SimpleBeanPropertyFilter.serializeAllExcept(except));
+      ObjectWriter writer = this.newObjectMapper().writer(compact ? this.newCompactPrinter() : this.newPrettyPrinter());
+      return writer.with(filters);
+   }
 
-        public void writePrologLinefeed(XMLStreamWriter2 sw) throws XMLStreamException {
-        }
+   static class JSON extends JacksonFactory {
+      private final boolean encodeThreadContextAsList;
+      private final boolean includeStacktrace;
+      private final boolean stacktraceAsString;
+      private final boolean objectMessageAsJsonObject;
 
-        public DefaultXmlPrettyPrinter createInstance() {
-            return new Log4jXmlPrettyPrinter(1);
-        }
-    }
+      public JSON(
+         final boolean encodeThreadContextAsList, final boolean includeStacktrace, final boolean stacktraceAsString, final boolean objectMessageAsJsonObject
+      ) {
+         this.encodeThreadContextAsList = encodeThreadContextAsList;
+         this.includeStacktrace = includeStacktrace;
+         this.stacktraceAsString = stacktraceAsString;
+         this.objectMessageAsJsonObject = objectMessageAsJsonObject;
+      }
 
-    static class YAML
-    extends JacksonFactory {
-        private final boolean includeStacktrace;
-        private final boolean stacktraceAsString;
+      @Override
+      protected String getPropertNameForContextMap() {
+         return "contextMap";
+      }
 
-        public YAML(boolean includeStacktrace, boolean stacktraceAsString) {
-            this.includeStacktrace = includeStacktrace;
-            this.stacktraceAsString = stacktraceAsString;
-        }
+      @Override
+      protected String getPropertyNameForTimeMillis() {
+         return "timeMillis";
+      }
 
-        @Override
-        protected String getPropertyNameForTimeMillis() {
-            return "timeMillis";
-        }
+      @Override
+      protected String getPropertyNameForInstant() {
+         return "instant";
+      }
 
-        @Override
-        protected String getPropertyNameForInstant() {
-            return "instant";
-        }
+      @Override
+      protected String getPropertNameForSource() {
+         return "source";
+      }
 
-        @Override
-        protected String getPropertNameForContextMap() {
-            return "contextMap";
-        }
+      @Override
+      protected String getPropertNameForNanoTime() {
+         return "nanoTime";
+      }
 
-        @Override
-        protected String getPropertNameForSource() {
-            return "source";
-        }
+      @Override
+      protected PrettyPrinter newCompactPrinter() {
+         return new MinimalPrettyPrinter();
+      }
 
-        @Override
-        protected String getPropertNameForNanoTime() {
-            return "nanoTime";
-        }
+      @Override
+      protected ObjectMapper newObjectMapper() {
+         return new Log4jJsonObjectMapper(this.encodeThreadContextAsList, this.includeStacktrace, this.stacktraceAsString, this.objectMessageAsJsonObject);
+      }
 
-        @Override
-        protected PrettyPrinter newCompactPrinter() {
-            return new MinimalPrettyPrinter();
-        }
+      @Override
+      protected PrettyPrinter newPrettyPrinter() {
+         return new DefaultPrettyPrinter();
+      }
+   }
 
-        @Override
-        protected ObjectMapper newObjectMapper() {
-            return new Log4jYamlObjectMapper(false, this.includeStacktrace, this.stacktraceAsString);
-        }
+   static class Log4jXmlPrettyPrinter extends DefaultXmlPrettyPrinter {
+      private static final long serialVersionUID = 1L;
 
-        @Override
-        protected PrettyPrinter newPrettyPrinter() {
-            return new DefaultPrettyPrinter();
-        }
-    }
+      Log4jXmlPrettyPrinter(final int nesting) {
+         this._nesting = nesting;
+      }
 
-    static class XML
-    extends JacksonFactory {
-        static final int DEFAULT_INDENT = 1;
-        private final boolean includeStacktrace;
-        private final boolean stacktraceAsString;
+      public void writePrologLinefeed(final XMLStreamWriter2 sw) throws XMLStreamException {
+      }
 
-        public XML(boolean includeStacktrace, boolean stacktraceAsString) {
-            this.includeStacktrace = includeStacktrace;
-            this.stacktraceAsString = stacktraceAsString;
-        }
+      public DefaultXmlPrettyPrinter createInstance() {
+         return new JacksonFactory.Log4jXmlPrettyPrinter(1);
+      }
+   }
 
-        @Override
-        protected String getPropertyNameForTimeMillis() {
-            return "TimeMillis";
-        }
+   static class XML extends JacksonFactory {
+      static final int DEFAULT_INDENT = 1;
+      private final boolean includeStacktrace;
+      private final boolean stacktraceAsString;
 
-        @Override
-        protected String getPropertyNameForInstant() {
-            return "Instant";
-        }
+      public XML(final boolean includeStacktrace, final boolean stacktraceAsString) {
+         this.includeStacktrace = includeStacktrace;
+         this.stacktraceAsString = stacktraceAsString;
+      }
 
-        @Override
-        protected String getPropertNameForContextMap() {
-            return "ContextMap";
-        }
+      @Override
+      protected String getPropertyNameForTimeMillis() {
+         return "TimeMillis";
+      }
 
-        @Override
-        protected String getPropertNameForSource() {
-            return "Source";
-        }
+      @Override
+      protected String getPropertyNameForInstant() {
+         return "Instant";
+      }
 
-        @Override
-        protected String getPropertNameForNanoTime() {
-            return "nanoTime";
-        }
+      @Override
+      protected String getPropertNameForContextMap() {
+         return "ContextMap";
+      }
 
-        @Override
-        protected PrettyPrinter newCompactPrinter() {
-            return null;
-        }
+      @Override
+      protected String getPropertNameForSource() {
+         return "Source";
+      }
 
-        @Override
-        protected ObjectMapper newObjectMapper() {
-            return new Log4jXmlObjectMapper(this.includeStacktrace, this.stacktraceAsString);
-        }
+      @Override
+      protected String getPropertNameForNanoTime() {
+         return "nanoTime";
+      }
 
-        @Override
-        protected PrettyPrinter newPrettyPrinter() {
-            return new Log4jXmlPrettyPrinter(1);
-        }
-    }
+      @Override
+      protected PrettyPrinter newCompactPrinter() {
+         return null;
+      }
 
-    static class JSON
-    extends JacksonFactory {
-        private final boolean encodeThreadContextAsList;
-        private final boolean includeStacktrace;
-        private final boolean stacktraceAsString;
-        private final boolean objectMessageAsJsonObject;
+      @Override
+      protected ObjectMapper newObjectMapper() {
+         return new Log4jXmlObjectMapper(this.includeStacktrace, this.stacktraceAsString);
+      }
 
-        public JSON(boolean encodeThreadContextAsList, boolean includeStacktrace, boolean stacktraceAsString, boolean objectMessageAsJsonObject) {
-            this.encodeThreadContextAsList = encodeThreadContextAsList;
-            this.includeStacktrace = includeStacktrace;
-            this.stacktraceAsString = stacktraceAsString;
-            this.objectMessageAsJsonObject = objectMessageAsJsonObject;
-        }
+      @Override
+      protected PrettyPrinter newPrettyPrinter() {
+         return new JacksonFactory.Log4jXmlPrettyPrinter(1);
+      }
+   }
 
-        @Override
-        protected String getPropertNameForContextMap() {
-            return "contextMap";
-        }
+   static class YAML extends JacksonFactory {
+      private final boolean includeStacktrace;
+      private final boolean stacktraceAsString;
 
-        @Override
-        protected String getPropertyNameForTimeMillis() {
-            return "timeMillis";
-        }
+      public YAML(final boolean includeStacktrace, final boolean stacktraceAsString) {
+         this.includeStacktrace = includeStacktrace;
+         this.stacktraceAsString = stacktraceAsString;
+      }
 
-        @Override
-        protected String getPropertyNameForInstant() {
-            return "instant";
-        }
+      @Override
+      protected String getPropertyNameForTimeMillis() {
+         return "timeMillis";
+      }
 
-        @Override
-        protected String getPropertNameForSource() {
-            return "source";
-        }
+      @Override
+      protected String getPropertyNameForInstant() {
+         return "instant";
+      }
 
-        @Override
-        protected String getPropertNameForNanoTime() {
-            return "nanoTime";
-        }
+      @Override
+      protected String getPropertNameForContextMap() {
+         return "contextMap";
+      }
 
-        @Override
-        protected PrettyPrinter newCompactPrinter() {
-            return new MinimalPrettyPrinter();
-        }
+      @Override
+      protected String getPropertNameForSource() {
+         return "source";
+      }
 
-        @Override
-        protected ObjectMapper newObjectMapper() {
-            return new Log4jJsonObjectMapper(this.encodeThreadContextAsList, this.includeStacktrace, this.stacktraceAsString, this.objectMessageAsJsonObject);
-        }
+      @Override
+      protected String getPropertNameForNanoTime() {
+         return "nanoTime";
+      }
 
-        @Override
-        protected PrettyPrinter newPrettyPrinter() {
-            return new DefaultPrettyPrinter();
-        }
-    }
+      @Override
+      protected PrettyPrinter newCompactPrinter() {
+         return new MinimalPrettyPrinter();
+      }
+
+      @Override
+      protected ObjectMapper newObjectMapper() {
+         return new Log4jYamlObjectMapper(false, this.includeStacktrace, this.stacktraceAsString);
+      }
+
+      @Override
+      protected PrettyPrinter newPrettyPrinter() {
+         return new DefaultPrettyPrinter();
+      }
+   }
 }
-

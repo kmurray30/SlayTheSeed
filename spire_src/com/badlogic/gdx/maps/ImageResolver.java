@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.maps;
 
 import com.badlogic.gdx.assets.AssetManager;
@@ -10,48 +7,44 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ObjectMap;
 
 public interface ImageResolver {
-    public TextureRegion getImage(String var1);
+   TextureRegion getImage(String var1);
 
-    public static class TextureAtlasImageResolver
-    implements ImageResolver {
-        private final TextureAtlas atlas;
+   public static class AssetManagerImageResolver implements ImageResolver {
+      private final AssetManager assetManager;
 
-        public TextureAtlasImageResolver(TextureAtlas atlas) {
-            this.atlas = atlas;
-        }
+      public AssetManagerImageResolver(AssetManager assetManager) {
+         this.assetManager = assetManager;
+      }
 
-        @Override
-        public TextureRegion getImage(String name) {
-            return this.atlas.findRegion(name);
-        }
-    }
+      @Override
+      public TextureRegion getImage(String name) {
+         return new TextureRegion(this.assetManager.get(name, Texture.class));
+      }
+   }
 
-    public static class AssetManagerImageResolver
-    implements ImageResolver {
-        private final AssetManager assetManager;
+   public static class DirectImageResolver implements ImageResolver {
+      private final ObjectMap<String, Texture> images;
 
-        public AssetManagerImageResolver(AssetManager assetManager) {
-            this.assetManager = assetManager;
-        }
+      public DirectImageResolver(ObjectMap<String, Texture> images) {
+         this.images = images;
+      }
 
-        @Override
-        public TextureRegion getImage(String name) {
-            return new TextureRegion(this.assetManager.get(name, Texture.class));
-        }
-    }
+      @Override
+      public TextureRegion getImage(String name) {
+         return new TextureRegion(this.images.get(name));
+      }
+   }
 
-    public static class DirectImageResolver
-    implements ImageResolver {
-        private final ObjectMap<String, Texture> images;
+   public static class TextureAtlasImageResolver implements ImageResolver {
+      private final TextureAtlas atlas;
 
-        public DirectImageResolver(ObjectMap<String, Texture> images) {
-            this.images = images;
-        }
+      public TextureAtlasImageResolver(TextureAtlas atlas) {
+         this.atlas = atlas;
+      }
 
-        @Override
-        public TextureRegion getImage(String name) {
-            return new TextureRegion(this.images.get(name));
-        }
-    }
+      @Override
+      public TextureRegion getImage(String name) {
+         return this.atlas.findRegion(name);
+      }
+   }
 }
-

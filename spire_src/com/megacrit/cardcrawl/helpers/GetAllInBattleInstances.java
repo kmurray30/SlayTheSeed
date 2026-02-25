@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.helpers;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -9,32 +6,42 @@ import java.util.HashSet;
 import java.util.UUID;
 
 public class GetAllInBattleInstances {
-    public static HashSet<AbstractCard> get(UUID uuid) {
-        HashSet<AbstractCard> cards = new HashSet<AbstractCard>();
-        if (AbstractDungeon.player.cardInUse.uuid.equals(uuid)) {
-            cards.add(AbstractDungeon.player.cardInUse);
-        }
-        for (AbstractCard c : AbstractDungeon.player.drawPile.group) {
-            if (!c.uuid.equals(uuid)) continue;
-            cards.add(c);
-        }
-        for (AbstractCard c : AbstractDungeon.player.discardPile.group) {
-            if (!c.uuid.equals(uuid)) continue;
-            cards.add(c);
-        }
-        for (AbstractCard c : AbstractDungeon.player.exhaustPile.group) {
-            if (!c.uuid.equals(uuid)) continue;
-            cards.add(c);
-        }
-        for (AbstractCard c : AbstractDungeon.player.limbo.group) {
-            if (!c.uuid.equals(uuid)) continue;
-            cards.add(c);
-        }
-        for (AbstractCard c : AbstractDungeon.player.hand.group) {
-            if (!c.uuid.equals(uuid)) continue;
-            cards.add(c);
-        }
-        return cards;
-    }
-}
+   public static HashSet<AbstractCard> get(UUID uuid) {
+      HashSet<AbstractCard> cards = new HashSet<>();
+      if (AbstractDungeon.player.cardInUse.uuid.equals(uuid)) {
+         cards.add(AbstractDungeon.player.cardInUse);
+      }
 
+      for (AbstractCard c : AbstractDungeon.player.drawPile.group) {
+         if (c.uuid.equals(uuid)) {
+            cards.add(c);
+         }
+      }
+
+      for (AbstractCard cx : AbstractDungeon.player.discardPile.group) {
+         if (cx.uuid.equals(uuid)) {
+            cards.add(cx);
+         }
+      }
+
+      for (AbstractCard cxx : AbstractDungeon.player.exhaustPile.group) {
+         if (cxx.uuid.equals(uuid)) {
+            cards.add(cxx);
+         }
+      }
+
+      for (AbstractCard cxxx : AbstractDungeon.player.limbo.group) {
+         if (cxxx.uuid.equals(uuid)) {
+            cards.add(cxxx);
+         }
+      }
+
+      for (AbstractCard cxxxx : AbstractDungeon.player.hand.group) {
+         if (cxxxx.uuid.equals(uuid)) {
+            cards.add(cxxxx);
+         }
+      }
+
+      return cards;
+   }
+}

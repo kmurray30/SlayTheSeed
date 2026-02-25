@@ -1,11 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  org.osgi.framework.Bundle
- *  org.osgi.framework.BundleReference
- *  org.osgi.framework.FrameworkUtil
- */
 package org.apache.logging.log4j.core.osgi;
 
 import java.lang.ref.WeakReference;
@@ -21,121 +13,125 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.FrameworkUtil;
 
-public class BundleContextSelector
-extends ClassLoaderContextSelector {
-    @Override
-    public void shutdown(String fqcn, ClassLoader loader, boolean currentContext, boolean allContexts) {
-        Class<?> callerClass;
-        LoggerContext ctx = null;
-        Bundle bundle = null;
-        if (currentContext) {
-            ctx = ContextAnchor.THREAD_CONTEXT.get();
-            ContextAnchor.THREAD_CONTEXT.remove();
-        }
-        if (ctx == null && loader instanceof BundleReference) {
-            bundle = ((BundleReference)loader).getBundle();
-            ctx = this.getLoggerContext(bundle);
-            this.removeLoggerContext(ctx);
-        }
-        if (ctx == null && (callerClass = StackLocatorUtil.getCallerClass(fqcn)) != null) {
+public class BundleContextSelector extends ClassLoaderContextSelector {
+   @Override
+   public void shutdown(final String fqcn, final ClassLoader loader, final boolean currentContext, final boolean allContexts) {
+      LoggerContext ctx = null;
+      Bundle bundle = null;
+      if (currentContext) {
+         ctx = ContextAnchor.THREAD_CONTEXT.get();
+         ContextAnchor.THREAD_CONTEXT.remove();
+      }
+
+      if (ctx == null && loader instanceof BundleReference) {
+         bundle = ((BundleReference)loader).getBundle();
+         ctx = this.getLoggerContext(bundle);
+         this.removeLoggerContext(ctx);
+      }
+
+      if (ctx == null) {
+         Class<?> callerClass = StackLocatorUtil.getCallerClass(fqcn);
+         if (callerClass != null) {
             bundle = FrameworkUtil.getBundle(callerClass);
             ctx = this.getLoggerContext(FrameworkUtil.getBundle(callerClass));
             this.removeLoggerContext(ctx);
-        }
-        if (ctx == null) {
-            ctx = ContextAnchor.THREAD_CONTEXT.get();
-            ContextAnchor.THREAD_CONTEXT.remove();
-        }
-        if (ctx != null) {
-            ctx.stop(50L, TimeUnit.MILLISECONDS);
-        }
-        if (bundle != null && allContexts) {
-            Bundle[] bundles;
-            for (Bundle bdl : bundles = bundle.getBundleContext().getBundles()) {
-                ctx = this.getLoggerContext(bdl);
-                if (ctx == null) continue;
-                ctx.stop(50L, TimeUnit.MILLISECONDS);
-            }
-        }
-    }
+         }
+      }
 
-    private LoggerContext getLoggerContext(Bundle bundle) {
-        String name = Objects.requireNonNull(bundle, "No Bundle provided").getSymbolicName();
-        AtomicReference ref = (AtomicReference)CONTEXT_MAP.get(name);
-        if (ref != null && ref.get() != null) {
-            return (LoggerContext)((WeakReference)ref.get()).get();
-        }
-        return null;
-    }
+      if (ctx == null) {
+         ctx = ContextAnchor.THREAD_CONTEXT.get();
+         ContextAnchor.THREAD_CONTEXT.remove();
+      }
 
-    private void removeLoggerContext(LoggerContext context) {
-        CONTEXT_MAP.remove(context.getName());
-    }
+      if (ctx != null) {
+         ctx.stop(50L, TimeUnit.MILLISECONDS);
+      }
 
-    @Override
-    public boolean hasContext(String fqcn, ClassLoader loader, boolean currentContext) {
-        if (currentContext && ContextAnchor.THREAD_CONTEXT.get() != null) {
-            return ContextAnchor.THREAD_CONTEXT.get().isStarted();
-        }
-        if (loader instanceof BundleReference) {
-            return BundleContextSelector.hasContext(((BundleReference)loader).getBundle());
-        }
-        Class<?> callerClass = StackLocatorUtil.getCallerClass(fqcn);
-        if (callerClass != null) {
-            return BundleContextSelector.hasContext(FrameworkUtil.getBundle(callerClass));
-        }
-        return ContextAnchor.THREAD_CONTEXT.get() != null && ContextAnchor.THREAD_CONTEXT.get().isStarted();
-    }
+      if (bundle != null && allContexts) {
+         Bundle[] bundles = bundle.getBundleContext().getBundles();
 
-    @Override
-    public LoggerContext getContext(String fqcn, ClassLoader loader, boolean currentContext, URI configLocation) {
-        if (currentContext) {
-            LoggerContext ctx = ContextAnchor.THREAD_CONTEXT.get();
+         for (Bundle bdl : bundles) {
+            ctx = this.getLoggerContext(bdl);
             if (ctx != null) {
-                return ctx;
+               ctx.stop(50L, TimeUnit.MILLISECONDS);
             }
-            return this.getDefault();
-        }
-        if (loader instanceof BundleReference) {
-            return BundleContextSelector.locateContext(((BundleReference)loader).getBundle(), configLocation);
-        }
-        Class<?> callerClass = StackLocatorUtil.getCallerClass(fqcn);
-        if (callerClass != null) {
-            return BundleContextSelector.locateContext(FrameworkUtil.getBundle(callerClass), configLocation);
-        }
-        LoggerContext lc = ContextAnchor.THREAD_CONTEXT.get();
-        return lc == null ? this.getDefault() : lc;
-    }
+         }
+      }
+   }
 
-    private static boolean hasContext(Bundle bundle) {
-        String name = Objects.requireNonNull(bundle, "No Bundle provided").getSymbolicName();
-        AtomicReference ref = (AtomicReference)CONTEXT_MAP.get(name);
-        return ref != null && ref.get() != null && ((WeakReference)ref.get()).get() != null && ((LoggerContext)((WeakReference)ref.get()).get()).isStarted();
-    }
+   private LoggerContext getLoggerContext(final Bundle bundle) {
+      String name = Objects.requireNonNull(bundle, "No Bundle provided").getSymbolicName();
+      AtomicReference<WeakReference<LoggerContext>> ref = CONTEXT_MAP.get(name);
+      return ref != null && ref.get() != null ? ref.get().get() : null;
+   }
 
-    private static LoggerContext locateContext(Bundle bundle, URI configLocation) {
-        String name = Objects.requireNonNull(bundle, "No Bundle provided").getSymbolicName();
-        AtomicReference ref = (AtomicReference)CONTEXT_MAP.get(name);
-        if (ref == null) {
-            LoggerContext context = new LoggerContext(name, (Object)bundle, configLocation);
-            CONTEXT_MAP.putIfAbsent(name, new AtomicReference<WeakReference<LoggerContext>>(new WeakReference<LoggerContext>(context)));
-            return (LoggerContext)((WeakReference)((AtomicReference)CONTEXT_MAP.get(name)).get()).get();
-        }
-        WeakReference r = (WeakReference)ref.get();
-        LoggerContext ctx = (LoggerContext)r.get();
-        if (ctx == null) {
-            LoggerContext context = new LoggerContext(name, (Object)bundle, configLocation);
-            ref.compareAndSet(r, new WeakReference<LoggerContext>(context));
-            return (LoggerContext)((WeakReference)ref.get()).get();
-        }
-        URI oldConfigLocation = ctx.getConfigLocation();
-        if (oldConfigLocation == null && configLocation != null) {
-            LOGGER.debug("Setting bundle ({}) configuration to {}", (Object)name, (Object)configLocation);
-            ctx.setConfigLocation(configLocation);
-        } else if (oldConfigLocation != null && configLocation != null && !configLocation.equals(oldConfigLocation)) {
-            LOGGER.warn("locateContext called with URI [{}], but existing LoggerContext has URI [{}]", (Object)configLocation, (Object)oldConfigLocation);
-        }
-        return ctx;
-    }
+   private void removeLoggerContext(LoggerContext context) {
+      CONTEXT_MAP.remove(context.getName());
+   }
+
+   @Override
+   public boolean hasContext(final String fqcn, final ClassLoader loader, final boolean currentContext) {
+      if (currentContext && ContextAnchor.THREAD_CONTEXT.get() != null) {
+         return ContextAnchor.THREAD_CONTEXT.get().isStarted();
+      } else if (loader instanceof BundleReference) {
+         return hasContext(((BundleReference)loader).getBundle());
+      } else {
+         Class<?> callerClass = StackLocatorUtil.getCallerClass(fqcn);
+         return callerClass != null
+            ? hasContext(FrameworkUtil.getBundle(callerClass))
+            : ContextAnchor.THREAD_CONTEXT.get() != null && ContextAnchor.THREAD_CONTEXT.get().isStarted();
+      }
+   }
+
+   @Override
+   public LoggerContext getContext(final String fqcn, final ClassLoader loader, final boolean currentContext, final URI configLocation) {
+      if (currentContext) {
+         LoggerContext ctx = ContextAnchor.THREAD_CONTEXT.get();
+         return ctx != null ? ctx : this.getDefault();
+      } else if (loader instanceof BundleReference) {
+         return locateContext(((BundleReference)loader).getBundle(), configLocation);
+      } else {
+         Class<?> callerClass = StackLocatorUtil.getCallerClass(fqcn);
+         if (callerClass != null) {
+            return locateContext(FrameworkUtil.getBundle(callerClass), configLocation);
+         } else {
+            LoggerContext lc = ContextAnchor.THREAD_CONTEXT.get();
+            return lc == null ? this.getDefault() : lc;
+         }
+      }
+   }
+
+   private static boolean hasContext(final Bundle bundle) {
+      String name = Objects.requireNonNull(bundle, "No Bundle provided").getSymbolicName();
+      AtomicReference<WeakReference<LoggerContext>> ref = CONTEXT_MAP.get(name);
+      return ref != null && ref.get() != null && ref.get().get() != null && ref.get().get().isStarted();
+   }
+
+   private static LoggerContext locateContext(final Bundle bundle, final URI configLocation) {
+      String name = Objects.requireNonNull(bundle, "No Bundle provided").getSymbolicName();
+      AtomicReference<WeakReference<LoggerContext>> ref = CONTEXT_MAP.get(name);
+      if (ref == null) {
+         LoggerContext context = new LoggerContext(name, bundle, configLocation);
+         CONTEXT_MAP.putIfAbsent(name, new AtomicReference<>(new WeakReference<>(context)));
+         return CONTEXT_MAP.get(name).get().get();
+      } else {
+         WeakReference<LoggerContext> r = ref.get();
+         LoggerContext ctx = r.get();
+         if (ctx == null) {
+            LoggerContext context = new LoggerContext(name, bundle, configLocation);
+            ref.compareAndSet(r, new WeakReference<>(context));
+            return ref.get().get();
+         } else {
+            URI oldConfigLocation = ctx.getConfigLocation();
+            if (oldConfigLocation == null && configLocation != null) {
+               LOGGER.debug("Setting bundle ({}) configuration to {}", name, configLocation);
+               ctx.setConfigLocation(configLocation);
+            } else if (oldConfigLocation != null && configLocation != null && !configLocation.equals(oldConfigLocation)) {
+               LOGGER.warn("locateContext called with URI [{}], but existing LoggerContext has URI [{}]", configLocation, oldConfigLocation);
+            }
+
+            return ctx;
+         }
+      }
+   }
 }
-

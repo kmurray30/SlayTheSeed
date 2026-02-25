@@ -1,17 +1,13 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.layout;
 
 import java.nio.ByteBuffer;
 
 public interface ByteBufferDestination {
-    public ByteBuffer getByteBuffer();
+   ByteBuffer getByteBuffer();
 
-    public ByteBuffer drain(ByteBuffer var1);
+   ByteBuffer drain(ByteBuffer buf);
 
-    public void writeBytes(ByteBuffer var1);
+   void writeBytes(ByteBuffer data);
 
-    public void writeBytes(byte[] var1, int var2, int var3);
+   void writeBytes(byte[] data, int offset, int length);
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.cards.colorless;
 
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
@@ -13,38 +10,48 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-public class DeepBreath
-extends AbstractCard {
-    public static final String ID = "Deep Breath";
-    private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("Deep Breath");
+public class DeepBreath extends AbstractCard {
+   public static final String ID = "Deep Breath";
+   private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("Deep Breath");
 
-    public DeepBreath() {
-        super(ID, DeepBreath.cardStrings.NAME, "colorless/skill/deep_breath", 0, DeepBreath.cardStrings.DESCRIPTION, AbstractCard.CardType.SKILL, AbstractCard.CardColor.COLORLESS, AbstractCard.CardRarity.UNCOMMON, AbstractCard.CardTarget.SELF);
-        this.magicNumber = this.baseMagicNumber = 1;
-    }
+   public DeepBreath() {
+      super(
+         "Deep Breath",
+         cardStrings.NAME,
+         "colorless/skill/deep_breath",
+         0,
+         cardStrings.DESCRIPTION,
+         AbstractCard.CardType.SKILL,
+         AbstractCard.CardColor.COLORLESS,
+         AbstractCard.CardRarity.UNCOMMON,
+         AbstractCard.CardTarget.SELF
+      );
+      this.baseMagicNumber = 1;
+      this.magicNumber = this.baseMagicNumber;
+   }
 
-    @Override
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        if (AbstractDungeon.player.discardPile.size() > 0) {
-            this.addToBot(new EmptyDeckShuffleAction());
-            this.addToBot(new ShuffleAction(AbstractDungeon.player.drawPile, false));
-        }
-        this.addToBot(new DrawCardAction(p, this.magicNumber));
-    }
+   @Override
+   public void use(AbstractPlayer p, AbstractMonster m) {
+      if (AbstractDungeon.player.discardPile.size() > 0) {
+         this.addToBot(new EmptyDeckShuffleAction());
+         this.addToBot(new ShuffleAction(AbstractDungeon.player.drawPile, false));
+      }
 
-    @Override
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeMagicNumber(1);
-            this.rawDescription = DeepBreath.cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
-        }
-    }
+      this.addToBot(new DrawCardAction(p, this.magicNumber));
+   }
 
-    @Override
-    public AbstractCard makeCopy() {
-        return new DeepBreath();
-    }
+   @Override
+   public void upgrade() {
+      if (!this.upgraded) {
+         this.upgradeName();
+         this.upgradeMagicNumber(1);
+         this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
+         this.initializeDescription();
+      }
+   }
+
+   @Override
+   public AbstractCard makeCopy() {
+      return new DeepBreath();
+   }
 }
-

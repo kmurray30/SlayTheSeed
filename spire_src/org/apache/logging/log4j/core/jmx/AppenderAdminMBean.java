@@ -1,19 +1,15 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.jmx;
 
 public interface AppenderAdminMBean {
-    public static final String PATTERN = "org.apache.logging.log4j2:type=%s,component=Appenders,name=%s";
+   String PATTERN = "org.apache.logging.log4j2:type=%s,component=Appenders,name=%s";
 
-    public String getName();
+   String getName();
 
-    public String getLayout();
+   String getLayout();
 
-    public boolean isIgnoreExceptions();
+   boolean isIgnoreExceptions();
 
-    public String getErrorHandler();
+   String getErrorHandler();
 
-    public String getFilter();
+   String getFilter();
 }
-

@@ -1,11 +1,5 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.layout;
 
-import org.apache.logging.log4j.core.layout.ByteBufferDestination;
-
 public interface Encoder<T> {
-    public void encode(T var1, ByteBufferDestination var2);
+   void encode(T source, ByteBufferDestination destination);
 }
-

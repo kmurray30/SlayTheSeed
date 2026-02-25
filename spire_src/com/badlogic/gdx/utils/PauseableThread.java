@@ -1,66 +1,54 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.utils;
 
-public class PauseableThread
-extends Thread {
-    final Runnable runnable;
-    boolean paused = false;
-    boolean exit = false;
+public class PauseableThread extends Thread {
+   final Runnable runnable;
+   boolean paused = false;
+   boolean exit = false;
 
-    public PauseableThread(Runnable runnable) {
-        this.runnable = runnable;
-    }
+   public PauseableThread(Runnable runnable) {
+      this.runnable = runnable;
+   }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    @Override
-    public void run() {
-        while (true) {
-            PauseableThread pauseableThread = this;
-            synchronized (pauseableThread) {
-                try {
-                    while (this.paused) {
-                        this.wait();
-                    }
-                }
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+   @Override
+   public void run() {
+      while (true) {
+         synchronized (this) {
+            try {
+               while (this.paused) {
+                  this.wait();
+               }
+            } catch (InterruptedException var4) {
+               var4.printStackTrace();
             }
-            if (this.exit) {
-                return;
-            }
-            this.runnable.run();
-        }
-    }
+         }
 
-    public void onPause() {
-        this.paused = true;
-    }
+         if (this.exit) {
+            return;
+         }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    public void onResume() {
-        PauseableThread pauseableThread = this;
-        synchronized (pauseableThread) {
-            this.paused = false;
-            this.notifyAll();
-        }
-    }
+         this.runnable.run();
+      }
+   }
 
-    public boolean isPaused() {
-        return this.paused;
-    }
+   public void onPause() {
+      this.paused = true;
+   }
 
-    public void stopThread() {
-        this.exit = true;
-        if (this.paused) {
-            this.onResume();
-        }
-    }
+   public void onResume() {
+      synchronized (this) {
+         this.paused = false;
+         this.notifyAll();
+      }
+   }
+
+   public boolean isPaused() {
+      return this.paused;
+   }
+
+   public void stopThread() {
+      this.exit = true;
+      if (this.paused) {
+         this.onResume();
+      }
+   }
 }
-

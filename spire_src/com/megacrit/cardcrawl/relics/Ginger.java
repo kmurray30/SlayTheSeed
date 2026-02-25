@@ -1,26 +1,19 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.relics;
 
-import com.megacrit.cardcrawl.relics.AbstractRelic;
+public class Ginger extends AbstractRelic {
+   public static final String ID = "Ginger";
 
-public class Ginger
-extends AbstractRelic {
-    public static final String ID = "Ginger";
+   public Ginger() {
+      super("Ginger", "ginger.png", AbstractRelic.RelicTier.RARE, AbstractRelic.LandingSound.FLAT);
+   }
 
-    public Ginger() {
-        super(ID, "ginger.png", AbstractRelic.RelicTier.RARE, AbstractRelic.LandingSound.FLAT);
-    }
+   @Override
+   public String getUpdatedDescription() {
+      return this.DESCRIPTIONS[0];
+   }
 
-    @Override
-    public String getUpdatedDescription() {
-        return this.DESCRIPTIONS[0];
-    }
-
-    @Override
-    public AbstractRelic makeCopy() {
-        return new Ginger();
-    }
+   @Override
+   public AbstractRelic makeCopy() {
+      return new Ginger();
+   }
 }
-

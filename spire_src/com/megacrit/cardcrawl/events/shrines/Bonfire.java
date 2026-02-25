@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.events.shrines;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -15,141 +12,135 @@ import com.megacrit.cardcrawl.relics.Circlet;
 import com.megacrit.cardcrawl.relics.SpiritPoop;
 import com.megacrit.cardcrawl.vfx.cardManip.PurgeCardEffect;
 
-public class Bonfire
-extends AbstractImageEvent {
-    public static final String ID = "Bonfire Elementals";
-    private static final EventStrings eventStrings = CardCrawlGame.languagePack.getEventString("Bonfire Elementals");
-    public static final String NAME = Bonfire.eventStrings.NAME;
-    public static final String[] DESCRIPTIONS = Bonfire.eventStrings.DESCRIPTIONS;
-    public static final String[] OPTIONS = Bonfire.eventStrings.OPTIONS;
-    private static final String DIALOG_1 = DESCRIPTIONS[0];
-    private static final String DIALOG_2 = DESCRIPTIONS[1];
-    private static final String DIALOG_3 = DESCRIPTIONS[2];
-    private CUR_SCREEN screen = CUR_SCREEN.INTRO;
-    private AbstractCard offeredCard = null;
-    private boolean cardSelect = false;
+public class Bonfire extends AbstractImageEvent {
+   public static final String ID = "Bonfire Elementals";
+   private static final EventStrings eventStrings = CardCrawlGame.languagePack.getEventString("Bonfire Elementals");
+   public static final String NAME;
+   public static final String[] DESCRIPTIONS;
+   public static final String[] OPTIONS;
+   private static final String DIALOG_1;
+   private static final String DIALOG_2;
+   private static final String DIALOG_3;
+   private Bonfire.CUR_SCREEN screen = Bonfire.CUR_SCREEN.INTRO;
+   private AbstractCard offeredCard = null;
+   private boolean cardSelect = false;
 
-    public Bonfire() {
-        super(NAME, DIALOG_1, "images/events/bonfire.jpg");
-        this.imageEventText.setDialogOption(OPTIONS[0]);
-    }
+   public Bonfire() {
+      super(NAME, DIALOG_1, "images/events/bonfire.jpg");
+      this.imageEventText.setDialogOption(OPTIONS[0]);
+   }
 
-    @Override
-    public void onEnterRoom() {
-        if (Settings.AMBIANCE_ON) {
-            CardCrawlGame.sound.play("EVENT_GOOP");
-        }
-    }
+   @Override
+   public void onEnterRoom() {
+      if (Settings.AMBIANCE_ON) {
+         CardCrawlGame.sound.play("EVENT_GOOP");
+      }
+   }
 
-    @Override
-    public void update() {
-        super.update();
-        if (this.cardSelect && !AbstractDungeon.gridSelectScreen.selectedCards.isEmpty()) {
-            this.offeredCard = AbstractDungeon.gridSelectScreen.selectedCards.remove(0);
-            switch (this.offeredCard.rarity) {
-                case CURSE: {
-                    Bonfire.logMetricRemoveCardAndObtainRelic(ID, "Offered Curse", this.offeredCard, new SpiritPoop());
-                    break;
-                }
-                case BASIC: {
-                    Bonfire.logMetricCardRemoval(ID, "Offered Basic", this.offeredCard);
-                    break;
-                }
-                case COMMON: {
-                    Bonfire.logMetricCardRemovalAndHeal(ID, "Offered Common", this.offeredCard, 5);
-                }
-                case SPECIAL: {
-                    Bonfire.logMetricCardRemovalAndHeal(ID, "Offered Special", this.offeredCard, 5);
-                    break;
-                }
-                case UNCOMMON: {
-                    int heal = AbstractDungeon.player.maxHealth - AbstractDungeon.player.currentHealth;
-                    Bonfire.logMetricCardRemovalAndHeal(ID, "Offered Uncommon", this.offeredCard, heal);
-                    break;
-                }
-                case RARE: {
-                    int heal2 = AbstractDungeon.player.maxHealth - AbstractDungeon.player.currentHealth;
-                    Bonfire.logMetricCardRemovalHealMaxHPUp(ID, "Offered Rare", this.offeredCard, heal2, 10);
-                    break;
-                }
-            }
-            this.setReward(this.offeredCard.rarity);
-            AbstractDungeon.topLevelEffects.add(new PurgeCardEffect(this.offeredCard, Settings.WIDTH / 2, Settings.HEIGHT / 2));
-            AbstractDungeon.player.masterDeck.removeCard(this.offeredCard);
-            this.imageEventText.updateDialogOption(0, OPTIONS[1]);
-            this.screen = CUR_SCREEN.COMPLETE;
-            this.cardSelect = false;
-        }
-    }
+   @Override
+   public void update() {
+      super.update();
+      if (this.cardSelect && !AbstractDungeon.gridSelectScreen.selectedCards.isEmpty()) {
+         this.offeredCard = AbstractDungeon.gridSelectScreen.selectedCards.remove(0);
+         switch (this.offeredCard.rarity) {
+            case CURSE:
+               logMetricRemoveCardAndObtainRelic("Bonfire Elementals", "Offered Curse", this.offeredCard, new SpiritPoop());
+               break;
+            case BASIC:
+               logMetricCardRemoval("Bonfire Elementals", "Offered Basic", this.offeredCard);
+               break;
+            case COMMON:
+               logMetricCardRemovalAndHeal("Bonfire Elementals", "Offered Common", this.offeredCard, 5);
+            case SPECIAL:
+               logMetricCardRemovalAndHeal("Bonfire Elementals", "Offered Special", this.offeredCard, 5);
+               break;
+            case UNCOMMON:
+               int heal = AbstractDungeon.player.maxHealth - AbstractDungeon.player.currentHealth;
+               logMetricCardRemovalAndHeal("Bonfire Elementals", "Offered Uncommon", this.offeredCard, heal);
+               break;
+            case RARE:
+               int heal2 = AbstractDungeon.player.maxHealth - AbstractDungeon.player.currentHealth;
+               logMetricCardRemovalHealMaxHPUp("Bonfire Elementals", "Offered Rare", this.offeredCard, heal2, 10);
+         }
 
-    @Override
-    protected void buttonEffect(int buttonPressed) {
-        switch (this.screen) {
-            case INTRO: {
-                this.imageEventText.updateBodyText(DIALOG_2);
-                this.imageEventText.updateDialogOption(0, OPTIONS[2]);
-                this.screen = CUR_SCREEN.CHOOSE;
-                break;
-            }
-            case CHOOSE: {
-                if (CardGroup.getGroupWithoutBottledCards(AbstractDungeon.player.masterDeck.getPurgeableCards()).size() > 0) {
-                    AbstractDungeon.gridSelectScreen.open(CardGroup.getGroupWithoutBottledCards(AbstractDungeon.player.masterDeck.getPurgeableCards()), 1, OPTIONS[3], false, false, false, true);
-                    this.cardSelect = true;
-                    break;
-                }
-                this.imageEventText.updateBodyText(DESCRIPTIONS[4]);
-                this.imageEventText.updateDialogOption(0, OPTIONS[1]);
-                this.screen = CUR_SCREEN.COMPLETE;
-                break;
-            }
-            case COMPLETE: {
-                this.openMap();
-            }
-        }
-    }
+         this.setReward(this.offeredCard.rarity);
+         AbstractDungeon.topLevelEffects.add(new PurgeCardEffect(this.offeredCard, Settings.WIDTH / 2, Settings.HEIGHT / 2));
+         AbstractDungeon.player.masterDeck.removeCard(this.offeredCard);
+         this.imageEventText.updateDialogOption(0, OPTIONS[1]);
+         this.screen = Bonfire.CUR_SCREEN.COMPLETE;
+         this.cardSelect = false;
+      }
+   }
 
-    private void setReward(AbstractCard.CardRarity rarity) {
-        String dialog = DIALOG_3;
-        switch (rarity) {
-            case CURSE: {
-                dialog = dialog + DESCRIPTIONS[3];
-                if (!AbstractDungeon.player.hasRelic("Spirit Poop")) {
-                    AbstractDungeon.getCurrRoom().spawnRelicAndObtain((float)Settings.WIDTH / 2.0f, (float)Settings.HEIGHT / 2.0f, RelicLibrary.getRelic("Spirit Poop").makeCopy());
-                    break;
-                }
-                AbstractDungeon.getCurrRoom().spawnRelicAndObtain(this.drawX, this.drawY, new Circlet());
-                break;
+   @Override
+   protected void buttonEffect(int buttonPressed) {
+      switch (this.screen) {
+         case INTRO:
+            this.imageEventText.updateBodyText(DIALOG_2);
+            this.imageEventText.updateDialogOption(0, OPTIONS[2]);
+            this.screen = Bonfire.CUR_SCREEN.CHOOSE;
+            break;
+         case CHOOSE:
+            if (CardGroup.getGroupWithoutBottledCards(AbstractDungeon.player.masterDeck.getPurgeableCards()).size() > 0) {
+               AbstractDungeon.gridSelectScreen
+                  .open(CardGroup.getGroupWithoutBottledCards(AbstractDungeon.player.masterDeck.getPurgeableCards()), 1, OPTIONS[3], false, false, false, true);
+               this.cardSelect = true;
+            } else {
+               this.imageEventText.updateBodyText(DESCRIPTIONS[4]);
+               this.imageEventText.updateDialogOption(0, OPTIONS[1]);
+               this.screen = Bonfire.CUR_SCREEN.COMPLETE;
             }
-            case BASIC: {
-                dialog = dialog + DESCRIPTIONS[4];
-                break;
-            }
-            case COMMON: 
-            case SPECIAL: {
-                dialog = dialog + DESCRIPTIONS[5];
-                AbstractDungeon.player.heal(5);
-                break;
-            }
-            case UNCOMMON: {
-                dialog = dialog + DESCRIPTIONS[6];
-                AbstractDungeon.player.heal(AbstractDungeon.player.maxHealth);
-                break;
-            }
-            case RARE: {
-                dialog = dialog + DESCRIPTIONS[7];
-                AbstractDungeon.player.increaseMaxHp(10, false);
-                AbstractDungeon.player.heal(AbstractDungeon.player.maxHealth);
-                break;
-            }
-        }
-        this.imageEventText.updateBodyText(dialog);
-    }
+            break;
+         case COMPLETE:
+            this.openMap();
+      }
+   }
 
-    private static enum CUR_SCREEN {
-        INTRO,
-        CHOOSE,
-        COMPLETE;
+   private void setReward(AbstractCard.CardRarity rarity) {
+      String dialog = DIALOG_3;
+      switch (rarity) {
+         case CURSE:
+            dialog = dialog + DESCRIPTIONS[3];
+            if (!AbstractDungeon.player.hasRelic("Spirit Poop")) {
+               AbstractDungeon.getCurrRoom()
+                  .spawnRelicAndObtain(Settings.WIDTH / 2.0F, Settings.HEIGHT / 2.0F, RelicLibrary.getRelic("Spirit Poop").makeCopy());
+            } else {
+               AbstractDungeon.getCurrRoom().spawnRelicAndObtain(this.drawX, this.drawY, new Circlet());
+            }
+            break;
+         case BASIC:
+            dialog = dialog + DESCRIPTIONS[4];
+            break;
+         case COMMON:
+         case SPECIAL:
+            dialog = dialog + DESCRIPTIONS[5];
+            AbstractDungeon.player.heal(5);
+            break;
+         case UNCOMMON:
+            dialog = dialog + DESCRIPTIONS[6];
+            AbstractDungeon.player.heal(AbstractDungeon.player.maxHealth);
+            break;
+         case RARE:
+            dialog = dialog + DESCRIPTIONS[7];
+            AbstractDungeon.player.increaseMaxHp(10, false);
+            AbstractDungeon.player.heal(AbstractDungeon.player.maxHealth);
+      }
 
-    }
+      this.imageEventText.updateBodyText(dialog);
+   }
+
+   static {
+      NAME = eventStrings.NAME;
+      DESCRIPTIONS = eventStrings.DESCRIPTIONS;
+      OPTIONS = eventStrings.OPTIONS;
+      DIALOG_1 = DESCRIPTIONS[0];
+      DIALOG_2 = DESCRIPTIONS[1];
+      DIALOG_3 = DESCRIPTIONS[2];
+   }
+
+   private static enum CUR_SCREEN {
+      INTRO,
+      CHOOSE,
+      COMPLETE;
+   }
 }
-

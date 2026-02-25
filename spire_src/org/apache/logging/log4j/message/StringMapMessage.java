@@ -1,33 +1,25 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.message;
 
 import java.util.Map;
-import org.apache.logging.log4j.message.AsynchronouslyFormattable;
-import org.apache.logging.log4j.message.MapMessage;
 import org.apache.logging.log4j.util.PerformanceSensitive;
 
 @AsynchronouslyFormattable
-@PerformanceSensitive(value={"allocation"})
-public class StringMapMessage
-extends MapMessage<StringMapMessage, String> {
-    private static final long serialVersionUID = 1L;
+@PerformanceSensitive("allocation")
+public class StringMapMessage extends MapMessage<StringMapMessage, String> {
+   private static final long serialVersionUID = 1L;
 
-    public StringMapMessage() {
-    }
+   public StringMapMessage() {
+   }
 
-    public StringMapMessage(int initialCapacity) {
-        super(initialCapacity);
-    }
+   public StringMapMessage(final int initialCapacity) {
+      super(initialCapacity);
+   }
 
-    public StringMapMessage(Map<String, String> map) {
-        super(map);
-    }
+   public StringMapMessage(final Map<String, String> map) {
+      super(map);
+   }
 
-    @Override
-    public StringMapMessage newInstance(Map<String, String> map) {
-        return new StringMapMessage(map);
-    }
+   public StringMapMessage newInstance(final Map<String, String> map) {
+      return new StringMapMessage(map);
+   }
 }
-

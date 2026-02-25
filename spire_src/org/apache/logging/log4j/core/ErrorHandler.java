@@ -1,15 +1,9 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core;
 
-import org.apache.logging.log4j.core.LogEvent;
-
 public interface ErrorHandler {
-    public void error(String var1);
+   void error(String msg);
 
-    public void error(String var1, Throwable var2);
+   void error(String msg, Throwable t);
 
-    public void error(String var1, LogEvent var2, Throwable var3);
+   void error(String msg, LogEvent event, Throwable t);
 }
-

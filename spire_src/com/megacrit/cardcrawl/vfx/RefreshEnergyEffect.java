@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx;
 
 import com.badlogic.gdx.Gdx;
@@ -10,46 +7,58 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
-import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
-public class RefreshEnergyEffect
-extends AbstractGameEffect {
-    private static final float EFFECT_DUR = 0.4f;
-    private float scale = Settings.scale / 1.2f;
-    private Color color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-    private TextureAtlas.AtlasRegion img = ImageMaster.WHITE_RING;
-    private float x;
-    private float y;
+public class RefreshEnergyEffect extends AbstractGameEffect {
+   private static final float EFFECT_DUR = 0.4F;
+   private float scale;
+   private Color color;
+   private TextureAtlas.AtlasRegion img;
+   private float x;
+   private float y;
 
-    public RefreshEnergyEffect() {
-        this.x = 198.0f * Settings.scale - (float)this.img.packedWidth / 2.0f;
-        this.y = 190.0f * Settings.scale - (float)this.img.packedHeight / 2.0f;
-        this.duration = 0.4f;
-    }
+   public RefreshEnergyEffect() {
+      this.scale = Settings.scale / 1.2F;
+      this.color = new Color(1.0F, 1.0F, 1.0F, 1.0F);
+      this.img = ImageMaster.WHITE_RING;
+      this.x = 198.0F * Settings.scale - this.img.packedWidth / 2.0F;
+      this.y = 190.0F * Settings.scale - this.img.packedHeight / 2.0F;
+      this.duration = 0.4F;
+   }
 
-    @Override
-    public void update() {
-        this.duration -= Gdx.graphics.getDeltaTime();
-        this.scale *= 1.0f + Gdx.graphics.getDeltaTime() * 2.5f;
-        this.color.a = Interpolation.fade.apply(0.0f, 0.75f, this.duration / 0.4f);
-        if (this.color.a < 0.0f) {
-            this.color.a = 0.0f;
-        }
-        if (this.duration < 0.0f) {
-            this.isDone = true;
-        }
-    }
+   @Override
+   public void update() {
+      this.duration = this.duration - Gdx.graphics.getDeltaTime();
+      this.scale = this.scale * (1.0F + Gdx.graphics.getDeltaTime() * 2.5F);
+      this.color.a = Interpolation.fade.apply(0.0F, 0.75F, this.duration / 0.4F);
+      if (this.color.a < 0.0F) {
+         this.color.a = 0.0F;
+      }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        sb.setColor(this.color);
-        sb.setBlendFunction(770, 1);
-        sb.draw(this.img, this.x, this.y, (float)this.img.packedWidth / 2.0f, (float)this.img.packedHeight / 2.0f, this.img.packedWidth, this.img.packedHeight, this.scale * 1.5f, this.scale * 1.5f, this.rotation);
-        sb.setBlendFunction(770, 771);
-    }
+      if (this.duration < 0.0F) {
+         this.isDone = true;
+      }
+   }
 
-    @Override
-    public void dispose() {
-    }
+   @Override
+   public void render(SpriteBatch sb) {
+      sb.setColor(this.color);
+      sb.setBlendFunction(770, 1);
+      sb.draw(
+         this.img,
+         this.x,
+         this.y,
+         this.img.packedWidth / 2.0F,
+         this.img.packedHeight / 2.0F,
+         this.img.packedWidth,
+         this.img.packedHeight,
+         this.scale * 1.5F,
+         this.scale * 1.5F,
+         this.rotation
+      );
+      sb.setBlendFunction(770, 771);
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

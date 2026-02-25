@@ -1,25 +1,21 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.jmx;
 
 public interface LoggerConfigAdminMBean {
-    public static final String PATTERN = "org.apache.logging.log4j2:type=%s,component=Loggers,name=%s";
+   String PATTERN = "org.apache.logging.log4j2:type=%s,component=Loggers,name=%s";
 
-    public String getName();
+   String getName();
 
-    public String getLevel();
+   String getLevel();
 
-    public void setLevel(String var1);
+   void setLevel(String level);
 
-    public boolean isAdditive();
+   boolean isAdditive();
 
-    public void setAdditive(boolean var1);
+   void setAdditive(boolean additive);
 
-    public boolean isIncludeLocation();
+   boolean isIncludeLocation();
 
-    public String getFilter();
+   String getFilter();
 
-    public String[] getAppenderRefs();
+   String[] getAppenderRefs();
 }
-

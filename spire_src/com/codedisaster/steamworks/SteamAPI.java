@@ -1,85 +1,81 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.codedisaster.steamworks;
 
-import com.codedisaster.steamworks.SteamException;
-import com.codedisaster.steamworks.SteamSharedLibraryLoader;
 import java.io.PrintStream;
 
 public class SteamAPI {
-    private static boolean isRunning = false;
-    private static boolean isNativeAPILoaded = false;
+   private static boolean isRunning = false;
+   private static boolean isNativeAPILoaded = false;
 
-    public static void loadLibraries() throws SteamException {
-        SteamAPI.loadLibraries(null);
-    }
+   public static void loadLibraries() throws SteamException {
+      loadLibraries(null);
+   }
 
-    public static void loadLibraries(String libraryPath) throws SteamException {
-        if (isNativeAPILoaded) {
-            return;
-        }
-        if (libraryPath == null && SteamSharedLibraryLoader.DEBUG) {
+   public static void loadLibraries(String libraryPath) throws SteamException {
+      if (!isNativeAPILoaded) {
+         if (libraryPath == null && SteamSharedLibraryLoader.DEBUG) {
             String sdkPath = SteamSharedLibraryLoader.getSdkRedistributableBinPath();
             SteamSharedLibraryLoader.loadLibrary("steam_api", sdkPath);
-        } else {
+         } else {
             SteamSharedLibraryLoader.loadLibrary("steam_api", libraryPath);
-        }
-        SteamSharedLibraryLoader.loadLibrary("steamworks4j", libraryPath);
-        isNativeAPILoaded = true;
-    }
+         }
 
-    public static void skipLoadLibraries() {
-        isNativeAPILoaded = true;
-    }
+         SteamSharedLibraryLoader.loadLibrary("steamworks4j", libraryPath);
+         isNativeAPILoaded = true;
+      }
+   }
 
-    public static boolean restartAppIfNecessary(int appId) throws SteamException {
-        if (!isNativeAPILoaded) {
-            throw new SteamException("Native libraries not loaded.\nEnsure to call SteamAPI.loadLibraries() first!");
-        }
-        return SteamAPI.nativeRestartAppIfNecessary(appId);
-    }
+   public static void skipLoadLibraries() {
+      isNativeAPILoaded = true;
+   }
 
-    public static boolean init() throws SteamException {
-        if (!isNativeAPILoaded) {
-            throw new SteamException("Native libraries not loaded.\nEnsure to call SteamAPI.loadLibraries() first!");
-        }
-        isRunning = SteamAPI.nativeInit();
-        return isRunning;
-    }
+   public static boolean restartAppIfNecessary(int appId) throws SteamException {
+      if (!isNativeAPILoaded) {
+         throw new SteamException("Native libraries not loaded.\nEnsure to call SteamAPI.loadLibraries() first!");
+      } else {
+         return nativeRestartAppIfNecessary(appId);
+      }
+   }
 
-    public static void shutdown() {
-        isRunning = false;
-        SteamAPI.nativeShutdown();
-    }
+   public static boolean init() throws SteamException {
+      if (!isNativeAPILoaded) {
+         throw new SteamException("Native libraries not loaded.\nEnsure to call SteamAPI.loadLibraries() first!");
+      } else {
+         isRunning = nativeInit();
+         return isRunning;
+      }
+   }
 
-    public static boolean isSteamRunning() {
-        return SteamAPI.isSteamRunning(false);
-    }
+   public static void shutdown() {
+      isRunning = false;
+      nativeShutdown();
+   }
 
-    public static boolean isSteamRunning(boolean checkNative) {
-        return isRunning && (!checkNative || SteamAPI.isSteamRunningNative());
-    }
+   public static boolean isSteamRunning() {
+      return isSteamRunning(false);
+   }
 
-    public static void printDebugInfo(PrintStream stream) {
-        stream.println("  Steam API initialized: " + isRunning);
-        stream.println("  Steam client active: " + SteamAPI.isSteamRunning());
-    }
+   public static boolean isSteamRunning(boolean checkNative) {
+      return isRunning && (!checkNative || isSteamRunningNative());
+   }
 
-    static boolean isIsNativeAPILoaded() {
-        return isNativeAPILoaded;
-    }
+   public static void printDebugInfo(PrintStream stream) {
+      stream.println("  Steam API initialized: " + isRunning);
+      stream.println("  Steam client active: " + isSteamRunning());
+   }
 
-    private static native boolean nativeRestartAppIfNecessary(int var0);
+   static boolean isIsNativeAPILoaded() {
+      return isNativeAPILoaded;
+   }
 
-    public static native void releaseCurrentThreadMemory();
+   private static native boolean nativeRestartAppIfNecessary(int var0);
 
-    private static native boolean nativeInit();
+   public static native void releaseCurrentThreadMemory();
 
-    private static native void nativeShutdown();
+   private static native boolean nativeInit();
 
-    public static native void runCallbacks();
+   private static native void nativeShutdown();
 
-    private static native boolean isSteamRunningNative();
+   public static native void runCallbacks();
+
+   private static native boolean isSteamRunningNative();
 }
-

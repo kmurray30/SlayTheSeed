@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.gikk.twirk.types.usernotice;
 
 import com.gikk.twirk.types.AbstractEmoteMessage;
@@ -9,22 +6,20 @@ import com.gikk.twirk.types.usernotice.subtype.Ritual;
 import com.gikk.twirk.types.usernotice.subtype.Subscription;
 import java.util.Optional;
 
-public interface Usernotice
-extends AbstractEmoteMessage {
-    public String getMessage();
+public interface Usernotice extends AbstractEmoteMessage {
+   String getMessage();
 
-    public String getSystemMessage();
+   String getSystemMessage();
 
-    public boolean isSubscription();
+   boolean isSubscription();
 
-    public Optional<Subscription> getSubscription();
+   Optional<Subscription> getSubscription();
 
-    public boolean isRaid();
+   boolean isRaid();
 
-    public Optional<Raid> getRaid();
+   Optional<Raid> getRaid();
 
-    public boolean isRitual();
+   boolean isRitual();
 
-    public Optional<Ritual> getRitual();
+   Optional<Ritual> getRitual();
 }
-

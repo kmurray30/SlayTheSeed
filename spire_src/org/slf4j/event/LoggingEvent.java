@@ -1,26 +1,21 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.slf4j.event;
 
 import org.slf4j.Marker;
-import org.slf4j.event.Level;
 
 public interface LoggingEvent {
-    public Level getLevel();
+   Level getLevel();
 
-    public Marker getMarker();
+   Marker getMarker();
 
-    public String getLoggerName();
+   String getLoggerName();
 
-    public String getMessage();
+   String getMessage();
 
-    public String getThreadName();
+   String getThreadName();
 
-    public Object[] getArgumentArray();
+   Object[] getArgumentArray();
 
-    public long getTimeStamp();
+   long getTimeStamp();
 
-    public Throwable getThrowable();
+   Throwable getThrowable();
 }
-

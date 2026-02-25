@@ -1,32 +1,25 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.config.builder.api;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.builder.api.Component;
-import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilder;
 import org.apache.logging.log4j.core.util.Builder;
 
-public interface ComponentBuilder<T extends ComponentBuilder<T>>
-extends Builder<Component> {
-    public T addAttribute(String var1, String var2);
+public interface ComponentBuilder<T extends ComponentBuilder<T>> extends Builder<Component> {
+   T addAttribute(String key, String value);
 
-    public T addAttribute(String var1, Level var2);
+   T addAttribute(String key, Level level);
 
-    public T addAttribute(String var1, Enum<?> var2);
+   T addAttribute(String key, Enum<?> value);
 
-    public T addAttribute(String var1, int var2);
+   T addAttribute(String key, int value);
 
-    public T addAttribute(String var1, boolean var2);
+   T addAttribute(String key, boolean value);
 
-    public T addAttribute(String var1, Object var2);
+   T addAttribute(String key, Object value);
 
-    public T addComponent(ComponentBuilder<?> var1);
+   T addComponent(ComponentBuilder<?> builder);
 
-    public String getName();
+   String getName();
 
-    public ConfigurationBuilder<? extends Configuration> getBuilder();
+   ConfigurationBuilder<? extends Configuration> getBuilder();
 }
-

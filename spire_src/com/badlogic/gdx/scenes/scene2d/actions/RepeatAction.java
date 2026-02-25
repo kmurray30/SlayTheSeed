@@ -1,56 +1,54 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.scenes.scene2d.actions;
 
-import com.badlogic.gdx.scenes.scene2d.actions.DelegateAction;
+public class RepeatAction extends DelegateAction {
+   public static final int FOREVER = -1;
+   private int repeatCount;
+   private int executedCount;
+   private boolean finished;
 
-public class RepeatAction
-extends DelegateAction {
-    public static final int FOREVER = -1;
-    private int repeatCount;
-    private int executedCount;
-    private boolean finished;
-
-    @Override
-    protected boolean delegate(float delta) {
-        if (this.executedCount == this.repeatCount) {
-            return true;
-        }
-        if (this.action.act(delta)) {
+   @Override
+   protected boolean delegate(float delta) {
+      if (this.executedCount == this.repeatCount) {
+         return true;
+      } else {
+         if (this.action.act(delta)) {
             if (this.finished) {
-                return true;
+               return true;
             }
+
             if (this.repeatCount > 0) {
-                ++this.executedCount;
+               this.executedCount++;
             }
+
             if (this.executedCount == this.repeatCount) {
-                return true;
+               return true;
             }
+
             if (this.action != null) {
-                this.action.restart();
+               this.action.restart();
             }
-        }
-        return false;
-    }
+         }
 
-    public void finish() {
-        this.finished = true;
-    }
+         return false;
+      }
+   }
 
-    @Override
-    public void restart() {
-        super.restart();
-        this.executedCount = 0;
-        this.finished = false;
-    }
+   public void finish() {
+      this.finished = true;
+   }
 
-    public void setCount(int count) {
-        this.repeatCount = count;
-    }
+   @Override
+   public void restart() {
+      super.restart();
+      this.executedCount = 0;
+      this.finished = false;
+   }
 
-    public int getCount() {
-        return this.repeatCount;
-    }
+   public void setCount(int count) {
+      this.repeatCount = count;
+   }
+
+   public int getCount() {
+      return this.repeatCount;
+   }
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.helpers;
 
 import com.badlogic.gdx.Gdx;
@@ -10,102 +7,96 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.megacrit.cardcrawl.core.Settings;
 
 public class ScreenShake {
-    private float x = 0.0f;
-    private float duration = 0.0f;
-    private float startDuration = 0.0f;
-    private float intensityValue;
-    private float intervalSpeed;
-    private boolean vertical;
+   private float x = 0.0F;
+   private float duration = 0.0F;
+   private float startDuration = 0.0F;
+   private float intensityValue;
+   private float intervalSpeed;
+   private boolean vertical;
 
-    public void shake(ShakeIntensity intensity, ShakeDur dur, boolean isVertical) {
-        this.startDuration = this.duration = this.getDuration(dur);
-        this.intensityValue = this.getIntensity(intensity);
-        this.vertical = isVertical;
-        this.intervalSpeed = 0.3f;
-    }
+   public void shake(ScreenShake.ShakeIntensity intensity, ScreenShake.ShakeDur dur, boolean isVertical) {
+      this.duration = this.getDuration(dur);
+      this.startDuration = this.duration;
+      this.intensityValue = this.getIntensity(intensity);
+      this.vertical = isVertical;
+      this.intervalSpeed = 0.3F;
+   }
 
-    public void rumble(float dur) {
-        this.duration = dur;
-        this.startDuration = dur;
-        this.intensityValue = 10.0f;
-        this.vertical = false;
-        this.intervalSpeed = 0.7f;
-    }
+   public void rumble(float dur) {
+      this.duration = dur;
+      this.startDuration = dur;
+      this.intensityValue = 10.0F;
+      this.vertical = false;
+      this.intervalSpeed = 0.7F;
+   }
 
-    public void mildRumble(float dur) {
-        this.duration = dur;
-        this.startDuration = dur;
-        this.intensityValue = 3.0f;
-        this.vertical = false;
-        this.intervalSpeed = 0.7f;
-    }
+   public void mildRumble(float dur) {
+      this.duration = dur;
+      this.startDuration = dur;
+      this.intensityValue = 3.0F;
+      this.vertical = false;
+      this.intervalSpeed = 0.7F;
+   }
 
-    public void update(FitViewport viewport) {
-        if (Settings.HORIZ_LETTERBOX_AMT != 0 || Settings.VERT_LETTERBOX_AMT != 0) {
-            return;
-        }
-        if (this.duration != 0.0f) {
-            this.duration -= Gdx.graphics.getDeltaTime();
-            if (this.duration < 0.0f) {
-                this.duration = 0.0f;
-                viewport.update(Settings.M_W, Settings.M_H);
-                return;
+   public void update(FitViewport viewport) {
+      if (Settings.HORIZ_LETTERBOX_AMT == 0 && Settings.VERT_LETTERBOX_AMT == 0) {
+         if (this.duration != 0.0F) {
+            this.duration = this.duration - Gdx.graphics.getDeltaTime();
+            if (this.duration < 0.0F) {
+               this.duration = 0.0F;
+               viewport.update(Settings.M_W, Settings.M_H);
+               return;
             }
-            float tmp = Interpolation.fade.apply(0.1f, this.intensityValue, this.duration / this.startDuration);
+
+            float tmp = Interpolation.fade.apply(0.1F, this.intensityValue, this.duration / this.startDuration);
             this.x = MathUtils.cosDeg((float)(System.currentTimeMillis() % 360L) / this.intervalSpeed) * tmp;
             if (Settings.SCREEN_SHAKE) {
-                if (this.vertical) {
-                    viewport.update(Settings.M_W, (int)((float)Settings.M_H + Math.abs(this.x)));
-                } else {
-                    viewport.update((int)((float)Settings.M_W + this.x), Settings.M_H);
-                }
+               if (this.vertical) {
+                  viewport.update(Settings.M_W, (int)(Settings.M_H + Math.abs(this.x)));
+               } else {
+                  viewport.update((int)(Settings.M_W + this.x), Settings.M_H);
+               }
             }
-        }
-    }
+         }
+      }
+   }
 
-    private float getIntensity(ShakeIntensity intensity) {
-        switch (intensity) {
-            case LOW: {
-                return 20.0f * Settings.scale;
-            }
-            case MED: {
-                return 50.0f * Settings.scale;
-            }
-        }
-        return 100.0f * Settings.scale;
-    }
+   private float getIntensity(ScreenShake.ShakeIntensity intensity) {
+      switch (intensity) {
+         case LOW:
+            return 20.0F * Settings.scale;
+         case MED:
+            return 50.0F * Settings.scale;
+         default:
+            return 100.0F * Settings.scale;
+      }
+   }
 
-    private float getDuration(ShakeDur dur) {
-        switch (dur) {
-            case SHORT: {
-                return 0.3f;
-            }
-            case MED: {
-                return 0.5f;
-            }
-            case LONG: {
-                return 1.0f;
-            }
-            case XLONG: {
-                return 3.0f;
-            }
-        }
-        return 1.0f;
-    }
+   private float getDuration(ScreenShake.ShakeDur dur) {
+      switch (dur) {
+         case SHORT:
+            return 0.3F;
+         case MED:
+            return 0.5F;
+         case LONG:
+            return 1.0F;
+         case XLONG:
+            return 3.0F;
+         default:
+            return 1.0F;
+      }
+   }
 
-    public static enum ShakeDur {
-        SHORT,
-        MED,
-        LONG,
-        XLONG;
+   public static enum ShakeDur {
+      SHORT,
+      MED,
+      LONG,
+      XLONG;
+   }
 
-    }
-
-    public static enum ShakeIntensity {
-        LOW,
-        MED,
-        HIGH;
-
-    }
+   public static enum ShakeIntensity {
+      LOW,
+      MED,
+      HIGH;
+   }
 }
-

@@ -1,35 +1,29 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl.util.glu;
 
-import org.lwjgl.util.glu.GLUtessellatorCallback;
-
 public interface GLUtessellator {
-    public void gluDeleteTess();
+   void gluDeleteTess();
 
-    public void gluTessProperty(int var1, double var2);
+   void gluTessProperty(int var1, double var2);
 
-    public void gluGetTessProperty(int var1, double[] var2, int var3);
+   void gluGetTessProperty(int var1, double[] var2, int var3);
 
-    public void gluTessNormal(double var1, double var3, double var5);
+   void gluTessNormal(double var1, double var3, double var5);
 
-    public void gluTessCallback(int var1, GLUtessellatorCallback var2);
+   void gluTessCallback(int var1, GLUtessellatorCallback var2);
 
-    public void gluTessVertex(double[] var1, int var2, Object var3);
+   void gluTessVertex(double[] var1, int var2, Object var3);
 
-    public void gluTessBeginPolygon(Object var1);
+   void gluTessBeginPolygon(Object var1);
 
-    public void gluTessBeginContour();
+   void gluTessBeginContour();
 
-    public void gluTessEndContour();
+   void gluTessEndContour();
 
-    public void gluTessEndPolygon();
+   void gluTessEndPolygon();
 
-    public void gluBeginPolygon();
+   void gluBeginPolygon();
 
-    public void gluNextContour(int var1);
+   void gluNextContour(int var1);
 
-    public void gluEndPolygon();
+   void gluEndPolygon();
 }
-

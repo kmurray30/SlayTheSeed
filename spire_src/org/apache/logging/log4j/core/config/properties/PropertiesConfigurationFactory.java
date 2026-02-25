@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.config.properties;
 
 import java.io.IOException;
@@ -12,28 +9,24 @@ import org.apache.logging.log4j.core.config.ConfigurationFactory;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.apache.logging.log4j.core.config.Order;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
-import org.apache.logging.log4j.core.config.properties.PropertiesConfiguration;
-import org.apache.logging.log4j.core.config.properties.PropertiesConfigurationBuilder;
 
-@Plugin(name="PropertiesConfigurationFactory", category="ConfigurationFactory")
-@Order(value=8)
-public class PropertiesConfigurationFactory
-extends ConfigurationFactory {
-    @Override
-    protected String[] getSupportedTypes() {
-        return new String[]{".properties"};
-    }
+@Plugin(name = "PropertiesConfigurationFactory", category = "ConfigurationFactory")
+@Order(8)
+public class PropertiesConfigurationFactory extends ConfigurationFactory {
+   @Override
+   protected String[] getSupportedTypes() {
+      return new String[]{".properties"};
+   }
 
-    @Override
-    public PropertiesConfiguration getConfiguration(LoggerContext loggerContext, ConfigurationSource source) {
-        Properties properties = new Properties();
-        try (InputStream configStream = source.getInputStream();){
-            properties.load(configStream);
-        }
-        catch (IOException ioe) {
-            throw new ConfigurationException("Unable to load " + source.toString(), ioe);
-        }
-        return new PropertiesConfigurationBuilder().setConfigurationSource(source).setRootProperties(properties).setLoggerContext(loggerContext).build();
-    }
+   public PropertiesConfiguration getConfiguration(final LoggerContext loggerContext, final ConfigurationSource source) {
+      Properties properties = new Properties();
+
+      try (InputStream configStream = source.getInputStream()) {
+         properties.load(configStream);
+      } catch (IOException var17) {
+         throw new ConfigurationException("Unable to load " + source.toString(), var17);
+      }
+
+      return new PropertiesConfigurationBuilder().setConfigurationSource(source).setRootProperties(properties).setLoggerContext(loggerContext).build();
+   }
 }
-

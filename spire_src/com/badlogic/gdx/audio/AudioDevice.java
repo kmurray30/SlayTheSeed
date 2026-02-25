@@ -1,23 +1,18 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.audio;
 
 import com.badlogic.gdx.utils.Disposable;
 
-public interface AudioDevice
-extends Disposable {
-    public boolean isMono();
+public interface AudioDevice extends Disposable {
+   boolean isMono();
 
-    public void writeSamples(short[] var1, int var2, int var3);
+   void writeSamples(short[] var1, int var2, int var3);
 
-    public void writeSamples(float[] var1, int var2, int var3);
+   void writeSamples(float[] var1, int var2, int var3);
 
-    public int getLatency();
+   int getLatency();
 
-    @Override
-    public void dispose();
+   @Override
+   void dispose();
 
-    public void setVolume(float var1);
+   void setVolume(float var1);
 }
-

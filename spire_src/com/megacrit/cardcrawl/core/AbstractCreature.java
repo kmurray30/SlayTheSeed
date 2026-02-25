@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.core;
 
 import com.badlogic.gdx.Gdx;
@@ -16,8 +13,6 @@ import com.esotericsoftware.spine.SkeletonData;
 import com.esotericsoftware.spine.SkeletonJson;
 import com.esotericsoftware.spine.SkeletonMeshRenderer;
 import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.Hitbox;
@@ -44,960 +39,1151 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public abstract class AbstractCreature {
-    private static final Logger logger = LogManager.getLogger(AbstractCreature.class.getName());
-    public String name;
-    public String id;
-    public ArrayList<AbstractPower> powers = new ArrayList();
-    public boolean isPlayer;
-    public boolean isBloodied;
-    public float drawX;
-    public float drawY;
-    public float dialogX;
-    public float dialogY;
-    public Hitbox hb;
-    public int gold;
-    public int displayGold;
-    public boolean isDying = false;
-    public boolean isDead = false;
-    public boolean halfDead = false;
-    public boolean flipHorizontal = false;
-    public boolean flipVertical = false;
-    public float escapeTimer = 0.0f;
-    public boolean isEscaping = false;
-    protected static final float TIP_X_THRESHOLD = 1544.0f * Settings.scale;
-    protected static final float MULTI_TIP_Y_OFFSET = 80.0f * Settings.scale;
-    protected static final float TIP_OFFSET_R_X = 20.0f * Settings.scale;
-    protected static final float TIP_OFFSET_L_X = -380.0f * Settings.scale;
-    protected static final float TIP_OFFSET_Y = 80.0f * Settings.scale;
-    protected ArrayList<PowerTip> tips = new ArrayList();
-    private static UIStrings uiStrings = CardCrawlGame.languagePack.getUIString("AbstractCreature");
-    public static final String[] TEXT = AbstractCreature.uiStrings.TEXT;
-    public Hitbox healthHb;
-    private float healthHideTimer = 0.0f;
-    public int lastDamageTaken = 0;
-    public float hb_x;
-    public float hb_y;
-    public float hb_w;
-    public float hb_h;
-    public int currentHealth;
-    public int maxHealth;
-    public int currentBlock;
-    private float healthBarWidth;
-    private float targetHealthBarWidth;
-    private float hbShowTimer = 0.0f;
-    private float healthBarAnimTimer = 0.0f;
-    private float blockAnimTimer = 0.0f;
-    private float blockOffset = 0.0f;
-    private float blockScale = 1.0f;
-    public float hbAlpha = 0.0f;
-    private float hbYOffset = HB_Y_OFFSET_DIST * 5.0f;
-    private Color hbBgColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
-    private Color hbShadowColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
-    private Color blockColor = new Color(0.6f, 0.93f, 0.98f, 0.0f);
-    private Color blockOutlineColor = new Color(0.6f, 0.93f, 0.98f, 0.0f);
-    private Color blockTextColor = new Color(0.9f, 0.9f, 0.9f, 0.0f);
-    private Color redHbBarColor = new Color(0.8f, 0.05f, 0.05f, 0.0f);
-    private Color greenHbBarColor = Color.valueOf("78c13c00");
-    private Color blueHbBarColor = Color.valueOf("31568c00");
-    private Color orangeHbBarColor = new Color(1.0f, 0.5f, 0.0f, 0.0f);
-    private Color hbTextColor = new Color(1.0f, 1.0f, 1.0f, 0.0f);
-    private static final float BLOCK_ANIM_TIME = 0.7f;
-    private static final float BLOCK_OFFSET_DIST = 12.0f * Settings.scale;
-    private static final float SHOW_HB_TIME = 0.7f;
-    private static final float HB_Y_OFFSET_DIST = 12.0f * Settings.scale;
-    protected static final float BLOCK_ICON_X = -14.0f * Settings.scale;
-    protected static final float BLOCK_ICON_Y = -14.0f * Settings.scale;
-    private static final int BLOCK_W = 64;
-    private static final float HEALTH_BAR_PAUSE_DURATION = 1.2f;
-    private static final float HEALTH_BAR_HEIGHT = 20.0f * Settings.scale;
-    private static final float HEALTH_BAR_OFFSET_Y = -28.0f * Settings.scale;
-    private static final float HEALTH_TEXT_OFFSET_Y = 6.0f * Settings.scale;
-    private static final float POWER_ICON_PADDING_X = Settings.isMobile ? 55.0f * Settings.scale : 48.0f * Settings.scale;
-    private static final float HEALTH_BG_OFFSET_X = 31.0f * Settings.scale;
-    public TintEffect tint = new TintEffect();
-    public static SkeletonMeshRenderer sr;
-    private boolean shakeToggle = true;
-    private static final float SHAKE_THRESHOLD;
-    private static final float SHAKE_SPEED;
-    public float animX;
-    public float animY;
-    protected float vX;
-    protected float vY;
-    protected CreatureAnimation animation;
-    protected float animationTimer = 0.0f;
-    protected static final float SLOW_ATTACK_ANIM_DUR = 1.0f;
-    protected static final float STAGGER_ANIM_DUR = 0.3f;
-    protected static final float FAST_ATTACK_ANIM_DUR = 0.4f;
-    protected static final float HOP_ANIM_DURATION = 0.7f;
-    private static final float STAGGER_MOVE_SPEED;
-    protected TextureAtlas atlas = null;
-    protected Skeleton skeleton;
-    public AnimationState state;
-    protected AnimationStateData stateData;
-    private static final int RETICLE_W = 36;
-    public float reticleAlpha = 0.0f;
-    private Color reticleColor = new Color(1.0f, 1.0f, 1.0f, 0.0f);
-    private Color reticleShadowColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
-    public boolean reticleRendered = false;
-    private float reticleOffset = 0.0f;
-    private float reticleAnimTimer = 0.0f;
-    private static final float RETICLE_OFFSET_DIST;
+   private static final Logger logger = LogManager.getLogger(AbstractCreature.class.getName());
+   public String name;
+   public String id;
+   public ArrayList<AbstractPower> powers = new ArrayList<>();
+   public boolean isPlayer;
+   public boolean isBloodied;
+   public float drawX;
+   public float drawY;
+   public float dialogX;
+   public float dialogY;
+   public Hitbox hb;
+   public int gold;
+   public int displayGold;
+   public boolean isDying = false;
+   public boolean isDead = false;
+   public boolean halfDead = false;
+   public boolean flipHorizontal = false;
+   public boolean flipVertical = false;
+   public float escapeTimer = 0.0F;
+   public boolean isEscaping = false;
+   protected static final float TIP_X_THRESHOLD = 1544.0F * Settings.scale;
+   protected static final float MULTI_TIP_Y_OFFSET = 80.0F * Settings.scale;
+   protected static final float TIP_OFFSET_R_X = 20.0F * Settings.scale;
+   protected static final float TIP_OFFSET_L_X = -380.0F * Settings.scale;
+   protected static final float TIP_OFFSET_Y = 80.0F * Settings.scale;
+   protected ArrayList<PowerTip> tips = new ArrayList<>();
+   private static UIStrings uiStrings = CardCrawlGame.languagePack.getUIString("AbstractCreature");
+   public static final String[] TEXT;
+   public Hitbox healthHb;
+   private float healthHideTimer = 0.0F;
+   public int lastDamageTaken = 0;
+   public float hb_x;
+   public float hb_y;
+   public float hb_w;
+   public float hb_h;
+   public int currentHealth;
+   public int maxHealth;
+   public int currentBlock;
+   private float healthBarWidth;
+   private float targetHealthBarWidth;
+   private float hbShowTimer = 0.0F;
+   private float healthBarAnimTimer = 0.0F;
+   private float blockAnimTimer = 0.0F;
+   private float blockOffset = 0.0F;
+   private float blockScale = 1.0F;
+   public float hbAlpha = 0.0F;
+   private float hbYOffset;
+   private Color hbBgColor;
+   private Color hbShadowColor;
+   private Color blockColor;
+   private Color blockOutlineColor;
+   private Color blockTextColor;
+   private Color redHbBarColor;
+   private Color greenHbBarColor;
+   private Color blueHbBarColor;
+   private Color orangeHbBarColor;
+   private Color hbTextColor;
+   private static final float BLOCK_ANIM_TIME = 0.7F;
+   private static final float BLOCK_OFFSET_DIST = 12.0F * Settings.scale;
+   private static final float SHOW_HB_TIME = 0.7F;
+   private static final float HB_Y_OFFSET_DIST = 12.0F * Settings.scale;
+   protected static final float BLOCK_ICON_X = -14.0F * Settings.scale;
+   protected static final float BLOCK_ICON_Y = -14.0F * Settings.scale;
+   private static final int BLOCK_W = 64;
+   private static final float HEALTH_BAR_PAUSE_DURATION = 1.2F;
+   private static final float HEALTH_BAR_HEIGHT = 20.0F * Settings.scale;
+   private static final float HEALTH_BAR_OFFSET_Y = -28.0F * Settings.scale;
+   private static final float HEALTH_TEXT_OFFSET_Y = 6.0F * Settings.scale;
+   private static final float POWER_ICON_PADDING_X = Settings.isMobile ? 55.0F * Settings.scale : 48.0F * Settings.scale;
+   private static final float HEALTH_BG_OFFSET_X = 31.0F * Settings.scale;
+   public TintEffect tint;
+   public static SkeletonMeshRenderer sr;
+   private boolean shakeToggle;
+   private static final float SHAKE_THRESHOLD = Settings.scale * 8.0F;
+   private static final float SHAKE_SPEED = 150.0F * Settings.scale;
+   public float animX;
+   public float animY;
+   protected float vX;
+   protected float vY;
+   protected AbstractCreature.CreatureAnimation animation;
+   protected float animationTimer;
+   protected static final float SLOW_ATTACK_ANIM_DUR = 1.0F;
+   protected static final float STAGGER_ANIM_DUR = 0.3F;
+   protected static final float FAST_ATTACK_ANIM_DUR = 0.4F;
+   protected static final float HOP_ANIM_DURATION = 0.7F;
+   private static final float STAGGER_MOVE_SPEED = 20.0F * Settings.scale;
+   protected TextureAtlas atlas;
+   protected Skeleton skeleton;
+   public AnimationState state;
+   protected AnimationStateData stateData;
+   private static final int RETICLE_W = 36;
+   public float reticleAlpha;
+   private Color reticleColor;
+   private Color reticleShadowColor;
+   public boolean reticleRendered;
+   private float reticleOffset;
+   private float reticleAnimTimer;
+   private static final float RETICLE_OFFSET_DIST = 15.0F * Settings.scale;
 
-    public abstract void damage(DamageInfo var1);
+   public AbstractCreature() {
+      this.hbYOffset = HB_Y_OFFSET_DIST * 5.0F;
+      this.hbBgColor = new Color(0.0F, 0.0F, 0.0F, 0.0F);
+      this.hbShadowColor = new Color(0.0F, 0.0F, 0.0F, 0.0F);
+      this.blockColor = new Color(0.6F, 0.93F, 0.98F, 0.0F);
+      this.blockOutlineColor = new Color(0.6F, 0.93F, 0.98F, 0.0F);
+      this.blockTextColor = new Color(0.9F, 0.9F, 0.9F, 0.0F);
+      this.redHbBarColor = new Color(0.8F, 0.05F, 0.05F, 0.0F);
+      this.greenHbBarColor = Color.valueOf("78c13c00");
+      this.blueHbBarColor = Color.valueOf("31568c00");
+      this.orangeHbBarColor = new Color(1.0F, 0.5F, 0.0F, 0.0F);
+      this.hbTextColor = new Color(1.0F, 1.0F, 1.0F, 0.0F);
+      this.tint = new TintEffect();
+      this.shakeToggle = true;
+      this.animationTimer = 0.0F;
+      this.atlas = null;
+      this.reticleAlpha = 0.0F;
+      this.reticleColor = new Color(1.0F, 1.0F, 1.0F, 0.0F);
+      this.reticleShadowColor = new Color(0.0F, 0.0F, 0.0F, 0.0F);
+      this.reticleRendered = false;
+      this.reticleOffset = 0.0F;
+      this.reticleAnimTimer = 0.0F;
+   }
 
-    private void brokeBlock() {
-        if (this instanceof AbstractMonster) {
-            for (AbstractRelic r : AbstractDungeon.player.relics) {
-                r.onBlockBroken(this);
+   public abstract void damage(DamageInfo var1);
+
+   private void brokeBlock() {
+      if (this instanceof AbstractMonster) {
+         for (AbstractRelic r : AbstractDungeon.player.relics) {
+            r.onBlockBroken(this);
+         }
+      }
+
+      AbstractDungeon.effectList
+         .add(new HbBlockBrokenEffect(this.hb.cX - this.hb.width / 2.0F + BLOCK_ICON_X, this.hb.cY - this.hb.height / 2.0F + BLOCK_ICON_Y));
+      CardCrawlGame.sound.play("BLOCK_BREAK");
+   }
+
+   protected int decrementBlock(DamageInfo info, int damageAmount) {
+      if (info.type != DamageInfo.DamageType.HP_LOSS && this.currentBlock > 0) {
+         CardCrawlGame.screenShake.shake(ScreenShake.ShakeIntensity.MED, ScreenShake.ShakeDur.SHORT, false);
+         if (damageAmount > this.currentBlock) {
+            damageAmount -= this.currentBlock;
+            if (Settings.SHOW_DMG_BLOCK) {
+               AbstractDungeon.effectList.add(new BlockedNumberEffect(this.hb.cX, this.hb.cY + this.hb.height / 2.0F, Integer.toString(this.currentBlock)));
             }
-        }
-        AbstractDungeon.effectList.add(new HbBlockBrokenEffect(this.hb.cX - this.hb.width / 2.0f + BLOCK_ICON_X, this.hb.cY - this.hb.height / 2.0f + BLOCK_ICON_Y));
-        CardCrawlGame.sound.play("BLOCK_BREAK");
-    }
 
-    protected int decrementBlock(DamageInfo info, int damageAmount) {
-        if (info.type != DamageInfo.DamageType.HP_LOSS && this.currentBlock > 0) {
-            CardCrawlGame.screenShake.shake(ScreenShake.ShakeIntensity.MED, ScreenShake.ShakeDur.SHORT, false);
-            if (damageAmount > this.currentBlock) {
-                damageAmount -= this.currentBlock;
-                if (Settings.SHOW_DMG_BLOCK) {
-                    AbstractDungeon.effectList.add(new BlockedNumberEffect(this.hb.cX, this.hb.cY + this.hb.height / 2.0f, Integer.toString(this.currentBlock)));
-                }
-                this.loseBlock();
-                this.brokeBlock();
-            } else if (damageAmount == this.currentBlock) {
-                damageAmount = 0;
-                this.loseBlock();
-                this.brokeBlock();
-                AbstractDungeon.effectList.add(new BlockedWordEffect(this, this.hb.cX, this.hb.cY, TEXT[1]));
-            } else {
-                CardCrawlGame.sound.play("BLOCK_ATTACK");
-                this.loseBlock(damageAmount);
-                for (int i = 0; i < 18; ++i) {
-                    AbstractDungeon.effectList.add(new BlockImpactLineEffect(this.hb.cX, this.hb.cY));
-                }
-                if (Settings.SHOW_DMG_BLOCK) {
-                    AbstractDungeon.effectList.add(new BlockedNumberEffect(this.hb.cX, this.hb.cY + this.hb.height / 2.0f, Integer.toString(damageAmount)));
-                }
-                damageAmount = 0;
+            this.loseBlock();
+            this.brokeBlock();
+         } else if (damageAmount == this.currentBlock) {
+            damageAmount = 0;
+            this.loseBlock();
+            this.brokeBlock();
+            AbstractDungeon.effectList.add(new BlockedWordEffect(this, this.hb.cX, this.hb.cY, TEXT[1]));
+         } else {
+            CardCrawlGame.sound.play("BLOCK_ATTACK");
+            this.loseBlock(damageAmount);
+
+            for (int i = 0; i < 18; i++) {
+               AbstractDungeon.effectList.add(new BlockImpactLineEffect(this.hb.cX, this.hb.cY));
             }
-        }
-        return damageAmount;
-    }
 
-    public void increaseMaxHp(int amount, boolean showEffect) {
-        if (!Settings.isEndless || !AbstractDungeon.player.hasBlight("FullBelly")) {
-            if (amount < 0) {
-                logger.info("Why are we decreasing health with increaseMaxHealth()?");
+            if (Settings.SHOW_DMG_BLOCK) {
+               AbstractDungeon.effectList.add(new BlockedNumberEffect(this.hb.cX, this.hb.cY + this.hb.height / 2.0F, Integer.toString(damageAmount)));
             }
-            this.maxHealth += amount;
-            AbstractDungeon.effectsQueue.add(new TextAboveCreatureEffect(this.hb.cX - this.animX, this.hb.cY, TEXT[2] + Integer.toString(amount), Settings.GREEN_TEXT_COLOR));
-            this.heal(amount, true);
-            this.healthBarUpdatedEvent();
-        }
-    }
 
-    public void decreaseMaxHealth(int amount) {
-        if (amount < 0) {
-            logger.info("Why are we increasing health with decreaseMaxHealth()?");
-        }
-        this.maxHealth -= amount;
-        if (this.maxHealth <= 1) {
-            this.maxHealth = 1;
-        }
-        if (this.currentHealth > this.maxHealth) {
-            this.currentHealth = this.maxHealth;
-        }
-        this.healthBarUpdatedEvent();
-    }
+            damageAmount = 0;
+         }
+      }
 
-    protected void refreshHitboxLocation() {
-        this.hb.move(this.drawX + this.hb_x + this.animX, this.drawY + this.hb_y + this.hb_h / 2.0f);
-        this.healthHb.move(this.hb.cX, this.hb.cY - this.hb_h / 2.0f - this.healthHb.height / 2.0f);
-    }
+      return damageAmount;
+   }
 
-    public void updateAnimations() {
-        if (this.animationTimer != 0.0f) {
-            switch (this.animation) {
-                case ATTACK_FAST: {
-                    this.updateFastAttackAnimation();
-                    break;
-                }
-                case ATTACK_SLOW: {
-                    this.updateSlowAttackAnimation();
-                    break;
-                }
-                case FAST_SHAKE: {
-                    this.updateFastShakeAnimation();
-                    break;
-                }
-                case HOP: {
-                    this.updateHopAnimation();
-                    break;
-                }
-                case JUMP: {
-                    this.updateJumpAnimation();
-                    break;
-                }
-                case SHAKE: {
-                    this.updateShakeAnimation();
-                    break;
-                }
-                case STAGGER: {
-                    this.updateStaggerAnimation();
-                    break;
-                }
-            }
-        }
-        this.refreshHitboxLocation();
-        if (!this.isPlayer) {
-            ((AbstractMonster)this).refreshIntentHbLocation();
-        }
-    }
+   public void increaseMaxHp(int amount, boolean showEffect) {
+      if (!Settings.isEndless || !AbstractDungeon.player.hasBlight("FullBelly")) {
+         if (amount < 0) {
+            logger.info("Why are we decreasing health with increaseMaxHealth()?");
+         }
 
-    protected void updateFastAttackAnimation() {
-        this.animationTimer -= Gdx.graphics.getDeltaTime();
-        float targetPos = 90.0f * Settings.scale;
-        if (!this.isPlayer) {
-            targetPos = -targetPos;
-        }
-        if (this.animationTimer > 0.5f) {
-            this.animX = Interpolation.exp5In.apply(0.0f, targetPos, (1.0f - this.animationTimer / 1.0f) * 2.0f);
-        } else if (this.animationTimer < 0.0f) {
-            this.animationTimer = 0.0f;
-            this.animX = 0.0f;
-        } else {
-            this.animX = Interpolation.fade.apply(0.0f, targetPos, this.animationTimer / 1.0f * 2.0f);
-        }
-    }
+         this.maxHealth += amount;
+         AbstractDungeon.effectsQueue
+            .add(new TextAboveCreatureEffect(this.hb.cX - this.animX, this.hb.cY, TEXT[2] + Integer.toString(amount), Settings.GREEN_TEXT_COLOR));
+         this.heal(amount, true);
+         this.healthBarUpdatedEvent();
+      }
+   }
 
-    protected void updateSlowAttackAnimation() {
-        this.animationTimer -= Gdx.graphics.getDeltaTime();
-        float targetPos = 90.0f * Settings.scale;
-        if (!this.isPlayer) {
-            targetPos = -targetPos;
-        }
-        if (this.animationTimer > 0.5f) {
-            this.animX = Interpolation.exp10In.apply(0.0f, targetPos, (1.0f - this.animationTimer / 1.0f) * 2.0f);
-        } else if (this.animationTimer < 0.0f) {
-            this.animationTimer = 0.0f;
-            this.animX = 0.0f;
-        } else {
-            this.animX = Interpolation.fade.apply(0.0f, targetPos, this.animationTimer / 1.0f * 2.0f);
-        }
-    }
+   public void decreaseMaxHealth(int amount) {
+      if (amount < 0) {
+         logger.info("Why are we increasing health with decreaseMaxHealth()?");
+      }
 
-    protected void updateFastShakeAnimation() {
-        this.animationTimer -= Gdx.graphics.getDeltaTime();
-        if (this.animationTimer < 0.0f) {
-            this.animationTimer = 0.0f;
-            this.animX = 0.0f;
-        } else if (this.shakeToggle) {
-            this.animX += SHAKE_SPEED * Gdx.graphics.getDeltaTime();
-            if (this.animX > SHAKE_THRESHOLD / 2.0f) {
-                this.shakeToggle = !this.shakeToggle;
-            }
-        } else {
-            this.animX -= SHAKE_SPEED * Gdx.graphics.getDeltaTime();
-            if (this.animX < -SHAKE_THRESHOLD / 2.0f) {
-                this.shakeToggle = !this.shakeToggle;
-            }
-        }
-    }
+      this.maxHealth -= amount;
+      if (this.maxHealth <= 1) {
+         this.maxHealth = 1;
+      }
 
-    protected void updateHopAnimation() {
-        this.vY -= 17.0f * Settings.scale;
-        this.animY += this.vY * Gdx.graphics.getDeltaTime();
-        if (this.animY < 0.0f) {
-            this.animationTimer = 0.0f;
-            this.animY = 0.0f;
-        }
-    }
+      if (this.currentHealth > this.maxHealth) {
+         this.currentHealth = this.maxHealth;
+      }
 
-    protected void updateJumpAnimation() {
-        this.vY -= 17.0f * Settings.scale;
-        this.animY += this.vY * Gdx.graphics.getDeltaTime();
-        if (this.animY < 0.0f) {
-            this.animationTimer = 0.0f;
-            this.animY = 0.0f;
-        }
-    }
+      this.healthBarUpdatedEvent();
+   }
 
-    protected void updateStaggerAnimation() {
-        if (this.animationTimer != 0.0f) {
-            this.animationTimer -= Gdx.graphics.getDeltaTime();
-            this.animX = !this.isPlayer ? Interpolation.pow2.apply(STAGGER_MOVE_SPEED, 0.0f, 1.0f - this.animationTimer / 0.3f) : Interpolation.pow2.apply(-STAGGER_MOVE_SPEED, 0.0f, 1.0f - this.animationTimer / 0.3f);
-            if (this.animationTimer < 0.0f) {
-                this.animationTimer = 0.0f;
-                this.animX = 0.0f;
-                this.vX = STAGGER_MOVE_SPEED;
-            }
-        }
-    }
+   protected void refreshHitboxLocation() {
+      this.hb.move(this.drawX + this.hb_x + this.animX, this.drawY + this.hb_y + this.hb_h / 2.0F);
+      this.healthHb.move(this.hb.cX, this.hb.cY - this.hb_h / 2.0F - this.healthHb.height / 2.0F);
+   }
 
-    protected void updateShakeAnimation() {
-        this.animationTimer -= Gdx.graphics.getDeltaTime();
-        if (this.animationTimer < 0.0f) {
-            this.animationTimer = 0.0f;
-            this.animX = 0.0f;
-        } else if (this.shakeToggle) {
-            this.animX += SHAKE_SPEED * Gdx.graphics.getDeltaTime();
-            if (this.animX > SHAKE_THRESHOLD) {
-                this.shakeToggle = !this.shakeToggle;
-            }
-        } else {
-            this.animX -= SHAKE_SPEED * Gdx.graphics.getDeltaTime();
-            if (this.animX < -SHAKE_THRESHOLD) {
-                this.shakeToggle = !this.shakeToggle;
-            }
-        }
-    }
+   public void updateAnimations() {
+      if (this.animationTimer != 0.0F) {
+         switch (this.animation) {
+            case ATTACK_FAST:
+               this.updateFastAttackAnimation();
+               break;
+            case ATTACK_SLOW:
+               this.updateSlowAttackAnimation();
+               break;
+            case FAST_SHAKE:
+               this.updateFastShakeAnimation();
+               break;
+            case HOP:
+               this.updateHopAnimation();
+               break;
+            case JUMP:
+               this.updateJumpAnimation();
+               break;
+            case SHAKE:
+               this.updateShakeAnimation();
+               break;
+            case STAGGER:
+               this.updateStaggerAnimation();
+         }
+      }
 
-    protected void loadAnimation(String atlasUrl, String skeletonUrl, float scale) {
-        this.atlas = new TextureAtlas(Gdx.files.internal(atlasUrl));
-        SkeletonJson json = new SkeletonJson(this.atlas);
-        if (CardCrawlGame.dungeon != null && AbstractDungeon.player != null) {
-            if (AbstractDungeon.player.hasRelic("PreservedInsect") && !this.isPlayer && AbstractDungeon.getCurrRoom().eliteTrigger) {
-                scale += 0.3f;
-            }
-            if (ModHelper.isModEnabled("MonsterHunter") && !this.isPlayer) {
-                scale -= 0.3f;
-            }
-        }
-        json.setScale(Settings.renderScale / scale);
-        SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(skeletonUrl));
-        this.skeleton = new Skeleton(skeletonData);
-        this.skeleton.setColor(Color.WHITE);
-        this.stateData = new AnimationStateData(skeletonData);
-        this.state = new AnimationState(this.stateData);
-    }
+      this.refreshHitboxLocation();
+      if (!this.isPlayer) {
+         ((AbstractMonster)this).refreshIntentHbLocation();
+      }
+   }
 
-    public void heal(int healAmount, boolean showEffect) {
-        if (Settings.isEndless && this.isPlayer && AbstractDungeon.player.hasBlight("FullBelly") && (healAmount /= 2) < 1) {
+   protected void updateFastAttackAnimation() {
+      this.animationTimer = this.animationTimer - Gdx.graphics.getDeltaTime();
+      float targetPos = 90.0F * Settings.scale;
+      if (!this.isPlayer) {
+         targetPos = -targetPos;
+      }
+
+      if (this.animationTimer > 0.5F) {
+         this.animX = Interpolation.exp5In.apply(0.0F, targetPos, (1.0F - this.animationTimer / 1.0F) * 2.0F);
+      } else if (this.animationTimer < 0.0F) {
+         this.animationTimer = 0.0F;
+         this.animX = 0.0F;
+      } else {
+         this.animX = Interpolation.fade.apply(0.0F, targetPos, this.animationTimer / 1.0F * 2.0F);
+      }
+   }
+
+   protected void updateSlowAttackAnimation() {
+      this.animationTimer = this.animationTimer - Gdx.graphics.getDeltaTime();
+      float targetPos = 90.0F * Settings.scale;
+      if (!this.isPlayer) {
+         targetPos = -targetPos;
+      }
+
+      if (this.animationTimer > 0.5F) {
+         this.animX = Interpolation.exp10In.apply(0.0F, targetPos, (1.0F - this.animationTimer / 1.0F) * 2.0F);
+      } else if (this.animationTimer < 0.0F) {
+         this.animationTimer = 0.0F;
+         this.animX = 0.0F;
+      } else {
+         this.animX = Interpolation.fade.apply(0.0F, targetPos, this.animationTimer / 1.0F * 2.0F);
+      }
+   }
+
+   protected void updateFastShakeAnimation() {
+      this.animationTimer = this.animationTimer - Gdx.graphics.getDeltaTime();
+      if (this.animationTimer < 0.0F) {
+         this.animationTimer = 0.0F;
+         this.animX = 0.0F;
+      } else if (this.shakeToggle) {
+         this.animX = this.animX + SHAKE_SPEED * Gdx.graphics.getDeltaTime();
+         if (this.animX > SHAKE_THRESHOLD / 2.0F) {
+            this.shakeToggle = !this.shakeToggle;
+         }
+      } else {
+         this.animX = this.animX - SHAKE_SPEED * Gdx.graphics.getDeltaTime();
+         if (this.animX < -SHAKE_THRESHOLD / 2.0F) {
+            this.shakeToggle = !this.shakeToggle;
+         }
+      }
+   }
+
+   protected void updateHopAnimation() {
+      this.vY = this.vY - 17.0F * Settings.scale;
+      this.animY = this.animY + this.vY * Gdx.graphics.getDeltaTime();
+      if (this.animY < 0.0F) {
+         this.animationTimer = 0.0F;
+         this.animY = 0.0F;
+      }
+   }
+
+   protected void updateJumpAnimation() {
+      this.vY = this.vY - 17.0F * Settings.scale;
+      this.animY = this.animY + this.vY * Gdx.graphics.getDeltaTime();
+      if (this.animY < 0.0F) {
+         this.animationTimer = 0.0F;
+         this.animY = 0.0F;
+      }
+   }
+
+   protected void updateStaggerAnimation() {
+      if (this.animationTimer != 0.0F) {
+         this.animationTimer = this.animationTimer - Gdx.graphics.getDeltaTime();
+         if (!this.isPlayer) {
+            this.animX = Interpolation.pow2.apply(STAGGER_MOVE_SPEED, 0.0F, 1.0F - this.animationTimer / 0.3F);
+         } else {
+            this.animX = Interpolation.pow2.apply(-STAGGER_MOVE_SPEED, 0.0F, 1.0F - this.animationTimer / 0.3F);
+         }
+
+         if (this.animationTimer < 0.0F) {
+            this.animationTimer = 0.0F;
+            this.animX = 0.0F;
+            this.vX = STAGGER_MOVE_SPEED;
+         }
+      }
+   }
+
+   protected void updateShakeAnimation() {
+      this.animationTimer = this.animationTimer - Gdx.graphics.getDeltaTime();
+      if (this.animationTimer < 0.0F) {
+         this.animationTimer = 0.0F;
+         this.animX = 0.0F;
+      } else if (this.shakeToggle) {
+         this.animX = this.animX + SHAKE_SPEED * Gdx.graphics.getDeltaTime();
+         if (this.animX > SHAKE_THRESHOLD) {
+            this.shakeToggle = !this.shakeToggle;
+         }
+      } else {
+         this.animX = this.animX - SHAKE_SPEED * Gdx.graphics.getDeltaTime();
+         if (this.animX < -SHAKE_THRESHOLD) {
+            this.shakeToggle = !this.shakeToggle;
+         }
+      }
+   }
+
+   protected void loadAnimation(String atlasUrl, String skeletonUrl, float scale) {
+      this.atlas = new TextureAtlas(Gdx.files.internal(atlasUrl));
+      SkeletonJson json = new SkeletonJson(this.atlas);
+      if (CardCrawlGame.dungeon != null && AbstractDungeon.player != null) {
+         if (AbstractDungeon.player.hasRelic("PreservedInsect") && !this.isPlayer && AbstractDungeon.getCurrRoom().eliteTrigger) {
+            scale += 0.3F;
+         }
+
+         if (ModHelper.isModEnabled("MonsterHunter") && !this.isPlayer) {
+            scale -= 0.3F;
+         }
+      }
+
+      json.setScale(Settings.renderScale / scale);
+      SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(skeletonUrl));
+      this.skeleton = new Skeleton(skeletonData);
+      this.skeleton.setColor(Color.WHITE);
+      this.stateData = new AnimationStateData(skeletonData);
+      this.state = new AnimationState(this.stateData);
+   }
+
+   public void heal(int healAmount, boolean showEffect) {
+      if (Settings.isEndless && this.isPlayer && AbstractDungeon.player.hasBlight("FullBelly")) {
+         healAmount /= 2;
+         if (healAmount < 1) {
             healAmount = 1;
-        }
-        if (this.isDying) {
-            return;
-        }
-        for (AbstractRelic r : AbstractDungeon.player.relics) {
-            if (!this.isPlayer) continue;
-            healAmount = r.onPlayerHeal(healAmount);
-        }
-        for (AbstractPower p : this.powers) {
+         }
+      }
+
+      if (!this.isDying) {
+         for (AbstractRelic r : AbstractDungeon.player.relics) {
+            if (this.isPlayer) {
+               healAmount = r.onPlayerHeal(healAmount);
+            }
+         }
+
+         for (AbstractPower p : this.powers) {
             healAmount = p.onHeal(healAmount);
-        }
-        this.currentHealth += healAmount;
-        if (this.currentHealth > this.maxHealth) {
+         }
+
+         this.currentHealth += healAmount;
+         if (this.currentHealth > this.maxHealth) {
             this.currentHealth = this.maxHealth;
-        }
-        if ((float)this.currentHealth > (float)this.maxHealth / 2.0f && this.isBloodied) {
+         }
+
+         if (this.currentHealth > this.maxHealth / 2.0F && this.isBloodied) {
             this.isBloodied = false;
+
             for (AbstractRelic r2 : AbstractDungeon.player.relics) {
-                r2.onNotBloodied();
+               r2.onNotBloodied();
             }
-        }
-        if (healAmount > 0) {
+         }
+
+         if (healAmount > 0) {
             if (showEffect && this.isPlayer) {
-                AbstractDungeon.topPanel.panelHealEffect();
-                AbstractDungeon.effectsQueue.add(new HealEffect(this.hb.cX - this.animX, this.hb.cY, healAmount));
+               AbstractDungeon.topPanel.panelHealEffect();
+               AbstractDungeon.effectsQueue.add(new HealEffect(this.hb.cX - this.animX, this.hb.cY, healAmount));
             }
+
             this.healthBarUpdatedEvent();
-        }
-    }
+         }
+      }
+   }
 
-    public void heal(int amount) {
-        this.heal(amount, true);
-    }
+   public void heal(int amount) {
+      this.heal(amount, true);
+   }
 
-    public void addBlock(int blockAmount) {
-        float tmp = blockAmount;
-        if (this.isPlayer) {
-            for (AbstractRelic abstractRelic : AbstractDungeon.player.relics) {
-                tmp = abstractRelic.onPlayerGainedBlock(tmp);
+   public void addBlock(int blockAmount) {
+      float tmp = blockAmount;
+      if (this.isPlayer) {
+         for (AbstractRelic r : AbstractDungeon.player.relics) {
+            tmp = r.onPlayerGainedBlock(tmp);
+         }
+
+         if (tmp > 0.0F) {
+            for (AbstractPower p : this.powers) {
+               p.onGainedBlock(tmp);
             }
-            if (tmp > 0.0f) {
-                for (AbstractPower abstractPower : this.powers) {
-                    abstractPower.onGainedBlock(tmp);
-                }
-            }
-        }
-        boolean effect = false;
-        if (this.currentBlock == 0) {
-            effect = true;
-        }
-        for (AbstractMonster m : AbstractDungeon.getCurrRoom().monsters.monsters) {
-            for (AbstractPower p : m.powers) {
-                tmp = p.onPlayerGainedBlock(tmp);
-            }
-        }
-        this.currentBlock += MathUtils.floor(tmp);
-        if (this.currentBlock >= 99 && this.isPlayer) {
-            UnlockTracker.unlockAchievement("IMPERVIOUS");
-        }
-        if (this.currentBlock > 999) {
-            this.currentBlock = 999;
-        }
-        if (this.currentBlock == 999) {
-            UnlockTracker.unlockAchievement("BARRICADED");
-        }
-        if (effect && this.currentBlock > 0) {
-            this.gainBlockAnimation();
-        } else if (blockAmount > 0 && blockAmount > 0) {
-            Color color = Settings.GOLD_COLOR.cpy();
-            color.a = this.blockTextColor.a;
-            this.blockTextColor = color;
-            this.blockScale = 5.0f;
-        }
-    }
+         }
+      }
 
-    public void loseBlock(int amount, boolean noAnimation) {
-        boolean effect = false;
-        if (this.currentBlock != 0) {
-            effect = true;
-        }
-        this.currentBlock -= amount;
-        if (this.currentBlock < 0) {
-            this.currentBlock = 0;
-        }
-        if (this.currentBlock == 0 && effect) {
-            if (!noAnimation) {
-                AbstractDungeon.effectList.add(new HbBlockBrokenEffect(this.hb.cX - this.hb.width / 2.0f + BLOCK_ICON_X, this.hb.cY - this.hb.height / 2.0f + BLOCK_ICON_Y));
-            }
-        } else if (this.currentBlock > 0 && amount > 0) {
-            Color tmp = Color.SCARLET.cpy();
-            tmp.a = this.blockTextColor.a;
-            this.blockTextColor = tmp;
-            this.blockScale = 5.0f;
-        }
-    }
+      boolean effect = false;
+      if (this.currentBlock == 0) {
+         effect = true;
+      }
 
-    public void loseBlock() {
-        this.loseBlock(this.currentBlock);
-    }
+      for (AbstractMonster m : AbstractDungeon.getCurrRoom().monsters.monsters) {
+         for (AbstractPower p : m.powers) {
+            tmp = p.onPlayerGainedBlock(tmp);
+         }
+      }
 
-    public void loseBlock(boolean noAnimation) {
-        this.loseBlock(this.currentBlock, noAnimation);
-    }
+      this.currentBlock = this.currentBlock + MathUtils.floor(tmp);
+      if (this.currentBlock >= 99 && this.isPlayer) {
+         UnlockTracker.unlockAchievement("IMPERVIOUS");
+      }
 
-    public void loseBlock(int amount) {
-        this.loseBlock(amount, false);
-    }
+      if (this.currentBlock > 999) {
+         this.currentBlock = 999;
+      }
 
-    public void showHealthBar() {
-        this.hbShowTimer = 0.7f;
-        this.hbAlpha = 0.0f;
-    }
+      if (this.currentBlock == 999) {
+         UnlockTracker.unlockAchievement("BARRICADED");
+      }
 
-    public void hideHealthBar() {
-        this.hbAlpha = 0.0f;
-    }
+      if (effect && this.currentBlock > 0) {
+         this.gainBlockAnimation();
+      } else if (blockAmount > 0 && blockAmount > 0) {
+         Color tmpCol = Settings.GOLD_COLOR.cpy();
+         tmpCol.a = this.blockTextColor.a;
+         this.blockTextColor = tmpCol;
+         this.blockScale = 5.0F;
+      }
+   }
 
-    public void addPower(AbstractPower powerToApply) {
-        boolean hasBuffAlready = false;
-        for (AbstractPower p : this.powers) {
-            if (!p.ID.equals(powerToApply.ID)) continue;
+   public void loseBlock(int amount, boolean noAnimation) {
+      boolean effect = false;
+      if (this.currentBlock != 0) {
+         effect = true;
+      }
+
+      this.currentBlock -= amount;
+      if (this.currentBlock < 0) {
+         this.currentBlock = 0;
+      }
+
+      if (this.currentBlock == 0 && effect) {
+         if (!noAnimation) {
+            AbstractDungeon.effectList
+               .add(new HbBlockBrokenEffect(this.hb.cX - this.hb.width / 2.0F + BLOCK_ICON_X, this.hb.cY - this.hb.height / 2.0F + BLOCK_ICON_Y));
+         }
+      } else if (this.currentBlock > 0 && amount > 0) {
+         Color tmp = Color.SCARLET.cpy();
+         tmp.a = this.blockTextColor.a;
+         this.blockTextColor = tmp;
+         this.blockScale = 5.0F;
+      }
+   }
+
+   public void loseBlock() {
+      this.loseBlock(this.currentBlock);
+   }
+
+   public void loseBlock(boolean noAnimation) {
+      this.loseBlock(this.currentBlock, noAnimation);
+   }
+
+   public void loseBlock(int amount) {
+      this.loseBlock(amount, false);
+   }
+
+   public void showHealthBar() {
+      this.hbShowTimer = 0.7F;
+      this.hbAlpha = 0.0F;
+   }
+
+   public void hideHealthBar() {
+      this.hbAlpha = 0.0F;
+   }
+
+   public void addPower(AbstractPower powerToApply) {
+      boolean hasBuffAlready = false;
+
+      for (AbstractPower p : this.powers) {
+         if (p.ID.equals(powerToApply.ID)) {
             p.stackPower(powerToApply.amount);
             p.updateDescription();
             hasBuffAlready = true;
-        }
-        if (!hasBuffAlready) {
-            this.powers.add(powerToApply);
-            if (this.isPlayer) {
-                int buffCount = 0;
-                for (AbstractPower p : this.powers) {
-                    if (p.type != AbstractPower.PowerType.BUFF) continue;
-                    ++buffCount;
-                }
-                if (buffCount >= 10) {
-                    UnlockTracker.unlockAchievement("POWERFUL");
-                }
+         }
+      }
+
+      if (!hasBuffAlready) {
+         this.powers.add(powerToApply);
+         if (this.isPlayer) {
+            int buffCount = 0;
+
+            for (AbstractPower px : this.powers) {
+               if (px.type == AbstractPower.PowerType.BUFF) {
+                  buffCount++;
+               }
             }
-        }
-    }
 
-    public void applyStartOfTurnPowers() {
-        for (AbstractPower p : this.powers) {
-            p.atStartOfTurn();
-        }
-    }
-
-    public void applyTurnPowers() {
-        for (AbstractPower p : this.powers) {
-            p.duringTurn();
-        }
-    }
-
-    public void applyStartOfTurnPostDrawPowers() {
-        for (AbstractPower p : this.powers) {
-            p.atStartOfTurnPostDraw();
-        }
-    }
-
-    public void applyEndOfTurnTriggers() {
-        for (AbstractPower p : this.powers) {
-            if (!this.isPlayer) {
-                p.atEndOfTurnPreEndTurnCards(false);
+            if (buffCount >= 10) {
+               UnlockTracker.unlockAchievement("POWERFUL");
             }
-            p.atEndOfTurn(this.isPlayer);
-        }
-    }
+         }
+      }
+   }
 
-    public void healthBarUpdatedEvent() {
-        this.healthBarAnimTimer = 1.2f;
-        this.targetHealthBarWidth = this.hb.width * (float)this.currentHealth / (float)this.maxHealth;
-        if (this.maxHealth == this.currentHealth) {
-            this.healthBarWidth = this.targetHealthBarWidth;
-        } else if (this.currentHealth == 0) {
-            this.healthBarWidth = 0.0f;
-            this.targetHealthBarWidth = 0.0f;
-        }
-        if (this.targetHealthBarWidth > this.healthBarWidth) {
-            this.healthBarWidth = this.targetHealthBarWidth;
-        }
-    }
+   public void applyStartOfTurnPowers() {
+      for (AbstractPower p : this.powers) {
+         p.atStartOfTurn();
+      }
+   }
 
-    public void healthBarRevivedEvent() {
-        this.healthBarAnimTimer = 1.2f;
-        this.healthBarWidth = this.targetHealthBarWidth = this.hb.width * (float)this.currentHealth / (float)this.maxHealth;
-        this.hbBgColor.a = 0.75f;
-        this.hbShadowColor.a = 0.5f;
-        this.hbTextColor.a = 1.0f;
-    }
+   public void applyTurnPowers() {
+      for (AbstractPower p : this.powers) {
+         p.duringTurn();
+      }
+   }
 
-    protected void updateHealthBar() {
-        this.updateHbHoverFade();
-        this.updateBlockAnimations();
-        this.updateHbPopInAnimation();
-        this.updateHbDamageAnimation();
-        this.updateHbAlpha();
-    }
+   public void applyStartOfTurnPostDrawPowers() {
+      for (AbstractPower p : this.powers) {
+         p.atStartOfTurnPostDraw();
+      }
+   }
 
-    private void updateHbHoverFade() {
-        if (this.healthHb.hovered) {
-            this.healthHideTimer -= Gdx.graphics.getDeltaTime() * 4.0f;
-            if (this.healthHideTimer < 0.2f) {
-                this.healthHideTimer = 0.2f;
+   public void applyEndOfTurnTriggers() {
+      for (AbstractPower p : this.powers) {
+         if (!this.isPlayer) {
+            p.atEndOfTurnPreEndTurnCards(false);
+         }
+
+         p.atEndOfTurn(this.isPlayer);
+      }
+   }
+
+   public void healthBarUpdatedEvent() {
+      this.healthBarAnimTimer = 1.2F;
+      this.targetHealthBarWidth = this.hb.width * this.currentHealth / this.maxHealth;
+      if (this.maxHealth == this.currentHealth) {
+         this.healthBarWidth = this.targetHealthBarWidth;
+      } else if (this.currentHealth == 0) {
+         this.healthBarWidth = 0.0F;
+         this.targetHealthBarWidth = 0.0F;
+      }
+
+      if (this.targetHealthBarWidth > this.healthBarWidth) {
+         this.healthBarWidth = this.targetHealthBarWidth;
+      }
+   }
+
+   public void healthBarRevivedEvent() {
+      this.healthBarAnimTimer = 1.2F;
+      this.targetHealthBarWidth = this.hb.width * this.currentHealth / this.maxHealth;
+      this.healthBarWidth = this.targetHealthBarWidth;
+      this.hbBgColor.a = 0.75F;
+      this.hbShadowColor.a = 0.5F;
+      this.hbTextColor.a = 1.0F;
+   }
+
+   protected void updateHealthBar() {
+      this.updateHbHoverFade();
+      this.updateBlockAnimations();
+      this.updateHbPopInAnimation();
+      this.updateHbDamageAnimation();
+      this.updateHbAlpha();
+   }
+
+   private void updateHbHoverFade() {
+      if (this.healthHb.hovered) {
+         this.healthHideTimer = this.healthHideTimer - Gdx.graphics.getDeltaTime() * 4.0F;
+         if (this.healthHideTimer < 0.2F) {
+            this.healthHideTimer = 0.2F;
+         }
+      } else {
+         this.healthHideTimer = this.healthHideTimer + Gdx.graphics.getDeltaTime() * 4.0F;
+         if (this.healthHideTimer > 1.0F) {
+            this.healthHideTimer = 1.0F;
+         }
+      }
+   }
+
+   private void updateHbAlpha() {
+      if (this instanceof AbstractMonster && ((AbstractMonster)this).isEscaping) {
+         this.hbAlpha = MathHelper.fadeLerpSnap(this.hbAlpha, 0.0F);
+         this.targetHealthBarWidth = 0.0F;
+         this.hbBgColor.a = this.hbAlpha * 0.75F;
+         this.hbShadowColor.a = this.hbAlpha * 0.5F;
+         this.hbTextColor.a = this.hbAlpha;
+         this.orangeHbBarColor.a = this.hbAlpha;
+         this.redHbBarColor.a = this.hbAlpha;
+         this.greenHbBarColor.a = this.hbAlpha;
+         this.blueHbBarColor.a = this.hbAlpha;
+         this.blockOutlineColor.a = this.hbAlpha;
+      } else if (this.targetHealthBarWidth == 0.0F && this.healthBarAnimTimer <= 0.0F) {
+         this.hbShadowColor.a = MathHelper.fadeLerpSnap(this.hbShadowColor.a, 0.0F);
+         this.hbBgColor.a = MathHelper.fadeLerpSnap(this.hbBgColor.a, 0.0F);
+         this.hbTextColor.a = MathHelper.fadeLerpSnap(this.hbTextColor.a, 0.0F);
+         this.blockOutlineColor.a = MathHelper.fadeLerpSnap(this.blockOutlineColor.a, 0.0F);
+      } else {
+         this.hbBgColor.a = this.hbAlpha * 0.5F;
+         this.hbShadowColor.a = this.hbAlpha * 0.2F;
+         this.hbTextColor.a = this.hbAlpha;
+         this.orangeHbBarColor.a = this.hbAlpha;
+         this.redHbBarColor.a = this.hbAlpha;
+         this.greenHbBarColor.a = this.hbAlpha;
+         this.blueHbBarColor.a = this.hbAlpha;
+         this.blockOutlineColor.a = this.hbAlpha;
+      }
+   }
+
+   protected void gainBlockAnimation() {
+      this.blockAnimTimer = 0.7F;
+      this.blockTextColor.a = 0.0F;
+      this.blockColor.a = 0.0F;
+   }
+
+   private void updateBlockAnimations() {
+      if (this.currentBlock > 0) {
+         if (this.blockAnimTimer > 0.0F) {
+            this.blockAnimTimer = this.blockAnimTimer - Gdx.graphics.getDeltaTime();
+            if (this.blockAnimTimer < 0.0F) {
+               this.blockAnimTimer = 0.0F;
             }
-        } else {
-            this.healthHideTimer += Gdx.graphics.getDeltaTime() * 4.0f;
-            if (this.healthHideTimer > 1.0f) {
-                this.healthHideTimer = 1.0f;
-            }
-        }
-    }
 
-    private void updateHbAlpha() {
-        if (this instanceof AbstractMonster && ((AbstractMonster)this).isEscaping) {
-            this.hbAlpha = MathHelper.fadeLerpSnap(this.hbAlpha, 0.0f);
-            this.targetHealthBarWidth = 0.0f;
-            this.hbBgColor.a = this.hbAlpha * 0.75f;
-            this.hbShadowColor.a = this.hbAlpha * 0.5f;
-            this.hbTextColor.a = this.hbAlpha;
-            this.orangeHbBarColor.a = this.hbAlpha;
-            this.redHbBarColor.a = this.hbAlpha;
-            this.greenHbBarColor.a = this.hbAlpha;
-            this.blueHbBarColor.a = this.hbAlpha;
-            this.blockOutlineColor.a = this.hbAlpha;
-        } else if (this.targetHealthBarWidth == 0.0f && this.healthBarAnimTimer <= 0.0f) {
-            this.hbShadowColor.a = MathHelper.fadeLerpSnap(this.hbShadowColor.a, 0.0f);
-            this.hbBgColor.a = MathHelper.fadeLerpSnap(this.hbBgColor.a, 0.0f);
-            this.hbTextColor.a = MathHelper.fadeLerpSnap(this.hbTextColor.a, 0.0f);
-            this.blockOutlineColor.a = MathHelper.fadeLerpSnap(this.blockOutlineColor.a, 0.0f);
-        } else {
-            this.hbBgColor.a = this.hbAlpha * 0.5f;
-            this.hbShadowColor.a = this.hbAlpha * 0.2f;
-            this.hbTextColor.a = this.hbAlpha;
-            this.orangeHbBarColor.a = this.hbAlpha;
-            this.redHbBarColor.a = this.hbAlpha;
-            this.greenHbBarColor.a = this.hbAlpha;
-            this.blueHbBarColor.a = this.hbAlpha;
-            this.blockOutlineColor.a = this.hbAlpha;
-        }
-    }
+            this.blockOffset = Interpolation.swingOut.apply(BLOCK_OFFSET_DIST * 3.0F, 0.0F, 1.0F - this.blockAnimTimer / 0.7F);
+            this.blockScale = Interpolation.pow3In.apply(3.0F, 1.0F, 1.0F - this.blockAnimTimer / 0.7F);
+            this.blockColor.a = Interpolation.pow2Out.apply(0.0F, 1.0F, 1.0F - this.blockAnimTimer / 0.7F);
+            this.blockTextColor.a = Interpolation.pow5In.apply(0.0F, 1.0F, 1.0F - this.blockAnimTimer / 0.7F);
+         } else if (this.blockScale != 1.0F) {
+            this.blockScale = MathHelper.scaleLerpSnap(this.blockScale, 1.0F);
+         }
 
-    protected void gainBlockAnimation() {
-        this.blockAnimTimer = 0.7f;
-        this.blockTextColor.a = 0.0f;
-        this.blockColor.a = 0.0f;
-    }
+         if (this.blockTextColor.r != 1.0F) {
+            this.blockTextColor.r = MathHelper.slowColorLerpSnap(this.blockTextColor.r, 1.0F);
+         }
 
-    private void updateBlockAnimations() {
-        if (this.currentBlock > 0) {
-            if (this.blockAnimTimer > 0.0f) {
-                this.blockAnimTimer -= Gdx.graphics.getDeltaTime();
-                if (this.blockAnimTimer < 0.0f) {
-                    this.blockAnimTimer = 0.0f;
-                }
-                this.blockOffset = Interpolation.swingOut.apply(BLOCK_OFFSET_DIST * 3.0f, 0.0f, 1.0f - this.blockAnimTimer / 0.7f);
-                this.blockScale = Interpolation.pow3In.apply(3.0f, 1.0f, 1.0f - this.blockAnimTimer / 0.7f);
-                this.blockColor.a = Interpolation.pow2Out.apply(0.0f, 1.0f, 1.0f - this.blockAnimTimer / 0.7f);
-                this.blockTextColor.a = Interpolation.pow5In.apply(0.0f, 1.0f, 1.0f - this.blockAnimTimer / 0.7f);
-            } else if (this.blockScale != 1.0f) {
-                this.blockScale = MathHelper.scaleLerpSnap(this.blockScale, 1.0f);
-            }
-            if (this.blockTextColor.r != 1.0f) {
-                this.blockTextColor.r = MathHelper.slowColorLerpSnap(this.blockTextColor.r, 1.0f);
-            }
-            if (this.blockTextColor.g != 1.0f) {
-                this.blockTextColor.g = MathHelper.slowColorLerpSnap(this.blockTextColor.g, 1.0f);
-            }
-            if (this.blockTextColor.b != 1.0f) {
-                this.blockTextColor.b = MathHelper.slowColorLerpSnap(this.blockTextColor.b, 1.0f);
-            }
-        }
-    }
+         if (this.blockTextColor.g != 1.0F) {
+            this.blockTextColor.g = MathHelper.slowColorLerpSnap(this.blockTextColor.g, 1.0F);
+         }
 
-    private void updateHbPopInAnimation() {
-        if (this.hbShowTimer > 0.0f) {
-            this.hbShowTimer -= Gdx.graphics.getDeltaTime();
-            if (this.hbShowTimer < 0.0f) {
-                this.hbShowTimer = 0.0f;
-            }
-            this.hbAlpha = Interpolation.fade.apply(0.0f, 1.0f, 1.0f - this.hbShowTimer / 0.7f);
-            this.hbYOffset = Interpolation.exp10Out.apply(HB_Y_OFFSET_DIST * 5.0f, 0.0f, 1.0f - this.hbShowTimer / 0.7f);
-        }
-    }
+         if (this.blockTextColor.b != 1.0F) {
+            this.blockTextColor.b = MathHelper.slowColorLerpSnap(this.blockTextColor.b, 1.0F);
+         }
+      }
+   }
 
-    private void updateHbDamageAnimation() {
-        if (this.healthBarAnimTimer > 0.0f) {
-            this.healthBarAnimTimer -= Gdx.graphics.getDeltaTime();
-        }
-        if (this.healthBarWidth != this.targetHealthBarWidth && this.healthBarAnimTimer <= 0.0f && this.targetHealthBarWidth < this.healthBarWidth) {
-            this.healthBarWidth = MathHelper.uiLerpSnap(this.healthBarWidth, this.targetHealthBarWidth);
-        }
-    }
+   private void updateHbPopInAnimation() {
+      if (this.hbShowTimer > 0.0F) {
+         this.hbShowTimer = this.hbShowTimer - Gdx.graphics.getDeltaTime();
+         if (this.hbShowTimer < 0.0F) {
+            this.hbShowTimer = 0.0F;
+         }
 
-    public void updatePowers() {
-        for (int i = 0; i < this.powers.size(); ++i) {
-            this.powers.get(i).update(i);
-        }
-    }
+         this.hbAlpha = Interpolation.fade.apply(0.0F, 1.0F, 1.0F - this.hbShowTimer / 0.7F);
+         this.hbYOffset = Interpolation.exp10Out.apply(HB_Y_OFFSET_DIST * 5.0F, 0.0F, 1.0F - this.hbShowTimer / 0.7F);
+      }
+   }
 
-    public static void initialize() {
-        sr = new SkeletonMeshRenderer();
-        sr.setPremultipliedAlpha(true);
-    }
+   private void updateHbDamageAnimation() {
+      if (this.healthBarAnimTimer > 0.0F) {
+         this.healthBarAnimTimer = this.healthBarAnimTimer - Gdx.graphics.getDeltaTime();
+      }
 
-    public void renderPowerTips(SpriteBatch sb) {
-        this.tips.clear();
-        for (AbstractPower p : this.powers) {
-            if (p.region48 != null) {
-                this.tips.add(new PowerTip(p.name, p.description, p.region48));
-                continue;
-            }
+      if (this.healthBarWidth != this.targetHealthBarWidth && this.healthBarAnimTimer <= 0.0F && this.targetHealthBarWidth < this.healthBarWidth) {
+         this.healthBarWidth = MathHelper.uiLerpSnap(this.healthBarWidth, this.targetHealthBarWidth);
+      }
+   }
+
+   public void updatePowers() {
+      for (int i = 0; i < this.powers.size(); i++) {
+         this.powers.get(i).update(i);
+      }
+   }
+
+   public static void initialize() {
+      sr = new SkeletonMeshRenderer();
+      sr.setPremultipliedAlpha(true);
+   }
+
+   public void renderPowerTips(SpriteBatch sb) {
+      this.tips.clear();
+
+      for (AbstractPower p : this.powers) {
+         if (p.region48 != null) {
+            this.tips.add(new PowerTip(p.name, p.description, p.region48));
+         } else {
             this.tips.add(new PowerTip(p.name, p.description, p.img));
-        }
-        if (!this.tips.isEmpty()) {
-            if (this.hb.cX + this.hb.width / 2.0f < TIP_X_THRESHOLD) {
-                TipHelper.queuePowerTips(this.hb.cX + this.hb.width / 2.0f + TIP_OFFSET_R_X, this.hb.cY + TipHelper.calculateAdditionalOffset(this.tips, this.hb.cY), this.tips);
-            } else {
-                TipHelper.queuePowerTips(this.hb.cX - this.hb.width / 2.0f + TIP_OFFSET_L_X, this.hb.cY + TipHelper.calculateAdditionalOffset(this.tips, this.hb.cY), this.tips);
-            }
-        }
-    }
+         }
+      }
 
-    public void useFastAttackAnimation() {
-        this.animX = 0.0f;
-        this.animY = 0.0f;
-        this.animationTimer = 0.4f;
-        this.animation = CreatureAnimation.ATTACK_FAST;
-    }
+      if (!this.tips.isEmpty()) {
+         if (this.hb.cX + this.hb.width / 2.0F < TIP_X_THRESHOLD) {
+            TipHelper.queuePowerTips(
+               this.hb.cX + this.hb.width / 2.0F + TIP_OFFSET_R_X, this.hb.cY + TipHelper.calculateAdditionalOffset(this.tips, this.hb.cY), this.tips
+            );
+         } else {
+            TipHelper.queuePowerTips(
+               this.hb.cX - this.hb.width / 2.0F + TIP_OFFSET_L_X, this.hb.cY + TipHelper.calculateAdditionalOffset(this.tips, this.hb.cY), this.tips
+            );
+         }
+      }
+   }
 
-    public void useSlowAttackAnimation() {
-        this.animX = 0.0f;
-        this.animY = 0.0f;
-        this.animationTimer = 1.0f;
-        this.animation = CreatureAnimation.ATTACK_SLOW;
-    }
+   public void useFastAttackAnimation() {
+      this.animX = 0.0F;
+      this.animY = 0.0F;
+      this.animationTimer = 0.4F;
+      this.animation = AbstractCreature.CreatureAnimation.ATTACK_FAST;
+   }
 
-    public void useHopAnimation() {
-        this.animX = 0.0f;
-        this.animY = 0.0f;
-        this.vY = 300.0f * Settings.scale;
-        this.animationTimer = 0.7f;
-        this.animation = CreatureAnimation.HOP;
-    }
+   public void useSlowAttackAnimation() {
+      this.animX = 0.0F;
+      this.animY = 0.0F;
+      this.animationTimer = 1.0F;
+      this.animation = AbstractCreature.CreatureAnimation.ATTACK_SLOW;
+   }
 
-    public void useJumpAnimation() {
-        this.animX = 0.0f;
-        this.animY = 0.0f;
-        this.vY = 500.0f * Settings.scale;
-        this.animationTimer = 0.7f;
-        this.animation = CreatureAnimation.JUMP;
-    }
+   public void useHopAnimation() {
+      this.animX = 0.0F;
+      this.animY = 0.0F;
+      this.vY = 300.0F * Settings.scale;
+      this.animationTimer = 0.7F;
+      this.animation = AbstractCreature.CreatureAnimation.HOP;
+   }
 
-    public void useStaggerAnimation() {
-        if (this.animY == 0.0f) {
-            this.animX = 0.0f;
-            this.animationTimer = 0.3f;
-            this.animation = CreatureAnimation.STAGGER;
-        }
-    }
+   public void useJumpAnimation() {
+      this.animX = 0.0F;
+      this.animY = 0.0F;
+      this.vY = 500.0F * Settings.scale;
+      this.animationTimer = 0.7F;
+      this.animation = AbstractCreature.CreatureAnimation.JUMP;
+   }
 
-    public void useFastShakeAnimation(float duration) {
-        if (this.animY == 0.0f) {
-            this.animX = 0.0f;
-            this.animationTimer = duration;
-            this.animation = CreatureAnimation.FAST_SHAKE;
-        }
-    }
+   public void useStaggerAnimation() {
+      if (this.animY == 0.0F) {
+         this.animX = 0.0F;
+         this.animationTimer = 0.3F;
+         this.animation = AbstractCreature.CreatureAnimation.STAGGER;
+      }
+   }
 
-    public void useShakeAnimation(float duration) {
-        if (this.animY == 0.0f) {
-            this.animX = 0.0f;
-            this.animationTimer = duration;
-            this.animation = CreatureAnimation.SHAKE;
-        }
-    }
+   public void useFastShakeAnimation(float duration) {
+      if (this.animY == 0.0F) {
+         this.animX = 0.0F;
+         this.animationTimer = duration;
+         this.animation = AbstractCreature.CreatureAnimation.FAST_SHAKE;
+      }
+   }
 
-    public AbstractPower getPower(String targetID) {
-        for (AbstractPower p : this.powers) {
-            if (!p.ID.equals(targetID)) continue;
+   public void useShakeAnimation(float duration) {
+      if (this.animY == 0.0F) {
+         this.animX = 0.0F;
+         this.animationTimer = duration;
+         this.animation = AbstractCreature.CreatureAnimation.SHAKE;
+      }
+   }
+
+   public AbstractPower getPower(String targetID) {
+      for (AbstractPower p : this.powers) {
+         if (p.ID.equals(targetID)) {
             return p;
-        }
-        return null;
-    }
+         }
+      }
 
-    public boolean hasPower(String targetID) {
-        for (AbstractPower p : this.powers) {
-            if (!p.ID.equals(targetID)) continue;
-            return true;
-        }
-        return false;
-    }
+      return null;
+   }
 
-    public boolean isDeadOrEscaped() {
-        if (this.isDying || this.halfDead) {
+   public boolean hasPower(String targetID) {
+      for (AbstractPower p : this.powers) {
+         if (p.ID.equals(targetID)) {
             return true;
-        }
-        if (!this.isPlayer) {
+         }
+      }
+
+      return false;
+   }
+
+   public boolean isDeadOrEscaped() {
+      if (!this.isDying && !this.halfDead) {
+         if (!this.isPlayer) {
             AbstractMonster m = (AbstractMonster)this;
             if (m.isEscaping) {
-                return true;
+               return true;
             }
-        }
-        return false;
-    }
+         }
 
-    public void loseGold(int goldAmount) {
-        if (goldAmount > 0) {
-            this.gold -= goldAmount;
-            if (this.gold < 0) {
-                this.gold = 0;
-            }
-        } else {
-            logger.info("NEGATIVE MONEY???");
-        }
-    }
+         return false;
+      } else {
+         return true;
+      }
+   }
 
-    public void gainGold(int amount) {
-        if (amount < 0) {
-            logger.info("NEGATIVE MONEY???");
-        } else {
-            this.gold += amount;
-        }
-    }
+   public void loseGold(int goldAmount) {
+      if (goldAmount > 0) {
+         this.gold -= goldAmount;
+         if (this.gold < 0) {
+            this.gold = 0;
+         }
+      } else {
+         logger.info("NEGATIVE MONEY???");
+      }
+   }
 
-    public void renderReticle(SpriteBatch sb) {
-        this.reticleRendered = true;
-        this.renderReticleCorner(sb, -this.hb.width / 2.0f + this.reticleOffset, this.hb.height / 2.0f - this.reticleOffset, false, false);
-        this.renderReticleCorner(sb, this.hb.width / 2.0f - this.reticleOffset, this.hb.height / 2.0f - this.reticleOffset, true, false);
-        this.renderReticleCorner(sb, -this.hb.width / 2.0f + this.reticleOffset, -this.hb.height / 2.0f + this.reticleOffset, false, true);
-        this.renderReticleCorner(sb, this.hb.width / 2.0f - this.reticleOffset, -this.hb.height / 2.0f + this.reticleOffset, true, true);
-    }
+   public void gainGold(int amount) {
+      if (amount < 0) {
+         logger.info("NEGATIVE MONEY???");
+      } else {
+         this.gold += amount;
+      }
+   }
 
-    public void renderReticle(SpriteBatch sb, Hitbox hb) {
-        this.reticleRendered = true;
-        this.renderReticleCorner(sb, -hb.width / 2.0f + this.reticleOffset, hb.height / 2.0f - this.reticleOffset, hb, false, false);
-        this.renderReticleCorner(sb, hb.width / 2.0f - this.reticleOffset, hb.height / 2.0f - this.reticleOffset, hb, true, false);
-        this.renderReticleCorner(sb, -hb.width / 2.0f + this.reticleOffset, -hb.height / 2.0f + this.reticleOffset, hb, false, true);
-        this.renderReticleCorner(sb, hb.width / 2.0f - this.reticleOffset, -hb.height / 2.0f + this.reticleOffset, hb, true, true);
-    }
+   public void renderReticle(SpriteBatch sb) {
+      this.reticleRendered = true;
+      this.renderReticleCorner(sb, -this.hb.width / 2.0F + this.reticleOffset, this.hb.height / 2.0F - this.reticleOffset, false, false);
+      this.renderReticleCorner(sb, this.hb.width / 2.0F - this.reticleOffset, this.hb.height / 2.0F - this.reticleOffset, true, false);
+      this.renderReticleCorner(sb, -this.hb.width / 2.0F + this.reticleOffset, -this.hb.height / 2.0F + this.reticleOffset, false, true);
+      this.renderReticleCorner(sb, this.hb.width / 2.0F - this.reticleOffset, -this.hb.height / 2.0F + this.reticleOffset, true, true);
+   }
 
-    protected void updateReticle() {
-        if (this.reticleRendered) {
-            this.reticleRendered = false;
-            this.reticleAlpha += Gdx.graphics.getDeltaTime() * 3.0f;
-            if (this.reticleAlpha > 1.0f) {
-                this.reticleAlpha = 1.0f;
-            }
-            this.reticleAnimTimer += Gdx.graphics.getDeltaTime();
-            if (this.reticleAnimTimer > 1.0f) {
-                this.reticleAnimTimer = 1.0f;
-            }
-            this.reticleOffset = Interpolation.elasticOut.apply(RETICLE_OFFSET_DIST, 0.0f, this.reticleAnimTimer);
-        } else {
-            this.reticleAlpha = 0.0f;
-            this.reticleAnimTimer = 0.0f;
-            this.reticleOffset = RETICLE_OFFSET_DIST;
-        }
-    }
+   public void renderReticle(SpriteBatch sb, Hitbox hb) {
+      this.reticleRendered = true;
+      this.renderReticleCorner(sb, -hb.width / 2.0F + this.reticleOffset, hb.height / 2.0F - this.reticleOffset, hb, false, false);
+      this.renderReticleCorner(sb, hb.width / 2.0F - this.reticleOffset, hb.height / 2.0F - this.reticleOffset, hb, true, false);
+      this.renderReticleCorner(sb, -hb.width / 2.0F + this.reticleOffset, -hb.height / 2.0F + this.reticleOffset, hb, false, true);
+      this.renderReticleCorner(sb, hb.width / 2.0F - this.reticleOffset, -hb.height / 2.0F + this.reticleOffset, hb, true, true);
+   }
 
-    public void renderHealth(SpriteBatch sb) {
-        if (Settings.hideCombatElements) {
-            return;
-        }
-        float x = this.hb.cX - this.hb.width / 2.0f;
-        float y = this.hb.cY - this.hb.height / 2.0f + this.hbYOffset;
-        this.renderHealthBg(sb, x, y);
-        if (this.targetHealthBarWidth != 0.0f) {
+   protected void updateReticle() {
+      if (this.reticleRendered) {
+         this.reticleRendered = false;
+         this.reticleAlpha = this.reticleAlpha + Gdx.graphics.getDeltaTime() * 3.0F;
+         if (this.reticleAlpha > 1.0F) {
+            this.reticleAlpha = 1.0F;
+         }
+
+         this.reticleAnimTimer = this.reticleAnimTimer + Gdx.graphics.getDeltaTime();
+         if (this.reticleAnimTimer > 1.0F) {
+            this.reticleAnimTimer = 1.0F;
+         }
+
+         this.reticleOffset = Interpolation.elasticOut.apply(RETICLE_OFFSET_DIST, 0.0F, this.reticleAnimTimer);
+      } else {
+         this.reticleAlpha = 0.0F;
+         this.reticleAnimTimer = 0.0F;
+         this.reticleOffset = RETICLE_OFFSET_DIST;
+      }
+   }
+
+   public void renderHealth(SpriteBatch sb) {
+      if (!Settings.hideCombatElements) {
+         float x = this.hb.cX - this.hb.width / 2.0F;
+         float y = this.hb.cY - this.hb.height / 2.0F + this.hbYOffset;
+         this.renderHealthBg(sb, x, y);
+         if (this.targetHealthBarWidth != 0.0F) {
             this.renderOrangeHealthBar(sb, x, y);
             if (this.hasPower("Poison")) {
-                this.renderGreenHealthBar(sb, x, y);
+               this.renderGreenHealthBar(sb, x, y);
             }
+
             this.renderRedHealthBar(sb, x, y);
-        }
-        if (this.currentBlock != 0 && this.hbAlpha != 0.0f) {
+         }
+
+         if (this.currentBlock != 0 && this.hbAlpha != 0.0F) {
             this.renderBlockOutline(sb, x, y);
-        }
-        this.renderHealthText(sb, y);
-        if (this.currentBlock != 0 && this.hbAlpha != 0.0f) {
+         }
+
+         this.renderHealthText(sb, y);
+         if (this.currentBlock != 0 && this.hbAlpha != 0.0F) {
             this.renderBlockIconAndValue(sb, x, y);
-        }
-        this.renderPowerIcons(sb, x, y);
-    }
+         }
 
-    private void renderBlockOutline(SpriteBatch sb, float x, float y) {
-        sb.setColor(this.blockOutlineColor);
-        sb.setBlendFunction(770, 1);
-        sb.draw(ImageMaster.BLOCK_BAR_L, x - HEALTH_BAR_HEIGHT, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
-        sb.draw(ImageMaster.BLOCK_BAR_B, x, y + HEALTH_BAR_OFFSET_Y, this.hb.width, HEALTH_BAR_HEIGHT);
-        sb.draw(ImageMaster.BLOCK_BAR_R, x + this.hb.width, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
-        sb.setBlendFunction(770, 771);
-    }
+         this.renderPowerIcons(sb, x, y);
+      }
+   }
 
-    private void renderBlockIconAndValue(SpriteBatch sb, float x, float y) {
-        sb.setColor(this.blockColor);
-        sb.draw(ImageMaster.BLOCK_ICON, x + BLOCK_ICON_X - 32.0f, y + BLOCK_ICON_Y - 32.0f + this.blockOffset, 32.0f, 32.0f, 64.0f, 64.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 64, 64, false, false);
-        FontHelper.renderFontCentered(sb, FontHelper.blockInfoFont, Integer.toString(this.currentBlock), x + BLOCK_ICON_X, y - 16.0f * Settings.scale, this.blockTextColor, this.blockScale);
-    }
+   private void renderBlockOutline(SpriteBatch sb, float x, float y) {
+      sb.setColor(this.blockOutlineColor);
+      sb.setBlendFunction(770, 1);
+      sb.draw(ImageMaster.BLOCK_BAR_L, x - HEALTH_BAR_HEIGHT, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
+      sb.draw(ImageMaster.BLOCK_BAR_B, x, y + HEALTH_BAR_OFFSET_Y, this.hb.width, HEALTH_BAR_HEIGHT);
+      sb.draw(ImageMaster.BLOCK_BAR_R, x + this.hb.width, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
+      sb.setBlendFunction(770, 771);
+   }
 
-    private void renderHealthBg(SpriteBatch sb, float x, float y) {
-        sb.setColor(this.hbShadowColor);
-        sb.draw(ImageMaster.HB_SHADOW_L, x - HEALTH_BAR_HEIGHT, y - HEALTH_BG_OFFSET_X + 3.0f * Settings.scale, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
-        sb.draw(ImageMaster.HB_SHADOW_B, x, y - HEALTH_BG_OFFSET_X + 3.0f * Settings.scale, this.hb.width, HEALTH_BAR_HEIGHT);
-        sb.draw(ImageMaster.HB_SHADOW_R, x + this.hb.width, y - HEALTH_BG_OFFSET_X + 3.0f * Settings.scale, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
-        sb.setColor(this.hbBgColor);
-        if (this.currentHealth != this.maxHealth) {
+   private void renderBlockIconAndValue(SpriteBatch sb, float x, float y) {
+      sb.setColor(this.blockColor);
+      sb.draw(
+         ImageMaster.BLOCK_ICON,
+         x + BLOCK_ICON_X - 32.0F,
+         y + BLOCK_ICON_Y - 32.0F + this.blockOffset,
+         32.0F,
+         32.0F,
+         64.0F,
+         64.0F,
+         Settings.scale,
+         Settings.scale,
+         0.0F,
+         0,
+         0,
+         64,
+         64,
+         false,
+         false
+      );
+      FontHelper.renderFontCentered(
+         sb, FontHelper.blockInfoFont, Integer.toString(this.currentBlock), x + BLOCK_ICON_X, y - 16.0F * Settings.scale, this.blockTextColor, this.blockScale
+      );
+   }
+
+   private void renderHealthBg(SpriteBatch sb, float x, float y) {
+      sb.setColor(this.hbShadowColor);
+      sb.draw(ImageMaster.HB_SHADOW_L, x - HEALTH_BAR_HEIGHT, y - HEALTH_BG_OFFSET_X + 3.0F * Settings.scale, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
+      sb.draw(ImageMaster.HB_SHADOW_B, x, y - HEALTH_BG_OFFSET_X + 3.0F * Settings.scale, this.hb.width, HEALTH_BAR_HEIGHT);
+      sb.draw(ImageMaster.HB_SHADOW_R, x + this.hb.width, y - HEALTH_BG_OFFSET_X + 3.0F * Settings.scale, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
+      sb.setColor(this.hbBgColor);
+      if (this.currentHealth != this.maxHealth) {
+         sb.draw(ImageMaster.HEALTH_BAR_L, x - HEALTH_BAR_HEIGHT, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
+         sb.draw(ImageMaster.HEALTH_BAR_B, x, y + HEALTH_BAR_OFFSET_Y, this.hb.width, HEALTH_BAR_HEIGHT);
+         sb.draw(ImageMaster.HEALTH_BAR_R, x + this.hb.width, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
+      }
+   }
+
+   private void renderOrangeHealthBar(SpriteBatch sb, float x, float y) {
+      sb.setColor(this.orangeHbBarColor);
+      sb.draw(ImageMaster.HEALTH_BAR_L, x - HEALTH_BAR_HEIGHT, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
+      sb.draw(ImageMaster.HEALTH_BAR_B, x, y + HEALTH_BAR_OFFSET_Y, this.healthBarWidth, HEALTH_BAR_HEIGHT);
+      sb.draw(ImageMaster.HEALTH_BAR_R, x + this.healthBarWidth, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
+   }
+
+   private void renderGreenHealthBar(SpriteBatch sb, float x, float y) {
+      sb.setColor(this.greenHbBarColor);
+      if (this.currentHealth > 0) {
+         sb.draw(ImageMaster.HEALTH_BAR_L, x - HEALTH_BAR_HEIGHT, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
+      }
+
+      sb.draw(ImageMaster.HEALTH_BAR_B, x, y + HEALTH_BAR_OFFSET_Y, this.targetHealthBarWidth, HEALTH_BAR_HEIGHT);
+      sb.draw(ImageMaster.HEALTH_BAR_R, x + this.targetHealthBarWidth, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
+   }
+
+   private void renderRedHealthBar(SpriteBatch sb, float x, float y) {
+      if (this.currentBlock > 0) {
+         sb.setColor(this.blueHbBarColor);
+      } else {
+         sb.setColor(this.redHbBarColor);
+      }
+
+      if (!this.hasPower("Poison")) {
+         if (this.currentHealth > 0) {
             sb.draw(ImageMaster.HEALTH_BAR_L, x - HEALTH_BAR_HEIGHT, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
-            sb.draw(ImageMaster.HEALTH_BAR_B, x, y + HEALTH_BAR_OFFSET_Y, this.hb.width, HEALTH_BAR_HEIGHT);
-            sb.draw(ImageMaster.HEALTH_BAR_R, x + this.hb.width, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
-        }
-    }
+         }
 
-    private void renderOrangeHealthBar(SpriteBatch sb, float x, float y) {
-        sb.setColor(this.orangeHbBarColor);
-        sb.draw(ImageMaster.HEALTH_BAR_L, x - HEALTH_BAR_HEIGHT, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
-        sb.draw(ImageMaster.HEALTH_BAR_B, x, y + HEALTH_BAR_OFFSET_Y, this.healthBarWidth, HEALTH_BAR_HEIGHT);
-        sb.draw(ImageMaster.HEALTH_BAR_R, x + this.healthBarWidth, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
-    }
+         sb.draw(ImageMaster.HEALTH_BAR_B, x, y + HEALTH_BAR_OFFSET_Y, this.targetHealthBarWidth, HEALTH_BAR_HEIGHT);
+         sb.draw(ImageMaster.HEALTH_BAR_R, x + this.targetHealthBarWidth, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
+      } else {
+         int poisonAmt = this.getPower("Poison").amount;
+         if (poisonAmt > 0 && this.hasPower("Intangible")) {
+            poisonAmt = 1;
+         }
 
-    private void renderGreenHealthBar(SpriteBatch sb, float x, float y) {
-        sb.setColor(this.greenHbBarColor);
-        if (this.currentHealth > 0) {
-            sb.draw(ImageMaster.HEALTH_BAR_L, x - HEALTH_BAR_HEIGHT, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
-        }
-        sb.draw(ImageMaster.HEALTH_BAR_B, x, y + HEALTH_BAR_OFFSET_Y, this.targetHealthBarWidth, HEALTH_BAR_HEIGHT);
-        sb.draw(ImageMaster.HEALTH_BAR_R, x + this.targetHealthBarWidth, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
-    }
-
-    private void renderRedHealthBar(SpriteBatch sb, float x, float y) {
-        if (this.currentBlock > 0) {
-            sb.setColor(this.blueHbBarColor);
-        } else {
-            sb.setColor(this.redHbBarColor);
-        }
-        if (!this.hasPower("Poison")) {
+         if (this.currentHealth > poisonAmt) {
+            float w = 1.0F - (float)(this.currentHealth - poisonAmt) / this.currentHealth;
+            w *= this.targetHealthBarWidth;
             if (this.currentHealth > 0) {
-                sb.draw(ImageMaster.HEALTH_BAR_L, x - HEALTH_BAR_HEIGHT, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
+               sb.draw(ImageMaster.HEALTH_BAR_L, x - HEALTH_BAR_HEIGHT, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
             }
-            sb.draw(ImageMaster.HEALTH_BAR_B, x, y + HEALTH_BAR_OFFSET_Y, this.targetHealthBarWidth, HEALTH_BAR_HEIGHT);
-            sb.draw(ImageMaster.HEALTH_BAR_R, x + this.targetHealthBarWidth, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
-        } else {
-            int poisonAmt = this.getPower((String)"Poison").amount;
-            if (poisonAmt > 0 && this.hasPower("Intangible")) {
-                poisonAmt = 1;
-            }
-            if (this.currentHealth > poisonAmt) {
-                float w = 1.0f - (float)(this.currentHealth - poisonAmt) / (float)this.currentHealth;
-                w *= this.targetHealthBarWidth;
-                if (this.currentHealth > 0) {
-                    sb.draw(ImageMaster.HEALTH_BAR_L, x - HEALTH_BAR_HEIGHT, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
-                }
-                sb.draw(ImageMaster.HEALTH_BAR_B, x, y + HEALTH_BAR_OFFSET_Y, this.targetHealthBarWidth - w, HEALTH_BAR_HEIGHT);
-                sb.draw(ImageMaster.HEALTH_BAR_R, x + this.targetHealthBarWidth - w, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
-            }
-        }
-    }
 
-    private void renderHealthText(SpriteBatch sb, float y) {
-        if (this.targetHealthBarWidth != 0.0f) {
-            float tmp = this.hbTextColor.a;
-            this.hbTextColor.a *= this.healthHideTimer;
-            FontHelper.renderFontCentered(sb, FontHelper.healthInfoFont, this.currentHealth + "/" + this.maxHealth, this.hb.cX, y + HEALTH_BAR_OFFSET_Y + HEALTH_TEXT_OFFSET_Y + 5.0f * Settings.scale, this.hbTextColor);
-            this.hbTextColor.a = tmp;
-        } else {
-            FontHelper.renderFontCentered(sb, FontHelper.healthInfoFont, TEXT[0], this.hb.cX, y + HEALTH_BAR_OFFSET_Y + HEALTH_TEXT_OFFSET_Y - 1.0f * Settings.scale, this.hbTextColor);
-        }
-    }
+            sb.draw(ImageMaster.HEALTH_BAR_B, x, y + HEALTH_BAR_OFFSET_Y, this.targetHealthBarWidth - w, HEALTH_BAR_HEIGHT);
+            sb.draw(ImageMaster.HEALTH_BAR_R, x + this.targetHealthBarWidth - w, y + HEALTH_BAR_OFFSET_Y, HEALTH_BAR_HEIGHT, HEALTH_BAR_HEIGHT);
+         }
+      }
+   }
 
-    private void renderPowerIcons(SpriteBatch sb, float x, float y) {
-        float offset = 10.0f * Settings.scale;
-        for (AbstractPower p : this.powers) {
-            if (Settings.isMobile) {
-                p.renderIcons(sb, x + offset, y - 53.0f * Settings.scale, this.hbTextColor);
-            } else {
-                p.renderIcons(sb, x + offset, y - 48.0f * Settings.scale, this.hbTextColor);
-            }
-            offset += POWER_ICON_PADDING_X;
-        }
-        offset = 0.0f * Settings.scale;
-        for (AbstractPower p : this.powers) {
-            if (Settings.isMobile) {
-                p.renderAmount(sb, x + offset + 32.0f * Settings.scale, y - 75.0f * Settings.scale, this.hbTextColor);
-            } else {
-                p.renderAmount(sb, x + offset + 32.0f * Settings.scale, y - 66.0f * Settings.scale, this.hbTextColor);
-            }
-            offset += POWER_ICON_PADDING_X;
-        }
-    }
+   private void renderHealthText(SpriteBatch sb, float y) {
+      if (this.targetHealthBarWidth != 0.0F) {
+         float tmp = this.hbTextColor.a;
+         this.hbTextColor.a = this.hbTextColor.a * this.healthHideTimer;
+         FontHelper.renderFontCentered(
+            sb,
+            FontHelper.healthInfoFont,
+            this.currentHealth + "/" + this.maxHealth,
+            this.hb.cX,
+            y + HEALTH_BAR_OFFSET_Y + HEALTH_TEXT_OFFSET_Y + 5.0F * Settings.scale,
+            this.hbTextColor
+         );
+         this.hbTextColor.a = tmp;
+      } else {
+         FontHelper.renderFontCentered(
+            sb, FontHelper.healthInfoFont, TEXT[0], this.hb.cX, y + HEALTH_BAR_OFFSET_Y + HEALTH_TEXT_OFFSET_Y - 1.0F * Settings.scale, this.hbTextColor
+         );
+      }
+   }
 
-    private void renderReticleCorner(SpriteBatch sb, float x, float y, Hitbox hb, boolean flipX, boolean flipY) {
-        this.reticleShadowColor.a = this.reticleAlpha / 4.0f;
-        sb.setColor(this.reticleShadowColor);
-        sb.draw(ImageMaster.RETICLE_CORNER, hb.cX + x - 18.0f + 4.0f * Settings.scale, hb.cY + y - 18.0f - 4.0f * Settings.scale, 18.0f, 18.0f, 36.0f, 36.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 36, 36, flipX, flipY);
-        this.reticleColor.a = this.reticleAlpha;
-        sb.setColor(this.reticleColor);
-        sb.draw(ImageMaster.RETICLE_CORNER, hb.cX + x - 18.0f, hb.cY + y - 18.0f, 18.0f, 18.0f, 36.0f, 36.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 36, 36, flipX, flipY);
-    }
+   private void renderPowerIcons(SpriteBatch sb, float x, float y) {
+      float offset = 10.0F * Settings.scale;
 
-    private void renderReticleCorner(SpriteBatch sb, float x, float y, boolean flipX, boolean flipY) {
-        this.reticleShadowColor.a = this.reticleAlpha / 4.0f;
-        sb.setColor(this.reticleShadowColor);
-        sb.draw(ImageMaster.RETICLE_CORNER, this.hb.cX + x - 18.0f + 4.0f * Settings.scale, this.hb.cY + y - 18.0f - 4.0f * Settings.scale, 18.0f, 18.0f, 36.0f, 36.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 36, 36, flipX, flipY);
-        this.reticleColor.a = this.reticleAlpha;
-        sb.setColor(this.reticleColor);
-        sb.draw(ImageMaster.RETICLE_CORNER, this.hb.cX + x - 18.0f, this.hb.cY + y - 18.0f, 18.0f, 18.0f, 36.0f, 36.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 36, 36, flipX, flipY);
-    }
+      for (AbstractPower p : this.powers) {
+         if (Settings.isMobile) {
+            p.renderIcons(sb, x + offset, y - 53.0F * Settings.scale, this.hbTextColor);
+         } else {
+            p.renderIcons(sb, x + offset, y - 48.0F * Settings.scale, this.hbTextColor);
+         }
 
-    public abstract void render(SpriteBatch var1);
+         offset += POWER_ICON_PADDING_X;
+      }
 
-    static {
-        SHAKE_THRESHOLD = Settings.scale * 8.0f;
-        SHAKE_SPEED = 150.0f * Settings.scale;
-        STAGGER_MOVE_SPEED = 20.0f * Settings.scale;
-        RETICLE_OFFSET_DIST = 15.0f * Settings.scale;
-    }
+      offset = 0.0F * Settings.scale;
 
-    public static enum CreatureAnimation {
-        FAST_SHAKE,
-        SHAKE,
-        ATTACK_FAST,
-        ATTACK_SLOW,
-        STAGGER,
-        HOP,
-        JUMP;
+      for (AbstractPower p : this.powers) {
+         if (Settings.isMobile) {
+            p.renderAmount(sb, x + offset + 32.0F * Settings.scale, y - 75.0F * Settings.scale, this.hbTextColor);
+         } else {
+            p.renderAmount(sb, x + offset + 32.0F * Settings.scale, y - 66.0F * Settings.scale, this.hbTextColor);
+         }
 
-    }
+         offset += POWER_ICON_PADDING_X;
+      }
+   }
+
+   private void renderReticleCorner(SpriteBatch sb, float x, float y, Hitbox hb, boolean flipX, boolean flipY) {
+      this.reticleShadowColor.a = this.reticleAlpha / 4.0F;
+      sb.setColor(this.reticleShadowColor);
+      sb.draw(
+         ImageMaster.RETICLE_CORNER,
+         hb.cX + x - 18.0F + 4.0F * Settings.scale,
+         hb.cY + y - 18.0F - 4.0F * Settings.scale,
+         18.0F,
+         18.0F,
+         36.0F,
+         36.0F,
+         Settings.scale,
+         Settings.scale,
+         0.0F,
+         0,
+         0,
+         36,
+         36,
+         flipX,
+         flipY
+      );
+      this.reticleColor.a = this.reticleAlpha;
+      sb.setColor(this.reticleColor);
+      sb.draw(
+         ImageMaster.RETICLE_CORNER,
+         hb.cX + x - 18.0F,
+         hb.cY + y - 18.0F,
+         18.0F,
+         18.0F,
+         36.0F,
+         36.0F,
+         Settings.scale,
+         Settings.scale,
+         0.0F,
+         0,
+         0,
+         36,
+         36,
+         flipX,
+         flipY
+      );
+   }
+
+   private void renderReticleCorner(SpriteBatch sb, float x, float y, boolean flipX, boolean flipY) {
+      this.reticleShadowColor.a = this.reticleAlpha / 4.0F;
+      sb.setColor(this.reticleShadowColor);
+      sb.draw(
+         ImageMaster.RETICLE_CORNER,
+         this.hb.cX + x - 18.0F + 4.0F * Settings.scale,
+         this.hb.cY + y - 18.0F - 4.0F * Settings.scale,
+         18.0F,
+         18.0F,
+         36.0F,
+         36.0F,
+         Settings.scale,
+         Settings.scale,
+         0.0F,
+         0,
+         0,
+         36,
+         36,
+         flipX,
+         flipY
+      );
+      this.reticleColor.a = this.reticleAlpha;
+      sb.setColor(this.reticleColor);
+      sb.draw(
+         ImageMaster.RETICLE_CORNER,
+         this.hb.cX + x - 18.0F,
+         this.hb.cY + y - 18.0F,
+         18.0F,
+         18.0F,
+         36.0F,
+         36.0F,
+         Settings.scale,
+         Settings.scale,
+         0.0F,
+         0,
+         0,
+         36,
+         36,
+         flipX,
+         flipY
+      );
+   }
+
+   public abstract void render(SpriteBatch var1);
+
+   static {
+      TEXT = uiStrings.TEXT;
+   }
+
+   public static enum CreatureAnimation {
+      FAST_SHAKE,
+      SHAKE,
+      ATTACK_FAST,
+      ATTACK_SLOW,
+      STAGGER,
+      HOP,
+      JUMP;
+   }
 }
-

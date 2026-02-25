@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core;
 
 import java.io.Serializable;
@@ -13,51 +10,49 @@ import org.apache.logging.log4j.core.time.Instant;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.util.ReadOnlyStringMap;
 
-public interface LogEvent
-extends Serializable {
-    public LogEvent toImmutable();
+public interface LogEvent extends Serializable {
+   LogEvent toImmutable();
 
-    @Deprecated
-    public Map<String, String> getContextMap();
+   @Deprecated
+   Map<String, String> getContextMap();
 
-    public ReadOnlyStringMap getContextData();
+   ReadOnlyStringMap getContextData();
 
-    public ThreadContext.ContextStack getContextStack();
+   ThreadContext.ContextStack getContextStack();
 
-    public String getLoggerFqcn();
+   String getLoggerFqcn();
 
-    public Level getLevel();
+   Level getLevel();
 
-    public String getLoggerName();
+   String getLoggerName();
 
-    public Marker getMarker();
+   Marker getMarker();
 
-    public Message getMessage();
+   Message getMessage();
 
-    public long getTimeMillis();
+   long getTimeMillis();
 
-    public Instant getInstant();
+   Instant getInstant();
 
-    public StackTraceElement getSource();
+   StackTraceElement getSource();
 
-    public String getThreadName();
+   String getThreadName();
 
-    public long getThreadId();
+   long getThreadId();
 
-    public int getThreadPriority();
+   int getThreadPriority();
 
-    public Throwable getThrown();
+   Throwable getThrown();
 
-    public ThrowableProxy getThrownProxy();
+   ThrowableProxy getThrownProxy();
 
-    public boolean isEndOfBatch();
+   boolean isEndOfBatch();
 
-    public boolean isIncludeLocation();
+   boolean isIncludeLocation();
 
-    public void setEndOfBatch(boolean var1);
+   void setEndOfBatch(boolean endOfBatch);
 
-    public void setIncludeLocation(boolean var1);
+   void setIncludeLocation(boolean locationRequired);
 
-    public long getNanoTime();
+   long getNanoTime();
 }
-

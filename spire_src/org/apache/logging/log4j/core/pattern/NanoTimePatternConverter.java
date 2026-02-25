@@ -1,30 +1,23 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.pattern;
 
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
-import org.apache.logging.log4j.core.pattern.ConverterKeys;
-import org.apache.logging.log4j.core.pattern.LogEventPatternConverter;
 import org.apache.logging.log4j.util.PerformanceSensitive;
 
-@Plugin(name="NanoTimePatternConverter", category="Converter")
-@ConverterKeys(value={"N", "nano"})
-@PerformanceSensitive(value={"allocation"})
-public final class NanoTimePatternConverter
-extends LogEventPatternConverter {
-    private NanoTimePatternConverter(String[] options) {
-        super("Nanotime", "nanotime");
-    }
+@Plugin(name = "NanoTimePatternConverter", category = "Converter")
+@ConverterKeys({"N", "nano"})
+@PerformanceSensitive("allocation")
+public final class NanoTimePatternConverter extends LogEventPatternConverter {
+   private NanoTimePatternConverter(final String[] options) {
+      super("Nanotime", "nanotime");
+   }
 
-    public static NanoTimePatternConverter newInstance(String[] options) {
-        return new NanoTimePatternConverter(options);
-    }
+   public static NanoTimePatternConverter newInstance(final String[] options) {
+      return new NanoTimePatternConverter(options);
+   }
 
-    @Override
-    public void format(LogEvent event, StringBuilder output) {
-        output.append(event.getNanoTime());
-    }
+   @Override
+   public void format(final LogEvent event, final StringBuilder output) {
+      output.append(event.getNanoTime());
+   }
 }
-

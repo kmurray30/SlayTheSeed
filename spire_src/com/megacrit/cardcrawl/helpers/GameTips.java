@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.helpers;
 
 import com.badlogic.gdx.math.MathUtils;
@@ -11,32 +8,37 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class GameTips {
-    private static final TutorialStrings tutorialStrings = CardCrawlGame.languagePack.getTutorialString("Random Tips");
-    public static final String[] LABEL = GameTips.tutorialStrings.LABEL;
-    private ArrayList<String> tips = new ArrayList();
+   private static final TutorialStrings tutorialStrings = CardCrawlGame.languagePack.getTutorialString("Random Tips");
+   public static final String[] LABEL;
+   private ArrayList<String> tips = new ArrayList<>();
 
-    public GameTips() {
-        this.initialize();
-    }
+   public GameTips() {
+      this.initialize();
+   }
 
-    public void initialize() {
-        Collections.addAll(this.tips, GameTips.tutorialStrings.TEXT);
-        if (!Settings.isConsoleBuild) {
-            Collections.addAll(this.tips, CardCrawlGame.languagePack.getTutorialString((String)"PC Tips").TEXT);
-        }
-        Collections.shuffle(this.tips);
-    }
+   public void initialize() {
+      Collections.addAll(this.tips, tutorialStrings.TEXT);
+      if (!Settings.isConsoleBuild) {
+         Collections.addAll(this.tips, CardCrawlGame.languagePack.getTutorialString("PC Tips").TEXT);
+      }
 
-    public String getTip() {
-        String retVal = this.tips.remove(MathUtils.random(this.tips.size() - 1));
-        if (this.tips.isEmpty()) {
-            this.initialize();
-        }
-        return retVal;
-    }
+      Collections.shuffle(this.tips);
+   }
 
-    public String getPotionTip() {
-        return LABEL[0];
-    }
+   public String getTip() {
+      String retVal = this.tips.remove(MathUtils.random(this.tips.size() - 1));
+      if (this.tips.isEmpty()) {
+         this.initialize();
+      }
+
+      return retVal;
+   }
+
+   public String getPotionTip() {
+      return LABEL[0];
+   }
+
+   static {
+      LABEL = tutorialStrings.LABEL;
+   }
 }
-

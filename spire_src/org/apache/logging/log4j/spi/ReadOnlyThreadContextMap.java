@@ -1,24 +1,20 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.spi;
 
 import java.util.Map;
 import org.apache.logging.log4j.util.StringMap;
 
 public interface ReadOnlyThreadContextMap {
-    public void clear();
+   void clear();
 
-    public boolean containsKey(String var1);
+   boolean containsKey(final String key);
 
-    public String get(String var1);
+   String get(final String key);
 
-    public Map<String, String> getCopy();
+   Map<String, String> getCopy();
 
-    public Map<String, String> getImmutableMapOrNull();
+   Map<String, String> getImmutableMapOrNull();
 
-    public StringMap getReadOnlyContextData();
+   StringMap getReadOnlyContextData();
 
-    public boolean isEmpty();
+   boolean isEmpty();
 }
-

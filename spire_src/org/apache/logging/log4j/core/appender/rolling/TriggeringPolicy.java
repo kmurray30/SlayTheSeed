@@ -1,14 +1,9 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.appender.rolling;
 
 import org.apache.logging.log4j.core.LogEvent;
-import org.apache.logging.log4j.core.appender.rolling.RollingFileManager;
 
 public interface TriggeringPolicy {
-    public void initialize(RollingFileManager var1);
+   void initialize(final RollingFileManager manager);
 
-    public boolean isTriggeringEvent(LogEvent var1);
+   boolean isTriggeringEvent(final LogEvent logEvent);
 }
-

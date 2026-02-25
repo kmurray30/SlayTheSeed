@@ -1,13 +1,9 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.google.gson.internal.bind;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.internal.$Gson$Types;
-import com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
@@ -17,66 +13,69 @@ import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
-/*
- * This class specifies class file version 49.0 but uses Java 6 signatures.  Assumed Java 6.
- */
-public final class ArrayTypeAdapter<E>
-extends TypeAdapter<Object> {
-    public static final TypeAdapterFactory FACTORY = new TypeAdapterFactory(){
-
-        @Override
-        public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
-            Type type = typeToken.getType();
-            if (!(type instanceof GenericArrayType || type instanceof Class && ((Class)type).isArray())) {
-                return null;
-            }
+public final class ArrayTypeAdapter<E> extends TypeAdapter<Object> {
+   public static final TypeAdapterFactory FACTORY = new TypeAdapterFactory() {
+      @Override
+      public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
+         Type type = typeToken.getType();
+         if (type instanceof GenericArrayType || type instanceof Class && ((Class)type).isArray()) {
             Type componentType = $Gson$Types.getArrayComponentType(type);
             TypeAdapter<?> componentTypeAdapter = gson.getAdapter(TypeToken.get(componentType));
-            return new ArrayTypeAdapter(gson, componentTypeAdapter, $Gson$Types.getRawType(componentType));
-        }
-    };
-    private final Class<E> componentType;
-    private final TypeAdapter<E> componentTypeAdapter;
-
-    public ArrayTypeAdapter(Gson context, TypeAdapter<E> componentTypeAdapter, Class<E> componentType) {
-        this.componentTypeAdapter = new TypeAdapterRuntimeTypeWrapper<E>(context, componentTypeAdapter, componentType);
-        this.componentType = componentType;
-    }
-
-    @Override
-    public Object read(JsonReader in) throws IOException {
-        if (in.peek() == JsonToken.NULL) {
-            in.nextNull();
+            return new ArrayTypeAdapter(gson, (TypeAdapter<E>)componentTypeAdapter, (Class<E>)$Gson$Types.getRawType(componentType));
+         } else {
             return null;
-        }
-        ArrayList<E> list = new ArrayList<E>();
-        in.beginArray();
-        while (in.hasNext()) {
+         }
+      }
+   };
+   private final Class<E> componentType;
+   private final TypeAdapter<E> componentTypeAdapter;
+
+   public ArrayTypeAdapter(Gson context, TypeAdapter<E> componentTypeAdapter, Class<E> componentType) {
+      this.componentTypeAdapter = new TypeAdapterRuntimeTypeWrapper<>(context, componentTypeAdapter, componentType);
+      this.componentType = componentType;
+   }
+
+   @Override
+   public Object read(JsonReader in) throws IOException {
+      if (in.peek() == JsonToken.NULL) {
+         in.nextNull();
+         return null;
+      } else {
+         List<E> list = new ArrayList<>();
+         in.beginArray();
+
+         while (in.hasNext()) {
             E instance = this.componentTypeAdapter.read(in);
             list.add(instance);
-        }
-        in.endArray();
-        Object array = Array.newInstance(this.componentType, list.size());
-        for (int i = 0; i < list.size(); ++i) {
+         }
+
+         in.endArray();
+         Object array = Array.newInstance(this.componentType, list.size());
+
+         for (int i = 0; i < list.size(); i++) {
             Array.set(array, i, list.get(i));
-        }
-        return array;
-    }
+         }
 
-    @Override
-    public void write(JsonWriter out, Object array) throws IOException {
-        if (array == null) {
-            out.nullValue();
-            return;
-        }
-        out.beginArray();
-        int length = Array.getLength(array);
-        for (int i = 0; i < length; ++i) {
-            Object value = Array.get(array, i);
+         return array;
+      }
+   }
+
+   @Override
+   public void write(JsonWriter out, Object array) throws IOException {
+      if (array == null) {
+         out.nullValue();
+      } else {
+         out.beginArray();
+         int i = 0;
+
+         for (int length = Array.getLength(array); i < length; i++) {
+            E value = (E)Array.get(array, i);
             this.componentTypeAdapter.write(out, value);
-        }
-        out.endArray();
-    }
-}
+         }
 
+         out.endArray();
+      }
+   }
+}

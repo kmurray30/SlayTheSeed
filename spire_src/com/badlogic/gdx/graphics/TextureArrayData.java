@@ -1,35 +1,30 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.graphics;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.glutils.FileTextureArrayData;
 
 public interface TextureArrayData {
-    public boolean isPrepared();
+   boolean isPrepared();
 
-    public void prepare();
+   void prepare();
 
-    public void consumeTextureArrayData();
+   void consumeTextureArrayData();
 
-    public int getWidth();
+   int getWidth();
 
-    public int getHeight();
+   int getHeight();
 
-    public int getDepth();
+   int getDepth();
 
-    public boolean isManaged();
+   boolean isManaged();
 
-    public int getInternalFormat();
+   int getInternalFormat();
 
-    public int getGLType();
+   int getGLType();
 
-    public static class Factory {
-        public static TextureArrayData loadFromFiles(Pixmap.Format format, boolean useMipMaps, FileHandle ... files) {
-            return new FileTextureArrayData(format, useMipMaps, files);
-        }
-    }
+   public static class Factory {
+      public static TextureArrayData loadFromFiles(Pixmap.Format format, boolean useMipMaps, FileHandle... files) {
+         return new FileTextureArrayData(format, useMipMaps, files);
+      }
+   }
 }
-

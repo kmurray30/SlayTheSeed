@@ -1,26 +1,24 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package net.java.games.input;
 
 import java.io.IOException;
-import net.java.games.input.OSXHIDDevice;
 
 final class OSXHIDDeviceIterator {
-    private final long iterator_address = OSXHIDDeviceIterator.nCreateIterator();
+   private final long iterator_address = nCreateIterator();
 
-    private static final native long nCreateIterator();
+   public OSXHIDDeviceIterator() throws IOException {
+   }
 
-    public final void close() {
-        OSXHIDDeviceIterator.nReleaseIterator(this.iterator_address);
-    }
+   private static final native long nCreateIterator();
 
-    private static final native void nReleaseIterator(long var0);
+   public final void close() {
+      nReleaseIterator(this.iterator_address);
+   }
 
-    public final OSXHIDDevice next() throws IOException {
-        return OSXHIDDeviceIterator.nNext(this.iterator_address);
-    }
+   private static final native void nReleaseIterator(long var0);
 
-    private static final native OSXHIDDevice nNext(long var0) throws IOException;
+   public final OSXHIDDevice next() throws IOException {
+      return nNext(this.iterator_address);
+   }
+
+   private static final native OSXHIDDevice nNext(long var0) throws IOException;
 }
-

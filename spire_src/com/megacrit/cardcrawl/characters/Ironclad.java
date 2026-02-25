@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.characters;
 
 import com.badlogic.gdx.graphics.Color;
@@ -14,7 +11,6 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.cards.red.Bash;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.EnergyManager;
 import com.megacrit.cardcrawl.core.Settings;
@@ -39,262 +35,288 @@ import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Ironclad
-extends AbstractPlayer {
-    private static final Logger logger = LogManager.getLogger(Ironclad.class.getName());
-    private static final CharacterStrings characterStrings = CardCrawlGame.languagePack.getCharacterString("Ironclad");
-    public static final String[] NAMES = Ironclad.characterStrings.NAMES;
-    public static final String[] TEXT = Ironclad.characterStrings.TEXT;
-    private EnergyOrbInterface energyOrb = new EnergyOrbRed();
-    private Prefs prefs;
-    private CharStat charStat = new CharStat(this);
+public class Ironclad extends AbstractPlayer {
+   private static final Logger logger = LogManager.getLogger(Ironclad.class.getName());
+   private static final CharacterStrings characterStrings = CardCrawlGame.languagePack.getCharacterString("Ironclad");
+   public static final String[] NAMES;
+   public static final String[] TEXT;
+   private EnergyOrbInterface energyOrb = new EnergyOrbRed();
+   private Prefs prefs;
+   private CharStat charStat = new CharStat(this);
 
-    Ironclad(String playerName) {
-        super(playerName, AbstractPlayer.PlayerClass.IRONCLAD);
-        this.dialogX = this.drawX + 0.0f * Settings.scale;
-        this.dialogY = this.drawY + 220.0f * Settings.scale;
-        this.initializeClass(null, "images/characters/ironclad/shoulder2.png", "images/characters/ironclad/shoulder.png", "images/characters/ironclad/corpse.png", this.getLoadout(), -4.0f, -16.0f, 220.0f, 290.0f, new EnergyManager(3));
-        this.loadAnimation("images/characters/ironclad/idle/skeleton.atlas", "images/characters/ironclad/idle/skeleton.json", 1.0f);
-        AnimationState.TrackEntry e = this.state.setAnimation(0, "Idle", true);
-        this.stateData.setMix("Hit", "Idle", 0.1f);
-        e.setTimeScale(0.6f);
-        if (ModHelper.enabledMods.size() > 0 && (ModHelper.isModEnabled("Diverse") || ModHelper.isModEnabled("Chimera") || ModHelper.isModEnabled("Blue Cards"))) {
-            this.masterMaxOrbs = 1;
-        }
-    }
+   Ironclad(String playerName) {
+      super(playerName, AbstractPlayer.PlayerClass.IRONCLAD);
+      this.dialogX = this.drawX + 0.0F * Settings.scale;
+      this.dialogY = this.drawY + 220.0F * Settings.scale;
+      this.initializeClass(
+         null,
+         "images/characters/ironclad/shoulder2.png",
+         "images/characters/ironclad/shoulder.png",
+         "images/characters/ironclad/corpse.png",
+         this.getLoadout(),
+         -4.0F,
+         -16.0F,
+         220.0F,
+         290.0F,
+         new EnergyManager(3)
+      );
+      this.loadAnimation("images/characters/ironclad/idle/skeleton.atlas", "images/characters/ironclad/idle/skeleton.json", 1.0F);
+      AnimationState.TrackEntry e = this.state.setAnimation(0, "Idle", true);
+      this.stateData.setMix("Hit", "Idle", 0.1F);
+      e.setTimeScale(0.6F);
+      if (ModHelper.enabledMods.size() > 0 && (ModHelper.isModEnabled("Diverse") || ModHelper.isModEnabled("Chimera") || ModHelper.isModEnabled("Blue Cards"))) {
+         this.masterMaxOrbs = 1;
+      }
+   }
 
-    @Override
-    public String getPortraitImageName() {
-        return "ironcladPortrait.jpg";
-    }
+   @Override
+   public String getPortraitImageName() {
+      return "ironcladPortrait.jpg";
+   }
 
-    @Override
-    public ArrayList<String> getStartingRelics() {
-        ArrayList<String> retVal = new ArrayList<String>();
-        retVal.add("Burning Blood");
-        UnlockTracker.markRelicAsSeen("Burning Blood");
-        return retVal;
-    }
+   @Override
+   public ArrayList<String> getStartingRelics() {
+      ArrayList<String> retVal = new ArrayList<>();
+      retVal.add("Burning Blood");
+      UnlockTracker.markRelicAsSeen("Burning Blood");
+      return retVal;
+   }
 
-    @Override
-    public ArrayList<String> getStartingDeck() {
-        ArrayList<String> retVal = new ArrayList<String>();
-        retVal.add("Strike_R");
-        retVal.add("Strike_R");
-        retVal.add("Strike_R");
-        retVal.add("Strike_R");
-        retVal.add("Strike_R");
-        retVal.add("Defend_R");
-        retVal.add("Defend_R");
-        retVal.add("Defend_R");
-        retVal.add("Defend_R");
-        retVal.add("Bash");
-        return retVal;
-    }
+   @Override
+   public ArrayList<String> getStartingDeck() {
+      ArrayList<String> retVal = new ArrayList<>();
+      retVal.add("Strike_R");
+      retVal.add("Strike_R");
+      retVal.add("Strike_R");
+      retVal.add("Strike_R");
+      retVal.add("Strike_R");
+      retVal.add("Defend_R");
+      retVal.add("Defend_R");
+      retVal.add("Defend_R");
+      retVal.add("Defend_R");
+      retVal.add("Bash");
+      return retVal;
+   }
 
-    @Override
-    public AbstractCard getStartCardForEvent() {
-        return new Bash();
-    }
+   @Override
+   public AbstractCard getStartCardForEvent() {
+      return new Bash();
+   }
 
-    @Override
-    public CharSelectInfo getLoadout() {
-        return new CharSelectInfo(NAMES[0], TEXT[0], 80, 80, 0, 99, 5, this, this.getStartingRelics(), this.getStartingDeck(), false);
-    }
+   @Override
+   public CharSelectInfo getLoadout() {
+      return new CharSelectInfo(NAMES[0], TEXT[0], 80, 80, 0, 99, 5, this, this.getStartingRelics(), this.getStartingDeck(), false);
+   }
 
-    @Override
-    public String getTitle(AbstractPlayer.PlayerClass plyrClass) {
-        return AbstractPlayer.uiStrings.TEXT[1];
-    }
+   @Override
+   public String getTitle(AbstractPlayer.PlayerClass plyrClass) {
+      return AbstractPlayer.uiStrings.TEXT[1];
+   }
 
-    @Override
-    public AbstractCard.CardColor getCardColor() {
-        return AbstractCard.CardColor.RED;
-    }
+   @Override
+   public AbstractCard.CardColor getCardColor() {
+      return AbstractCard.CardColor.RED;
+   }
 
-    @Override
-    public Color getCardRenderColor() {
-        return Color.SCARLET;
-    }
+   @Override
+   public Color getCardRenderColor() {
+      return Color.SCARLET;
+   }
 
-    @Override
-    public String getAchievementKey() {
-        return "RUBY";
-    }
+   @Override
+   public String getAchievementKey() {
+      return "RUBY";
+   }
 
-    @Override
-    public ArrayList<AbstractCard> getCardPool(ArrayList<AbstractCard> tmpPool) {
-        CardLibrary.addRedCards(tmpPool);
-        if (ModHelper.isModEnabled("Green Cards")) {
-            CardLibrary.addGreenCards(tmpPool);
-        }
-        if (ModHelper.isModEnabled("Blue Cards")) {
-            CardLibrary.addBlueCards(tmpPool);
-        }
-        if (ModHelper.isModEnabled("Purple Cards")) {
-            CardLibrary.addPurpleCards(tmpPool);
-        }
-        return tmpPool;
-    }
+   @Override
+   public ArrayList<AbstractCard> getCardPool(ArrayList<AbstractCard> tmpPool) {
+      CardLibrary.addRedCards(tmpPool);
+      if (ModHelper.isModEnabled("Green Cards")) {
+         CardLibrary.addGreenCards(tmpPool);
+      }
 
-    @Override
-    public Color getCardTrailColor() {
-        return new Color(1.0f, 0.4f, 0.1f, 1.0f);
-    }
+      if (ModHelper.isModEnabled("Blue Cards")) {
+         CardLibrary.addBlueCards(tmpPool);
+      }
 
-    @Override
-    public String getLeaderboardCharacterName() {
-        return "IRONCLAD";
-    }
+      if (ModHelper.isModEnabled("Purple Cards")) {
+         CardLibrary.addPurpleCards(tmpPool);
+      }
 
-    @Override
-    public Texture getEnergyImage() {
-        return ImageMaster.RED_ORB_FLASH_VFX;
-    }
+      return tmpPool;
+   }
 
-    @Override
-    public int getAscensionMaxHPLoss() {
-        return 5;
-    }
+   @Override
+   public Color getCardTrailColor() {
+      return new Color(1.0F, 0.4F, 0.1F, 1.0F);
+   }
 
-    @Override
-    public BitmapFont getEnergyNumFont() {
-        return FontHelper.energyNumFontRed;
-    }
+   @Override
+   public String getLeaderboardCharacterName() {
+      return "IRONCLAD";
+   }
 
-    @Override
-    public void renderOrb(SpriteBatch sb, boolean enabled, float current_x, float current_y) {
-        this.energyOrb.renderOrb(sb, enabled, current_x, current_y);
-    }
+   @Override
+   public Texture getEnergyImage() {
+      return ImageMaster.RED_ORB_FLASH_VFX;
+   }
 
-    @Override
-    public void updateOrb(int orbCount) {
-        this.energyOrb.updateOrb(orbCount);
-    }
+   @Override
+   public int getAscensionMaxHPLoss() {
+      return 5;
+   }
 
-    @Override
-    public Prefs getPrefs() {
-        if (this.prefs == null) {
-            logger.error("prefs need to be initialized first!");
-        }
-        return this.prefs;
-    }
+   @Override
+   public BitmapFont getEnergyNumFont() {
+      return FontHelper.energyNumFontRed;
+   }
 
-    @Override
-    public void loadPrefs() {
-        this.prefs = SaveHelper.getPrefs("STSDataVagabond");
-    }
+   @Override
+   public void renderOrb(SpriteBatch sb, boolean enabled, float current_x, float current_y) {
+      this.energyOrb.renderOrb(sb, enabled, current_x, current_y);
+   }
 
-    @Override
-    public CharStat getCharStat() {
-        return this.charStat;
-    }
+   @Override
+   public void updateOrb(int orbCount) {
+      this.energyOrb.updateOrb(orbCount);
+   }
 
-    @Override
-    public int getUnlockedCardCount() {
-        return UnlockTracker.unlockedRedCardCount;
-    }
+   @Override
+   public Prefs getPrefs() {
+      if (this.prefs == null) {
+         logger.error("prefs need to be initialized first!");
+      }
 
-    @Override
-    public int getSeenCardCount() {
-        return CardLibrary.seenRedCards;
-    }
+      return this.prefs;
+   }
 
-    @Override
-    public int getCardCount() {
-        return CardLibrary.redCards;
-    }
+   @Override
+   public void loadPrefs() {
+      this.prefs = SaveHelper.getPrefs("STSDataVagabond");
+   }
 
-    @Override
-    public boolean saveFileExists() {
-        return SaveAndContinue.saveExistsAndNotCorrupted(this);
-    }
+   @Override
+   public CharStat getCharStat() {
+      return this.charStat;
+   }
 
-    @Override
-    public String getWinStreakKey() {
-        return "win_streak_ironclad";
-    }
+   @Override
+   public int getUnlockedCardCount() {
+      return UnlockTracker.unlockedRedCardCount;
+   }
 
-    @Override
-    public String getLeaderboardWinStreakKey() {
-        return "IRONCLAD_CONSECUTIVE_WINS";
-    }
+   @Override
+   public int getSeenCardCount() {
+      return CardLibrary.seenRedCards;
+   }
 
-    @Override
-    public void renderStatScreen(SpriteBatch sb, float screenX, float renderY) {
-        StatsScreen.renderHeader(sb, StatsScreen.NAMES[2], screenX, renderY);
-        this.charStat.render(sb, screenX, renderY);
-    }
+   @Override
+   public int getCardCount() {
+      return CardLibrary.redCards;
+   }
 
-    @Override
-    public void doCharSelectScreenSelectEffect() {
-        CardCrawlGame.sound.playA("ATTACK_HEAVY", MathUtils.random(-0.2f, 0.2f));
-        CardCrawlGame.screenShake.shake(ScreenShake.ShakeIntensity.MED, ScreenShake.ShakeDur.SHORT, true);
-    }
+   @Override
+   public boolean saveFileExists() {
+      return SaveAndContinue.saveExistsAndNotCorrupted(this);
+   }
 
-    @Override
-    public String getCustomModeCharacterButtonSoundKey() {
-        return "ATTACK_HEAVY";
-    }
+   @Override
+   public String getWinStreakKey() {
+      return "win_streak_ironclad";
+   }
 
-    @Override
-    public Texture getCustomModeCharacterButtonImage() {
-        return ImageMaster.FILTER_IRONCLAD;
-    }
+   @Override
+   public String getLeaderboardWinStreakKey() {
+      return "IRONCLAD_CONSECUTIVE_WINS";
+   }
 
-    @Override
-    public CharacterStrings getCharacterString() {
-        return CardCrawlGame.languagePack.getCharacterString("Ironclad");
-    }
+   @Override
+   public void renderStatScreen(SpriteBatch sb, float screenX, float renderY) {
+      StatsScreen.renderHeader(sb, StatsScreen.NAMES[2], screenX, renderY);
+      this.charStat.render(sb, screenX, renderY);
+   }
 
-    @Override
-    public String getLocalizedCharacterName() {
-        return NAMES[0];
-    }
+   @Override
+   public void doCharSelectScreenSelectEffect() {
+      CardCrawlGame.sound.playA("ATTACK_HEAVY", MathUtils.random(-0.2F, 0.2F));
+      CardCrawlGame.screenShake.shake(ScreenShake.ShakeIntensity.MED, ScreenShake.ShakeDur.SHORT, true);
+   }
 
-    @Override
-    public void refreshCharStat() {
-        this.charStat = new CharStat(this);
-    }
+   @Override
+   public String getCustomModeCharacterButtonSoundKey() {
+      return "ATTACK_HEAVY";
+   }
 
-    @Override
-    public AbstractPlayer newInstance() {
-        return new Ironclad(this.name);
-    }
+   @Override
+   public Texture getCustomModeCharacterButtonImage() {
+      return ImageMaster.FILTER_IRONCLAD;
+   }
 
-    @Override
-    public TextureAtlas.AtlasRegion getOrb() {
-        return AbstractCard.orb_red;
-    }
+   @Override
+   public CharacterStrings getCharacterString() {
+      return CardCrawlGame.languagePack.getCharacterString("Ironclad");
+   }
 
-    @Override
-    public void damage(DamageInfo info) {
-        if (info.owner != null && info.type != DamageInfo.DamageType.THORNS && info.output - this.currentBlock > 0) {
-            AnimationState.TrackEntry e = this.state.setAnimation(0, "Hit", false);
-            this.state.addAnimation(0, "Idle", true, 0.0f);
-            e.setTimeScale(0.6f);
-        }
-        super.damage(info);
-    }
+   @Override
+   public String getLocalizedCharacterName() {
+      return NAMES[0];
+   }
 
-    @Override
-    public String getSpireHeartText() {
-        return SpireHeart.DESCRIPTIONS[8];
-    }
+   @Override
+   public void refreshCharStat() {
+      this.charStat = new CharStat(this);
+   }
 
-    @Override
-    public Color getSlashAttackColor() {
-        return Color.RED;
-    }
+   @Override
+   public AbstractPlayer newInstance() {
+      return new Ironclad(this.name);
+   }
 
-    @Override
-    public AbstractGameAction.AttackEffect[] getSpireHeartSlashEffect() {
-        return new AbstractGameAction.AttackEffect[]{AbstractGameAction.AttackEffect.SLASH_HEAVY, AbstractGameAction.AttackEffect.FIRE, AbstractGameAction.AttackEffect.BLUNT_HEAVY, AbstractGameAction.AttackEffect.SLASH_HEAVY, AbstractGameAction.AttackEffect.FIRE, AbstractGameAction.AttackEffect.BLUNT_HEAVY};
-    }
+   @Override
+   public TextureAtlas.AtlasRegion getOrb() {
+      return AbstractCard.orb_red;
+   }
 
-    @Override
-    public String getVampireText() {
-        return Vampires.DESCRIPTIONS[0];
-    }
+   @Override
+   public void damage(DamageInfo info) {
+      if (info.owner != null && info.type != DamageInfo.DamageType.THORNS && info.output - this.currentBlock > 0) {
+         AnimationState.TrackEntry e = this.state.setAnimation(0, "Hit", false);
+         this.state.addAnimation(0, "Idle", true, 0.0F);
+         e.setTimeScale(0.6F);
+      }
+
+      super.damage(info);
+   }
+
+   @Override
+   public String getSpireHeartText() {
+      return SpireHeart.DESCRIPTIONS[8];
+   }
+
+   @Override
+   public Color getSlashAttackColor() {
+      return Color.RED;
+   }
+
+   @Override
+   public AbstractGameAction.AttackEffect[] getSpireHeartSlashEffect() {
+      return new AbstractGameAction.AttackEffect[]{
+         AbstractGameAction.AttackEffect.SLASH_HEAVY,
+         AbstractGameAction.AttackEffect.FIRE,
+         AbstractGameAction.AttackEffect.BLUNT_HEAVY,
+         AbstractGameAction.AttackEffect.SLASH_HEAVY,
+         AbstractGameAction.AttackEffect.FIRE,
+         AbstractGameAction.AttackEffect.BLUNT_HEAVY
+      };
+   }
+
+   @Override
+   public String getVampireText() {
+      return Vampires.DESCRIPTIONS[0];
+   }
+
+   static {
+      NAMES = characterStrings.NAMES;
+      TEXT = characterStrings.TEXT;
+   }
 }
-

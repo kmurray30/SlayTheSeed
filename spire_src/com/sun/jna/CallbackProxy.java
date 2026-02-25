@@ -1,16 +1,9 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.sun.jna;
 
-import com.sun.jna.Callback;
+public interface CallbackProxy extends Callback {
+   Object callback(Object[] var1);
 
-public interface CallbackProxy
-extends Callback {
-    public Object callback(Object[] var1);
+   Class<?>[] getParameterTypes();
 
-    public Class<?>[] getParameterTypes();
-
-    public Class<?> getReturnType();
+   Class<?> getReturnType();
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.filter;
 
 import java.util.Queue;
@@ -16,219 +13,294 @@ import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory;
-import org.apache.logging.log4j.core.filter.AbstractFilter;
 import org.apache.logging.log4j.message.Message;
 
-@Plugin(name="BurstFilter", category="Core", elementType="filter", printObject=true)
-public final class BurstFilter
-extends AbstractFilter {
-    private static final long NANOS_IN_SECONDS = 1000000000L;
-    private static final int DEFAULT_RATE = 10;
-    private static final int DEFAULT_RATE_MULTIPLE = 100;
-    private static final int HASH_SHIFT = 32;
-    private final Level level;
-    private final long burstInterval;
-    private final DelayQueue<LogDelay> history = new DelayQueue();
-    private final Queue<LogDelay> available = new ConcurrentLinkedQueue<LogDelay>();
+@Plugin(name = "BurstFilter", category = "Core", elementType = "filter", printObject = true)
+public final class BurstFilter extends AbstractFilter {
+   private static final long NANOS_IN_SECONDS = 1000000000L;
+   private static final int DEFAULT_RATE = 10;
+   private static final int DEFAULT_RATE_MULTIPLE = 100;
+   private static final int HASH_SHIFT = 32;
+   private final Level level;
+   private final long burstInterval;
+   private final DelayQueue<BurstFilter.LogDelay> history = new DelayQueue<>();
+   private final Queue<BurstFilter.LogDelay> available = new ConcurrentLinkedQueue<>();
 
-    static LogDelay createLogDelay(long expireTime) {
-        return new LogDelay(expireTime);
-    }
+   static BurstFilter.LogDelay createLogDelay(final long expireTime) {
+      return new BurstFilter.LogDelay(expireTime);
+   }
 
-    private BurstFilter(Level level, float rate, long maxBurst, Filter.Result onMatch, Filter.Result onMismatch) {
-        super(onMatch, onMismatch);
-        this.level = level;
-        this.burstInterval = (long)(1.0E9f * ((float)maxBurst / rate));
-        int i = 0;
-        while ((long)i < maxBurst) {
-            this.available.add(BurstFilter.createLogDelay(0L));
-            ++i;
-        }
-    }
+   private BurstFilter(final Level level, final float rate, final long maxBurst, final Filter.Result onMatch, final Filter.Result onMismatch) {
+      super(onMatch, onMismatch);
+      this.level = level;
+      this.burstInterval = (long)(1.0E9F * ((float)maxBurst / rate));
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object ... params) {
-        return this.filter(level);
-    }
+      for (int i = 0; i < maxBurst; i++) {
+         this.available.add(createLogDelay(0L));
+      }
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, Object msg, Throwable t) {
-        return this.filter(level);
-    }
+   @Override
+   public Filter.Result filter(final Logger logger, final Level level, final Marker marker, final String msg, final Object... params) {
+      return this.filter(level);
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, Message msg, Throwable t) {
-        return this.filter(level);
-    }
+   @Override
+   public Filter.Result filter(final Logger logger, final Level level, final Marker marker, final Object msg, final Throwable t) {
+      return this.filter(level);
+   }
 
-    @Override
-    public Filter.Result filter(LogEvent event) {
-        return this.filter(event.getLevel());
-    }
+   @Override
+   public Filter.Result filter(final Logger logger, final Level level, final Marker marker, final Message msg, final Throwable t) {
+      return this.filter(level);
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0) {
-        return this.filter(level);
-    }
+   @Override
+   public Filter.Result filter(final LogEvent event) {
+      return this.filter(event.getLevel());
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1) {
-        return this.filter(level);
-    }
+   @Override
+   public Filter.Result filter(final Logger logger, final Level level, final Marker marker, final String msg, final Object p0) {
+      return this.filter(level);
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1, Object p2) {
-        return this.filter(level);
-    }
+   @Override
+   public Filter.Result filter(final Logger logger, final Level level, final Marker marker, final String msg, final Object p0, final Object p1) {
+      return this.filter(level);
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1, Object p2, Object p3) {
-        return this.filter(level);
-    }
+   @Override
+   public Filter.Result filter(final Logger logger, final Level level, final Marker marker, final String msg, final Object p0, final Object p1, final Object p2) {
+      return this.filter(level);
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1, Object p2, Object p3, Object p4) {
-        return this.filter(level);
-    }
+   @Override
+   public Filter.Result filter(
+      final Logger logger, final Level level, final Marker marker, final String msg, final Object p0, final Object p1, final Object p2, final Object p3
+   ) {
+      return this.filter(level);
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5) {
-        return this.filter(level);
-    }
+   @Override
+   public Filter.Result filter(
+      final Logger logger,
+      final Level level,
+      final Marker marker,
+      final String msg,
+      final Object p0,
+      final Object p1,
+      final Object p2,
+      final Object p3,
+      final Object p4
+   ) {
+      return this.filter(level);
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6) {
-        return this.filter(level);
-    }
+   @Override
+   public Filter.Result filter(
+      final Logger logger,
+      final Level level,
+      final Marker marker,
+      final String msg,
+      final Object p0,
+      final Object p1,
+      final Object p2,
+      final Object p3,
+      final Object p4,
+      final Object p5
+   ) {
+      return this.filter(level);
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7) {
-        return this.filter(level);
-    }
+   @Override
+   public Filter.Result filter(
+      final Logger logger,
+      final Level level,
+      final Marker marker,
+      final String msg,
+      final Object p0,
+      final Object p1,
+      final Object p2,
+      final Object p3,
+      final Object p4,
+      final Object p5,
+      final Object p6
+   ) {
+      return this.filter(level);
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8) {
-        return this.filter(level);
-    }
+   @Override
+   public Filter.Result filter(
+      final Logger logger,
+      final Level level,
+      final Marker marker,
+      final String msg,
+      final Object p0,
+      final Object p1,
+      final Object p2,
+      final Object p3,
+      final Object p4,
+      final Object p5,
+      final Object p6,
+      final Object p7
+   ) {
+      return this.filter(level);
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9) {
-        return this.filter(level);
-    }
+   @Override
+   public Filter.Result filter(
+      final Logger logger,
+      final Level level,
+      final Marker marker,
+      final String msg,
+      final Object p0,
+      final Object p1,
+      final Object p2,
+      final Object p3,
+      final Object p4,
+      final Object p5,
+      final Object p6,
+      final Object p7,
+      final Object p8
+   ) {
+      return this.filter(level);
+   }
 
-    private Filter.Result filter(Level level) {
-        if (this.level.isMoreSpecificThan(level)) {
-            LogDelay delay = (LogDelay)this.history.poll();
-            while (delay != null) {
-                this.available.add(delay);
-                delay = (LogDelay)this.history.poll();
-            }
-            delay = this.available.poll();
-            if (delay != null) {
-                delay.setDelay(this.burstInterval);
-                this.history.add(delay);
-                return this.onMatch;
-            }
-            return this.onMismatch;
-        }
-        return this.onMatch;
-    }
+   @Override
+   public Filter.Result filter(
+      final Logger logger,
+      final Level level,
+      final Marker marker,
+      final String msg,
+      final Object p0,
+      final Object p1,
+      final Object p2,
+      final Object p3,
+      final Object p4,
+      final Object p5,
+      final Object p6,
+      final Object p7,
+      final Object p8,
+      final Object p9
+   ) {
+      return this.filter(level);
+   }
 
-    public int getAvailable() {
-        return this.available.size();
-    }
-
-    public void clear() {
-        for (LogDelay delay : this.history) {
-            this.history.remove(delay);
+   private Filter.Result filter(final Level level) {
+      if (!this.level.isMoreSpecificThan(level)) {
+         return this.onMatch;
+      } else {
+         for (BurstFilter.LogDelay delay = this.history.poll(); delay != null; delay = this.history.poll()) {
             this.available.add(delay);
-        }
-    }
+         }
 
-    @Override
-    public String toString() {
-        return "level=" + this.level.toString() + ", interval=" + this.burstInterval + ", max=" + this.history.size();
-    }
+         BurstFilter.LogDelay var3 = this.available.poll();
+         if (var3 != null) {
+            var3.setDelay(this.burstInterval);
+            this.history.add(var3);
+            return this.onMatch;
+         } else {
+            return this.onMismatch;
+         }
+      }
+   }
 
-    @PluginBuilderFactory
-    public static Builder newBuilder() {
-        return new Builder();
-    }
+   public int getAvailable() {
+      return this.available.size();
+   }
 
-    public static class Builder
-    extends AbstractFilter.AbstractFilterBuilder<Builder>
-    implements org.apache.logging.log4j.core.util.Builder<BurstFilter> {
-        @PluginBuilderAttribute
-        private Level level = Level.WARN;
-        @PluginBuilderAttribute
-        private float rate = 10.0f;
-        @PluginBuilderAttribute
-        private long maxBurst;
+   public void clear() {
+      for (BurstFilter.LogDelay delay : this.history) {
+         this.history.remove(delay);
+         this.available.add(delay);
+      }
+   }
 
-        public Builder setLevel(Level level) {
-            this.level = level;
-            return this;
-        }
+   @Override
+   public String toString() {
+      return "level=" + this.level.toString() + ", interval=" + this.burstInterval + ", max=" + this.history.size();
+   }
 
-        public Builder setRate(float rate) {
-            this.rate = rate;
-            return this;
-        }
+   @PluginBuilderFactory
+   public static BurstFilter.Builder newBuilder() {
+      return new BurstFilter.Builder();
+   }
 
-        public Builder setMaxBurst(long maxBurst) {
-            this.maxBurst = maxBurst;
-            return this;
-        }
+   public static class Builder
+      extends AbstractFilter.AbstractFilterBuilder<BurstFilter.Builder>
+      implements org.apache.logging.log4j.core.util.Builder<BurstFilter> {
+      @PluginBuilderAttribute
+      private Level level = Level.WARN;
+      @PluginBuilderAttribute
+      private float rate = 10.0F;
+      @PluginBuilderAttribute
+      private long maxBurst;
 
-        @Override
-        public BurstFilter build() {
-            if (this.rate <= 0.0f) {
-                this.rate = 10.0f;
-            }
-            if (this.maxBurst <= 0L) {
-                this.maxBurst = (long)(this.rate * 100.0f);
-            }
-            return new BurstFilter(this.level, this.rate, this.maxBurst, this.getOnMatch(), this.getOnMismatch());
-        }
-    }
+      public BurstFilter.Builder setLevel(final Level level) {
+         this.level = level;
+         return this;
+      }
 
-    private static class LogDelay
-    implements Delayed {
-        private long expireTime;
+      public BurstFilter.Builder setRate(final float rate) {
+         this.rate = rate;
+         return this;
+      }
 
-        LogDelay(long expireTime) {
-            this.expireTime = expireTime;
-        }
+      public BurstFilter.Builder setMaxBurst(final long maxBurst) {
+         this.maxBurst = maxBurst;
+         return this;
+      }
 
-        public void setDelay(long delay) {
-            this.expireTime = delay + System.nanoTime();
-        }
+      public BurstFilter build() {
+         if (this.rate <= 0.0F) {
+            this.rate = 10.0F;
+         }
 
-        @Override
-        public long getDelay(TimeUnit timeUnit) {
-            return timeUnit.convert(this.expireTime - System.nanoTime(), TimeUnit.NANOSECONDS);
-        }
+         if (this.maxBurst <= 0L) {
+            this.maxBurst = (long)(this.rate * 100.0F);
+         }
 
-        @Override
-        public int compareTo(Delayed delayed) {
-            long diff = this.expireTime - ((LogDelay)delayed).expireTime;
-            return Long.signum(diff);
-        }
+         return new BurstFilter(this.level, this.rate, this.maxBurst, this.getOnMatch(), this.getOnMismatch());
+      }
+   }
 
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || this.getClass() != o.getClass()) {
-                return false;
-            }
-            LogDelay logDelay = (LogDelay)o;
+   private static class LogDelay implements Delayed {
+      private long expireTime;
+
+      LogDelay(final long expireTime) {
+         this.expireTime = expireTime;
+      }
+
+      public void setDelay(final long delay) {
+         this.expireTime = delay + System.nanoTime();
+      }
+
+      @Override
+      public long getDelay(final TimeUnit timeUnit) {
+         return timeUnit.convert(this.expireTime - System.nanoTime(), TimeUnit.NANOSECONDS);
+      }
+
+      public int compareTo(final Delayed delayed) {
+         long diff = this.expireTime - ((BurstFilter.LogDelay)delayed).expireTime;
+         return Long.signum(diff);
+      }
+
+      @Override
+      public boolean equals(final Object o) {
+         if (this == o) {
+            return true;
+         } else if (o != null && this.getClass() == o.getClass()) {
+            BurstFilter.LogDelay logDelay = (BurstFilter.LogDelay)o;
             return this.expireTime == logDelay.expireTime;
-        }
+         } else {
+            return false;
+         }
+      }
 
-        public int hashCode() {
-            return (int)(this.expireTime ^ this.expireTime >>> 32);
-        }
-    }
+      @Override
+      public int hashCode() {
+         return (int)(this.expireTime ^ this.expireTime >>> 32);
+      }
+   }
 }
-

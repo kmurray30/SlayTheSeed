@@ -1,20 +1,13 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.codedisaster.steamworks;
 
-import com.codedisaster.steamworks.SteamNativeHandle;
+public class SteamAuthTicket extends SteamNativeHandle {
+   static final long AuthTicketInvalid = 0L;
 
-public class SteamAuthTicket
-extends SteamNativeHandle {
-    static final long AuthTicketInvalid = 0L;
+   SteamAuthTicket(long handle) {
+      super(handle);
+   }
 
-    SteamAuthTicket(long handle) {
-        super(handle);
-    }
-
-    public boolean isValid() {
-        return this.handle != 0L;
-    }
+   public boolean isValid() {
+      return this.handle != 0L;
+   }
 }
-

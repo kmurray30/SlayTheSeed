@@ -1,75 +1,71 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl.input;
 
 public interface Controller {
-    public String getName();
+   String getName();
 
-    public int getIndex();
+   int getIndex();
 
-    public int getButtonCount();
+   int getButtonCount();
 
-    public String getButtonName(int var1);
+   String getButtonName(int var1);
 
-    public boolean isButtonPressed(int var1);
+   boolean isButtonPressed(int var1);
 
-    public void poll();
+   void poll();
 
-    public float getPovX();
+   float getPovX();
 
-    public float getPovY();
+   float getPovY();
 
-    public float getDeadZone(int var1);
+   float getDeadZone(int var1);
 
-    public void setDeadZone(int var1, float var2);
+   void setDeadZone(int var1, float var2);
 
-    public int getAxisCount();
+   int getAxisCount();
 
-    public String getAxisName(int var1);
+   String getAxisName(int var1);
 
-    public float getAxisValue(int var1);
+   float getAxisValue(int var1);
 
-    public float getXAxisValue();
+   float getXAxisValue();
 
-    public float getXAxisDeadZone();
+   float getXAxisDeadZone();
 
-    public void setXAxisDeadZone(float var1);
+   void setXAxisDeadZone(float var1);
 
-    public float getYAxisValue();
+   float getYAxisValue();
 
-    public float getYAxisDeadZone();
+   float getYAxisDeadZone();
 
-    public void setYAxisDeadZone(float var1);
+   void setYAxisDeadZone(float var1);
 
-    public float getZAxisValue();
+   float getZAxisValue();
 
-    public float getZAxisDeadZone();
+   float getZAxisDeadZone();
 
-    public void setZAxisDeadZone(float var1);
+   void setZAxisDeadZone(float var1);
 
-    public float getRXAxisValue();
+   float getRXAxisValue();
 
-    public float getRXAxisDeadZone();
+   float getRXAxisDeadZone();
 
-    public void setRXAxisDeadZone(float var1);
+   void setRXAxisDeadZone(float var1);
 
-    public float getRYAxisValue();
+   float getRYAxisValue();
 
-    public float getRYAxisDeadZone();
+   float getRYAxisDeadZone();
 
-    public void setRYAxisDeadZone(float var1);
+   void setRYAxisDeadZone(float var1);
 
-    public float getRZAxisValue();
+   float getRZAxisValue();
 
-    public float getRZAxisDeadZone();
+   float getRZAxisDeadZone();
 
-    public void setRZAxisDeadZone(float var1);
+   void setRZAxisDeadZone(float var1);
 
-    public int getRumblerCount();
+   int getRumblerCount();
 
-    public String getRumblerName(int var1);
+   String getRumblerName(int var1);
 
-    public void setRumblerStrength(int var1, float var2);
+   void setRumblerStrength(int var1, float var2);
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.config;
 
 import org.apache.logging.log4j.Level;
@@ -13,43 +10,46 @@ import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.status.StatusLogger;
 
-@Plugin(name="AppenderRef", category="Core", printObject=true)
-@PluginAliases(value={"appender-ref"})
+@Plugin(name = "AppenderRef", category = "Core", printObject = true)
+@PluginAliases("appender-ref")
 public final class AppenderRef {
-    private static final Logger LOGGER = StatusLogger.getLogger();
-    private final String ref;
-    private final Level level;
-    private final Filter filter;
+   private static final Logger LOGGER = StatusLogger.getLogger();
+   private final String ref;
+   private final Level level;
+   private final Filter filter;
 
-    private AppenderRef(String ref, Level level, Filter filter) {
-        this.ref = ref;
-        this.level = level;
-        this.filter = filter;
-    }
+   private AppenderRef(final String ref, final Level level, final Filter filter) {
+      this.ref = ref;
+      this.level = level;
+      this.filter = filter;
+   }
 
-    public String getRef() {
-        return this.ref;
-    }
+   public String getRef() {
+      return this.ref;
+   }
 
-    public Level getLevel() {
-        return this.level;
-    }
+   public Level getLevel() {
+      return this.level;
+   }
 
-    public Filter getFilter() {
-        return this.filter;
-    }
+   public Filter getFilter() {
+      return this.filter;
+   }
 
-    public String toString() {
-        return this.ref;
-    }
+   @Override
+   public String toString() {
+      return this.ref;
+   }
 
-    @PluginFactory
-    public static AppenderRef createAppenderRef(@PluginAttribute(value="ref") String ref, @PluginAttribute(value="level") Level level, @PluginElement(value="Filter") Filter filter) {
-        if (ref == null) {
-            LOGGER.error("Appender references must contain a reference");
-            return null;
-        }
-        return new AppenderRef(ref, level, filter);
-    }
+   @PluginFactory
+   public static AppenderRef createAppenderRef(
+      @PluginAttribute("ref") final String ref, @PluginAttribute("level") final Level level, @PluginElement("Filter") final Filter filter
+   ) {
+      if (ref == null) {
+         LOGGER.error("Appender references must contain a reference");
+         return null;
+      } else {
+         return new AppenderRef(ref, level, filter);
+      }
+   }
 }
-

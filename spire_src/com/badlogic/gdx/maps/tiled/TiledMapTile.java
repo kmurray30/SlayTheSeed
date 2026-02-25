@@ -1,38 +1,33 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.maps.tiled;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 
 public interface TiledMapTile {
-    public int getId();
+   int getId();
 
-    public void setId(int var1);
+   void setId(int var1);
 
-    public BlendMode getBlendMode();
+   TiledMapTile.BlendMode getBlendMode();
 
-    public void setBlendMode(BlendMode var1);
+   void setBlendMode(TiledMapTile.BlendMode var1);
 
-    public TextureRegion getTextureRegion();
+   TextureRegion getTextureRegion();
 
-    public void setTextureRegion(TextureRegion var1);
+   void setTextureRegion(TextureRegion var1);
 
-    public float getOffsetX();
+   float getOffsetX();
 
-    public void setOffsetX(float var1);
+   void setOffsetX(float var1);
 
-    public float getOffsetY();
+   float getOffsetY();
 
-    public void setOffsetY(float var1);
+   void setOffsetY(float var1);
 
-    public MapProperties getProperties();
+   MapProperties getProperties();
 
-    public static enum BlendMode {
-        NONE,
-        ALPHA;
-
-    }
+   public static enum BlendMode {
+      NONE,
+      ALPHA;
+   }
 }
-

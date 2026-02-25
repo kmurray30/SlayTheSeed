@@ -1,70 +1,67 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl.util.glu;
 
 import org.lwjgl.opengl.GL11;
 
 public class Quadric {
-    protected int drawStyle = 100012;
-    protected int orientation = 100020;
-    protected boolean textureFlag = false;
-    protected int normals = 100000;
+   protected int drawStyle = 100012;
+   protected int orientation = 100020;
+   protected boolean textureFlag = false;
+   protected int normals = 100000;
 
-    protected void normal3f(float x, float y, float z) {
-        float mag = (float)Math.sqrt(x * x + y * y + z * z);
-        if (mag > 1.0E-5f) {
-            x /= mag;
-            y /= mag;
-            z /= mag;
-        }
-        GL11.glNormal3f(x, y, z);
-    }
+   protected void normal3f(float x, float y, float z) {
+      float mag = (float)Math.sqrt(x * x + y * y + z * z);
+      if (mag > 1.0E-5F) {
+         x /= mag;
+         y /= mag;
+         z /= mag;
+      }
 
-    public void setDrawStyle(int drawStyle) {
-        this.drawStyle = drawStyle;
-    }
+      GL11.glNormal3f(x, y, z);
+   }
 
-    public void setNormals(int normals) {
-        this.normals = normals;
-    }
+   public void setDrawStyle(int drawStyle) {
+      this.drawStyle = drawStyle;
+   }
 
-    public void setOrientation(int orientation) {
-        this.orientation = orientation;
-    }
+   public void setNormals(int normals) {
+      this.normals = normals;
+   }
 
-    public void setTextureFlag(boolean textureFlag) {
-        this.textureFlag = textureFlag;
-    }
+   public void setOrientation(int orientation) {
+      this.orientation = orientation;
+   }
 
-    public int getDrawStyle() {
-        return this.drawStyle;
-    }
+   public void setTextureFlag(boolean textureFlag) {
+      this.textureFlag = textureFlag;
+   }
 
-    public int getNormals() {
-        return this.normals;
-    }
+   public int getDrawStyle() {
+      return this.drawStyle;
+   }
 
-    public int getOrientation() {
-        return this.orientation;
-    }
+   public int getNormals() {
+      return this.normals;
+   }
 
-    public boolean getTextureFlag() {
-        return this.textureFlag;
-    }
+   public int getOrientation() {
+      return this.orientation;
+   }
 
-    protected void TXTR_COORD(float x, float y) {
-        if (this.textureFlag) {
-            GL11.glTexCoord2f(x, y);
-        }
-    }
+   public boolean getTextureFlag() {
+      return this.textureFlag;
+   }
 
-    protected float sin(float r) {
-        return (float)Math.sin(r);
-    }
+   protected void TXTR_COORD(float x, float y) {
+      if (this.textureFlag) {
+         GL11.glTexCoord2f(x, y);
+      }
+   }
 
-    protected float cos(float r) {
-        return (float)Math.cos(r);
-    }
+   protected float sin(float r) {
+      return (float)Math.sin(r);
+   }
+
+   protected float cos(float r) {
+      return (float)Math.cos(r);
+   }
 }
-

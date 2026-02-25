@@ -1,18 +1,11 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.config.builder.api;
 
-import org.apache.logging.log4j.core.config.builder.api.ComponentBuilder;
+public interface ScriptFileComponentBuilder extends ComponentBuilder<ScriptFileComponentBuilder> {
+   ScriptFileComponentBuilder addLanguage(String language);
 
-public interface ScriptFileComponentBuilder
-extends ComponentBuilder<ScriptFileComponentBuilder> {
-    public ScriptFileComponentBuilder addLanguage(String var1);
+   ScriptFileComponentBuilder addIsWatched(boolean isWatched);
 
-    public ScriptFileComponentBuilder addIsWatched(boolean var1);
+   ScriptFileComponentBuilder addIsWatched(String isWatched);
 
-    public ScriptFileComponentBuilder addIsWatched(String var1);
-
-    public ScriptFileComponentBuilder addCharset(String var1);
+   ScriptFileComponentBuilder addCharset(String charset);
 }
-

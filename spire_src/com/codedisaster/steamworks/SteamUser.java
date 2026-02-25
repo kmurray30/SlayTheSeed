@@ -1,156 +1,151 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.codedisaster.steamworks;
 
-import com.codedisaster.steamworks.SteamAPICall;
-import com.codedisaster.steamworks.SteamAuth;
-import com.codedisaster.steamworks.SteamAuthTicket;
-import com.codedisaster.steamworks.SteamException;
-import com.codedisaster.steamworks.SteamID;
-import com.codedisaster.steamworks.SteamInterface;
-import com.codedisaster.steamworks.SteamUserCallback;
-import com.codedisaster.steamworks.SteamUserCallbackAdapter;
-import com.codedisaster.steamworks.SteamUserNative;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
-public class SteamUser
-extends SteamInterface {
-    public SteamUser(SteamUserCallback callback) {
-        super(SteamUserNative.createCallback(new SteamUserCallbackAdapter(callback)));
-    }
+public class SteamUser extends SteamInterface {
+   public SteamUser(SteamUserCallback callback) {
+      super(SteamUserNative.createCallback(new SteamUserCallbackAdapter(callback)));
+   }
 
-    public SteamID getSteamID() {
-        return new SteamID(SteamUserNative.getSteamID());
-    }
+   public SteamID getSteamID() {
+      return new SteamID(SteamUserNative.getSteamID());
+   }
 
-    @Deprecated
-    public int initiateGameConnection(ByteBuffer authBlob, SteamID steamIDGameServer, int serverIP, short serverPort, boolean secure) throws SteamException {
-        if (!authBlob.isDirect()) {
-            throw new SteamException("Direct buffer required!");
-        }
-        int bytesWritten = SteamUserNative.initiateGameConnection(authBlob, authBlob.position(), authBlob.remaining(), steamIDGameServer.handle, serverIP, serverPort, secure);
-        if (bytesWritten > 0) {
-            authBlob.limit(bytesWritten);
-        }
-        return bytesWritten;
-    }
+   @Deprecated
+   public int initiateGameConnection(ByteBuffer authBlob, SteamID steamIDGameServer, int serverIP, short serverPort, boolean secure) throws SteamException {
+      if (!authBlob.isDirect()) {
+         throw new SteamException("Direct buffer required!");
+      } else {
+         int bytesWritten = SteamUserNative.initiateGameConnection(
+            authBlob, authBlob.position(), authBlob.remaining(), steamIDGameServer.handle, serverIP, serverPort, secure
+         );
+         if (bytesWritten > 0) {
+            ((Buffer)authBlob).limit(bytesWritten);
+         }
 
-    @Deprecated
-    public void terminateGameConnection(int serverIP, short serverPort) {
-        SteamUserNative.terminateGameConnection(serverIP, serverPort);
-    }
+         return bytesWritten;
+      }
+   }
 
-    public void startVoiceRecording() {
-        SteamUserNative.startVoiceRecording();
-    }
+   @Deprecated
+   public void terminateGameConnection(int serverIP, short serverPort) {
+      SteamUserNative.terminateGameConnection(serverIP, serverPort);
+   }
 
-    public void stopVoiceRecording() {
-        SteamUserNative.stopVoiceRecording();
-    }
+   public void startVoiceRecording() {
+      SteamUserNative.startVoiceRecording();
+   }
 
-    public VoiceResult getAvailableVoice(int[] bytesAvailable) {
-        int result = SteamUserNative.getAvailableVoice(bytesAvailable);
-        return VoiceResult.byOrdinal(result);
-    }
+   public void stopVoiceRecording() {
+      SteamUserNative.stopVoiceRecording();
+   }
 
-    public VoiceResult getVoice(ByteBuffer voiceData, int[] bytesWritten) throws SteamException {
-        if (!voiceData.isDirect()) {
-            throw new SteamException("Direct buffer required!");
-        }
-        int result = SteamUserNative.getVoice(voiceData, voiceData.position(), voiceData.remaining(), bytesWritten);
-        return VoiceResult.byOrdinal(result);
-    }
+   public SteamUser.VoiceResult getAvailableVoice(int[] bytesAvailable) {
+      int result = SteamUserNative.getAvailableVoice(bytesAvailable);
+      return SteamUser.VoiceResult.byOrdinal(result);
+   }
 
-    public VoiceResult decompressVoice(ByteBuffer voiceData, ByteBuffer audioData, int[] bytesWritten, int desiredSampleRate) throws SteamException {
-        if (!voiceData.isDirect()) {
-            throw new SteamException("Direct buffer required!");
-        }
-        if (!audioData.isDirect()) {
-            throw new SteamException("Direct buffer required!");
-        }
-        int result = SteamUserNative.decompressVoice(voiceData, voiceData.position(), voiceData.remaining(), audioData, audioData.position(), audioData.remaining(), bytesWritten, desiredSampleRate);
-        return VoiceResult.byOrdinal(result);
-    }
+   public SteamUser.VoiceResult getVoice(ByteBuffer voiceData, int[] bytesWritten) throws SteamException {
+      if (!voiceData.isDirect()) {
+         throw new SteamException("Direct buffer required!");
+      } else {
+         int result = SteamUserNative.getVoice(voiceData, voiceData.position(), voiceData.remaining(), bytesWritten);
+         return SteamUser.VoiceResult.byOrdinal(result);
+      }
+   }
 
-    public int getVoiceOptimalSampleRate() {
-        return SteamUserNative.getVoiceOptimalSampleRate();
-    }
+   public SteamUser.VoiceResult decompressVoice(ByteBuffer voiceData, ByteBuffer audioData, int[] bytesWritten, int desiredSampleRate) throws SteamException {
+      if (!voiceData.isDirect()) {
+         throw new SteamException("Direct buffer required!");
+      } else if (!audioData.isDirect()) {
+         throw new SteamException("Direct buffer required!");
+      } else {
+         int result = SteamUserNative.decompressVoice(
+            voiceData, voiceData.position(), voiceData.remaining(), audioData, audioData.position(), audioData.remaining(), bytesWritten, desiredSampleRate
+         );
+         return SteamUser.VoiceResult.byOrdinal(result);
+      }
+   }
 
-    public SteamAuthTicket getAuthSessionTicket(ByteBuffer authTicket, int[] sizeInBytes) throws SteamException {
-        if (!authTicket.isDirect()) {
-            throw new SteamException("Direct buffer required!");
-        }
-        int ticket = SteamUserNative.getAuthSessionTicket(authTicket, authTicket.position(), authTicket.remaining(), sizeInBytes);
-        if ((long)ticket != 0L) {
-            authTicket.limit(sizeInBytes[0]);
-        }
-        return new SteamAuthTicket(ticket);
-    }
+   public int getVoiceOptimalSampleRate() {
+      return SteamUserNative.getVoiceOptimalSampleRate();
+   }
 
-    public SteamAuth.BeginAuthSessionResult beginAuthSession(ByteBuffer authTicket, SteamID steamID) throws SteamException {
-        if (!authTicket.isDirect()) {
-            throw new SteamException("Direct buffer required!");
-        }
-        int result = SteamUserNative.beginAuthSession(authTicket, authTicket.position(), authTicket.remaining(), steamID.handle);
-        return SteamAuth.BeginAuthSessionResult.byOrdinal(result);
-    }
+   public SteamAuthTicket getAuthSessionTicket(ByteBuffer authTicket, int[] sizeInBytes) throws SteamException {
+      if (!authTicket.isDirect()) {
+         throw new SteamException("Direct buffer required!");
+      } else {
+         int ticket = SteamUserNative.getAuthSessionTicket(authTicket, authTicket.position(), authTicket.remaining(), sizeInBytes);
+         if (ticket != 0L) {
+            ((Buffer)authTicket).limit(sizeInBytes[0]);
+         }
 
-    public void endAuthSession(SteamID steamID) {
-        SteamUserNative.endAuthSession(steamID.handle);
-    }
+         return new SteamAuthTicket(ticket);
+      }
+   }
 
-    public void cancelAuthTicket(SteamAuthTicket authTicket) {
-        SteamUserNative.cancelAuthTicket((int)authTicket.handle);
-    }
+   public SteamAuth.BeginAuthSessionResult beginAuthSession(ByteBuffer authTicket, SteamID steamID) throws SteamException {
+      if (!authTicket.isDirect()) {
+         throw new SteamException("Direct buffer required!");
+      } else {
+         int result = SteamUserNative.beginAuthSession(authTicket, authTicket.position(), authTicket.remaining(), steamID.handle);
+         return SteamAuth.BeginAuthSessionResult.byOrdinal(result);
+      }
+   }
 
-    public SteamAuth.UserHasLicenseForAppResult userHasLicenseForApp(SteamID steamID, int appID) {
-        return SteamAuth.UserHasLicenseForAppResult.byOrdinal(SteamUserNative.userHasLicenseForApp(steamID.handle, appID));
-    }
+   public void endAuthSession(SteamID steamID) {
+      SteamUserNative.endAuthSession(steamID.handle);
+   }
 
-    public SteamAPICall requestEncryptedAppTicket(ByteBuffer dataToInclude) throws SteamException {
-        if (!dataToInclude.isDirect()) {
-            throw new SteamException("Direct buffer required!");
-        }
-        return new SteamAPICall(SteamUserNative.requestEncryptedAppTicket(this.callback, dataToInclude, dataToInclude.position(), dataToInclude.remaining()));
-    }
+   public void cancelAuthTicket(SteamAuthTicket authTicket) {
+      SteamUserNative.cancelAuthTicket((int)authTicket.handle);
+   }
 
-    public boolean getEncryptedAppTicket(ByteBuffer ticket, int[] sizeInBytes) throws SteamException {
-        if (!ticket.isDirect()) {
-            throw new SteamException("Direct buffer required!");
-        }
-        return SteamUserNative.getEncryptedAppTicket(ticket, ticket.position(), ticket.remaining(), sizeInBytes);
-    }
+   public SteamAuth.UserHasLicenseForAppResult userHasLicenseForApp(SteamID steamID, int appID) {
+      return SteamAuth.UserHasLicenseForAppResult.byOrdinal(SteamUserNative.userHasLicenseForApp(steamID.handle, appID));
+   }
 
-    public boolean isBehindNAT() {
-        return SteamUserNative.isBehindNAT();
-    }
+   public SteamAPICall requestEncryptedAppTicket(ByteBuffer dataToInclude) throws SteamException {
+      if (!dataToInclude.isDirect()) {
+         throw new SteamException("Direct buffer required!");
+      } else {
+         return new SteamAPICall(SteamUserNative.requestEncryptedAppTicket(this.callback, dataToInclude, dataToInclude.position(), dataToInclude.remaining()));
+      }
+   }
 
-    public void advertiseGame(SteamID steamIDGameServer, int serverIP, short serverPort) {
-        SteamUserNative.advertiseGame(steamIDGameServer.handle, serverIP, serverPort);
-    }
+   public boolean getEncryptedAppTicket(ByteBuffer ticket, int[] sizeInBytes) throws SteamException {
+      if (!ticket.isDirect()) {
+         throw new SteamException("Direct buffer required!");
+      } else {
+         return SteamUserNative.getEncryptedAppTicket(ticket, ticket.position(), ticket.remaining(), sizeInBytes);
+      }
+   }
 
-    public static enum VoiceResult {
-        OK,
-        NotInitialized,
-        NotRecording,
-        NoData,
-        BufferTooSmall,
-        DataCorrupted,
-        Restricted,
-        UnsupportedCodec,
-        ReceiverOutOfDate,
-        ReceiverDidNotAnswer;
+   public boolean isBehindNAT() {
+      return SteamUserNative.isBehindNAT();
+   }
 
-        private static final VoiceResult[] values;
+   public void advertiseGame(SteamID steamIDGameServer, int serverIP, short serverPort) {
+      SteamUserNative.advertiseGame(steamIDGameServer.handle, serverIP, serverPort);
+   }
 
-        static VoiceResult byOrdinal(int voiceResult) {
-            return values[voiceResult];
-        }
+   public static enum VoiceResult {
+      OK,
+      NotInitialized,
+      NotRecording,
+      NoData,
+      BufferTooSmall,
+      DataCorrupted,
+      Restricted,
+      UnsupportedCodec,
+      ReceiverOutOfDate,
+      ReceiverDidNotAnswer;
 
-        static {
-            values = VoiceResult.values();
-        }
-    }
+      private static final SteamUser.VoiceResult[] values = values();
+
+      static SteamUser.VoiceResult byOrdinal(int voiceResult) {
+         return values[voiceResult];
+      }
+   }
 }
-

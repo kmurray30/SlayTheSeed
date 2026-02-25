@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx;
 
 import com.badlogic.gdx.Gdx;
@@ -11,44 +8,65 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
-import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
-public class AwakenedEyeParticle
-extends AbstractGameEffect {
-    private float x;
-    private float y;
-    private TextureAtlas.AtlasRegion img;
+public class AwakenedEyeParticle extends AbstractGameEffect {
+   private float x;
+   private float y;
+   private TextureAtlas.AtlasRegion img;
 
-    public AwakenedEyeParticle(float x, float y) {
-        this.startingDuration = this.duration = MathUtils.random(0.5f, 1.0f);
-        this.img = ImageMaster.ROOM_SHINE_2;
-        this.x = x - (float)(this.img.packedWidth / 2);
-        this.y = y - (float)(this.img.packedHeight / 2);
-        this.scale = Settings.scale * MathUtils.random(0.5f, 1.0f);
-        this.rotation = 0.0f;
-        this.color = new Color(MathUtils.random(0.2f, 0.4f), MathUtils.random(0.8f, 1.0f), MathUtils.random(0.8f, 1.0f), 0.01f);
-    }
+   public AwakenedEyeParticle(float x, float y) {
+      this.duration = MathUtils.random(0.5F, 1.0F);
+      this.startingDuration = this.duration;
+      this.img = ImageMaster.ROOM_SHINE_2;
+      this.x = x - this.img.packedWidth / 2;
+      this.y = y - this.img.packedHeight / 2;
+      this.scale = Settings.scale * MathUtils.random(0.5F, 1.0F);
+      this.rotation = 0.0F;
+      this.color = new Color(MathUtils.random(0.2F, 0.4F), MathUtils.random(0.8F, 1.0F), MathUtils.random(0.8F, 1.0F), 0.01F);
+   }
 
-    @Override
-    public void update() {
-        this.duration -= Gdx.graphics.getDeltaTime();
-        if (this.duration < 0.0f) {
-            this.isDone = true;
-        }
-        this.color.a = Interpolation.fade.apply(0.0f, 0.5f, this.duration / this.startingDuration);
-    }
+   @Override
+   public void update() {
+      this.duration = this.duration - Gdx.graphics.getDeltaTime();
+      if (this.duration < 0.0F) {
+         this.isDone = true;
+      }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        sb.setBlendFunction(770, 1);
-        sb.setColor(this.color);
-        sb.draw(this.img, this.x, this.y, (float)this.img.packedWidth / 2.0f, (float)this.img.packedHeight / 2.0f, this.img.packedWidth, this.img.packedHeight, this.scale * MathUtils.random(6.0f, 12.0f), this.scale * MathUtils.random(0.7f, 0.8f), this.rotation + MathUtils.random(-1.0f, 1.0f));
-        sb.draw(this.img, this.x, this.y, (float)this.img.packedWidth / 2.0f, (float)this.img.packedHeight / 2.0f, this.img.packedWidth, this.img.packedHeight, this.scale * MathUtils.random(0.2f, 0.5f), this.scale * MathUtils.random(2.0f, 3.0f), this.rotation + MathUtils.random(-1.0f, 1.0f));
-        sb.setBlendFunction(770, 771);
-    }
+      this.color.a = Interpolation.fade.apply(0.0F, 0.5F, this.duration / this.startingDuration);
+   }
 
-    @Override
-    public void dispose() {
-    }
+   @Override
+   public void render(SpriteBatch sb) {
+      sb.setBlendFunction(770, 1);
+      sb.setColor(this.color);
+      sb.draw(
+         this.img,
+         this.x,
+         this.y,
+         this.img.packedWidth / 2.0F,
+         this.img.packedHeight / 2.0F,
+         this.img.packedWidth,
+         this.img.packedHeight,
+         this.scale * MathUtils.random(6.0F, 12.0F),
+         this.scale * MathUtils.random(0.7F, 0.8F),
+         this.rotation + MathUtils.random(-1.0F, 1.0F)
+      );
+      sb.draw(
+         this.img,
+         this.x,
+         this.y,
+         this.img.packedWidth / 2.0F,
+         this.img.packedHeight / 2.0F,
+         this.img.packedWidth,
+         this.img.packedHeight,
+         this.scale * MathUtils.random(0.2F, 0.5F),
+         this.scale * MathUtils.random(2.0F, 3.0F),
+         this.rotation + MathUtils.random(-1.0F, 1.0F)
+      );
+      sb.setBlendFunction(770, 771);
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

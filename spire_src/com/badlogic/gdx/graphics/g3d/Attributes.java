@@ -1,214 +1,220 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.graphics.g3d;
 
-import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.utils.Array;
 import java.util.Comparator;
 import java.util.Iterator;
 
-public class Attributes
-implements Iterable<Attribute>,
-Comparator<Attribute>,
-Comparable<Attributes> {
-    protected long mask;
-    protected final Array<Attribute> attributes = new Array();
-    protected boolean sorted = true;
+public class Attributes implements Iterable<Attribute>, Comparator<Attribute>, Comparable<Attributes> {
+   protected long mask;
+   protected final Array<Attribute> attributes = new Array<>();
+   protected boolean sorted = true;
 
-    public final void sort() {
-        if (!this.sorted) {
-            this.attributes.sort(this);
-            this.sorted = true;
-        }
-    }
+   public final void sort() {
+      if (!this.sorted) {
+         this.attributes.sort(this);
+         this.sorted = true;
+      }
+   }
 
-    public final long getMask() {
-        return this.mask;
-    }
+   public final long getMask() {
+      return this.mask;
+   }
 
-    public final Attribute get(long type) {
-        if (this.has(type)) {
-            for (int i = 0; i < this.attributes.size; ++i) {
-                if (this.attributes.get((int)i).type != type) continue;
-                return this.attributes.get(i);
+   public final Attribute get(long type) {
+      if (this.has(type)) {
+         for (int i = 0; i < this.attributes.size; i++) {
+            if (this.attributes.get(i).type == type) {
+               return this.attributes.get(i);
             }
-        }
-        return null;
-    }
+         }
+      }
 
-    public final <T extends Attribute> T get(Class<T> clazz, long type) {
-        return (T)this.get(type);
-    }
+      return null;
+   }
 
-    public final Array<Attribute> get(Array<Attribute> out, long type) {
-        for (int i = 0; i < this.attributes.size; ++i) {
-            if ((this.attributes.get((int)i).type & type) == 0L) continue;
+   public final <T extends Attribute> T get(Class<T> clazz, long type) {
+      return (T)this.get(type);
+   }
+
+   public final Array<Attribute> get(Array<Attribute> out, long type) {
+      for (int i = 0; i < this.attributes.size; i++) {
+         if ((this.attributes.get(i).type & type) != 0L) {
             out.add(this.attributes.get(i));
-        }
-        return out;
-    }
+         }
+      }
 
-    public void clear() {
-        this.mask = 0L;
-        this.attributes.clear();
-    }
+      return out;
+   }
 
-    public int size() {
-        return this.attributes.size;
-    }
+   public void clear() {
+      this.mask = 0L;
+      this.attributes.clear();
+   }
 
-    private final void enable(long mask) {
-        this.mask |= mask;
-    }
+   public int size() {
+      return this.attributes.size;
+   }
 
-    private final void disable(long mask) {
-        this.mask &= mask ^ 0xFFFFFFFFFFFFFFFFL;
-    }
+   private final void enable(long mask) {
+      this.mask |= mask;
+   }
 
-    public final void set(Attribute attribute) {
-        int idx = this.indexOf(attribute.type);
-        if (idx < 0) {
-            this.enable(attribute.type);
-            this.attributes.add(attribute);
-            this.sorted = false;
-        } else {
-            this.attributes.set(idx, attribute);
-        }
-        this.sort();
-    }
+   private final void disable(long mask) {
+      this.mask &= ~mask;
+   }
 
-    public final void set(Attribute attribute1, Attribute attribute2) {
-        this.set(attribute1);
-        this.set(attribute2);
-    }
+   public final void set(Attribute attribute) {
+      int idx = this.indexOf(attribute.type);
+      if (idx < 0) {
+         this.enable(attribute.type);
+         this.attributes.add(attribute);
+         this.sorted = false;
+      } else {
+         this.attributes.set(idx, attribute);
+      }
 
-    public final void set(Attribute attribute1, Attribute attribute2, Attribute attribute3) {
-        this.set(attribute1);
-        this.set(attribute2);
-        this.set(attribute3);
-    }
+      this.sort();
+   }
 
-    public final void set(Attribute attribute1, Attribute attribute2, Attribute attribute3, Attribute attribute4) {
-        this.set(attribute1);
-        this.set(attribute2);
-        this.set(attribute3);
-        this.set(attribute4);
-    }
+   public final void set(Attribute attribute1, Attribute attribute2) {
+      this.set(attribute1);
+      this.set(attribute2);
+   }
 
-    public final void set(Attribute ... attributes) {
-        for (Attribute attr : attributes) {
-            this.set(attr);
-        }
-    }
+   public final void set(Attribute attribute1, Attribute attribute2, Attribute attribute3) {
+      this.set(attribute1);
+      this.set(attribute2);
+      this.set(attribute3);
+   }
 
-    public final void set(Iterable<Attribute> attributes) {
-        for (Attribute attr : attributes) {
-            this.set(attr);
-        }
-    }
+   public final void set(Attribute attribute1, Attribute attribute2, Attribute attribute3, Attribute attribute4) {
+      this.set(attribute1);
+      this.set(attribute2);
+      this.set(attribute3);
+      this.set(attribute4);
+   }
 
-    public final void remove(long mask) {
-        for (int i = this.attributes.size - 1; i >= 0; --i) {
-            long type = this.attributes.get((int)i).type;
-            if ((mask & type) != type) continue;
+   public final void set(Attribute... attributes) {
+      for (Attribute attr : attributes) {
+         this.set(attr);
+      }
+   }
+
+   public final void set(Iterable<Attribute> attributes) {
+      for (Attribute attr : attributes) {
+         this.set(attr);
+      }
+   }
+
+   public final void remove(long mask) {
+      for (int i = this.attributes.size - 1; i >= 0; i--) {
+         long type = this.attributes.get(i).type;
+         if ((mask & type) == type) {
             this.attributes.removeIndex(i);
             this.disable(type);
             this.sorted = false;
-        }
-        this.sort();
-    }
+         }
+      }
 
-    public final boolean has(long type) {
-        return type != 0L && (this.mask & type) == type;
-    }
+      this.sort();
+   }
 
-    protected int indexOf(long type) {
-        if (this.has(type)) {
-            for (int i = 0; i < this.attributes.size; ++i) {
-                if (this.attributes.get((int)i).type != type) continue;
-                return i;
+   public final boolean has(long type) {
+      return type != 0L && (this.mask & type) == type;
+   }
+
+   protected int indexOf(long type) {
+      if (this.has(type)) {
+         for (int i = 0; i < this.attributes.size; i++) {
+            if (this.attributes.get(i).type == type) {
+               return i;
             }
-        }
-        return -1;
-    }
+         }
+      }
 
-    public final boolean same(Attributes other, boolean compareValues) {
-        if (other == this) {
+      return -1;
+   }
+
+   public final boolean same(Attributes other, boolean compareValues) {
+      if (other == this) {
+         return true;
+      } else if (other != null && this.mask == other.mask) {
+         if (!compareValues) {
             return true;
-        }
-        if (other == null || this.mask != other.mask) {
-            return false;
-        }
-        if (!compareValues) {
+         } else {
+            this.sort();
+            other.sort();
+
+            for (int i = 0; i < this.attributes.size; i++) {
+               if (!this.attributes.get(i).equals(other.attributes.get(i))) {
+                  return false;
+               }
+            }
+
             return true;
-        }
-        this.sort();
-        other.sort();
-        for (int i = 0; i < this.attributes.size; ++i) {
-            if (this.attributes.get(i).equals(other.attributes.get(i))) continue;
-            return false;
-        }
-        return true;
-    }
+         }
+      } else {
+         return false;
+      }
+   }
 
-    public final boolean same(Attributes other) {
-        return this.same(other, false);
-    }
+   public final boolean same(Attributes other) {
+      return this.same(other, false);
+   }
 
-    @Override
-    public final int compare(Attribute arg0, Attribute arg1) {
-        return (int)(arg0.type - arg1.type);
-    }
+   public final int compare(Attribute arg0, Attribute arg1) {
+      return (int)(arg0.type - arg1.type);
+   }
 
-    @Override
-    public final Iterator<Attribute> iterator() {
-        return this.attributes.iterator();
-    }
+   @Override
+   public final Iterator<Attribute> iterator() {
+      return this.attributes.iterator();
+   }
 
-    public int attributesHash() {
-        this.sort();
-        int n = this.attributes.size;
-        long result = 71L + this.mask;
-        int m = 1;
-        for (int i = 0; i < n; ++i) {
-            m = m * 7 & 0xFFFF;
-            result += this.mask * (long)this.attributes.get(i).hashCode() * (long)m;
-        }
-        return (int)(result ^ result >> 32);
-    }
+   public int attributesHash() {
+      this.sort();
+      int n = this.attributes.size;
+      long result = 71L + this.mask;
+      int m = 1;
 
-    public int hashCode() {
-        return this.attributesHash();
-    }
+      for (int i = 0; i < n; i++) {
+         result += this.mask * this.attributes.get(i).hashCode() * (m = m * 7 & 65535);
+      }
 
-    @Override
-    public boolean equals(Object other) {
-        if (!(other instanceof Attributes)) {
-            return false;
-        }
-        if (other == this) {
-            return true;
-        }
-        return this.same((Attributes)other, true);
-    }
+      return (int)(result ^ result >> 32);
+   }
 
-    @Override
-    public int compareTo(Attributes other) {
-        if (other == this) {
-            return 0;
-        }
-        if (this.mask != other.mask) {
-            return this.mask < other.mask ? -1 : 1;
-        }
-        this.sort();
-        other.sort();
-        for (int i = 0; i < this.attributes.size; ++i) {
+   @Override
+   public int hashCode() {
+      return this.attributesHash();
+   }
+
+   @Override
+   public boolean equals(Object other) {
+      if (!(other instanceof Attributes)) {
+         return false;
+      } else {
+         return other == this ? true : this.same((Attributes)other, true);
+      }
+   }
+
+   public int compareTo(Attributes other) {
+      if (other == this) {
+         return 0;
+      } else if (this.mask != other.mask) {
+         return this.mask < other.mask ? -1 : 1;
+      } else {
+         this.sort();
+         other.sort();
+
+         for (int i = 0; i < this.attributes.size; i++) {
             int c = this.attributes.get(i).compareTo(other.attributes.get(i));
-            if (c == 0) continue;
-            return c < 0 ? -1 : (c > 0 ? 1 : 0);
-        }
-        return 0;
-    }
-}
+            if (c != 0) {
+               return c < 0 ? -1 : (c > 0 ? 1 : 0);
+            }
+         }
 
+         return 0;
+      }
+   }
+}

@@ -1,11 +1,7 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.appender.rolling;
 
 public interface RolloverListener {
-    public void rolloverTriggered(String var1);
+   void rolloverTriggered(String fileName);
 
-    public void rolloverComplete(String var1);
+   void rolloverComplete(String fileName);
 }
-

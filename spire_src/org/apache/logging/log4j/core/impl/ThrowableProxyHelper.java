@@ -1,175 +1,183 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.impl;
 
 import java.net.URL;
 import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
-import org.apache.logging.log4j.core.impl.ExtendedClassInfo;
-import org.apache.logging.log4j.core.impl.ExtendedStackTraceElement;
-import org.apache.logging.log4j.core.impl.ThrowableProxy;
 import org.apache.logging.log4j.core.util.Loader;
 import org.apache.logging.log4j.status.StatusLogger;
 import org.apache.logging.log4j.util.LoaderUtil;
 
 class ThrowableProxyHelper {
-    private ThrowableProxyHelper() {
-    }
+   private ThrowableProxyHelper() {
+   }
 
-    static ExtendedStackTraceElement[] toExtendedStackTrace(ThrowableProxy src, Stack<Class<?>> stack, Map<String, CacheEntry> map, StackTraceElement[] rootTrace, StackTraceElement[] stackTrace) {
-        int stackLength;
-        if (rootTrace != null) {
-            int stackIndex;
-            int rootIndex = rootTrace.length - 1;
-            for (stackIndex = stackTrace.length - 1; rootIndex >= 0 && stackIndex >= 0 && rootTrace[rootIndex].equals(stackTrace[stackIndex]); --rootIndex, --stackIndex) {
-            }
-            src.setCommonElementCount(stackTrace.length - 1 - stackIndex);
-            stackLength = stackIndex + 1;
-        } else {
-            src.setCommonElementCount(0);
-            stackLength = stackTrace.length;
-        }
-        ExtendedStackTraceElement[] extStackTrace = new ExtendedStackTraceElement[stackLength];
-        Class<?> clazz = stack.isEmpty() ? null : stack.peek();
-        ClassLoader lastLoader = null;
-        for (int i = stackLength - 1; i >= 0; --i) {
-            ExtendedClassInfo extClassInfo;
-            StackTraceElement stackTraceElement = stackTrace[i];
-            String className = stackTraceElement.getClassName();
-            if (clazz != null && className.equals(clazz.getName())) {
-                CacheEntry entry = ThrowableProxyHelper.toCacheEntry(clazz, true);
-                extClassInfo = entry.element;
-                lastLoader = entry.loader;
-                stack.pop();
-                clazz = stack.isEmpty() ? null : stack.peek();
+   static ExtendedStackTraceElement[] toExtendedStackTrace(
+      final ThrowableProxy src,
+      final Stack<Class<?>> stack,
+      final Map<String, ThrowableProxyHelper.CacheEntry> map,
+      final StackTraceElement[] rootTrace,
+      final StackTraceElement[] stackTrace
+   ) {
+      int stackLength;
+      if (rootTrace != null) {
+         int rootIndex = rootTrace.length - 1;
+
+         int stackIndex;
+         for (stackIndex = stackTrace.length - 1; rootIndex >= 0 && stackIndex >= 0 && rootTrace[rootIndex].equals(stackTrace[stackIndex]); stackIndex--) {
+            rootIndex--;
+         }
+
+         src.setCommonElementCount(stackTrace.length - 1 - stackIndex);
+         stackLength = stackIndex + 1;
+      } else {
+         src.setCommonElementCount(0);
+         stackLength = stackTrace.length;
+      }
+
+      ExtendedStackTraceElement[] extStackTrace = new ExtendedStackTraceElement[stackLength];
+      Class<?> clazz = stack.isEmpty() ? null : stack.peek();
+      ClassLoader lastLoader = null;
+
+      for (int i = stackLength - 1; i >= 0; i--) {
+         StackTraceElement stackTraceElement = stackTrace[i];
+         String className = stackTraceElement.getClassName();
+         ExtendedClassInfo extClassInfo;
+         if (clazz != null && className.equals(clazz.getName())) {
+            ThrowableProxyHelper.CacheEntry entry = toCacheEntry(clazz, true);
+            extClassInfo = entry.element;
+            lastLoader = entry.loader;
+            stack.pop();
+            clazz = stack.isEmpty() ? null : stack.peek();
+         } else {
+            ThrowableProxyHelper.CacheEntry cacheEntry = map.get(className);
+            if (cacheEntry != null) {
+               extClassInfo = cacheEntry.element;
+               if (cacheEntry.loader != null) {
+                  lastLoader = cacheEntry.loader;
+               }
             } else {
-                CacheEntry entry;
-                CacheEntry cacheEntry = map.get(className);
-                if (cacheEntry != null) {
-                    entry = cacheEntry;
-                    extClassInfo = entry.element;
-                    if (entry.loader != null) {
-                        lastLoader = entry.loader;
-                    }
-                } else {
-                    entry = ThrowableProxyHelper.toCacheEntry(ThrowableProxyHelper.loadClass(lastLoader, className), false);
-                    extClassInfo = entry.element;
-                    map.put(className, entry);
-                    if (entry.loader != null) {
-                        lastLoader = entry.loader;
-                    }
-                }
+               ThrowableProxyHelper.CacheEntry entry = toCacheEntry(loadClass(lastLoader, className), false);
+               extClassInfo = entry.element;
+               map.put(className, entry);
+               if (entry.loader != null) {
+                  lastLoader = entry.loader;
+               }
             }
-            extStackTrace[i] = new ExtendedStackTraceElement(stackTraceElement, extClassInfo);
-        }
-        return extStackTrace;
-    }
+         }
 
-    static ThrowableProxy[] toSuppressedProxies(Throwable thrown, Set<Throwable> suppressedVisited) {
-        try {
-            Throwable[] suppressed = thrown.getSuppressed();
-            if (suppressed == null || suppressed.length == 0) {
-                return ThrowableProxy.EMPTY_ARRAY;
-            }
-            ArrayList<ThrowableProxy> proxies = new ArrayList<ThrowableProxy>(suppressed.length);
+         extStackTrace[i] = new ExtendedStackTraceElement(stackTraceElement, extClassInfo);
+      }
+
+      return extStackTrace;
+   }
+
+   static ThrowableProxy[] toSuppressedProxies(final Throwable thrown, Set<Throwable> suppressedVisited) {
+      try {
+         Throwable[] suppressed = thrown.getSuppressed();
+         if (suppressed != null && suppressed.length != 0) {
+            List<ThrowableProxy> proxies = new ArrayList<>(suppressed.length);
             if (suppressedVisited == null) {
-                suppressedVisited = new HashSet<Throwable>(suppressed.length);
+               suppressedVisited = new HashSet<>(suppressed.length);
             }
-            for (int i = 0; i < suppressed.length; ++i) {
-                Throwable candidate = suppressed[i];
-                if (!suppressedVisited.add(candidate)) continue;
-                proxies.add(new ThrowableProxy(candidate, suppressedVisited));
+
+            for (int i = 0; i < suppressed.length; i++) {
+               Throwable candidate = suppressed[i];
+               if (suppressedVisited.add(candidate)) {
+                  proxies.add(new ThrowableProxy(candidate, suppressedVisited));
+               }
             }
+
             return proxies.toArray(new ThrowableProxy[proxies.size()]);
-        }
-        catch (Exception e) {
-            StatusLogger.getLogger().error(e);
-            return null;
-        }
-    }
+         } else {
+            return ThrowableProxy.EMPTY_ARRAY;
+         }
+      } catch (Exception var6) {
+         StatusLogger.getLogger().error(var6);
+         return null;
+      }
+   }
 
-    private static CacheEntry toCacheEntry(Class<?> callerClass, boolean exact) {
-        String location = "?";
-        String version = "?";
-        ClassLoader lastLoader = null;
-        if (callerClass != null) {
-            String ver;
-            try {
-                URL locationURL;
-                CodeSource source = callerClass.getProtectionDomain().getCodeSource();
-                if (source != null && (locationURL = source.getLocation()) != null) {
-                    String str = locationURL.toString().replace('\\', '/');
-                    int index = str.lastIndexOf("/");
-                    if (index >= 0 && index == str.length() - 1) {
-                        index = str.lastIndexOf("/", index - 1);
-                    }
-                    location = str.substring(index + 1);
-                }
-            }
-            catch (Exception source) {
-                // empty catch block
-            }
-            Package pkg = callerClass.getPackage();
-            if (pkg != null && (ver = pkg.getImplementationVersion()) != null) {
-                version = ver;
-            }
-            try {
-                lastLoader = callerClass.getClassLoader();
-            }
-            catch (SecurityException e) {
-                lastLoader = null;
-            }
-        }
-        return new CacheEntry(new ExtendedClassInfo(exact, location, version), lastLoader);
-    }
+   private static ThrowableProxyHelper.CacheEntry toCacheEntry(final Class<?> callerClass, final boolean exact) {
+      String location = "?";
+      String version = "?";
+      ClassLoader lastLoader = null;
+      if (callerClass != null) {
+         try {
+            CodeSource source = callerClass.getProtectionDomain().getCodeSource();
+            if (source != null) {
+               URL locationURL = source.getLocation();
+               if (locationURL != null) {
+                  String str = locationURL.toString().replace('\\', '/');
+                  int index = str.lastIndexOf("/");
+                  if (index >= 0 && index == str.length() - 1) {
+                     index = str.lastIndexOf("/", index - 1);
+                  }
 
-    private static Class<?> loadClass(ClassLoader lastLoader, String className) {
-        Class<?> clazz;
-        if (lastLoader != null) {
-            try {
-                clazz = lastLoader.loadClass(className);
-                if (clazz != null) {
-                    return clazz;
-                }
+                  location = str.substring(index + 1);
+               }
             }
-            catch (Throwable throwable) {
-                // empty catch block
+         } catch (Exception var10) {
+         }
+
+         Package pkg = callerClass.getPackage();
+         if (pkg != null) {
+            String ver = pkg.getImplementationVersion();
+            if (ver != null) {
+               version = ver;
             }
-        }
-        try {
-            clazz = LoaderUtil.loadClass(className);
-        }
-        catch (ClassNotFoundException | NoClassDefFoundError e) {
-            return ThrowableProxyHelper.loadClass(className);
-        }
-        catch (SecurityException e) {
-            return null;
-        }
-        return clazz;
-    }
+         }
 
-    private static Class<?> loadClass(String className) {
-        try {
-            return Loader.loadClass(className, ThrowableProxyHelper.class.getClassLoader());
-        }
-        catch (ClassNotFoundException | NoClassDefFoundError | SecurityException e) {
-            return null;
-        }
-    }
+         try {
+            lastLoader = callerClass.getClassLoader();
+         } catch (SecurityException var9) {
+            lastLoader = null;
+         }
+      }
 
-    static final class CacheEntry {
-        private final ExtendedClassInfo element;
-        private final ClassLoader loader;
+      return new ThrowableProxyHelper.CacheEntry(new ExtendedClassInfo(exact, location, version), lastLoader);
+   }
 
-        private CacheEntry(ExtendedClassInfo element, ClassLoader loader) {
-            this.element = element;
-            this.loader = loader;
-        }
-    }
+   private static Class<?> loadClass(final ClassLoader lastLoader, final String className) {
+      if (lastLoader != null) {
+         try {
+            Class<?> clazz = lastLoader.loadClass(className);
+            if (clazz != null) {
+               return clazz;
+            }
+         } catch (Throwable var6) {
+         }
+      }
+
+      try {
+         Class<?> clazz = LoaderUtil.loadClass(className);
+         return clazz;
+      } catch (NoClassDefFoundError | ClassNotFoundException var4) {
+         return loadClass(className);
+      } catch (SecurityException var5) {
+         return null;
+      }
+   }
+
+   private static Class<?> loadClass(final String className) {
+      try {
+         return Loader.loadClass(className, ThrowableProxyHelper.class.getClassLoader());
+      } catch (NoClassDefFoundError | SecurityException | ClassNotFoundException var2) {
+         return null;
+      }
+   }
+
+   static final class CacheEntry {
+      private final ExtendedClassInfo element;
+      private final ClassLoader loader;
+
+      private CacheEntry(final ExtendedClassInfo element, final ClassLoader loader) {
+         this.element = element;
+         this.loader = loader;
+      }
+   }
 }
-

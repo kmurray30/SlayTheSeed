@@ -1,25 +1,21 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.spi;
 
 import java.util.Map;
 
 public interface ThreadContextMap {
-    public void clear();
+   void clear();
 
-    public boolean containsKey(String var1);
+   boolean containsKey(final String key);
 
-    public String get(String var1);
+   String get(final String key);
 
-    public Map<String, String> getCopy();
+   Map<String, String> getCopy();
 
-    public Map<String, String> getImmutableMapOrNull();
+   Map<String, String> getImmutableMapOrNull();
 
-    public boolean isEmpty();
+   boolean isEmpty();
 
-    public void put(String var1, String var2);
+   void put(final String key, final String value);
 
-    public void remove(String var1);
+   void remove(final String key);
 }
-

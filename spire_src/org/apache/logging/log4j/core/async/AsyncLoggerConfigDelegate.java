@@ -1,24 +1,18 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.async;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.LogEvent;
-import org.apache.logging.log4j.core.async.AsyncLoggerConfig;
-import org.apache.logging.log4j.core.async.EventRoute;
 import org.apache.logging.log4j.core.impl.LogEventFactory;
 import org.apache.logging.log4j.core.jmx.RingBufferAdmin;
 
 public interface AsyncLoggerConfigDelegate {
-    public RingBufferAdmin createRingBufferAdmin(String var1, String var2);
+   RingBufferAdmin createRingBufferAdmin(final String contextName, final String loggerConfigName);
 
-    public EventRoute getEventRoute(Level var1);
+   EventRoute getEventRoute(final Level level);
 
-    public void enqueueEvent(LogEvent var1, AsyncLoggerConfig var2);
+   void enqueueEvent(LogEvent event, AsyncLoggerConfig asyncLoggerConfig);
 
-    public boolean tryEnqueue(LogEvent var1, AsyncLoggerConfig var2);
+   boolean tryEnqueue(LogEvent event, AsyncLoggerConfig asyncLoggerConfig);
 
-    public void setLogEventFactory(LogEventFactory var1);
+   void setLogEventFactory(LogEventFactory logEventFactory);
 }
-

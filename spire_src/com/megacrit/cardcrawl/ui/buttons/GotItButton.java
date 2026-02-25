@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.ui.buttons;
 
 import com.badlogic.gdx.graphics.Color;
@@ -12,35 +9,59 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 
 public class GotItButton {
-    public Hitbox hb = new Hitbox(220.0f * Settings.scale, 60.0f * Settings.scale);
-    private static final int W = 210;
-    private static final int H = 52;
-    float x = x += 120.0f * Settings.scale;
-    float y = y -= 160.0f * Settings.scale;
+   public Hitbox hb = new Hitbox(220.0F * Settings.scale, 60.0F * Settings.scale);
+   private static final int W = 210;
+   private static final int H = 52;
+   float x;
+   float y;
 
-    public GotItButton(float x, float y) {
-        this.hb.move(x, y);
-    }
+   public GotItButton(float x, float y) {
+      x += 120.0F * Settings.scale;
+      y -= 160.0F * Settings.scale;
+      this.x = x;
+      this.y = y;
+      this.hb.move(x, y);
+   }
 
-    public void update() {
-        this.hb.update();
-        if (this.hb.justHovered) {
-            CardCrawlGame.sound.play("UI_HOVER");
-        }
-        if (this.hb.hovered && InputHelper.justClickedLeft) {
-            this.hb.clickStarted = true;
-        }
-    }
+   public void update() {
+      this.hb.update();
+      if (this.hb.justHovered) {
+         CardCrawlGame.sound.play("UI_HOVER");
+      }
 
-    public void render(SpriteBatch sb) {
-        sb.draw(ImageMaster.FTUE_BTN, this.x - 105.0f, this.y - 26.0f, 105.0f, 26.0f, 210.0f, 52.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 210, 52, false, false);
-        if (this.hb.hovered) {
-            sb.setBlendFunction(770, 1);
-            sb.setColor(new Color(1.0f, 1.0f, 1.0f, 0.25f));
-            sb.draw(ImageMaster.FTUE_BTN, this.x - 105.0f, this.y - 26.0f, 105.0f, 26.0f, 210.0f, 52.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 210, 52, false, false);
-            sb.setBlendFunction(770, 771);
-        }
-        this.hb.render(sb);
-    }
+      if (this.hb.hovered && InputHelper.justClickedLeft) {
+         this.hb.clickStarted = true;
+      }
+   }
+
+   public void render(SpriteBatch sb) {
+      sb.draw(
+         ImageMaster.FTUE_BTN, this.x - 105.0F, this.y - 26.0F, 105.0F, 26.0F, 210.0F, 52.0F, Settings.scale, Settings.scale, 0.0F, 0, 0, 210, 52, false, false
+      );
+      if (this.hb.hovered) {
+         sb.setBlendFunction(770, 1);
+         sb.setColor(new Color(1.0F, 1.0F, 1.0F, 0.25F));
+         sb.draw(
+            ImageMaster.FTUE_BTN,
+            this.x - 105.0F,
+            this.y - 26.0F,
+            105.0F,
+            26.0F,
+            210.0F,
+            52.0F,
+            Settings.scale,
+            Settings.scale,
+            0.0F,
+            0,
+            0,
+            210,
+            52,
+            false,
+            false
+         );
+         sb.setBlendFunction(770, 771);
+      }
+
+      this.hb.render(sb);
+   }
 }
-

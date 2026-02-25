@@ -1,11 +1,7 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.pattern;
 
 public interface TextRenderer {
-    public void render(String var1, StringBuilder var2, String var3);
+   void render(String input, StringBuilder output, String styleName);
 
-    public void render(StringBuilder var1, StringBuilder var2);
+   void render(StringBuilder input, StringBuilder output);
 }
-

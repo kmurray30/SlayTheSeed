@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.appender;
 
 import java.util.HashMap;
@@ -13,142 +10,142 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.AbstractLifeCycle;
 import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.appender.ManagerFactory;
 import org.apache.logging.log4j.core.config.ConfigurationException;
 import org.apache.logging.log4j.message.Message;
+import org.apache.logging.log4j.message.MessageFactory;
 import org.apache.logging.log4j.status.StatusLogger;
 
-public abstract class AbstractManager
-implements AutoCloseable {
-    protected static final Logger LOGGER = StatusLogger.getLogger();
-    private static final Map<String, AbstractManager> MAP = new HashMap<String, AbstractManager>();
-    private static final Lock LOCK = new ReentrantLock();
-    protected int count;
-    private final String name;
-    private final LoggerContext loggerContext;
+public abstract class AbstractManager implements AutoCloseable {
+   protected static final Logger LOGGER = StatusLogger.getLogger();
+   private static final Map<String, AbstractManager> MAP = new HashMap<>();
+   private static final Lock LOCK = new ReentrantLock();
+   protected int count;
+   private final String name;
+   private final LoggerContext loggerContext;
 
-    protected AbstractManager(LoggerContext loggerContext, String name) {
-        this.loggerContext = loggerContext;
-        this.name = name;
-        LOGGER.debug("Starting {} {}", (Object)this.getClass().getSimpleName(), (Object)name);
-    }
+   protected AbstractManager(final LoggerContext loggerContext, final String name) {
+      this.loggerContext = loggerContext;
+      this.name = name;
+      LOGGER.debug("Starting {} {}", this.getClass().getSimpleName(), name);
+   }
 
-    @Override
-    public void close() {
-        this.stop(0L, AbstractLifeCycle.DEFAULT_STOP_TIMEUNIT);
-    }
+   @Override
+   public void close() {
+      this.stop(0L, AbstractLifeCycle.DEFAULT_STOP_TIMEUNIT);
+   }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    public boolean stop(long timeout, TimeUnit timeUnit) {
-        boolean stopped = true;
-        LOCK.lock();
-        try {
-            --this.count;
-            if (this.count <= 0) {
-                MAP.remove(this.name);
-                LOGGER.debug("Shutting down {} {}", (Object)this.getClass().getSimpleName(), (Object)this.getName());
-                stopped = this.releaseSub(timeout, timeUnit);
-                LOGGER.debug("Shut down {} {}, all resources released: {}", (Object)this.getClass().getSimpleName(), (Object)this.getName(), (Object)stopped);
-            }
-        }
-        finally {
-            LOCK.unlock();
-        }
-        return stopped;
-    }
+   public boolean stop(final long timeout, final TimeUnit timeUnit) {
+      boolean stopped = true;
+      LOCK.lock();
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    public static <M extends AbstractManager, T> M getManager(String name, ManagerFactory<M, T> factory, T data) {
-        LOCK.lock();
-        try {
-            AbstractManager manager = MAP.get(name);
+      try {
+         this.count--;
+         if (this.count <= 0) {
+            MAP.remove(this.name);
+            LOGGER.debug("Shutting down {} {}", this.getClass().getSimpleName(), this.getName());
+            stopped = this.releaseSub(timeout, timeUnit);
+            LOGGER.debug("Shut down {} {}, all resources released: {}", this.getClass().getSimpleName(), this.getName(), stopped);
+         }
+      } finally {
+         LOCK.unlock();
+      }
+
+      return stopped;
+   }
+
+   public static <M extends AbstractManager, T> M getManager(final String name, final ManagerFactory<M, T> factory, final T data) {
+      LOCK.lock();
+
+      AbstractManager var4;
+      try {
+         M manager = (M)MAP.get(name);
+         if (manager == null) {
+            manager = (M)Objects.requireNonNull(factory, "factory").createManager(name, data);
             if (manager == null) {
-                manager = (AbstractManager)Objects.requireNonNull(factory, "factory").createManager(name, data);
-                if (manager == null) {
-                    throw new IllegalStateException("ManagerFactory [" + factory + "] unable to create manager for [" + name + "] with data [" + data + "]");
-                }
-                MAP.put(name, manager);
-            } else {
-                manager.updateData(data);
+               throw new IllegalStateException("ManagerFactory [" + factory + "] unable to create manager for [" + name + "] with data [" + data + "]");
             }
-            ++manager.count;
-            AbstractManager abstractManager = manager;
-            return (M)abstractManager;
-        }
-        finally {
-            LOCK.unlock();
-        }
-    }
 
-    public void updateData(Object data) {
-    }
+            MAP.put(name, manager);
+         } else {
+            manager.updateData(data);
+         }
 
-    public static boolean hasManager(String name) {
-        LOCK.lock();
-        try {
-            boolean bl = MAP.containsKey(name);
-            return bl;
-        }
-        finally {
-            LOCK.unlock();
-        }
-    }
+         manager.count++;
+         var4 = manager;
+      } finally {
+         LOCK.unlock();
+      }
 
-    protected static <M extends AbstractManager> M narrow(Class<M> narrowClass, AbstractManager manager) {
-        if (narrowClass.isAssignableFrom(manager.getClass())) {
-            return (M)manager;
-        }
-        throw new ConfigurationException("Configuration has multiple incompatible Appenders pointing to the same resource '" + manager.getName() + "'");
-    }
+      return (M)var4;
+   }
 
-    protected static StatusLogger logger() {
-        return StatusLogger.getLogger();
-    }
+   public void updateData(final Object data) {
+   }
 
-    protected boolean releaseSub(long timeout, TimeUnit timeUnit) {
-        return true;
-    }
+   public static boolean hasManager(final String name) {
+      LOCK.lock();
 
-    protected int getCount() {
-        return this.count;
-    }
+      boolean var1;
+      try {
+         var1 = MAP.containsKey(name);
+      } finally {
+         LOCK.unlock();
+      }
 
-    public LoggerContext getLoggerContext() {
-        return this.loggerContext;
-    }
+      return var1;
+   }
 
-    @Deprecated
-    public void release() {
-        this.close();
-    }
+   protected static <M extends AbstractManager> M narrow(final Class<M> narrowClass, final AbstractManager manager) {
+      if (narrowClass.isAssignableFrom(manager.getClass())) {
+         return (M)manager;
+      } else {
+         throw new ConfigurationException("Configuration has multiple incompatible Appenders pointing to the same resource '" + manager.getName() + "'");
+      }
+   }
 
-    public String getName() {
-        return this.name;
-    }
+   protected static StatusLogger logger() {
+      return StatusLogger.getLogger();
+   }
 
-    public Map<String, String> getContentFormat() {
-        return new HashMap<String, String>();
-    }
+   protected boolean releaseSub(final long timeout, final TimeUnit timeUnit) {
+      return true;
+   }
 
-    protected void log(Level level, String message, Throwable throwable) {
-        Message m = LOGGER.getMessageFactory().newMessage("{} {} {}: {}", this.getClass().getSimpleName(), this.getName(), message, throwable);
-        LOGGER.log(level, m, throwable);
-    }
+   protected int getCount() {
+      return this.count;
+   }
 
-    protected void logDebug(String message, Throwable throwable) {
-        this.log(Level.DEBUG, message, throwable);
-    }
+   public LoggerContext getLoggerContext() {
+      return this.loggerContext;
+   }
 
-    protected void logError(String message, Throwable throwable) {
-        this.log(Level.ERROR, message, throwable);
-    }
+   @Deprecated
+   public void release() {
+      this.close();
+   }
 
-    protected void logWarn(String message, Throwable throwable) {
-        this.log(Level.WARN, message, throwable);
-    }
+   public String getName() {
+      return this.name;
+   }
+
+   public Map<String, String> getContentFormat() {
+      return new HashMap<>();
+   }
+
+   protected void log(final Level level, final String message, final Throwable throwable) {
+      Message m = LOGGER.<MessageFactory>getMessageFactory().newMessage("{} {} {}: {}", this.getClass().getSimpleName(), this.getName(), message, throwable);
+      LOGGER.log(level, m, throwable);
+   }
+
+   protected void logDebug(final String message, final Throwable throwable) {
+      this.log(Level.DEBUG, message, throwable);
+   }
+
+   protected void logError(final String message, final Throwable throwable) {
+      this.log(Level.ERROR, message, throwable);
+   }
+
+   protected void logWarn(final String message, final Throwable throwable) {
+      this.log(Level.WARN, message, throwable);
+   }
 }
-

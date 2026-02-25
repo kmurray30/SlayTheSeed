@@ -1,66 +1,88 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
-import org.apache.logging.log4j.core.LifeCycle;
-import org.apache.logging.log4j.core.LogEvent;
-import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.util.EnglishEnums;
 
-public interface Filter
-extends LifeCycle {
-    public static final Filter[] EMPTY_ARRAY = new Filter[0];
-    public static final String ELEMENT_TYPE = "filter";
+public interface Filter extends LifeCycle {
+   Filter[] EMPTY_ARRAY = new Filter[0];
+   String ELEMENT_TYPE = "filter";
 
-    public Result getOnMismatch();
+   Filter.Result getOnMismatch();
 
-    public Result getOnMatch();
+   Filter.Result getOnMatch();
 
-    public Result filter(Logger var1, Level var2, Marker var3, String var4, Object ... var5);
+   Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object... params);
 
-    public Result filter(Logger var1, Level var2, Marker var3, String var4, Object var5);
+   Filter.Result filter(Logger logger, Level level, Marker marker, String message, Object p0);
 
-    public Result filter(Logger var1, Level var2, Marker var3, String var4, Object var5, Object var6);
+   Filter.Result filter(Logger logger, Level level, Marker marker, String message, Object p0, Object p1);
 
-    public Result filter(Logger var1, Level var2, Marker var3, String var4, Object var5, Object var6, Object var7);
+   Filter.Result filter(Logger logger, Level level, Marker marker, String message, Object p0, Object p1, Object p2);
 
-    public Result filter(Logger var1, Level var2, Marker var3, String var4, Object var5, Object var6, Object var7, Object var8);
+   Filter.Result filter(Logger logger, Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3);
 
-    public Result filter(Logger var1, Level var2, Marker var3, String var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   Filter.Result filter(Logger logger, Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public Result filter(Logger var1, Level var2, Marker var3, String var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   Filter.Result filter(Logger logger, Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public Result filter(Logger var1, Level var2, Marker var3, String var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   Filter.Result filter(Logger logger, Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public Result filter(Logger var1, Level var2, Marker var3, String var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12);
+   Filter.Result filter(
+      Logger logger, Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7
+   );
 
-    public Result filter(Logger var1, Level var2, Marker var3, String var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12, Object var13);
+   Filter.Result filter(
+      Logger logger,
+      Level level,
+      Marker marker,
+      String message,
+      Object p0,
+      Object p1,
+      Object p2,
+      Object p3,
+      Object p4,
+      Object p5,
+      Object p6,
+      Object p7,
+      Object p8
+   );
 
-    public Result filter(Logger var1, Level var2, Marker var3, String var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12, Object var13, Object var14);
+   Filter.Result filter(
+      Logger logger,
+      Level level,
+      Marker marker,
+      String message,
+      Object p0,
+      Object p1,
+      Object p2,
+      Object p3,
+      Object p4,
+      Object p5,
+      Object p6,
+      Object p7,
+      Object p8,
+      Object p9
+   );
 
-    public Result filter(Logger var1, Level var2, Marker var3, Object var4, Throwable var5);
+   Filter.Result filter(Logger logger, Level level, Marker marker, Object msg, Throwable t);
 
-    public Result filter(Logger var1, Level var2, Marker var3, Message var4, Throwable var5);
+   Filter.Result filter(Logger logger, Level level, Marker marker, Message msg, Throwable t);
 
-    public Result filter(LogEvent var1);
+   Filter.Result filter(LogEvent event);
 
-    public static enum Result {
-        ACCEPT,
-        NEUTRAL,
-        DENY;
+   public static enum Result {
+      ACCEPT,
+      NEUTRAL,
+      DENY;
 
+      public static Filter.Result toResult(final String name) {
+         return toResult(name, null);
+      }
 
-        public static Result toResult(String name) {
-            return Result.toResult(name, null);
-        }
-
-        public static Result toResult(String name, Result defaultResult) {
-            return EnglishEnums.valueOf(Result.class, name, defaultResult);
-        }
-    }
+      public static Filter.Result toResult(final String name, final Filter.Result defaultResult) {
+         return EnglishEnums.valueOf(Filter.Result.class, name, defaultResult);
+      }
+   }
 }
-

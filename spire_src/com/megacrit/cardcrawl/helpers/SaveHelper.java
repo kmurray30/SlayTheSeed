@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.helpers;
 
 import com.badlogic.gdx.Gdx;
@@ -11,15 +8,12 @@ import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.AsyncSaver;
-import com.megacrit.cardcrawl.helpers.Prefs;
 import com.megacrit.cardcrawl.integrations.DistributorFactory;
 import com.megacrit.cardcrawl.rooms.TrueVictoryRoom;
 import com.megacrit.cardcrawl.saveAndContinue.SaveAndContinue;
 import com.megacrit.cardcrawl.saveAndContinue.SaveFile;
 import com.megacrit.cardcrawl.screens.mainMenu.SaveSlotScreen;
 import com.megacrit.cardcrawl.vfx.GameSavedEffect;
-import java.io.File;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -28,221 +22,217 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class SaveHelper {
-    private static final Logger logger = LogManager.getLogger(SaveHelper.class.getName());
+   private static final Logger logger = LogManager.getLogger(SaveHelper.class.getName());
 
-    public static void initialize() {
-    }
+   public static void initialize() {
+   }
 
-    private static Boolean isGog() {
-        return CardCrawlGame.publisherIntegration.getType() == DistributorFactory.Distributor.GOG;
-    }
+   private static Boolean isGog() {
+      return CardCrawlGame.publisherIntegration.getType() == DistributorFactory.Distributor.GOG;
+   }
 
-    private static String getSaveDir() {
-        if (Settings.isBeta || SaveHelper.isGog().booleanValue()) {
-            return "betaPreferences";
-        }
-        return "preferences";
-    }
+   private static String getSaveDir() {
+      return !Settings.isBeta && !isGog() ? "preferences" : "betaPreferences";
+   }
 
-    public static boolean doesPrefExist(String name) {
-        return Gdx.files.local(SaveHelper.getSaveDir() + File.separator + name).exists();
-    }
+   public static boolean doesPrefExist(String name) {
+      return Gdx.files.local(getSaveDir() + java.io.File.separator + name).exists();
+   }
 
-    public static void deletePrefs(int slot) {
-        String dir = SaveHelper.getSaveDir() + File.separator;
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSDataVagabond", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSDataTheSilent", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSDataDefect", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSDataWatcher", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSAchievements", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSDaily", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSSeenBosses", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSSeenCards", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSBetaCardPreference", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSSeenRelics", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSUnlockProgress", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSUnlocks", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSGameplaySettings", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSInputSettings", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSInputSettings_Controller", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSSound", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSPlayer", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("STSTips", slot));
-        dir = "runs" + File.separator;
-        SaveHelper.deleteFolder(dir + SaveHelper.slotName("IRONCLAD", slot));
-        SaveHelper.deleteFolder(dir + SaveHelper.slotName("THE_SILENT", slot));
-        SaveHelper.deleteFolder(dir + SaveHelper.slotName("DEFECT", slot));
-        SaveHelper.deleteFolder(dir + SaveHelper.slotName("WATCHER", slot));
-        SaveHelper.deleteFolder(dir + SaveHelper.slotName("DAILY", slot));
-        dir = "saves" + File.separator;
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("IRONCLAD.autosave", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("DEFECT.autosave", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("THE_SILENT.autosave", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("WATCHER.autosave", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("IRONCLAD.autosave.backUp", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("DEFECT.autosave.backUp", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("THE_SILENT.autosave.backUp", slot));
-        SaveHelper.deleteFile(dir + SaveHelper.slotName("WATCHER.autosave.backUp", slot));
-        if (Settings.isBeta || SaveHelper.isGog().booleanValue()) {
-            SaveHelper.deleteFile(dir + SaveHelper.slotName("IRONCLAD.autosaveBETA", slot));
-            SaveHelper.deleteFile(dir + SaveHelper.slotName("DEFECT.autosaveBETA", slot));
-            SaveHelper.deleteFile(dir + SaveHelper.slotName("THE_SILENT.autosaveBETA", slot));
-            SaveHelper.deleteFile(dir + SaveHelper.slotName("WATCHER.autosaveBETA", slot));
-            SaveHelper.deleteFile(dir + SaveHelper.slotName("IRONCLAD.autosaveBETA.backUp", slot));
-            SaveHelper.deleteFile(dir + SaveHelper.slotName("DEFECT.autosaveBETA.backUp", slot));
-            SaveHelper.deleteFile(dir + SaveHelper.slotName("THE_SILENT.autosaveBETA.backUp", slot));
-            SaveHelper.deleteFile(dir + SaveHelper.slotName("WATCHER.autosaveBETA.backUp", slot));
-        }
-        CardCrawlGame.saveSlotPref.putString(SaveHelper.slotName("PROFILE_NAME", slot), "");
-        CardCrawlGame.saveSlotPref.putFloat(SaveHelper.slotName("COMPLETION", slot), 0.0f);
-        CardCrawlGame.saveSlotPref.putLong(SaveHelper.slotName("PLAYTIME", slot), 0L);
-        CardCrawlGame.saveSlotPref.flush();
-        if (slot == CardCrawlGame.saveSlot || CardCrawlGame.saveSlot == -1) {
-            String name = "";
-            boolean newDefaultSet = false;
-            for (int i = 0; i < 3; ++i) {
-                name = CardCrawlGame.saveSlotPref.getString(SaveHelper.slotName("PROFILE_NAME", i), "");
-                if (name.equals("")) continue;
-                logger.info("Current slot deleted, DEFAULT_SLOT is now " + i);
-                CardCrawlGame.saveSlotPref.putInteger("DEFAULT_SLOT", i);
-                newDefaultSet = true;
-                SaveSlotScreen.slotDeleted = true;
-                break;
+   public static void deletePrefs(int slot) {
+      String dir = getSaveDir() + java.io.File.separator;
+      deleteFile(dir + slotName("STSDataVagabond", slot));
+      deleteFile(dir + slotName("STSDataTheSilent", slot));
+      deleteFile(dir + slotName("STSDataDefect", slot));
+      deleteFile(dir + slotName("STSDataWatcher", slot));
+      deleteFile(dir + slotName("STSAchievements", slot));
+      deleteFile(dir + slotName("STSDaily", slot));
+      deleteFile(dir + slotName("STSSeenBosses", slot));
+      deleteFile(dir + slotName("STSSeenCards", slot));
+      deleteFile(dir + slotName("STSBetaCardPreference", slot));
+      deleteFile(dir + slotName("STSSeenRelics", slot));
+      deleteFile(dir + slotName("STSUnlockProgress", slot));
+      deleteFile(dir + slotName("STSUnlocks", slot));
+      deleteFile(dir + slotName("STSGameplaySettings", slot));
+      deleteFile(dir + slotName("STSInputSettings", slot));
+      deleteFile(dir + slotName("STSInputSettings_Controller", slot));
+      deleteFile(dir + slotName("STSSound", slot));
+      deleteFile(dir + slotName("STSPlayer", slot));
+      deleteFile(dir + slotName("STSTips", slot));
+      dir = "runs" + java.io.File.separator;
+      deleteFolder(dir + slotName("IRONCLAD", slot));
+      deleteFolder(dir + slotName("THE_SILENT", slot));
+      deleteFolder(dir + slotName("DEFECT", slot));
+      deleteFolder(dir + slotName("WATCHER", slot));
+      deleteFolder(dir + slotName("DAILY", slot));
+      dir = "saves" + java.io.File.separator;
+      deleteFile(dir + slotName("IRONCLAD.autosave", slot));
+      deleteFile(dir + slotName("DEFECT.autosave", slot));
+      deleteFile(dir + slotName("THE_SILENT.autosave", slot));
+      deleteFile(dir + slotName("WATCHER.autosave", slot));
+      deleteFile(dir + slotName("IRONCLAD.autosave.backUp", slot));
+      deleteFile(dir + slotName("DEFECT.autosave.backUp", slot));
+      deleteFile(dir + slotName("THE_SILENT.autosave.backUp", slot));
+      deleteFile(dir + slotName("WATCHER.autosave.backUp", slot));
+      if (Settings.isBeta || isGog()) {
+         deleteFile(dir + slotName("IRONCLAD.autosaveBETA", slot));
+         deleteFile(dir + slotName("DEFECT.autosaveBETA", slot));
+         deleteFile(dir + slotName("THE_SILENT.autosaveBETA", slot));
+         deleteFile(dir + slotName("WATCHER.autosaveBETA", slot));
+         deleteFile(dir + slotName("IRONCLAD.autosaveBETA.backUp", slot));
+         deleteFile(dir + slotName("DEFECT.autosaveBETA.backUp", slot));
+         deleteFile(dir + slotName("THE_SILENT.autosaveBETA.backUp", slot));
+         deleteFile(dir + slotName("WATCHER.autosaveBETA.backUp", slot));
+      }
+
+      CardCrawlGame.saveSlotPref.putString(slotName("PROFILE_NAME", slot), "");
+      CardCrawlGame.saveSlotPref.putFloat(slotName("COMPLETION", slot), 0.0F);
+      CardCrawlGame.saveSlotPref.putLong(slotName("PLAYTIME", slot), 0L);
+      CardCrawlGame.saveSlotPref.flush();
+      if (slot == CardCrawlGame.saveSlot || CardCrawlGame.saveSlot == -1) {
+         String name = "";
+         boolean newDefaultSet = false;
+
+         for (int i = 0; i < 3; i++) {
+            name = CardCrawlGame.saveSlotPref.getString(slotName("PROFILE_NAME", i), "");
+            if (!name.equals("")) {
+               logger.info("Current slot deleted, DEFAULT_SLOT is now " + i);
+               CardCrawlGame.saveSlotPref.putInteger("DEFAULT_SLOT", i);
+               newDefaultSet = true;
+               SaveSlotScreen.slotDeleted = true;
+               break;
             }
-            if (!newDefaultSet) {
-                logger.info("All slots deleted, DEFAULT_SLOT is now -1");
-                CardCrawlGame.saveSlotPref.putInteger("DEFAULT_SLOT", -1);
+         }
+
+         if (!newDefaultSet) {
+            logger.info("All slots deleted, DEFAULT_SLOT is now -1");
+            CardCrawlGame.saveSlotPref.putInteger("DEFAULT_SLOT", -1);
+         }
+
+         CardCrawlGame.saveSlotPref.flush();
+      }
+   }
+
+   private static void deleteFile(String fileName) {
+      logger.info("Deleting " + fileName);
+      if (Gdx.files.local(fileName).delete()) {
+         logger.info(fileName + " deleted.");
+      }
+
+      if (Gdx.files.local(fileName + ".backUp").delete()) {
+         logger.info(fileName + ".backUp deleted.");
+      }
+   }
+
+   private static void deleteFolder(String dirName) {
+      logger.info("Deleting " + dirName);
+      if (Gdx.files.local(dirName).deleteDirectory()) {
+         logger.info(dirName + " deleted.");
+      }
+   }
+
+   public static String slotName(String name, int slot) {
+      switch (slot) {
+         case 1:
+         case 2:
+         default:
+            name = slot + "_" + name;
+         case 0:
+            return name;
+      }
+   }
+
+   public static Prefs getPrefs(String name) {
+      switch (CardCrawlGame.saveSlot) {
+         case 1:
+         case 2:
+         default:
+            name = CardCrawlGame.saveSlot + "_" + name;
+         case 0:
+            Gson gson = new Gson();
+            Prefs retVal = new Prefs();
+            Type type = (new TypeToken<Map<String, String>>() {}).getType();
+            String filepath = getSaveDir() + java.io.File.separator + name;
+            String jsonStr = null;
+
+            try {
+               jsonStr = loadJson(filepath);
+               if (jsonStr.isEmpty()) {
+                  logger.error("Empty Pref file: name=" + name + ", filepath=" + filepath);
+                  handleCorruption(jsonStr, filepath, name);
+                  retVal = getPrefs(name);
+               } else {
+                  retVal.data = gson.fromJson(jsonStr, type);
+               }
+            } catch (JsonSyntaxException var7) {
+               logger.error("Corrupt Pref file", (Throwable)var7);
+               handleCorruption(jsonStr, filepath, name);
+               retVal = getPrefs(name);
             }
-            CardCrawlGame.saveSlotPref.flush();
-        }
-    }
 
-    private static void deleteFile(String fileName) {
-        logger.info("Deleting " + fileName);
-        if (Gdx.files.local(fileName).delete()) {
-            logger.info(fileName + " deleted.");
-        }
-        if (Gdx.files.local(fileName + ".backUp").delete()) {
-            logger.info(fileName + ".backUp deleted.");
-        }
-    }
+            retVal.filepath = filepath;
+            return retVal;
+      }
+   }
 
-    private static void deleteFolder(String dirName) {
-        logger.info("Deleting " + dirName);
-        if (Gdx.files.local(dirName).deleteDirectory()) {
-            logger.info(dirName + " deleted.");
-        }
-    }
+   private static void handleCorruption(String jsonStr, String filepath, String name) {
+      preserveCorruptFile(filepath);
+      FileHandle backup = Gdx.files.local(filepath + ".backUp");
+      if (backup.exists()) {
+         backup.moveTo(Gdx.files.local(filepath));
+         logger.info("Original corrupted, backup loaded for " + filepath);
+      }
+   }
 
-    public static String slotName(String name, int slot) {
-        switch (slot) {
-            case 0: {
-                break;
-            }
-            default: {
-                name = slot + "_" + name;
-            }
-        }
-        return name;
-    }
+   public static void preserveCorruptFile(String filePath) {
+      FileHandle file = Gdx.files.local(filePath);
+      FileHandle corruptFile = Gdx.files.local("sendToDevs" + java.io.File.separator + filePath + ".corrupt");
+      file.moveTo(corruptFile);
+   }
 
-    public static Prefs getPrefs(String name) {
-        switch (CardCrawlGame.saveSlot) {
-            case 0: {
-                break;
-            }
-            default: {
-                name = CardCrawlGame.saveSlot + "_" + name;
-            }
-        }
-        Gson gson = new Gson();
-        Prefs retVal = new Prefs();
-        Type type = new TypeToken<Map<String, String>>(){}.getType();
-        String filepath = SaveHelper.getSaveDir() + File.separator + name;
-        String jsonStr = null;
-        try {
-            jsonStr = SaveHelper.loadJson(filepath);
-            if (jsonStr.isEmpty()) {
-                logger.error("Empty Pref file: name=" + name + ", filepath=" + filepath);
-                SaveHelper.handleCorruption(jsonStr, filepath, name);
-                retVal = SaveHelper.getPrefs(name);
-            } else {
-                retVal.data = (Map)gson.fromJson(jsonStr, type);
-            }
-        }
-        catch (JsonSyntaxException e) {
-            logger.error("Corrupt Pref file", (Throwable)e);
-            SaveHelper.handleCorruption(jsonStr, filepath, name);
-            retVal = SaveHelper.getPrefs(name);
-        }
-        retVal.filepath = filepath;
-        return retVal;
-    }
+   private static String loadJson(String filepath) {
+      if (Gdx.files.local(filepath).exists()) {
+         return Gdx.files.local(filepath).readString(String.valueOf(StandardCharsets.UTF_8));
+      } else {
+         Map<String, String> map = new HashMap<>();
+         Gson gson = new Gson();
+         AsyncSaver.save(filepath, gson.toJson(map));
+         return "{}";
+      }
+   }
 
-    private static void handleCorruption(String jsonStr, String filepath, String name) {
-        SaveHelper.preserveCorruptFile(filepath);
-        FileHandle backup = Gdx.files.local(filepath + ".backUp");
-        if (backup.exists()) {
-            backup.moveTo(Gdx.files.local(filepath));
-            logger.info("Original corrupted, backup loaded for " + filepath);
-        }
-    }
+   public static boolean saveExists() {
+      StringBuilder retVal = new StringBuilder();
+      retVal.append(getSaveDir()).append(java.io.File.separator);
+      switch (CardCrawlGame.saveSlot) {
+         case 0:
+            retVal.append("STSPlayer");
+            break;
+         case 1:
+         case 2:
+         case 3:
+            retVal.append(CardCrawlGame.saveSlot).append("_STSPlayer");
+            break;
+         default:
+            retVal.append("STSPlayer");
+      }
 
-    public static void preserveCorruptFile(String filePath) {
-        FileHandle file = Gdx.files.local(filePath);
-        FileHandle corruptFile = Gdx.files.local("sendToDevs" + File.separator + filePath + ".corrupt");
-        file.moveTo(corruptFile);
-    }
+      return Gdx.files.local(retVal.toString()).exists();
+   }
 
-    private static String loadJson(String filepath) {
-        if (Gdx.files.local(filepath).exists()) {
-            return Gdx.files.local(filepath).readString(String.valueOf(StandardCharsets.UTF_8));
-        }
-        HashMap map = new HashMap();
-        Gson gson = new Gson();
-        AsyncSaver.save(filepath, gson.toJson(map));
-        return "{}";
-    }
+   public static void saveIfAppropriate(SaveFile.SaveType saveType) {
+      if (shouldSave()) {
+         SaveFile saveFile = new SaveFile(saveType);
+         SaveAndContinue.save(saveFile);
+         AbstractDungeon.effectList.add(new GameSavedEffect());
+      }
+   }
 
-    public static boolean saveExists() {
-        StringBuilder retVal = new StringBuilder();
-        retVal.append(SaveHelper.getSaveDir()).append(File.separator);
-        switch (CardCrawlGame.saveSlot) {
-            case 0: {
-                retVal.append("STSPlayer");
-                break;
-            }
-            case 1: 
-            case 2: 
-            case 3: {
-                retVal.append(CardCrawlGame.saveSlot).append("_STSPlayer");
-                break;
-            }
-            default: {
-                retVal.append("STSPlayer");
-            }
-        }
-        return Gdx.files.local(retVal.toString()).exists();
-    }
+   public static boolean shouldSave() {
+      return AbstractDungeon.nextRoom != null && AbstractDungeon.nextRoom.getRoom() instanceof TrueVictoryRoom ? false : !Settings.isDemo;
+   }
 
-    public static void saveIfAppropriate(SaveFile.SaveType saveType) {
-        if (!SaveHelper.shouldSave()) {
-            return;
-        }
-        SaveFile saveFile = new SaveFile(saveType);
-        SaveAndContinue.save(saveFile);
-        AbstractDungeon.effectList.add(new GameSavedEffect());
-    }
-
-    public static boolean shouldSave() {
-        if (AbstractDungeon.nextRoom != null && AbstractDungeon.nextRoom.getRoom() instanceof TrueVictoryRoom) {
-            return false;
-        }
-        return !Settings.isDemo;
-    }
-
-    public static boolean shouldDeleteSave() {
-        return !Settings.isDemo;
-    }
+   public static boolean shouldDeleteSave() {
+      return !Settings.isDemo;
+   }
 }
-

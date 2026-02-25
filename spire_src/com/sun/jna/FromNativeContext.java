@@ -1,17 +1,13 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.sun.jna;
 
 public class FromNativeContext {
-    private Class<?> type;
+   private Class<?> type;
 
-    FromNativeContext(Class<?> javaType) {
-        this.type = javaType;
-    }
+   FromNativeContext(Class<?> javaType) {
+      this.type = javaType;
+   }
 
-    public Class<?> getTargetType() {
-        return this.type;
-    }
+   public Class<?> getTargetType() {
+      return this.type;
+   }
 }
-

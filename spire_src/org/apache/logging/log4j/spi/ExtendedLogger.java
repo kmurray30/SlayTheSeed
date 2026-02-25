@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.spi;
 
 import org.apache.logging.log4j.Level;
@@ -10,78 +7,111 @@ import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.util.MessageSupplier;
 import org.apache.logging.log4j.util.Supplier;
 
-public interface ExtendedLogger
-extends Logger {
-    public boolean isEnabled(Level var1, Marker var2, Message var3, Throwable var4);
+public interface ExtendedLogger extends Logger {
+   boolean isEnabled(Level level, Marker marker, Message message, Throwable t);
 
-    public boolean isEnabled(Level var1, Marker var2, CharSequence var3, Throwable var4);
+   boolean isEnabled(Level level, Marker marker, CharSequence message, Throwable t);
 
-    public boolean isEnabled(Level var1, Marker var2, Object var3, Throwable var4);
+   boolean isEnabled(Level level, Marker marker, Object message, Throwable t);
 
-    public boolean isEnabled(Level var1, Marker var2, String var3, Throwable var4);
+   boolean isEnabled(Level level, Marker marker, String message, Throwable t);
 
-    public boolean isEnabled(Level var1, Marker var2, String var3);
+   boolean isEnabled(Level level, Marker marker, String message);
 
-    public boolean isEnabled(Level var1, Marker var2, String var3, Object ... var4);
+   boolean isEnabled(Level level, Marker marker, String message, Object... params);
 
-    public boolean isEnabled(Level var1, Marker var2, String var3, Object var4);
+   boolean isEnabled(Level level, Marker marker, String message, Object p0);
 
-    public boolean isEnabled(Level var1, Marker var2, String var3, Object var4, Object var5);
+   boolean isEnabled(Level level, Marker marker, String message, Object p0, Object p1);
 
-    public boolean isEnabled(Level var1, Marker var2, String var3, Object var4, Object var5, Object var6);
+   boolean isEnabled(Level level, Marker marker, String message, Object p0, Object p1, Object p2);
 
-    public boolean isEnabled(Level var1, Marker var2, String var3, Object var4, Object var5, Object var6, Object var7);
+   boolean isEnabled(Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3);
 
-    public boolean isEnabled(Level var1, Marker var2, String var3, Object var4, Object var5, Object var6, Object var7, Object var8);
+   boolean isEnabled(Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public boolean isEnabled(Level var1, Marker var2, String var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   boolean isEnabled(Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public boolean isEnabled(Level var1, Marker var2, String var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   boolean isEnabled(Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public boolean isEnabled(Level var1, Marker var2, String var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   boolean isEnabled(Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7);
 
-    public boolean isEnabled(Level var1, Marker var2, String var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12);
+   boolean isEnabled(
+      Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8
+   );
 
-    public boolean isEnabled(Level var1, Marker var2, String var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12, Object var13);
+   boolean isEnabled(
+      Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9
+   );
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, Message var4, Throwable var5);
+   void logIfEnabled(String fqcn, Level level, Marker marker, Message message, Throwable t);
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, CharSequence var4, Throwable var5);
+   void logIfEnabled(String fqcn, Level level, Marker marker, CharSequence message, Throwable t);
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, Object var4, Throwable var5);
+   void logIfEnabled(String fqcn, Level level, Marker marker, Object message, Throwable t);
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, String var4, Throwable var5);
+   void logIfEnabled(String fqcn, Level level, Marker marker, String message, Throwable t);
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, String var4);
+   void logIfEnabled(String fqcn, Level level, Marker marker, String message);
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, String var4, Object ... var5);
+   void logIfEnabled(String fqcn, Level level, Marker marker, String message, Object... params);
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, String var4, Object var5);
+   void logIfEnabled(String fqcn, Level level, Marker marker, String message, Object p0);
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, String var4, Object var5, Object var6);
+   void logIfEnabled(String fqcn, Level level, Marker marker, String message, Object p0, Object p1);
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, String var4, Object var5, Object var6, Object var7);
+   void logIfEnabled(String fqcn, Level level, Marker marker, String message, Object p0, Object p1, Object p2);
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, String var4, Object var5, Object var6, Object var7, Object var8);
+   void logIfEnabled(String fqcn, Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3);
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, String var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   void logIfEnabled(String fqcn, Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, String var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   void logIfEnabled(String fqcn, Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, String var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   void logIfEnabled(String fqcn, Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, String var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12);
+   void logIfEnabled(
+      String fqcn, Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7
+   );
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, String var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12, Object var13);
+   void logIfEnabled(
+      String fqcn,
+      Level level,
+      Marker marker,
+      String message,
+      Object p0,
+      Object p1,
+      Object p2,
+      Object p3,
+      Object p4,
+      Object p5,
+      Object p6,
+      Object p7,
+      Object p8
+   );
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, String var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12, Object var13, Object var14);
+   void logIfEnabled(
+      String fqcn,
+      Level level,
+      Marker marker,
+      String message,
+      Object p0,
+      Object p1,
+      Object p2,
+      Object p3,
+      Object p4,
+      Object p5,
+      Object p6,
+      Object p7,
+      Object p8,
+      Object p9
+   );
 
-    public void logMessage(String var1, Level var2, Marker var3, Message var4, Throwable var5);
+   void logMessage(String fqcn, Level level, Marker marker, Message message, Throwable t);
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, MessageSupplier var4, Throwable var5);
+   void logIfEnabled(String fqcn, Level level, Marker marker, MessageSupplier msgSupplier, Throwable t);
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, String var4, Supplier<?> ... var5);
+   void logIfEnabled(String fqcn, Level level, Marker marker, String message, Supplier<?>... paramSuppliers);
 
-    public void logIfEnabled(String var1, Level var2, Marker var3, Supplier<?> var4, Throwable var5);
+   void logIfEnabled(String fqcn, Level level, Marker marker, Supplier<?> msgSupplier, Throwable t);
 }
-

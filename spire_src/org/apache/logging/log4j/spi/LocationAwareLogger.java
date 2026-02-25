@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.spi;
 
 import org.apache.logging.log4j.Level;
@@ -8,6 +5,7 @@ import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.message.Message;
 
 public interface LocationAwareLogger {
-    public void logMessage(Level var1, Marker var2, String var3, StackTraceElement var4, Message var5, Throwable var6);
+   void logMessage(
+      final Level level, final Marker marker, final String fqcn, final StackTraceElement location, final Message message, final Throwable throwable
+   );
 }
-

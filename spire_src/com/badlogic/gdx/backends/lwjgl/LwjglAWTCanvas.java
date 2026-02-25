@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.backends.lwjgl;
 
 import com.badlogic.gdx.Application;
@@ -14,15 +11,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.backends.lwjgl.LwjglAWTInput;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationLogger;
-import com.badlogic.gdx.backends.lwjgl.LwjglClipboard;
-import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
-import com.badlogic.gdx.backends.lwjgl.LwjglGraphics;
-import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader;
-import com.badlogic.gdx.backends.lwjgl.LwjglNet;
-import com.badlogic.gdx.backends.lwjgl.LwjglPreferences;
 import com.badlogic.gdx.backends.lwjgl.audio.OpenALAudio;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Clipboard;
@@ -45,511 +33,500 @@ import org.lwjgl.opengl.AWTGLCanvas;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.PixelFormat;
 
-public class LwjglAWTCanvas
-implements Application {
-    static int instanceCount;
-    LwjglGraphics graphics;
-    OpenALAudio audio;
-    LwjglFiles files;
-    LwjglAWTInput input;
-    LwjglNet net;
-    final ApplicationListener listener;
-    AWTGLCanvas canvas;
-    final Array<Runnable> runnables = new Array();
-    final Array<Runnable> executedRunnables = new Array();
-    final Array<LifecycleListener> lifecycleListeners = new Array();
-    boolean running = true;
-    int lastWidth;
-    int lastHeight;
-    int logLevel = 2;
-    ApplicationLogger applicationLogger;
-    final String logTag = "LwjglAWTCanvas";
-    Cursor cursor;
-    Map<String, Preferences> preferences = new HashMap<String, Preferences>();
+public class LwjglAWTCanvas implements Application {
+   static int instanceCount;
+   LwjglGraphics graphics;
+   OpenALAudio audio;
+   LwjglFiles files;
+   LwjglAWTInput input;
+   LwjglNet net;
+   final ApplicationListener listener;
+   AWTGLCanvas canvas;
+   final Array<Runnable> runnables = new Array<>();
+   final Array<Runnable> executedRunnables = new Array<>();
+   final Array<LifecycleListener> lifecycleListeners = new Array<>();
+   boolean running = true;
+   int lastWidth;
+   int lastHeight;
+   int logLevel = 2;
+   ApplicationLogger applicationLogger;
+   final String logTag = "LwjglAWTCanvas";
+   Cursor cursor;
+   Map<String, Preferences> preferences = new HashMap<>();
 
-    public LwjglAWTCanvas(ApplicationListener listener) {
-        this(listener, null, null);
-    }
+   public LwjglAWTCanvas(ApplicationListener listener) {
+      this(listener, null, null);
+   }
 
-    public LwjglAWTCanvas(ApplicationListener listener, LwjglAWTCanvas sharedContextCanvas) {
-        this(listener, null, sharedContextCanvas);
-    }
+   public LwjglAWTCanvas(ApplicationListener listener, LwjglAWTCanvas sharedContextCanvas) {
+      this(listener, null, sharedContextCanvas);
+   }
 
-    public LwjglAWTCanvas(ApplicationListener listener, LwjglApplicationConfiguration config) {
-        this(listener, config, null);
-    }
+   public LwjglAWTCanvas(ApplicationListener listener, LwjglApplicationConfiguration config) {
+      this(listener, config, null);
+   }
 
-    public LwjglAWTCanvas(ApplicationListener listener, LwjglApplicationConfiguration config, LwjglAWTCanvas sharedContextCanvas) {
-        this.listener = listener;
-        if (config == null) {
-            config = new LwjglApplicationConfiguration();
-        }
-        LwjglNativesLoader.load();
-        this.setApplicationLogger(new LwjglApplicationLogger());
-        ++instanceCount;
-        AWTGLCanvas sharedDrawable = sharedContextCanvas != null ? sharedContextCanvas.canvas : null;
-        try {
-            this.canvas = new AWTGLCanvas(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), new PixelFormat(), sharedDrawable){
-                private final Dimension minSize;
-                private final NonSystemPaint nonSystemPaint;
-                {
-                    this.minSize = new Dimension(0, 0);
-                    this.nonSystemPaint = new NonSystemPaint(this);
-                }
+   public LwjglAWTCanvas(ApplicationListener listener, LwjglApplicationConfiguration config, LwjglAWTCanvas sharedContextCanvas) {
+      this.listener = listener;
+      if (config == null) {
+         config = new LwjglApplicationConfiguration();
+      }
 
-                @Override
-                public Dimension getMinimumSize() {
-                    return this.minSize;
-                }
+      LwjglNativesLoader.load();
+      this.setApplicationLogger(new LwjglApplicationLogger());
+      instanceCount++;
+      AWTGLCanvas sharedDrawable = sharedContextCanvas != null ? sharedContextCanvas.canvas : null;
 
-                @Override
-                public void initGL() {
-                    LwjglAWTCanvas.this.create();
-                }
-
-                @Override
-                public void paintGL() {
-                    try {
-                        boolean systemPaint = !(EventQueue.getCurrentEvent() instanceof NonSystemPaint);
-                        LwjglAWTCanvas.this.render(systemPaint);
-                        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(this.nonSystemPaint);
-                    }
-                    catch (Throwable ex) {
-                        LwjglAWTCanvas.this.exception(ex);
-                    }
-                }
-            };
-        }
-        catch (Throwable ex) {
-            this.exception(ex);
-            return;
-        }
-        this.canvas.setBackground(new Color(config.initialBackgroundColor.r, config.initialBackgroundColor.g, config.initialBackgroundColor.b, config.initialBackgroundColor.a));
-        this.graphics = new LwjglGraphics(this.canvas, config){
+      try {
+         this.canvas = new AWTGLCanvas(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(), new PixelFormat(), sharedDrawable) {
+            private final Dimension minSize = new Dimension(0, 0);
+            private final LwjglAWTCanvas.NonSystemPaint nonSystemPaint = new LwjglAWTCanvas.NonSystemPaint(this);
 
             @Override
-            public void setTitle(String title) {
-                super.setTitle(title);
-                LwjglAWTCanvas.this.setTitle(title);
+            public Dimension getMinimumSize() {
+               return this.minSize;
             }
 
             @Override
-            public boolean setWindowedMode(int width, int height) {
-                if (!super.setWindowedMode(width, height)) {
-                    return false;
-                }
-                LwjglAWTCanvas.this.setDisplayMode(width, height);
-                return true;
+            public void initGL() {
+               LwjglAWTCanvas.this.create();
             }
 
             @Override
-            public boolean setFullscreenMode(Graphics.DisplayMode displayMode) {
-                if (!super.setFullscreenMode(displayMode)) {
-                    return false;
-                }
-                LwjglAWTCanvas.this.setDisplayMode(displayMode.width, displayMode.height);
-                return true;
+            public void paintGL() {
+               try {
+                  boolean systemPaint = !(EventQueue.getCurrentEvent() instanceof LwjglAWTCanvas.NonSystemPaint);
+                  LwjglAWTCanvas.this.render(systemPaint);
+                  Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(this.nonSystemPaint);
+               } catch (Throwable var2) {
+                  LwjglAWTCanvas.this.exception(var2);
+               }
             }
+         };
+      } catch (Throwable var6) {
+         this.exception(var6);
+         return;
+      }
 
-            /*
-             * WARNING - Removed try catching itself - possible behaviour change.
-             */
-            @Override
-            public boolean shouldRender() {
-                2 var1_1 = this;
-                synchronized (var1_1) {
-                    boolean rq = this.requestRendering;
-                    this.requestRendering = false;
-                    return rq || this.isContinuous;
-                }
+      this.canvas
+         .setBackground(
+            new Color(config.initialBackgroundColor.r, config.initialBackgroundColor.g, config.initialBackgroundColor.b, config.initialBackgroundColor.a)
+         );
+      this.graphics = new LwjglGraphics(this.canvas, config) {
+         @Override
+         public void setTitle(String title) {
+            super.setTitle(title);
+            LwjglAWTCanvas.this.setTitle(title);
+         }
+
+         @Override
+         public boolean setWindowedMode(int width, int height) {
+            if (!super.setWindowedMode(width, height)) {
+               return false;
+            } else {
+               LwjglAWTCanvas.this.setDisplayMode(width, height);
+               return true;
             }
-        };
-        if (!LwjglApplicationConfiguration.disableAudio && Gdx.audio == null) {
-            this.audio = new OpenALAudio();
-        }
-        if (Gdx.files == null) {
-            this.files = new LwjglFiles();
-        }
-        if (Gdx.net == null) {
-            this.net = new LwjglNet();
-        }
-        this.input = new LwjglAWTInput(this);
-        this.setGlobals();
-    }
+         }
 
-    protected void setDisplayMode(int width, int height) {
-    }
+         @Override
+         public boolean setFullscreenMode(Graphics.DisplayMode displayMode) {
+            if (!super.setFullscreenMode(displayMode)) {
+               return false;
+            } else {
+               LwjglAWTCanvas.this.setDisplayMode(displayMode.width, displayMode.height);
+               return true;
+            }
+         }
 
-    protected void setTitle(String title) {
-    }
+         @Override
+         public boolean shouldRender() {
+            synchronized (this) {
+               boolean rq = this.requestRendering;
+               this.requestRendering = false;
+               return rq || this.isContinuous;
+            }
+         }
+      };
+      if (!LwjglApplicationConfiguration.disableAudio && Gdx.audio == null) {
+         this.audio = new OpenALAudio();
+      }
 
-    @Override
-    public ApplicationListener getApplicationListener() {
-        return this.listener;
-    }
+      if (Gdx.files == null) {
+         this.files = new LwjglFiles();
+      }
 
-    public Canvas getCanvas() {
-        return this.canvas;
-    }
+      if (Gdx.net == null) {
+         this.net = new LwjglNet();
+      }
 
-    @Override
-    public Audio getAudio() {
-        return Gdx.audio;
-    }
+      this.input = new LwjglAWTInput(this);
+      this.setGlobals();
+   }
 
-    @Override
-    public Files getFiles() {
-        return this.files;
-    }
+   protected void setDisplayMode(int width, int height) {
+   }
 
-    @Override
-    public Graphics getGraphics() {
-        return this.graphics;
-    }
+   protected void setTitle(String title) {
+   }
 
-    @Override
-    public Input getInput() {
-        return this.input;
-    }
+   @Override
+   public ApplicationListener getApplicationListener() {
+      return this.listener;
+   }
 
-    @Override
-    public Net getNet() {
-        return this.net;
-    }
+   public Canvas getCanvas() {
+      return this.canvas;
+   }
 
-    @Override
-    public Application.ApplicationType getType() {
-        return Application.ApplicationType.Desktop;
-    }
+   @Override
+   public Audio getAudio() {
+      return Gdx.audio;
+   }
 
-    @Override
-    public int getVersion() {
-        return 0;
-    }
+   @Override
+   public Files getFiles() {
+      return this.files;
+   }
 
-    void setGlobals() {
-        Gdx.app = this;
-        if (this.audio != null) {
-            Gdx.audio = this.audio;
-        }
-        if (this.files != null) {
-            Gdx.files = this.files;
-        }
-        if (this.net != null) {
-            Gdx.net = this.net;
-        }
-        Gdx.graphics = this.graphics;
-        Gdx.input = this.input;
-    }
+   @Override
+   public Graphics getGraphics() {
+      return this.graphics;
+   }
 
-    void create() {
-        try {
-            this.setGlobals();
-            this.graphics.initiateGL();
-            this.canvas.setVSyncEnabled(this.graphics.config.vSyncEnabled);
-            this.listener.create();
-            this.lastWidth = Math.max(1, this.graphics.getWidth());
-            this.lastHeight = Math.max(1, this.graphics.getHeight());
-            this.listener.resize(this.lastWidth, this.lastHeight);
-            this.start();
-        }
-        catch (Throwable ex) {
-            this.stopped();
-            this.exception(ex);
-        }
-    }
+   @Override
+   public Input getInput() {
+      return this.input;
+   }
 
-    void render(boolean shouldRender) throws LWJGLException {
-        if (!this.running) {
-            return;
-        }
-        this.setGlobals();
-        this.canvas.setCursor(this.cursor);
-        int width = Math.max(1, this.graphics.getWidth());
-        int height = Math.max(1, this.graphics.getHeight());
-        if (this.lastWidth != width || this.lastHeight != height) {
+   @Override
+   public Net getNet() {
+      return this.net;
+   }
+
+   @Override
+   public Application.ApplicationType getType() {
+      return Application.ApplicationType.Desktop;
+   }
+
+   @Override
+   public int getVersion() {
+      return 0;
+   }
+
+   void setGlobals() {
+      Gdx.app = this;
+      if (this.audio != null) {
+         Gdx.audio = this.audio;
+      }
+
+      if (this.files != null) {
+         Gdx.files = this.files;
+      }
+
+      if (this.net != null) {
+         Gdx.net = this.net;
+      }
+
+      Gdx.graphics = this.graphics;
+      Gdx.input = this.input;
+   }
+
+   void create() {
+      try {
+         this.setGlobals();
+         this.graphics.initiateGL();
+         this.canvas.setVSyncEnabled(this.graphics.config.vSyncEnabled);
+         this.listener.create();
+         this.lastWidth = Math.max(1, this.graphics.getWidth());
+         this.lastHeight = Math.max(1, this.graphics.getHeight());
+         this.listener.resize(this.lastWidth, this.lastHeight);
+         this.start();
+      } catch (Throwable var2) {
+         this.stopped();
+         this.exception(var2);
+      }
+   }
+
+   void render(boolean shouldRender) throws LWJGLException {
+      if (this.running) {
+         this.setGlobals();
+         this.canvas.setCursor(this.cursor);
+         int width = Math.max(1, this.graphics.getWidth());
+         int height = Math.max(1, this.graphics.getHeight());
+         if (this.lastWidth != width || this.lastHeight != height) {
             this.lastWidth = width;
             this.lastHeight = height;
             Gdx.gl.glViewport(0, 0, this.lastWidth, this.lastHeight);
             this.resize(width, height);
             this.listener.resize(width, height);
             shouldRender = true;
-        }
-        if (this.executeRunnables()) {
+         }
+
+         if (this.executeRunnables()) {
             shouldRender = true;
-        }
-        if (!this.running) {
-            return;
-        }
-        shouldRender |= this.graphics.shouldRender();
-        this.input.processEvents();
-        if (this.audio != null) {
-            this.audio.update();
-        }
-        if (shouldRender) {
-            this.graphics.updateTime();
-            ++this.graphics.frameId;
-            this.listener.render();
-            this.canvas.swapBuffers();
-        }
-        Display.sync(this.getFrameRate() * instanceCount);
-    }
+         }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    public boolean executeRunnables() {
-        Array<Runnable> array = this.runnables;
-        synchronized (array) {
-            for (int i = this.runnables.size - 1; i >= 0; --i) {
-                this.executedRunnables.addAll((Runnable[])new Runnable[]{this.runnables.get(i)});
+         if (this.running) {
+            shouldRender |= this.graphics.shouldRender();
+            this.input.processEvents();
+            if (this.audio != null) {
+               this.audio.update();
             }
-            this.runnables.clear();
-        }
-        if (this.executedRunnables.size == 0) {
-            return false;
-        }
-        do {
+
+            if (shouldRender) {
+               this.graphics.updateTime();
+               this.graphics.frameId++;
+               this.listener.render();
+               this.canvas.swapBuffers();
+            }
+
+            Display.sync(this.getFrameRate() * instanceCount);
+         }
+      }
+   }
+
+   public boolean executeRunnables() {
+      synchronized (this.runnables) {
+         for (int i = this.runnables.size - 1; i >= 0; i--) {
+            this.executedRunnables.addAll(this.runnables.get(i));
+         }
+
+         this.runnables.clear();
+      }
+
+      if (this.executedRunnables.size == 0) {
+         return false;
+      } else {
+         do {
             this.executedRunnables.pop().run();
-        } while (this.executedRunnables.size > 0);
-        return true;
-    }
+         } while (this.executedRunnables.size > 0);
 
-    protected int getFrameRate() {
-        int frameRate;
-        int n = frameRate = this.isActive() ? this.graphics.config.foregroundFPS : this.graphics.config.backgroundFPS;
-        if (frameRate == -1) {
-            frameRate = 10;
-        }
-        if (frameRate == 0) {
-            frameRate = this.graphics.config.backgroundFPS;
-        }
-        if (frameRate == 0) {
-            frameRate = 30;
-        }
-        return frameRate;
-    }
+         return true;
+      }
+   }
 
-    public boolean isActive() {
-        Component root = SwingUtilities.getRoot(this.canvas);
-        return root instanceof Frame ? ((Frame)root).isActive() : true;
-    }
+   protected int getFrameRate() {
+      int frameRate = this.isActive() ? this.graphics.config.foregroundFPS : this.graphics.config.backgroundFPS;
+      if (frameRate == -1) {
+         frameRate = 10;
+      }
 
-    protected void start() {
-    }
+      if (frameRate == 0) {
+         frameRate = this.graphics.config.backgroundFPS;
+      }
 
-    protected void resize(int width, int height) {
-    }
+      if (frameRate == 0) {
+         frameRate = 30;
+      }
 
-    protected void stopped() {
-    }
+      return frameRate;
+   }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    public void stop() {
-        if (!this.running) {
-            return;
-        }
-        this.running = false;
-        this.setGlobals();
-        Array<LifecycleListener> listeners = this.lifecycleListeners;
-        if (this.canvas.isDisplayable()) {
+   public boolean isActive() {
+      Component root = SwingUtilities.getRoot(this.canvas);
+      return root instanceof Frame ? ((Frame)root).isActive() : true;
+   }
+
+   protected void start() {
+   }
+
+   protected void resize(int width, int height) {
+   }
+
+   protected void stopped() {
+   }
+
+   public void stop() {
+      if (this.running) {
+         this.running = false;
+         this.setGlobals();
+         Array<LifecycleListener> listeners = this.lifecycleListeners;
+         if (this.canvas.isDisplayable()) {
             this.makeCurrent();
-        } else {
+         } else {
             this.error("LwjglAWTCanvas", "OpenGL context destroyed before application listener has had a chance to dispose of textures.");
-        }
-        Array<LifecycleListener> array = listeners;
-        synchronized (array) {
+         }
+
+         synchronized (listeners) {
             for (LifecycleListener listener : listeners) {
-                listener.pause();
-                listener.dispose();
+               listener.pause();
+               listener.dispose();
             }
-        }
-        this.listener.pause();
-        this.listener.dispose();
-        Gdx.app = null;
-        Gdx.graphics = null;
-        if (this.audio != null) {
+         }
+
+         this.listener.pause();
+         this.listener.dispose();
+         Gdx.app = null;
+         Gdx.graphics = null;
+         if (this.audio != null) {
             this.audio.dispose();
             Gdx.audio = null;
-        }
-        if (this.files != null) {
+         }
+
+         if (this.files != null) {
             Gdx.files = null;
-        }
-        if (this.net != null) {
+         }
+
+         if (this.net != null) {
             Gdx.net = null;
-        }
-        --instanceCount;
-        this.stopped();
-    }
+         }
 
-    @Override
-    public long getJavaHeap() {
-        return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-    }
+         instanceCount--;
+         this.stopped();
+      }
+   }
 
-    @Override
-    public long getNativeHeap() {
-        return this.getJavaHeap();
-    }
+   @Override
+   public long getJavaHeap() {
+      return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+   }
 
-    @Override
-    public Preferences getPreferences(String name) {
-        if (this.preferences.containsKey(name)) {
-            return this.preferences.get(name);
-        }
-        LwjglPreferences prefs = new LwjglPreferences(name, ".prefs/");
-        this.preferences.put(name, prefs);
-        return prefs;
-    }
+   @Override
+   public long getNativeHeap() {
+      return this.getJavaHeap();
+   }
 
-    @Override
-    public Clipboard getClipboard() {
-        return new LwjglClipboard();
-    }
+   @Override
+   public Preferences getPreferences(String name) {
+      if (this.preferences.containsKey(name)) {
+         return this.preferences.get(name);
+      } else {
+         Preferences prefs = new LwjglPreferences(name, ".prefs/");
+         this.preferences.put(name, prefs);
+         return prefs;
+      }
+   }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    @Override
-    public void postRunnable(Runnable runnable) {
-        Array<Runnable> array = this.runnables;
-        synchronized (array) {
-            this.runnables.add(runnable);
-        }
-    }
+   @Override
+   public Clipboard getClipboard() {
+      return new LwjglClipboard();
+   }
 
-    @Override
-    public void debug(String tag, String message) {
-        if (this.logLevel >= 3) {
-            this.getApplicationLogger().debug(tag, message);
-        }
-    }
+   @Override
+   public void postRunnable(Runnable runnable) {
+      synchronized (this.runnables) {
+         this.runnables.add(runnable);
+      }
+   }
 
-    @Override
-    public void debug(String tag, String message, Throwable exception) {
-        if (this.logLevel >= 3) {
-            this.getApplicationLogger().debug(tag, message, exception);
-        }
-    }
+   @Override
+   public void debug(String tag, String message) {
+      if (this.logLevel >= 3) {
+         this.getApplicationLogger().debug(tag, message);
+      }
+   }
 
-    @Override
-    public void log(String tag, String message) {
-        if (this.logLevel >= 2) {
-            this.getApplicationLogger().log(tag, message);
-        }
-    }
+   @Override
+   public void debug(String tag, String message, Throwable exception) {
+      if (this.logLevel >= 3) {
+         this.getApplicationLogger().debug(tag, message, exception);
+      }
+   }
 
-    @Override
-    public void log(String tag, String message, Throwable exception) {
-        if (this.logLevel >= 2) {
-            this.getApplicationLogger().log(tag, message, exception);
-        }
-    }
+   @Override
+   public void log(String tag, String message) {
+      if (this.logLevel >= 2) {
+         this.getApplicationLogger().log(tag, message);
+      }
+   }
 
-    @Override
-    public void error(String tag, String message) {
-        if (this.logLevel >= 1) {
-            this.getApplicationLogger().error(tag, message);
-        }
-    }
+   @Override
+   public void log(String tag, String message, Throwable exception) {
+      if (this.logLevel >= 2) {
+         this.getApplicationLogger().log(tag, message, exception);
+      }
+   }
 
-    @Override
-    public void error(String tag, String message, Throwable exception) {
-        if (this.logLevel >= 1) {
-            this.getApplicationLogger().error(tag, message, exception);
-        }
-    }
+   @Override
+   public void error(String tag, String message) {
+      if (this.logLevel >= 1) {
+         this.getApplicationLogger().error(tag, message);
+      }
+   }
 
-    @Override
-    public void setLogLevel(int logLevel) {
-        this.logLevel = logLevel;
-    }
+   @Override
+   public void error(String tag, String message, Throwable exception) {
+      if (this.logLevel >= 1) {
+         this.getApplicationLogger().error(tag, message, exception);
+      }
+   }
 
-    @Override
-    public int getLogLevel() {
-        return this.logLevel;
-    }
+   @Override
+   public void setLogLevel(int logLevel) {
+      this.logLevel = logLevel;
+   }
 
-    @Override
-    public void setApplicationLogger(ApplicationLogger applicationLogger) {
-        this.applicationLogger = applicationLogger;
-    }
+   @Override
+   public int getLogLevel() {
+      return this.logLevel;
+   }
 
-    @Override
-    public ApplicationLogger getApplicationLogger() {
-        return this.applicationLogger;
-    }
+   @Override
+   public void setApplicationLogger(ApplicationLogger applicationLogger) {
+      this.applicationLogger = applicationLogger;
+   }
 
-    @Override
-    public void exit() {
-        this.postRunnable(new Runnable(){
+   @Override
+   public ApplicationLogger getApplicationLogger() {
+      return this.applicationLogger;
+   }
 
-            @Override
-            public void run() {
-                LwjglAWTCanvas.this.stop();
-                System.exit(-1);
-            }
-        });
-    }
+   @Override
+   public void exit() {
+      this.postRunnable(new Runnable() {
+         @Override
+         public void run() {
+            LwjglAWTCanvas.this.stop();
+            System.exit(-1);
+         }
+      });
+   }
 
-    public void makeCurrent() {
-        try {
-            this.canvas.makeCurrent();
-            this.setGlobals();
-        }
-        catch (Throwable ex) {
-            this.exception(ex);
-        }
-    }
+   public void makeCurrent() {
+      try {
+         this.canvas.makeCurrent();
+         this.setGlobals();
+      } catch (Throwable var2) {
+         this.exception(var2);
+      }
+   }
 
-    public boolean isCurrent() {
-        try {
-            return this.canvas.isCurrent();
-        }
-        catch (Throwable ex) {
-            this.exception(ex);
-            return false;
-        }
-    }
+   public boolean isCurrent() {
+      try {
+         return this.canvas.isCurrent();
+      } catch (Throwable var2) {
+         this.exception(var2);
+         return false;
+      }
+   }
 
-    public void setCursor(Cursor cursor) {
-        this.cursor = cursor;
-    }
+   public void setCursor(Cursor cursor) {
+      this.cursor = cursor;
+   }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    @Override
-    public void addLifecycleListener(LifecycleListener listener) {
-        Array<LifecycleListener> array = this.lifecycleListeners;
-        synchronized (array) {
-            this.lifecycleListeners.add(listener);
-        }
-    }
+   @Override
+   public void addLifecycleListener(LifecycleListener listener) {
+      synchronized (this.lifecycleListeners) {
+         this.lifecycleListeners.add(listener);
+      }
+   }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    @Override
-    public void removeLifecycleListener(LifecycleListener listener) {
-        Array<LifecycleListener> array = this.lifecycleListeners;
-        synchronized (array) {
-            this.lifecycleListeners.removeValue(listener, true);
-        }
-    }
+   @Override
+   public void removeLifecycleListener(LifecycleListener listener) {
+      synchronized (this.lifecycleListeners) {
+         this.lifecycleListeners.removeValue(listener, true);
+      }
+   }
 
-    protected void exception(Throwable ex) {
-        ex.printStackTrace();
-        this.stop();
-    }
+   protected void exception(Throwable ex) {
+      ex.printStackTrace();
+      this.stop();
+   }
 
-    public static class NonSystemPaint
-    extends PaintEvent {
-        public NonSystemPaint(AWTGLCanvas canvas) {
-            super(canvas, 801, new Rectangle(0, 0, 99999, 99999));
-        }
-    }
+   public static class NonSystemPaint extends PaintEvent {
+      public NonSystemPaint(AWTGLCanvas canvas) {
+         super(canvas, 801, new Rectangle(0, 0, 99999, 99999));
+      }
+   }
 }
-

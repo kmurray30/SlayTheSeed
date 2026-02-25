@@ -1,53 +1,48 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.util;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-public class Log4jThread
-extends Thread {
-    static final String PREFIX = "Log4j2-";
-    private static final AtomicLong threadInitNumber = new AtomicLong();
+public class Log4jThread extends Thread {
+   static final String PREFIX = "Log4j2-";
+   private static final AtomicLong threadInitNumber = new AtomicLong();
 
-    private static long nextThreadNum() {
-        return threadInitNumber.getAndIncrement();
-    }
+   private static long nextThreadNum() {
+      return threadInitNumber.getAndIncrement();
+   }
 
-    private static String toThreadName(Object name) {
-        return PREFIX + name;
-    }
+   private static String toThreadName(final Object name) {
+      return "Log4j2-" + name;
+   }
 
-    public Log4jThread() {
-        super(Log4jThread.toThreadName(Log4jThread.nextThreadNum()));
-    }
+   public Log4jThread() {
+      super(toThreadName(nextThreadNum()));
+   }
 
-    public Log4jThread(Runnable target) {
-        super(target, Log4jThread.toThreadName(Log4jThread.nextThreadNum()));
-    }
+   public Log4jThread(final Runnable target) {
+      super(target, toThreadName(nextThreadNum()));
+   }
 
-    public Log4jThread(Runnable target, String name) {
-        super(target, Log4jThread.toThreadName(name));
-    }
+   public Log4jThread(final Runnable target, final String name) {
+      super(target, toThreadName(name));
+   }
 
-    public Log4jThread(String name) {
-        super(Log4jThread.toThreadName(name));
-    }
+   public Log4jThread(final String name) {
+      super(toThreadName(name));
+   }
 
-    public Log4jThread(ThreadGroup group, Runnable target) {
-        super(group, target, Log4jThread.toThreadName(Log4jThread.nextThreadNum()));
-    }
+   public Log4jThread(final ThreadGroup group, final Runnable target) {
+      super(group, target, toThreadName(nextThreadNum()));
+   }
 
-    public Log4jThread(ThreadGroup group, Runnable target, String name) {
-        super(group, target, Log4jThread.toThreadName(name));
-    }
+   public Log4jThread(final ThreadGroup group, final Runnable target, final String name) {
+      super(group, target, toThreadName(name));
+   }
 
-    public Log4jThread(ThreadGroup group, Runnable target, String name, long stackSize) {
-        super(group, target, Log4jThread.toThreadName(name), stackSize);
-    }
+   public Log4jThread(final ThreadGroup group, final Runnable target, final String name, final long stackSize) {
+      super(group, target, toThreadName(name), stackSize);
+   }
 
-    public Log4jThread(ThreadGroup group, String name) {
-        super(group, Log4jThread.toThreadName(name));
-    }
+   public Log4jThread(final ThreadGroup group, final String name) {
+      super(group, toThreadName(name));
+   }
 }
-

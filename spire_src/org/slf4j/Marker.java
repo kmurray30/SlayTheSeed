@@ -1,37 +1,32 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.slf4j;
 
 import java.io.Serializable;
 import java.util.Iterator;
 
-/*
- * This class specifies class file version 49.0 but uses Java 6 signatures.  Assumed Java 6.
- */
-public interface Marker
-extends Serializable {
-    public static final String ANY_MARKER = "*";
-    public static final String ANY_NON_NULL_MARKER = "+";
+public interface Marker extends Serializable {
+   String ANY_MARKER = "*";
+   String ANY_NON_NULL_MARKER = "+";
 
-    public String getName();
+   String getName();
 
-    public void add(Marker var1);
+   void add(Marker var1);
 
-    public boolean remove(Marker var1);
+   boolean remove(Marker var1);
 
-    public boolean hasChildren();
+   /** @deprecated */
+   boolean hasChildren();
 
-    public boolean hasReferences();
+   boolean hasReferences();
 
-    public Iterator<Marker> iterator();
+   Iterator<Marker> iterator();
 
-    public boolean contains(Marker var1);
+   boolean contains(Marker var1);
 
-    public boolean contains(String var1);
+   boolean contains(String var1);
 
-    public boolean equals(Object var1);
+   @Override
+   boolean equals(Object var1);
 
-    public int hashCode();
+   @Override
+   int hashCode();
 }
-

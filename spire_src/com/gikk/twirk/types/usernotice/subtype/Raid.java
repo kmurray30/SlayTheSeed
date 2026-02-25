@@ -1,13 +1,9 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.gikk.twirk.types.usernotice.subtype;
 
 public interface Raid {
-    public String getSourceDisplayName();
+   String getSourceDisplayName();
 
-    public String getSourceLoginName();
+   String getSourceLoginName();
 
-    public int getRaidCount();
+   int getRaidCount();
 }
-

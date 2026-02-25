@@ -1,30 +1,27 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j;
 
 import java.io.Serializable;
 
-public interface Marker
-extends Serializable {
-    public Marker addParents(Marker ... var1);
+public interface Marker extends Serializable {
+   Marker addParents(Marker... markers);
 
-    public boolean equals(Object var1);
+   @Override
+   boolean equals(Object obj);
 
-    public String getName();
+   String getName();
 
-    public Marker[] getParents();
+   Marker[] getParents();
 
-    public int hashCode();
+   @Override
+   int hashCode();
 
-    public boolean hasParents();
+   boolean hasParents();
 
-    public boolean isInstanceOf(Marker var1);
+   boolean isInstanceOf(Marker m);
 
-    public boolean isInstanceOf(String var1);
+   boolean isInstanceOf(String name);
 
-    public boolean remove(Marker var1);
+   boolean remove(Marker marker);
 
-    public Marker setParents(Marker ... var1);
+   Marker setParents(Marker... markers);
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.combat;
 
 import com.badlogic.gdx.Gdx;
@@ -14,100 +11,145 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
-public class ThrowDaggerEffect
-extends AbstractGameEffect {
-    private float x;
-    private float y;
-    private float destY;
-    private static final float DUR = 0.4f;
-    private TextureAtlas.AtlasRegion img = ImageMaster.DAGGER_STREAK;
-    private boolean playedSound = false;
-    private boolean forcedAngle = false;
+public class ThrowDaggerEffect extends AbstractGameEffect {
+   private float x;
+   private float y;
+   private float destY;
+   private static final float DUR = 0.4F;
+   private TextureAtlas.AtlasRegion img;
+   private boolean playedSound = false;
+   private boolean forcedAngle = false;
 
-    public ThrowDaggerEffect(float x, float y) {
-        this.x = x - MathUtils.random(320.0f, 360.0f) - (float)this.img.packedWidth / 2.0f;
-        this.destY = y;
-        this.y = this.destY + MathUtils.random(-25.0f, 25.0f) * Settings.scale - (float)this.img.packedHeight / 2.0f;
-        this.startingDuration = 0.4f;
-        this.duration = 0.4f;
-        this.scale = Settings.scale;
-        this.rotation = MathUtils.random(-3.0f, 3.0f);
-        this.color = Color.CHARTREUSE.cpy();
-    }
+   public ThrowDaggerEffect(float x, float y) {
+      this.img = ImageMaster.DAGGER_STREAK;
+      this.x = x - MathUtils.random(320.0F, 360.0F) - this.img.packedWidth / 2.0F;
+      this.destY = y;
+      this.y = this.destY + MathUtils.random(-25.0F, 25.0F) * Settings.scale - this.img.packedHeight / 2.0F;
+      this.startingDuration = 0.4F;
+      this.duration = 0.4F;
+      this.scale = Settings.scale;
+      this.rotation = MathUtils.random(-3.0F, 3.0F);
+      this.color = Color.CHARTREUSE.cpy();
+   }
 
-    public ThrowDaggerEffect(float x, float y, float fAngle) {
-        this.x = x - MathUtils.random(320.0f, 360.0f) - (float)this.img.packedWidth / 2.0f;
-        this.destY = y;
-        this.y = this.destY + MathUtils.random(-25.0f, 25.0f) * Settings.scale - (float)this.img.packedHeight / 2.0f;
-        this.startingDuration = 0.4f;
-        this.duration = 0.4f;
-        this.scale = Settings.scale;
-        this.rotation = fAngle;
-        this.color = Color.CHARTREUSE.cpy();
-        this.forcedAngle = true;
-    }
+   public ThrowDaggerEffect(float x, float y, float fAngle) {
+      this.img = ImageMaster.DAGGER_STREAK;
+      this.x = x - MathUtils.random(320.0F, 360.0F) - this.img.packedWidth / 2.0F;
+      this.destY = y;
+      this.y = this.destY + MathUtils.random(-25.0F, 25.0F) * Settings.scale - this.img.packedHeight / 2.0F;
+      this.startingDuration = 0.4F;
+      this.duration = 0.4F;
+      this.scale = Settings.scale;
+      this.rotation = fAngle;
+      this.color = Color.CHARTREUSE.cpy();
+      this.forcedAngle = true;
+   }
 
-    private void playRandomSfX() {
-        int roll = MathUtils.random(5);
-        switch (roll) {
-            case 0: {
-                CardCrawlGame.sound.play("ATTACK_DAGGER_1");
-                break;
-            }
-            case 1: {
-                CardCrawlGame.sound.play("ATTACK_DAGGER_2");
-                break;
-            }
-            case 2: {
-                CardCrawlGame.sound.play("ATTACK_DAGGER_3");
-                break;
-            }
-            case 3: {
-                CardCrawlGame.sound.play("ATTACK_DAGGER_4");
-                break;
-            }
-            case 4: {
-                CardCrawlGame.sound.play("ATTACK_DAGGER_5");
-                break;
-            }
-            default: {
-                CardCrawlGame.sound.play("ATTACK_DAGGER_6");
-            }
-        }
-    }
+   private void playRandomSfX() {
+      int roll = MathUtils.random(5);
+      switch (roll) {
+         case 0:
+            CardCrawlGame.sound.play("ATTACK_DAGGER_1");
+            break;
+         case 1:
+            CardCrawlGame.sound.play("ATTACK_DAGGER_2");
+            break;
+         case 2:
+            CardCrawlGame.sound.play("ATTACK_DAGGER_3");
+            break;
+         case 3:
+            CardCrawlGame.sound.play("ATTACK_DAGGER_4");
+            break;
+         case 4:
+            CardCrawlGame.sound.play("ATTACK_DAGGER_5");
+            break;
+         default:
+            CardCrawlGame.sound.play("ATTACK_DAGGER_6");
+      }
+   }
 
-    @Override
-    public void update() {
-        if (!this.playedSound) {
-            this.playRandomSfX();
-            this.playedSound = true;
-        }
-        this.duration -= Gdx.graphics.getDeltaTime();
-        if (this.duration < 0.0f) {
-            this.isDone = true;
-        }
-        this.color.a = this.duration > 0.2f ? Interpolation.fade.apply(1.0f, 0.0f, (this.duration - 0.2f) * 5.0f) : Interpolation.fade.apply(0.0f, 1.0f, this.duration * 5.0f);
-        this.scale = Interpolation.bounceIn.apply(Settings.scale * 0.5f, Settings.scale * 1.5f, this.duration / 0.4f);
-    }
+   @Override
+   public void update() {
+      if (!this.playedSound) {
+         this.playRandomSfX();
+         this.playedSound = true;
+      }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        sb.setColor(this.color);
-        if (!this.forcedAngle) {
-            sb.draw(this.img, this.x, this.y, (float)this.img.packedWidth * 0.85f, (float)this.img.packedHeight / 2.0f, this.img.packedWidth, this.img.packedHeight, this.scale, this.scale * 1.5f, this.rotation);
-            sb.setBlendFunction(770, 1);
-            sb.draw(this.img, this.x, this.y, (float)this.img.packedWidth * 0.85f, (float)this.img.packedHeight / 2.0f, this.img.packedWidth, this.img.packedHeight, this.scale * 0.75f, this.scale * 0.75f, this.rotation);
-            sb.setBlendFunction(770, 771);
-        } else {
-            sb.draw(this.img, this.x, this.y, (float)this.img.packedWidth / 2.0f, (float)this.img.packedHeight / 2.0f, this.img.packedWidth, this.img.packedHeight, this.scale, this.scale * 1.5f, this.rotation);
-            sb.setBlendFunction(770, 1);
-            sb.draw(this.img, this.x, this.y, (float)this.img.packedWidth / 2.0f, (float)this.img.packedHeight / 2.0f, this.img.packedWidth, this.img.packedHeight, this.scale * 0.75f, this.scale * 0.75f, this.rotation);
-            sb.setBlendFunction(770, 771);
-        }
-    }
+      this.duration = this.duration - Gdx.graphics.getDeltaTime();
+      if (this.duration < 0.0F) {
+         this.isDone = true;
+      }
 
-    @Override
-    public void dispose() {
-    }
+      if (this.duration > 0.2F) {
+         this.color.a = Interpolation.fade.apply(1.0F, 0.0F, (this.duration - 0.2F) * 5.0F);
+      } else {
+         this.color.a = Interpolation.fade.apply(0.0F, 1.0F, this.duration * 5.0F);
+      }
+
+      this.scale = Interpolation.bounceIn.apply(Settings.scale * 0.5F, Settings.scale * 1.5F, this.duration / 0.4F);
+   }
+
+   @Override
+   public void render(SpriteBatch sb) {
+      sb.setColor(this.color);
+      if (!this.forcedAngle) {
+         sb.draw(
+            this.img,
+            this.x,
+            this.y,
+            this.img.packedWidth * 0.85F,
+            this.img.packedHeight / 2.0F,
+            this.img.packedWidth,
+            this.img.packedHeight,
+            this.scale,
+            this.scale * 1.5F,
+            this.rotation
+         );
+         sb.setBlendFunction(770, 1);
+         sb.draw(
+            this.img,
+            this.x,
+            this.y,
+            this.img.packedWidth * 0.85F,
+            this.img.packedHeight / 2.0F,
+            this.img.packedWidth,
+            this.img.packedHeight,
+            this.scale * 0.75F,
+            this.scale * 0.75F,
+            this.rotation
+         );
+         sb.setBlendFunction(770, 771);
+      } else {
+         sb.draw(
+            this.img,
+            this.x,
+            this.y,
+            this.img.packedWidth / 2.0F,
+            this.img.packedHeight / 2.0F,
+            this.img.packedWidth,
+            this.img.packedHeight,
+            this.scale,
+            this.scale * 1.5F,
+            this.rotation
+         );
+         sb.setBlendFunction(770, 1);
+         sb.draw(
+            this.img,
+            this.x,
+            this.y,
+            this.img.packedWidth / 2.0F,
+            this.img.packedHeight / 2.0F,
+            this.img.packedWidth,
+            this.img.packedHeight,
+            this.scale * 0.75F,
+            this.scale * 0.75F,
+            this.rotation
+         );
+         sb.setBlendFunction(770, 771);
+      }
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

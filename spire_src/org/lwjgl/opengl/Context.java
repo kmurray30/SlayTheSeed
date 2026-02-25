@@ -1,17 +1,13 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl.opengl;
 
 import org.lwjgl.LWJGLException;
 
 interface Context {
-    public boolean isCurrent() throws LWJGLException;
+   boolean isCurrent() throws LWJGLException;
 
-    public void makeCurrent() throws LWJGLException;
+   void makeCurrent() throws LWJGLException;
 
-    public void releaseCurrent() throws LWJGLException;
+   void releaseCurrent() throws LWJGLException;
 
-    public void releaseDrawable() throws LWJGLException;
+   void releaseDrawable() throws LWJGLException;
 }
-

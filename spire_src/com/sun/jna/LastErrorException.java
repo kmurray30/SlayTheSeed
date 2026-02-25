@@ -1,52 +1,45 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.sun.jna;
 
-import com.sun.jna.Platform;
+public class LastErrorException extends RuntimeException {
+   private static final long serialVersionUID = 1L;
+   private int errorCode;
 
-public class LastErrorException
-extends RuntimeException {
-    private static final long serialVersionUID = 1L;
-    private int errorCode;
+   private static String formatMessage(int code) {
+      return Platform.isWindows() ? "GetLastError() returned " + code : "errno was " + code;
+   }
 
-    private static String formatMessage(int code) {
-        return Platform.isWindows() ? "GetLastError() returned " + code : "errno was " + code;
-    }
+   private static String parseMessage(String m) {
+      try {
+         return formatMessage(Integer.parseInt(m));
+      } catch (NumberFormatException var2) {
+         return m;
+      }
+   }
 
-    private static String parseMessage(String m) {
-        try {
-            return LastErrorException.formatMessage(Integer.parseInt(m));
-        }
-        catch (NumberFormatException e) {
-            return m;
-        }
-    }
+   public int getErrorCode() {
+      return this.errorCode;
+   }
 
-    public int getErrorCode() {
-        return this.errorCode;
-    }
+   public LastErrorException(String msg) {
+      super(parseMessage(msg.trim()));
 
-    public LastErrorException(String msg) {
-        super(LastErrorException.parseMessage(msg.trim()));
-        try {
-            if (msg.startsWith("[")) {
-                msg = msg.substring(1, msg.indexOf("]"));
-            }
-            this.errorCode = Integer.parseInt(msg);
-        }
-        catch (NumberFormatException e) {
-            this.errorCode = -1;
-        }
-    }
+      try {
+         if (msg.startsWith("[")) {
+            msg = msg.substring(1, msg.indexOf("]"));
+         }
 
-    public LastErrorException(int code) {
-        this(code, LastErrorException.formatMessage(code));
-    }
+         this.errorCode = Integer.parseInt(msg);
+      } catch (NumberFormatException var3) {
+         this.errorCode = -1;
+      }
+   }
 
-    protected LastErrorException(int code, String msg) {
-        super(msg);
-        this.errorCode = code;
-    }
+   public LastErrorException(int code) {
+      this(code, formatMessage(code));
+   }
+
+   protected LastErrorException(int code, String msg) {
+      super(msg);
+      this.errorCode = code;
+   }
 }
-

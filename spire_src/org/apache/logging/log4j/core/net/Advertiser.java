@@ -1,13 +1,9 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.net;
 
 import java.util.Map;
 
 public interface Advertiser {
-    public Object advertise(Map<String, String> var1);
+   Object advertise(Map<String, String> properties);
 
-    public void unadvertise(Object var1);
+   void unadvertise(Object advertisedObject);
 }
-

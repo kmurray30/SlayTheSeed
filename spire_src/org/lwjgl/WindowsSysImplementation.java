@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl;
 
 import java.lang.reflect.Method;
@@ -8,94 +5,90 @@ import java.nio.ByteBuffer;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
-import org.lwjgl.DefaultSysImplementation;
-import org.lwjgl.LWJGLUtil;
-import org.lwjgl.MemoryUtil;
-import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 
-final class WindowsSysImplementation
-extends DefaultSysImplementation {
-    private static final int JNI_VERSION = 24;
+final class WindowsSysImplementation extends DefaultSysImplementation {
+   private static final int JNI_VERSION = 24;
 
-    WindowsSysImplementation() {
-    }
+   @Override
+   public int getRequiredJNIVersion() {
+      return 24;
+   }
 
-    public int getRequiredJNIVersion() {
-        return 24;
-    }
+   @Override
+   public long getTimerResolution() {
+      return 1000L;
+   }
 
-    public long getTimerResolution() {
-        return 1000L;
-    }
+   @Override
+   public long getTime() {
+      return nGetTime();
+   }
 
-    public long getTime() {
-        return WindowsSysImplementation.nGetTime();
-    }
+   private static native long nGetTime();
 
-    private static native long nGetTime();
+   @Override
+   public boolean has64Bit() {
+      return true;
+   }
 
-    public boolean has64Bit() {
-        return true;
-    }
-
-    private static long getHwnd() {
-        if (!Display.isCreated()) {
-            return 0L;
-        }
-        try {
-            return AccessController.doPrivileged(new PrivilegedExceptionAction<Long>(){
-
-                @Override
-                public Long run() throws Exception {
-                    Method getImplementation_method = Display.class.getDeclaredMethod("getImplementation", new Class[0]);
-                    getImplementation_method.setAccessible(true);
-                    Object display_impl = getImplementation_method.invoke(null, new Object[0]);
-                    Class<?> WindowsDisplay_class = Class.forName("org.lwjgl.opengl.WindowsDisplay");
-                    Method getHwnd_method = WindowsDisplay_class.getDeclaredMethod("getHwnd", new Class[0]);
-                    getHwnd_method.setAccessible(true);
-                    return (Long)getHwnd_method.invoke(display_impl, new Object[0]);
-                }
+   private static long getHwnd() {
+      if (!Display.isCreated()) {
+         return 0L;
+      } else {
+         try {
+            return AccessController.doPrivileged(new PrivilegedExceptionAction<Long>() {
+               public Long run() throws Exception {
+                  Method getImplementation_method = Display.class.getDeclaredMethod("getImplementation");
+                  getImplementation_method.setAccessible(true);
+                  Object display_impl = getImplementation_method.invoke(null);
+                  Class<?> WindowsDisplay_class = Class.forName("org.lwjgl.opengl.WindowsDisplay");
+                  Method getHwnd_method = WindowsDisplay_class.getDeclaredMethod("getHwnd");
+                  getHwnd_method.setAccessible(true);
+                  return (Long)getHwnd_method.invoke(display_impl);
+               }
             });
-        }
-        catch (PrivilegedActionException e) {
-            throw new Error(e);
-        }
-    }
+         } catch (PrivilegedActionException var1) {
+            throw new Error(var1);
+         }
+      }
+   }
 
-    public void alert(String title, String message) {
-        if (!Display.isCreated()) {
-            WindowsSysImplementation.initCommonControls();
-        }
-        LWJGLUtil.log(String.format("*** Alert *** %s\n%s\n", title, message));
-        ByteBuffer titleText = MemoryUtil.encodeUTF16(title);
-        ByteBuffer messageText = MemoryUtil.encodeUTF16(message);
-        WindowsSysImplementation.nAlert(WindowsSysImplementation.getHwnd(), MemoryUtil.getAddress(titleText), MemoryUtil.getAddress(messageText));
-    }
+   @Override
+   public void alert(String title, String message) {
+      if (!Display.isCreated()) {
+         initCommonControls();
+      }
 
-    private static native void nAlert(long var0, long var2, long var4);
+      LWJGLUtil.log(String.format("*** Alert *** %s\n%s\n", title, message));
+      ByteBuffer titleText = MemoryUtil.encodeUTF16(title);
+      ByteBuffer messageText = MemoryUtil.encodeUTF16(message);
+      nAlert(getHwnd(), MemoryUtil.getAddress(titleText), MemoryUtil.getAddress(messageText));
+   }
 
-    private static native void initCommonControls();
+   private static native void nAlert(long var0, long var2, long var4);
 
-    public boolean openURL(String url) {
-        try {
-            LWJGLUtil.execPrivileged(new String[]{"rundll32", "url.dll,FileProtocolHandler", url});
-            return true;
-        }
-        catch (Exception e) {
-            LWJGLUtil.log("Failed to open url (" + url + "): " + e.getMessage());
-            return false;
-        }
-    }
+   private static native void initCommonControls();
 
-    public String getClipboard() {
-        return WindowsSysImplementation.nGetClipboard();
-    }
+   @Override
+   public boolean openURL(String url) {
+      try {
+         LWJGLUtil.execPrivileged(new String[]{"rundll32", "url.dll,FileProtocolHandler", url});
+         return true;
+      } catch (Exception var3) {
+         LWJGLUtil.log("Failed to open url (" + url + "): " + var3.getMessage());
+         return false;
+      }
+   }
 
-    private static native String nGetClipboard();
+   @Override
+   public String getClipboard() {
+      return nGetClipboard();
+   }
 
-    static {
-        Sys.initialize();
-    }
+   private static native String nGetClipboard();
+
+   static {
+      Sys.initialize();
+   }
 }
-

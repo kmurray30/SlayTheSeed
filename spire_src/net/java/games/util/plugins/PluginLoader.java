@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package net.java.games.util.plugins;
 
 import java.io.File;
@@ -8,48 +5,46 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-public class PluginLoader
-extends URLClassLoader {
-    static final boolean DEBUG = false;
-    File parentDir;
-    boolean localDLLs = true;
-    static /* synthetic */ Class class$net$java$games$util$plugins$Plugin;
+public class PluginLoader extends URLClassLoader {
+   static final boolean DEBUG = false;
+   File parentDir;
+   boolean localDLLs = true;
 
-    public PluginLoader(File jf) throws MalformedURLException {
-        super(new URL[]{jf.toURL()}, Thread.currentThread().getContextClassLoader());
-        this.parentDir = jf.getParentFile();
-        if (System.getProperty("net.java.games.util.plugins.nolocalnative") != null) {
-            this.localDLLs = false;
-        }
-    }
+   public PluginLoader(File jf) throws MalformedURLException {
+      super(new URL[]{jf.toURL()}, Thread.currentThread().getContextClassLoader());
+      this.parentDir = jf.getParentFile();
+      if (System.getProperty("net.java.games.util.plugins.nolocalnative") != null) {
+         this.localDLLs = false;
+      }
+   }
 
-    protected String findLibrary(String libname) {
-        if (this.localDLLs) {
-            String libpath = this.parentDir.getPath() + File.separator + System.mapLibraryName(libname);
-            return libpath;
-        }
-        return super.findLibrary(libname);
-    }
+   protected String findLibrary(String libname) {
+      return this.localDLLs ? this.parentDir.getPath() + File.separator + System.mapLibraryName(libname) : super.findLibrary(libname);
+   }
 
-    public boolean attemptPluginDefine(Class pc) {
-        return !pc.isInterface() && this.classImplementsPlugin(pc);
-    }
+   public boolean attemptPluginDefine(Class pc) {
+      return !pc.isInterface() && this.classImplementsPlugin(pc);
+   }
 
-    private boolean classImplementsPlugin(Class testClass) {
-        int i;
-        if (testClass == null) {
-            return false;
-        }
-        Class<?>[] implementedInterfaces = testClass.getInterfaces();
-        for (i = 0; i < implementedInterfaces.length; ++i) {
-            if (implementedInterfaces[i] != (class$net$java$games$util$plugins$Plugin == null ? PluginLoader.class$("net.java.games.util.plugins.Plugin") : class$net$java$games$util$plugins$Plugin)) continue;
-            return true;
-        }
-        for (i = 0; i < implementedInterfaces.length; ++i) {
-            if (!this.classImplementsPlugin(implementedInterfaces[i])) continue;
-            return true;
-        }
-        return this.classImplementsPlugin(testClass.getSuperclass());
-    }
+   private boolean classImplementsPlugin(Class testClass) {
+      if (testClass == null) {
+         return false;
+      } else {
+         Class[] implementedInterfaces = testClass.getInterfaces();
+
+         for (int i = 0; i < implementedInterfaces.length; i++) {
+            if (implementedInterfaces[i] == Plugin.class) {
+               return true;
+            }
+         }
+
+         for (int ix = 0; ix < implementedInterfaces.length; ix++) {
+            if (this.classImplementsPlugin(implementedInterfaces[ix])) {
+               return true;
+            }
+         }
+
+         return this.classImplementsPlugin(testClass.getSuperclass());
+      }
+   }
 }
-

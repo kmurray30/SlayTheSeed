@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.util;
 
 import java.io.OutputStream;
@@ -9,34 +6,33 @@ import java.io.Writer;
 import java.util.Objects;
 
 final class LowLevelLogUtil {
-    private static PrintWriter writer = new PrintWriter(System.err, true);
+   private static PrintWriter writer = new PrintWriter(System.err, true);
 
-    public static void log(String message) {
-        if (message != null) {
-            writer.println(message);
-        }
-    }
+   public static void log(final String message) {
+      if (message != null) {
+         writer.println(message);
+      }
+   }
 
-    public static void logException(Throwable exception) {
-        if (exception != null) {
-            exception.printStackTrace(writer);
-        }
-    }
+   public static void logException(final Throwable exception) {
+      if (exception != null) {
+         exception.printStackTrace(writer);
+      }
+   }
 
-    public static void logException(String message, Throwable exception) {
-        LowLevelLogUtil.log(message);
-        LowLevelLogUtil.logException(exception);
-    }
+   public static void logException(final String message, final Throwable exception) {
+      log(message);
+      logException(exception);
+   }
 
-    public static void setOutputStream(OutputStream out) {
-        writer = new PrintWriter(Objects.requireNonNull(out), true);
-    }
+   public static void setOutputStream(final OutputStream out) {
+      writer = new PrintWriter(Objects.requireNonNull(out), true);
+   }
 
-    public static void setWriter(Writer writer) {
-        LowLevelLogUtil.writer = new PrintWriter(Objects.requireNonNull(writer), true);
-    }
+   public static void setWriter(final Writer writer) {
+      LowLevelLogUtil.writer = new PrintWriter(Objects.requireNonNull(writer), true);
+   }
 
-    private LowLevelLogUtil() {
-    }
+   private LowLevelLogUtil() {
+   }
 }
-

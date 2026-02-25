@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.combat;
 
 import com.badlogic.gdx.Gdx;
@@ -14,91 +11,130 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
-public class OrbFlareEffect
-extends AbstractGameEffect {
-    private static TextureAtlas.AtlasRegion outer;
-    private static TextureAtlas.AtlasRegion inner;
-    private float scaleY;
-    private static final float DUR = 0.5f;
-    private AbstractOrb orb;
-    private OrbFlareColor flareColor;
-    private Color color2;
+public class OrbFlareEffect extends AbstractGameEffect {
+   private static TextureAtlas.AtlasRegion outer;
+   private static TextureAtlas.AtlasRegion inner;
+   private float scaleY;
+   private static final float DUR = 0.5F;
+   private AbstractOrb orb;
+   private OrbFlareEffect.OrbFlareColor flareColor;
+   private Color color2;
 
-    public OrbFlareEffect(AbstractOrb orb, OrbFlareColor setColor) {
-        if (outer == null) {
-            outer = ImageMaster.vfxAtlas.findRegion("combat/orbFlareOuter");
-            inner = ImageMaster.vfxAtlas.findRegion("combat/orbFlareInner");
-        }
-        this.orb = orb;
-        this.renderBehind = true;
-        this.duration = 0.5f;
-        this.startingDuration = 0.5f;
-        this.flareColor = setColor;
-        this.setColor();
-        this.scale = 2.0f * Settings.scale;
-        this.scaleY = 0.0f;
-    }
+   public OrbFlareEffect(AbstractOrb orb, OrbFlareEffect.OrbFlareColor setColor) {
+      if (outer == null) {
+         outer = ImageMaster.vfxAtlas.findRegion("combat/orbFlareOuter");
+         inner = ImageMaster.vfxAtlas.findRegion("combat/orbFlareInner");
+      }
 
-    private void setColor() {
-        switch (this.flareColor) {
-            case DARK: {
-                this.color = Color.VIOLET.cpy();
-                this.color2 = Color.BLACK.cpy();
-                break;
-            }
-            case FROST: {
-                this.color = Settings.BLUE_TEXT_COLOR.cpy();
-                this.color2 = Color.LIGHT_GRAY.cpy();
-                break;
-            }
-            case LIGHTNING: {
-                this.color = Color.CHARTREUSE.cpy();
-                this.color2 = Color.WHITE.cpy();
-                break;
-            }
-            case PLASMA: {
-                this.color = Color.CORAL.cpy();
-                this.color2 = Color.CYAN.cpy();
-                break;
-            }
-        }
-    }
+      this.orb = orb;
+      this.renderBehind = true;
+      this.duration = 0.5F;
+      this.startingDuration = 0.5F;
+      this.flareColor = setColor;
+      this.setColor();
+      this.scale = 2.0F * Settings.scale;
+      this.scaleY = 0.0F;
+   }
 
-    @Override
-    public void update() {
-        this.duration -= Gdx.graphics.getDeltaTime();
-        if (this.duration < 0.0f) {
-            this.duration = 0.0f;
-            this.isDone = true;
-        }
-        this.scaleY = Interpolation.elasticIn.apply(2.2f, 0.8f, this.duration * 2.0f);
-        this.scale = Interpolation.elasticIn.apply(2.1f, 1.9f, this.duration * 2.0f);
-        this.color2.a = this.color.a = Interpolation.pow2Out.apply(0.0f, 0.6f, this.duration * 2.0f);
-    }
+   private void setColor() {
+      switch (this.flareColor) {
+         case DARK:
+            this.color = Color.VIOLET.cpy();
+            this.color2 = Color.BLACK.cpy();
+            break;
+         case FROST:
+            this.color = Settings.BLUE_TEXT_COLOR.cpy();
+            this.color2 = Color.LIGHT_GRAY.cpy();
+            break;
+         case LIGHTNING:
+            this.color = Color.CHARTREUSE.cpy();
+            this.color2 = Color.WHITE.cpy();
+            break;
+         case PLASMA:
+            this.color = Color.CORAL.cpy();
+            this.color2 = Color.CYAN.cpy();
+      }
+   }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        sb.setColor(this.color2);
-        sb.draw(inner, this.orb.cX - (float)OrbFlareEffect.inner.packedWidth / 2.0f, this.orb.cY - (float)OrbFlareEffect.inner.packedHeight / 2.0f, (float)OrbFlareEffect.inner.packedWidth / 2.0f, (float)OrbFlareEffect.inner.packedHeight / 2.0f, OrbFlareEffect.inner.packedWidth, OrbFlareEffect.inner.packedHeight, this.scale * Settings.scale * 1.1f, this.scaleY * Settings.scale, MathUtils.random(-1.0f, 1.0f));
-        sb.setBlendFunction(770, 1);
-        sb.setColor(this.color);
-        sb.draw(outer, this.orb.cX - (float)OrbFlareEffect.outer.packedWidth / 2.0f, this.orb.cY - (float)OrbFlareEffect.outer.packedHeight / 2.0f, (float)OrbFlareEffect.outer.packedWidth / 2.0f, (float)OrbFlareEffect.outer.packedHeight / 2.0f, OrbFlareEffect.outer.packedWidth, OrbFlareEffect.outer.packedHeight, this.scale, this.scaleY * Settings.scale, MathUtils.random(-2.0f, 2.0f));
-        sb.draw(outer, this.orb.cX - (float)OrbFlareEffect.outer.packedWidth / 2.0f, this.orb.cY - (float)OrbFlareEffect.outer.packedHeight / 2.0f, (float)OrbFlareEffect.outer.packedWidth / 2.0f, (float)OrbFlareEffect.outer.packedHeight / 2.0f, OrbFlareEffect.outer.packedWidth, OrbFlareEffect.outer.packedHeight, this.scale, this.scaleY * Settings.scale, MathUtils.random(-2.0f, 2.0f));
-        sb.setBlendFunction(770, 771);
-        sb.setColor(this.color2);
-        sb.draw(inner, this.orb.cX - (float)OrbFlareEffect.inner.packedWidth / 2.0f, this.orb.cY - (float)OrbFlareEffect.inner.packedHeight / 2.0f, (float)OrbFlareEffect.inner.packedWidth / 2.0f, (float)OrbFlareEffect.inner.packedHeight / 2.0f, OrbFlareEffect.inner.packedWidth, OrbFlareEffect.inner.packedHeight, this.scale * Settings.scale * 1.1f, this.scaleY * Settings.scale, MathUtils.random(-1.0f, 1.0f));
-    }
+   @Override
+   public void update() {
+      this.duration = this.duration - Gdx.graphics.getDeltaTime();
+      if (this.duration < 0.0F) {
+         this.duration = 0.0F;
+         this.isDone = true;
+      }
 
-    @Override
-    public void dispose() {
-    }
+      this.scaleY = Interpolation.elasticIn.apply(2.2F, 0.8F, this.duration * 2.0F);
+      this.scale = Interpolation.elasticIn.apply(2.1F, 1.9F, this.duration * 2.0F);
+      this.color.a = Interpolation.pow2Out.apply(0.0F, 0.6F, this.duration * 2.0F);
+      this.color2.a = this.color.a;
+   }
 
-    public static enum OrbFlareColor {
-        LIGHTNING,
-        DARK,
-        PLASMA,
-        FROST;
+   @Override
+   public void render(SpriteBatch sb) {
+      sb.setColor(this.color2);
+      sb.draw(
+         inner,
+         this.orb.cX - inner.packedWidth / 2.0F,
+         this.orb.cY - inner.packedHeight / 2.0F,
+         inner.packedWidth / 2.0F,
+         inner.packedHeight / 2.0F,
+         inner.packedWidth,
+         inner.packedHeight,
+         this.scale * Settings.scale * 1.1F,
+         this.scaleY * Settings.scale,
+         MathUtils.random(-1.0F, 1.0F)
+      );
+      sb.setBlendFunction(770, 1);
+      sb.setColor(this.color);
+      sb.draw(
+         outer,
+         this.orb.cX - outer.packedWidth / 2.0F,
+         this.orb.cY - outer.packedHeight / 2.0F,
+         outer.packedWidth / 2.0F,
+         outer.packedHeight / 2.0F,
+         outer.packedWidth,
+         outer.packedHeight,
+         this.scale,
+         this.scaleY * Settings.scale,
+         MathUtils.random(-2.0F, 2.0F)
+      );
+      sb.draw(
+         outer,
+         this.orb.cX - outer.packedWidth / 2.0F,
+         this.orb.cY - outer.packedHeight / 2.0F,
+         outer.packedWidth / 2.0F,
+         outer.packedHeight / 2.0F,
+         outer.packedWidth,
+         outer.packedHeight,
+         this.scale,
+         this.scaleY * Settings.scale,
+         MathUtils.random(-2.0F, 2.0F)
+      );
+      sb.setBlendFunction(770, 771);
+      sb.setColor(this.color2);
+      sb.draw(
+         inner,
+         this.orb.cX - inner.packedWidth / 2.0F,
+         this.orb.cY - inner.packedHeight / 2.0F,
+         inner.packedWidth / 2.0F,
+         inner.packedHeight / 2.0F,
+         inner.packedWidth,
+         inner.packedHeight,
+         this.scale * Settings.scale * 1.1F,
+         this.scaleY * Settings.scale,
+         MathUtils.random(-1.0F, 1.0F)
+      );
+   }
 
-    }
+   @Override
+   public void dispose() {
+   }
+
+   public static enum OrbFlareColor {
+      LIGHTNING,
+      DARK,
+      PLASMA,
+      FROST;
+   }
 }
-

@@ -1,305 +1,298 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package net.java.games.input;
 
 public interface Component {
-    public Identifier getIdentifier();
+   Component.Identifier getIdentifier();
 
-    public boolean isRelative();
+   boolean isRelative();
 
-    public boolean isAnalog();
+   boolean isAnalog();
 
-    public float getDeadZone();
+   float getDeadZone();
 
-    public float getPollData();
+   float getPollData();
 
-    public String getName();
+   String getName();
 
-    public static class POV {
-        public static final float OFF = 0.0f;
-        public static final float CENTER = 0.0f;
-        public static final float UP_LEFT = 0.125f;
-        public static final float UP = 0.25f;
-        public static final float UP_RIGHT = 0.375f;
-        public static final float RIGHT = 0.5f;
-        public static final float DOWN_RIGHT = 0.625f;
-        public static final float DOWN = 0.75f;
-        public static final float DOWN_LEFT = 0.875f;
-        public static final float LEFT = 1.0f;
-    }
+   public static class Identifier {
+      private final String name;
 
-    public static class Identifier {
-        private final String name;
+      protected Identifier(String name) {
+         this.name = name;
+      }
 
-        protected Identifier(String name) {
-            this.name = name;
-        }
+      public String getName() {
+         return this.name;
+      }
 
-        public String getName() {
-            return this.name;
-        }
+      public String toString() {
+         return this.name;
+      }
 
-        public String toString() {
-            return this.name;
-        }
+      public static class Axis extends Component.Identifier {
+         public static final Component.Identifier.Axis X = new Component.Identifier.Axis("x");
+         public static final Component.Identifier.Axis Y = new Component.Identifier.Axis("y");
+         public static final Component.Identifier.Axis Z = new Component.Identifier.Axis("z");
+         public static final Component.Identifier.Axis RX = new Component.Identifier.Axis("rx");
+         public static final Component.Identifier.Axis RY = new Component.Identifier.Axis("ry");
+         public static final Component.Identifier.Axis RZ = new Component.Identifier.Axis("rz");
+         public static final Component.Identifier.Axis SLIDER = new Component.Identifier.Axis("slider");
+         public static final Component.Identifier.Axis SLIDER_ACCELERATION = new Component.Identifier.Axis("slider-acceleration");
+         public static final Component.Identifier.Axis SLIDER_FORCE = new Component.Identifier.Axis("slider-force");
+         public static final Component.Identifier.Axis SLIDER_VELOCITY = new Component.Identifier.Axis("slider-velocity");
+         public static final Component.Identifier.Axis X_ACCELERATION = new Component.Identifier.Axis("x-acceleration");
+         public static final Component.Identifier.Axis X_FORCE = new Component.Identifier.Axis("x-force");
+         public static final Component.Identifier.Axis X_VELOCITY = new Component.Identifier.Axis("x-velocity");
+         public static final Component.Identifier.Axis Y_ACCELERATION = new Component.Identifier.Axis("y-acceleration");
+         public static final Component.Identifier.Axis Y_FORCE = new Component.Identifier.Axis("y-force");
+         public static final Component.Identifier.Axis Y_VELOCITY = new Component.Identifier.Axis("y-velocity");
+         public static final Component.Identifier.Axis Z_ACCELERATION = new Component.Identifier.Axis("z-acceleration");
+         public static final Component.Identifier.Axis Z_FORCE = new Component.Identifier.Axis("z-force");
+         public static final Component.Identifier.Axis Z_VELOCITY = new Component.Identifier.Axis("z-velocity");
+         public static final Component.Identifier.Axis RX_ACCELERATION = new Component.Identifier.Axis("rx-acceleration");
+         public static final Component.Identifier.Axis RX_FORCE = new Component.Identifier.Axis("rx-force");
+         public static final Component.Identifier.Axis RX_VELOCITY = new Component.Identifier.Axis("rx-velocity");
+         public static final Component.Identifier.Axis RY_ACCELERATION = new Component.Identifier.Axis("ry-acceleration");
+         public static final Component.Identifier.Axis RY_FORCE = new Component.Identifier.Axis("ry-force");
+         public static final Component.Identifier.Axis RY_VELOCITY = new Component.Identifier.Axis("ry-velocity");
+         public static final Component.Identifier.Axis RZ_ACCELERATION = new Component.Identifier.Axis("rz-acceleration");
+         public static final Component.Identifier.Axis RZ_FORCE = new Component.Identifier.Axis("rz-force");
+         public static final Component.Identifier.Axis RZ_VELOCITY = new Component.Identifier.Axis("rz-velocity");
+         public static final Component.Identifier.Axis POV = new Component.Identifier.Axis("pov");
+         public static final Component.Identifier.Axis UNKNOWN = new Component.Identifier.Axis("unknown");
 
-        public static class Key
-        extends Identifier {
-            public static final Key VOID = new Key("Void");
-            public static final Key ESCAPE = new Key("Escape");
-            public static final Key _1 = new Key("1");
-            public static final Key _2 = new Key("2");
-            public static final Key _3 = new Key("3");
-            public static final Key _4 = new Key("4");
-            public static final Key _5 = new Key("5");
-            public static final Key _6 = new Key("6");
-            public static final Key _7 = new Key("7");
-            public static final Key _8 = new Key("8");
-            public static final Key _9 = new Key("9");
-            public static final Key _0 = new Key("0");
-            public static final Key MINUS = new Key("-");
-            public static final Key EQUALS = new Key("=");
-            public static final Key BACK = new Key("Back");
-            public static final Key TAB = new Key("Tab");
-            public static final Key Q = new Key("Q");
-            public static final Key W = new Key("W");
-            public static final Key E = new Key("E");
-            public static final Key R = new Key("R");
-            public static final Key T = new Key("T");
-            public static final Key Y = new Key("Y");
-            public static final Key U = new Key("U");
-            public static final Key I = new Key("I");
-            public static final Key O = new Key("O");
-            public static final Key P = new Key("P");
-            public static final Key LBRACKET = new Key("[");
-            public static final Key RBRACKET = new Key("]");
-            public static final Key RETURN = new Key("Return");
-            public static final Key LCONTROL = new Key("Left Control");
-            public static final Key A = new Key("A");
-            public static final Key S = new Key("S");
-            public static final Key D = new Key("D");
-            public static final Key F = new Key("F");
-            public static final Key G = new Key("G");
-            public static final Key H = new Key("H");
-            public static final Key J = new Key("J");
-            public static final Key K = new Key("K");
-            public static final Key L = new Key("L");
-            public static final Key SEMICOLON = new Key(";");
-            public static final Key APOSTROPHE = new Key("'");
-            public static final Key GRAVE = new Key("~");
-            public static final Key LSHIFT = new Key("Left Shift");
-            public static final Key BACKSLASH = new Key("\\");
-            public static final Key Z = new Key("Z");
-            public static final Key X = new Key("X");
-            public static final Key C = new Key("C");
-            public static final Key V = new Key("V");
-            public static final Key B = new Key("B");
-            public static final Key N = new Key("N");
-            public static final Key M = new Key("M");
-            public static final Key COMMA = new Key(",");
-            public static final Key PERIOD = new Key(".");
-            public static final Key SLASH = new Key("/");
-            public static final Key RSHIFT = new Key("Right Shift");
-            public static final Key MULTIPLY = new Key("Multiply");
-            public static final Key LALT = new Key("Left Alt");
-            public static final Key SPACE = new Key(" ");
-            public static final Key CAPITAL = new Key("Caps Lock");
-            public static final Key F1 = new Key("F1");
-            public static final Key F2 = new Key("F2");
-            public static final Key F3 = new Key("F3");
-            public static final Key F4 = new Key("F4");
-            public static final Key F5 = new Key("F5");
-            public static final Key F6 = new Key("F6");
-            public static final Key F7 = new Key("F7");
-            public static final Key F8 = new Key("F8");
-            public static final Key F9 = new Key("F9");
-            public static final Key F10 = new Key("F10");
-            public static final Key NUMLOCK = new Key("Num Lock");
-            public static final Key SCROLL = new Key("Scroll Lock");
-            public static final Key NUMPAD7 = new Key("Num 7");
-            public static final Key NUMPAD8 = new Key("Num 8");
-            public static final Key NUMPAD9 = new Key("Num 9");
-            public static final Key SUBTRACT = new Key("Num -");
-            public static final Key NUMPAD4 = new Key("Num 4");
-            public static final Key NUMPAD5 = new Key("Num 5");
-            public static final Key NUMPAD6 = new Key("Num 6");
-            public static final Key ADD = new Key("Num +");
-            public static final Key NUMPAD1 = new Key("Num 1");
-            public static final Key NUMPAD2 = new Key("Num 2");
-            public static final Key NUMPAD3 = new Key("Num 3");
-            public static final Key NUMPAD0 = new Key("Num 0");
-            public static final Key DECIMAL = new Key("Num .");
-            public static final Key F11 = new Key("F11");
-            public static final Key F12 = new Key("F12");
-            public static final Key F13 = new Key("F13");
-            public static final Key F14 = new Key("F14");
-            public static final Key F15 = new Key("F15");
-            public static final Key KANA = new Key("Kana");
-            public static final Key CONVERT = new Key("Convert");
-            public static final Key NOCONVERT = new Key("Noconvert");
-            public static final Key YEN = new Key("Yen");
-            public static final Key NUMPADEQUAL = new Key("Num =");
-            public static final Key CIRCUMFLEX = new Key("Circumflex");
-            public static final Key AT = new Key("At");
-            public static final Key COLON = new Key("Colon");
-            public static final Key UNDERLINE = new Key("Underline");
-            public static final Key KANJI = new Key("Kanji");
-            public static final Key STOP = new Key("Stop");
-            public static final Key AX = new Key("Ax");
-            public static final Key UNLABELED = new Key("Unlabeled");
-            public static final Key NUMPADENTER = new Key("Num Enter");
-            public static final Key RCONTROL = new Key("Right Control");
-            public static final Key NUMPADCOMMA = new Key("Num ,");
-            public static final Key DIVIDE = new Key("Num /");
-            public static final Key SYSRQ = new Key("SysRq");
-            public static final Key RALT = new Key("Right Alt");
-            public static final Key PAUSE = new Key("Pause");
-            public static final Key HOME = new Key("Home");
-            public static final Key UP = new Key("Up");
-            public static final Key PAGEUP = new Key("Pg Up");
-            public static final Key LEFT = new Key("Left");
-            public static final Key RIGHT = new Key("Right");
-            public static final Key END = new Key("End");
-            public static final Key DOWN = new Key("Down");
-            public static final Key PAGEDOWN = new Key("Pg Down");
-            public static final Key INSERT = new Key("Insert");
-            public static final Key DELETE = new Key("Delete");
-            public static final Key LWIN = new Key("Left Windows");
-            public static final Key RWIN = new Key("Right Windows");
-            public static final Key APPS = new Key("Apps");
-            public static final Key POWER = new Key("Power");
-            public static final Key SLEEP = new Key("Sleep");
-            public static final Key UNKNOWN = new Key("Unknown");
+         protected Axis(String name) {
+            super(name);
+         }
+      }
 
-            protected Key(String name) {
-                super(name);
-            }
-        }
+      public static class Button extends Component.Identifier {
+         public static final Component.Identifier.Button _0 = new Component.Identifier.Button("0");
+         public static final Component.Identifier.Button _1 = new Component.Identifier.Button("1");
+         public static final Component.Identifier.Button _2 = new Component.Identifier.Button("2");
+         public static final Component.Identifier.Button _3 = new Component.Identifier.Button("3");
+         public static final Component.Identifier.Button _4 = new Component.Identifier.Button("4");
+         public static final Component.Identifier.Button _5 = new Component.Identifier.Button("5");
+         public static final Component.Identifier.Button _6 = new Component.Identifier.Button("6");
+         public static final Component.Identifier.Button _7 = new Component.Identifier.Button("7");
+         public static final Component.Identifier.Button _8 = new Component.Identifier.Button("8");
+         public static final Component.Identifier.Button _9 = new Component.Identifier.Button("9");
+         public static final Component.Identifier.Button _10 = new Component.Identifier.Button("10");
+         public static final Component.Identifier.Button _11 = new Component.Identifier.Button("11");
+         public static final Component.Identifier.Button _12 = new Component.Identifier.Button("12");
+         public static final Component.Identifier.Button _13 = new Component.Identifier.Button("13");
+         public static final Component.Identifier.Button _14 = new Component.Identifier.Button("14");
+         public static final Component.Identifier.Button _15 = new Component.Identifier.Button("15");
+         public static final Component.Identifier.Button _16 = new Component.Identifier.Button("16");
+         public static final Component.Identifier.Button _17 = new Component.Identifier.Button("17");
+         public static final Component.Identifier.Button _18 = new Component.Identifier.Button("18");
+         public static final Component.Identifier.Button _19 = new Component.Identifier.Button("19");
+         public static final Component.Identifier.Button _20 = new Component.Identifier.Button("20");
+         public static final Component.Identifier.Button _21 = new Component.Identifier.Button("21");
+         public static final Component.Identifier.Button _22 = new Component.Identifier.Button("22");
+         public static final Component.Identifier.Button _23 = new Component.Identifier.Button("23");
+         public static final Component.Identifier.Button _24 = new Component.Identifier.Button("24");
+         public static final Component.Identifier.Button _25 = new Component.Identifier.Button("25");
+         public static final Component.Identifier.Button _26 = new Component.Identifier.Button("26");
+         public static final Component.Identifier.Button _27 = new Component.Identifier.Button("27");
+         public static final Component.Identifier.Button _28 = new Component.Identifier.Button("28");
+         public static final Component.Identifier.Button _29 = new Component.Identifier.Button("29");
+         public static final Component.Identifier.Button _30 = new Component.Identifier.Button("30");
+         public static final Component.Identifier.Button _31 = new Component.Identifier.Button("31");
+         public static final Component.Identifier.Button TRIGGER = new Component.Identifier.Button("Trigger");
+         public static final Component.Identifier.Button THUMB = new Component.Identifier.Button("Thumb");
+         public static final Component.Identifier.Button THUMB2 = new Component.Identifier.Button("Thumb 2");
+         public static final Component.Identifier.Button TOP = new Component.Identifier.Button("Top");
+         public static final Component.Identifier.Button TOP2 = new Component.Identifier.Button("Top 2");
+         public static final Component.Identifier.Button PINKIE = new Component.Identifier.Button("Pinkie");
+         public static final Component.Identifier.Button BASE = new Component.Identifier.Button("Base");
+         public static final Component.Identifier.Button BASE2 = new Component.Identifier.Button("Base 2");
+         public static final Component.Identifier.Button BASE3 = new Component.Identifier.Button("Base 3");
+         public static final Component.Identifier.Button BASE4 = new Component.Identifier.Button("Base 4");
+         public static final Component.Identifier.Button BASE5 = new Component.Identifier.Button("Base 5");
+         public static final Component.Identifier.Button BASE6 = new Component.Identifier.Button("Base 6");
+         public static final Component.Identifier.Button DEAD = new Component.Identifier.Button("Dead");
+         public static final Component.Identifier.Button A = new Component.Identifier.Button("A");
+         public static final Component.Identifier.Button B = new Component.Identifier.Button("B");
+         public static final Component.Identifier.Button C = new Component.Identifier.Button("C");
+         public static final Component.Identifier.Button X = new Component.Identifier.Button("X");
+         public static final Component.Identifier.Button Y = new Component.Identifier.Button("Y");
+         public static final Component.Identifier.Button Z = new Component.Identifier.Button("Z");
+         public static final Component.Identifier.Button LEFT_THUMB = new Component.Identifier.Button("Left Thumb");
+         public static final Component.Identifier.Button RIGHT_THUMB = new Component.Identifier.Button("Right Thumb");
+         public static final Component.Identifier.Button LEFT_THUMB2 = new Component.Identifier.Button("Left Thumb 2");
+         public static final Component.Identifier.Button RIGHT_THUMB2 = new Component.Identifier.Button("Right Thumb 2");
+         public static final Component.Identifier.Button SELECT = new Component.Identifier.Button("Select");
+         public static final Component.Identifier.Button MODE = new Component.Identifier.Button("Mode");
+         public static final Component.Identifier.Button LEFT_THUMB3 = new Component.Identifier.Button("Left Thumb 3");
+         public static final Component.Identifier.Button RIGHT_THUMB3 = new Component.Identifier.Button("Right Thumb 3");
+         public static final Component.Identifier.Button TOOL_PEN = new Component.Identifier.Button("Pen");
+         public static final Component.Identifier.Button TOOL_RUBBER = new Component.Identifier.Button("Rubber");
+         public static final Component.Identifier.Button TOOL_BRUSH = new Component.Identifier.Button("Brush");
+         public static final Component.Identifier.Button TOOL_PENCIL = new Component.Identifier.Button("Pencil");
+         public static final Component.Identifier.Button TOOL_AIRBRUSH = new Component.Identifier.Button("Airbrush");
+         public static final Component.Identifier.Button TOOL_FINGER = new Component.Identifier.Button("Finger");
+         public static final Component.Identifier.Button TOOL_MOUSE = new Component.Identifier.Button("Mouse");
+         public static final Component.Identifier.Button TOOL_LENS = new Component.Identifier.Button("Lens");
+         public static final Component.Identifier.Button TOUCH = new Component.Identifier.Button("Touch");
+         public static final Component.Identifier.Button STYLUS = new Component.Identifier.Button("Stylus");
+         public static final Component.Identifier.Button STYLUS2 = new Component.Identifier.Button("Stylus 2");
+         public static final Component.Identifier.Button UNKNOWN = new Component.Identifier.Button("Unknown");
+         public static final Component.Identifier.Button BACK = new Component.Identifier.Button("Back");
+         public static final Component.Identifier.Button EXTRA = new Component.Identifier.Button("Extra");
+         public static final Component.Identifier.Button FORWARD = new Component.Identifier.Button("Forward");
+         public static final Component.Identifier.Button LEFT = new Component.Identifier.Button("Left");
+         public static final Component.Identifier.Button MIDDLE = new Component.Identifier.Button("Middle");
+         public static final Component.Identifier.Button RIGHT = new Component.Identifier.Button("Right");
+         public static final Component.Identifier.Button SIDE = new Component.Identifier.Button("Side");
 
-        public static class Button
-        extends Identifier {
-            public static final Button _0 = new Button("0");
-            public static final Button _1 = new Button("1");
-            public static final Button _2 = new Button("2");
-            public static final Button _3 = new Button("3");
-            public static final Button _4 = new Button("4");
-            public static final Button _5 = new Button("5");
-            public static final Button _6 = new Button("6");
-            public static final Button _7 = new Button("7");
-            public static final Button _8 = new Button("8");
-            public static final Button _9 = new Button("9");
-            public static final Button _10 = new Button("10");
-            public static final Button _11 = new Button("11");
-            public static final Button _12 = new Button("12");
-            public static final Button _13 = new Button("13");
-            public static final Button _14 = new Button("14");
-            public static final Button _15 = new Button("15");
-            public static final Button _16 = new Button("16");
-            public static final Button _17 = new Button("17");
-            public static final Button _18 = new Button("18");
-            public static final Button _19 = new Button("19");
-            public static final Button _20 = new Button("20");
-            public static final Button _21 = new Button("21");
-            public static final Button _22 = new Button("22");
-            public static final Button _23 = new Button("23");
-            public static final Button _24 = new Button("24");
-            public static final Button _25 = new Button("25");
-            public static final Button _26 = new Button("26");
-            public static final Button _27 = new Button("27");
-            public static final Button _28 = new Button("28");
-            public static final Button _29 = new Button("29");
-            public static final Button _30 = new Button("30");
-            public static final Button _31 = new Button("31");
-            public static final Button TRIGGER = new Button("Trigger");
-            public static final Button THUMB = new Button("Thumb");
-            public static final Button THUMB2 = new Button("Thumb 2");
-            public static final Button TOP = new Button("Top");
-            public static final Button TOP2 = new Button("Top 2");
-            public static final Button PINKIE = new Button("Pinkie");
-            public static final Button BASE = new Button("Base");
-            public static final Button BASE2 = new Button("Base 2");
-            public static final Button BASE3 = new Button("Base 3");
-            public static final Button BASE4 = new Button("Base 4");
-            public static final Button BASE5 = new Button("Base 5");
-            public static final Button BASE6 = new Button("Base 6");
-            public static final Button DEAD = new Button("Dead");
-            public static final Button A = new Button("A");
-            public static final Button B = new Button("B");
-            public static final Button C = new Button("C");
-            public static final Button X = new Button("X");
-            public static final Button Y = new Button("Y");
-            public static final Button Z = new Button("Z");
-            public static final Button LEFT_THUMB = new Button("Left Thumb");
-            public static final Button RIGHT_THUMB = new Button("Right Thumb");
-            public static final Button LEFT_THUMB2 = new Button("Left Thumb 2");
-            public static final Button RIGHT_THUMB2 = new Button("Right Thumb 2");
-            public static final Button SELECT = new Button("Select");
-            public static final Button MODE = new Button("Mode");
-            public static final Button LEFT_THUMB3 = new Button("Left Thumb 3");
-            public static final Button RIGHT_THUMB3 = new Button("Right Thumb 3");
-            public static final Button TOOL_PEN = new Button("Pen");
-            public static final Button TOOL_RUBBER = new Button("Rubber");
-            public static final Button TOOL_BRUSH = new Button("Brush");
-            public static final Button TOOL_PENCIL = new Button("Pencil");
-            public static final Button TOOL_AIRBRUSH = new Button("Airbrush");
-            public static final Button TOOL_FINGER = new Button("Finger");
-            public static final Button TOOL_MOUSE = new Button("Mouse");
-            public static final Button TOOL_LENS = new Button("Lens");
-            public static final Button TOUCH = new Button("Touch");
-            public static final Button STYLUS = new Button("Stylus");
-            public static final Button STYLUS2 = new Button("Stylus 2");
-            public static final Button UNKNOWN = new Button("Unknown");
-            public static final Button BACK = new Button("Back");
-            public static final Button EXTRA = new Button("Extra");
-            public static final Button FORWARD = new Button("Forward");
-            public static final Button LEFT = new Button("Left");
-            public static final Button MIDDLE = new Button("Middle");
-            public static final Button RIGHT = new Button("Right");
-            public static final Button SIDE = new Button("Side");
+         public Button(String name) {
+            super(name);
+         }
+      }
 
-            public Button(String name) {
-                super(name);
-            }
-        }
+      public static class Key extends Component.Identifier {
+         public static final Component.Identifier.Key VOID = new Component.Identifier.Key("Void");
+         public static final Component.Identifier.Key ESCAPE = new Component.Identifier.Key("Escape");
+         public static final Component.Identifier.Key _1 = new Component.Identifier.Key("1");
+         public static final Component.Identifier.Key _2 = new Component.Identifier.Key("2");
+         public static final Component.Identifier.Key _3 = new Component.Identifier.Key("3");
+         public static final Component.Identifier.Key _4 = new Component.Identifier.Key("4");
+         public static final Component.Identifier.Key _5 = new Component.Identifier.Key("5");
+         public static final Component.Identifier.Key _6 = new Component.Identifier.Key("6");
+         public static final Component.Identifier.Key _7 = new Component.Identifier.Key("7");
+         public static final Component.Identifier.Key _8 = new Component.Identifier.Key("8");
+         public static final Component.Identifier.Key _9 = new Component.Identifier.Key("9");
+         public static final Component.Identifier.Key _0 = new Component.Identifier.Key("0");
+         public static final Component.Identifier.Key MINUS = new Component.Identifier.Key("-");
+         public static final Component.Identifier.Key EQUALS = new Component.Identifier.Key("=");
+         public static final Component.Identifier.Key BACK = new Component.Identifier.Key("Back");
+         public static final Component.Identifier.Key TAB = new Component.Identifier.Key("Tab");
+         public static final Component.Identifier.Key Q = new Component.Identifier.Key("Q");
+         public static final Component.Identifier.Key W = new Component.Identifier.Key("W");
+         public static final Component.Identifier.Key E = new Component.Identifier.Key("E");
+         public static final Component.Identifier.Key R = new Component.Identifier.Key("R");
+         public static final Component.Identifier.Key T = new Component.Identifier.Key("T");
+         public static final Component.Identifier.Key Y = new Component.Identifier.Key("Y");
+         public static final Component.Identifier.Key U = new Component.Identifier.Key("U");
+         public static final Component.Identifier.Key I = new Component.Identifier.Key("I");
+         public static final Component.Identifier.Key O = new Component.Identifier.Key("O");
+         public static final Component.Identifier.Key P = new Component.Identifier.Key("P");
+         public static final Component.Identifier.Key LBRACKET = new Component.Identifier.Key("[");
+         public static final Component.Identifier.Key RBRACKET = new Component.Identifier.Key("]");
+         public static final Component.Identifier.Key RETURN = new Component.Identifier.Key("Return");
+         public static final Component.Identifier.Key LCONTROL = new Component.Identifier.Key("Left Control");
+         public static final Component.Identifier.Key A = new Component.Identifier.Key("A");
+         public static final Component.Identifier.Key S = new Component.Identifier.Key("S");
+         public static final Component.Identifier.Key D = new Component.Identifier.Key("D");
+         public static final Component.Identifier.Key F = new Component.Identifier.Key("F");
+         public static final Component.Identifier.Key G = new Component.Identifier.Key("G");
+         public static final Component.Identifier.Key H = new Component.Identifier.Key("H");
+         public static final Component.Identifier.Key J = new Component.Identifier.Key("J");
+         public static final Component.Identifier.Key K = new Component.Identifier.Key("K");
+         public static final Component.Identifier.Key L = new Component.Identifier.Key("L");
+         public static final Component.Identifier.Key SEMICOLON = new Component.Identifier.Key(";");
+         public static final Component.Identifier.Key APOSTROPHE = new Component.Identifier.Key("'");
+         public static final Component.Identifier.Key GRAVE = new Component.Identifier.Key("~");
+         public static final Component.Identifier.Key LSHIFT = new Component.Identifier.Key("Left Shift");
+         public static final Component.Identifier.Key BACKSLASH = new Component.Identifier.Key("\\");
+         public static final Component.Identifier.Key Z = new Component.Identifier.Key("Z");
+         public static final Component.Identifier.Key X = new Component.Identifier.Key("X");
+         public static final Component.Identifier.Key C = new Component.Identifier.Key("C");
+         public static final Component.Identifier.Key V = new Component.Identifier.Key("V");
+         public static final Component.Identifier.Key B = new Component.Identifier.Key("B");
+         public static final Component.Identifier.Key N = new Component.Identifier.Key("N");
+         public static final Component.Identifier.Key M = new Component.Identifier.Key("M");
+         public static final Component.Identifier.Key COMMA = new Component.Identifier.Key(",");
+         public static final Component.Identifier.Key PERIOD = new Component.Identifier.Key(".");
+         public static final Component.Identifier.Key SLASH = new Component.Identifier.Key("/");
+         public static final Component.Identifier.Key RSHIFT = new Component.Identifier.Key("Right Shift");
+         public static final Component.Identifier.Key MULTIPLY = new Component.Identifier.Key("Multiply");
+         public static final Component.Identifier.Key LALT = new Component.Identifier.Key("Left Alt");
+         public static final Component.Identifier.Key SPACE = new Component.Identifier.Key(" ");
+         public static final Component.Identifier.Key CAPITAL = new Component.Identifier.Key("Caps Lock");
+         public static final Component.Identifier.Key F1 = new Component.Identifier.Key("F1");
+         public static final Component.Identifier.Key F2 = new Component.Identifier.Key("F2");
+         public static final Component.Identifier.Key F3 = new Component.Identifier.Key("F3");
+         public static final Component.Identifier.Key F4 = new Component.Identifier.Key("F4");
+         public static final Component.Identifier.Key F5 = new Component.Identifier.Key("F5");
+         public static final Component.Identifier.Key F6 = new Component.Identifier.Key("F6");
+         public static final Component.Identifier.Key F7 = new Component.Identifier.Key("F7");
+         public static final Component.Identifier.Key F8 = new Component.Identifier.Key("F8");
+         public static final Component.Identifier.Key F9 = new Component.Identifier.Key("F9");
+         public static final Component.Identifier.Key F10 = new Component.Identifier.Key("F10");
+         public static final Component.Identifier.Key NUMLOCK = new Component.Identifier.Key("Num Lock");
+         public static final Component.Identifier.Key SCROLL = new Component.Identifier.Key("Scroll Lock");
+         public static final Component.Identifier.Key NUMPAD7 = new Component.Identifier.Key("Num 7");
+         public static final Component.Identifier.Key NUMPAD8 = new Component.Identifier.Key("Num 8");
+         public static final Component.Identifier.Key NUMPAD9 = new Component.Identifier.Key("Num 9");
+         public static final Component.Identifier.Key SUBTRACT = new Component.Identifier.Key("Num -");
+         public static final Component.Identifier.Key NUMPAD4 = new Component.Identifier.Key("Num 4");
+         public static final Component.Identifier.Key NUMPAD5 = new Component.Identifier.Key("Num 5");
+         public static final Component.Identifier.Key NUMPAD6 = new Component.Identifier.Key("Num 6");
+         public static final Component.Identifier.Key ADD = new Component.Identifier.Key("Num +");
+         public static final Component.Identifier.Key NUMPAD1 = new Component.Identifier.Key("Num 1");
+         public static final Component.Identifier.Key NUMPAD2 = new Component.Identifier.Key("Num 2");
+         public static final Component.Identifier.Key NUMPAD3 = new Component.Identifier.Key("Num 3");
+         public static final Component.Identifier.Key NUMPAD0 = new Component.Identifier.Key("Num 0");
+         public static final Component.Identifier.Key DECIMAL = new Component.Identifier.Key("Num .");
+         public static final Component.Identifier.Key F11 = new Component.Identifier.Key("F11");
+         public static final Component.Identifier.Key F12 = new Component.Identifier.Key("F12");
+         public static final Component.Identifier.Key F13 = new Component.Identifier.Key("F13");
+         public static final Component.Identifier.Key F14 = new Component.Identifier.Key("F14");
+         public static final Component.Identifier.Key F15 = new Component.Identifier.Key("F15");
+         public static final Component.Identifier.Key KANA = new Component.Identifier.Key("Kana");
+         public static final Component.Identifier.Key CONVERT = new Component.Identifier.Key("Convert");
+         public static final Component.Identifier.Key NOCONVERT = new Component.Identifier.Key("Noconvert");
+         public static final Component.Identifier.Key YEN = new Component.Identifier.Key("Yen");
+         public static final Component.Identifier.Key NUMPADEQUAL = new Component.Identifier.Key("Num =");
+         public static final Component.Identifier.Key CIRCUMFLEX = new Component.Identifier.Key("Circumflex");
+         public static final Component.Identifier.Key AT = new Component.Identifier.Key("At");
+         public static final Component.Identifier.Key COLON = new Component.Identifier.Key("Colon");
+         public static final Component.Identifier.Key UNDERLINE = new Component.Identifier.Key("Underline");
+         public static final Component.Identifier.Key KANJI = new Component.Identifier.Key("Kanji");
+         public static final Component.Identifier.Key STOP = new Component.Identifier.Key("Stop");
+         public static final Component.Identifier.Key AX = new Component.Identifier.Key("Ax");
+         public static final Component.Identifier.Key UNLABELED = new Component.Identifier.Key("Unlabeled");
+         public static final Component.Identifier.Key NUMPADENTER = new Component.Identifier.Key("Num Enter");
+         public static final Component.Identifier.Key RCONTROL = new Component.Identifier.Key("Right Control");
+         public static final Component.Identifier.Key NUMPADCOMMA = new Component.Identifier.Key("Num ,");
+         public static final Component.Identifier.Key DIVIDE = new Component.Identifier.Key("Num /");
+         public static final Component.Identifier.Key SYSRQ = new Component.Identifier.Key("SysRq");
+         public static final Component.Identifier.Key RALT = new Component.Identifier.Key("Right Alt");
+         public static final Component.Identifier.Key PAUSE = new Component.Identifier.Key("Pause");
+         public static final Component.Identifier.Key HOME = new Component.Identifier.Key("Home");
+         public static final Component.Identifier.Key UP = new Component.Identifier.Key("Up");
+         public static final Component.Identifier.Key PAGEUP = new Component.Identifier.Key("Pg Up");
+         public static final Component.Identifier.Key LEFT = new Component.Identifier.Key("Left");
+         public static final Component.Identifier.Key RIGHT = new Component.Identifier.Key("Right");
+         public static final Component.Identifier.Key END = new Component.Identifier.Key("End");
+         public static final Component.Identifier.Key DOWN = new Component.Identifier.Key("Down");
+         public static final Component.Identifier.Key PAGEDOWN = new Component.Identifier.Key("Pg Down");
+         public static final Component.Identifier.Key INSERT = new Component.Identifier.Key("Insert");
+         public static final Component.Identifier.Key DELETE = new Component.Identifier.Key("Delete");
+         public static final Component.Identifier.Key LWIN = new Component.Identifier.Key("Left Windows");
+         public static final Component.Identifier.Key RWIN = new Component.Identifier.Key("Right Windows");
+         public static final Component.Identifier.Key APPS = new Component.Identifier.Key("Apps");
+         public static final Component.Identifier.Key POWER = new Component.Identifier.Key("Power");
+         public static final Component.Identifier.Key SLEEP = new Component.Identifier.Key("Sleep");
+         public static final Component.Identifier.Key UNKNOWN = new Component.Identifier.Key("Unknown");
 
-        public static class Axis
-        extends Identifier {
-            public static final Axis X = new Axis("x");
-            public static final Axis Y = new Axis("y");
-            public static final Axis Z = new Axis("z");
-            public static final Axis RX = new Axis("rx");
-            public static final Axis RY = new Axis("ry");
-            public static final Axis RZ = new Axis("rz");
-            public static final Axis SLIDER = new Axis("slider");
-            public static final Axis SLIDER_ACCELERATION = new Axis("slider-acceleration");
-            public static final Axis SLIDER_FORCE = new Axis("slider-force");
-            public static final Axis SLIDER_VELOCITY = new Axis("slider-velocity");
-            public static final Axis X_ACCELERATION = new Axis("x-acceleration");
-            public static final Axis X_FORCE = new Axis("x-force");
-            public static final Axis X_VELOCITY = new Axis("x-velocity");
-            public static final Axis Y_ACCELERATION = new Axis("y-acceleration");
-            public static final Axis Y_FORCE = new Axis("y-force");
-            public static final Axis Y_VELOCITY = new Axis("y-velocity");
-            public static final Axis Z_ACCELERATION = new Axis("z-acceleration");
-            public static final Axis Z_FORCE = new Axis("z-force");
-            public static final Axis Z_VELOCITY = new Axis("z-velocity");
-            public static final Axis RX_ACCELERATION = new Axis("rx-acceleration");
-            public static final Axis RX_FORCE = new Axis("rx-force");
-            public static final Axis RX_VELOCITY = new Axis("rx-velocity");
-            public static final Axis RY_ACCELERATION = new Axis("ry-acceleration");
-            public static final Axis RY_FORCE = new Axis("ry-force");
-            public static final Axis RY_VELOCITY = new Axis("ry-velocity");
-            public static final Axis RZ_ACCELERATION = new Axis("rz-acceleration");
-            public static final Axis RZ_FORCE = new Axis("rz-force");
-            public static final Axis RZ_VELOCITY = new Axis("rz-velocity");
-            public static final Axis POV = new Axis("pov");
-            public static final Axis UNKNOWN = new Axis("unknown");
+         protected Key(String name) {
+            super(name);
+         }
+      }
+   }
 
-            protected Axis(String name) {
-                super(name);
-            }
-        }
-    }
+   public static class POV {
+      public static final float OFF = 0.0F;
+      public static final float CENTER = 0.0F;
+      public static final float UP_LEFT = 0.125F;
+      public static final float UP = 0.25F;
+      public static final float UP_RIGHT = 0.375F;
+      public static final float RIGHT = 0.5F;
+      public static final float DOWN_RIGHT = 0.625F;
+      public static final float DOWN = 0.75F;
+      public static final float DOWN_LEFT = 0.875F;
+      public static final float LEFT = 1.0F;
+   }
 }
-

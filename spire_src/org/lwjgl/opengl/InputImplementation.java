@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl.opengl;
 
 import java.nio.ByteBuffer;
@@ -8,46 +5,45 @@ import java.nio.IntBuffer;
 import org.lwjgl.LWJGLException;
 
 public interface InputImplementation {
-    public boolean hasWheel();
+   boolean hasWheel();
 
-    public int getButtonCount();
+   int getButtonCount();
 
-    public void createMouse() throws LWJGLException;
+   void createMouse() throws LWJGLException;
 
-    public void destroyMouse();
+   void destroyMouse();
 
-    public void pollMouse(IntBuffer var1, ByteBuffer var2);
+   void pollMouse(IntBuffer var1, ByteBuffer var2);
 
-    public void readMouse(ByteBuffer var1);
+   void readMouse(ByteBuffer var1);
 
-    public void grabMouse(boolean var1);
+   void grabMouse(boolean var1);
 
-    public int getNativeCursorCapabilities();
+   int getNativeCursorCapabilities();
 
-    public void setCursorPosition(int var1, int var2);
+   void setCursorPosition(int var1, int var2);
 
-    public void setNativeCursor(Object var1) throws LWJGLException;
+   void setNativeCursor(Object var1) throws LWJGLException;
 
-    public int getMinCursorSize();
+   int getMinCursorSize();
 
-    public int getMaxCursorSize();
+   int getMaxCursorSize();
 
-    public void createKeyboard() throws LWJGLException;
+   void createKeyboard() throws LWJGLException;
 
-    public void destroyKeyboard();
+   void destroyKeyboard();
 
-    public void pollKeyboard(ByteBuffer var1);
+   void pollKeyboard(ByteBuffer var1);
 
-    public void readKeyboard(ByteBuffer var1);
+   void readKeyboard(ByteBuffer var1);
 
-    public Object createCursor(int var1, int var2, int var3, int var4, int var5, IntBuffer var6, IntBuffer var7) throws LWJGLException;
+   Object createCursor(int var1, int var2, int var3, int var4, int var5, IntBuffer var6, IntBuffer var7) throws LWJGLException;
 
-    public void destroyCursor(Object var1);
+   void destroyCursor(Object var1);
 
-    public int getWidth();
+   int getWidth();
 
-    public int getHeight();
+   int getHeight();
 
-    public boolean isInsideWindow();
+   boolean isInsideWindow();
 }
-

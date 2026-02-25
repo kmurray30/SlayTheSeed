@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.cards.deprecated;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
@@ -9,41 +6,49 @@ import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.WeakPower;
 
-public class DEPRECATEDRestrainingPalm
-extends AbstractCard {
-    public static final String ID = "PalmThatRestrains";
-    private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("PalmThatRestrains");
+public class DEPRECATEDRestrainingPalm extends AbstractCard {
+   public static final String ID = "PalmThatRestrains";
+   private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("PalmThatRestrains");
 
-    public DEPRECATEDRestrainingPalm() {
-        super(ID, DEPRECATEDRestrainingPalm.cardStrings.NAME, "red/attack/clothesline", 2, DEPRECATEDRestrainingPalm.cardStrings.DESCRIPTION, AbstractCard.CardType.ATTACK, AbstractCard.CardColor.PURPLE, AbstractCard.CardRarity.COMMON, AbstractCard.CardTarget.ENEMY);
-        this.baseDamage = 8;
-        this.magicNumber = this.baseMagicNumber = 3;
-    }
+   public DEPRECATEDRestrainingPalm() {
+      super(
+         "PalmThatRestrains",
+         cardStrings.NAME,
+         "red/attack/clothesline",
+         2,
+         cardStrings.DESCRIPTION,
+         AbstractCard.CardType.ATTACK,
+         AbstractCard.CardColor.PURPLE,
+         AbstractCard.CardRarity.COMMON,
+         AbstractCard.CardTarget.ENEMY
+      );
+      this.baseDamage = 8;
+      this.baseMagicNumber = 3;
+      this.magicNumber = this.baseMagicNumber;
+   }
 
-    @Override
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new DamageAction((AbstractCreature)m, new DamageInfo(p, this.damage, this.damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_HEAVY));
-        this.addToBot(new ApplyPowerAction(m, p, new WeakPower(m, this.magicNumber, false), this.magicNumber));
-    }
+   @Override
+   public void use(AbstractPlayer p, AbstractMonster m) {
+      this.addToBot(new DamageAction(m, new DamageInfo(p, this.damage, this.damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_HEAVY));
+      this.addToBot(new ApplyPowerAction(m, p, new WeakPower(m, this.magicNumber, false), this.magicNumber));
+   }
 
-    @Override
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeDamage(2);
-            this.upgradeMagicNumber(1);
-        }
-    }
+   @Override
+   public void upgrade() {
+      if (!this.upgraded) {
+         this.upgradeName();
+         this.upgradeDamage(2);
+         this.upgradeMagicNumber(1);
+      }
+   }
 
-    @Override
-    public AbstractCard makeCopy() {
-        return new DEPRECATEDRestrainingPalm();
-    }
+   @Override
+   public AbstractCard makeCopy() {
+      return new DEPRECATEDRestrainingPalm();
+   }
 }
-

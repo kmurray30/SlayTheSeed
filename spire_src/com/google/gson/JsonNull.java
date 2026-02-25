@@ -1,28 +1,19 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.google.gson;
 
-import com.google.gson.JsonElement;
+public final class JsonNull extends JsonElement {
+   public static final JsonNull INSTANCE = new JsonNull();
 
-public final class JsonNull
-extends JsonElement {
-    public static final JsonNull INSTANCE = new JsonNull();
+   JsonNull deepCopy() {
+      return INSTANCE;
+   }
 
-    @Deprecated
-    public JsonNull() {
-    }
+   @Override
+   public int hashCode() {
+      return JsonNull.class.hashCode();
+   }
 
-    JsonNull deepCopy() {
-        return INSTANCE;
-    }
-
-    public int hashCode() {
-        return JsonNull.class.hashCode();
-    }
-
-    public boolean equals(Object other) {
-        return this == other || other instanceof JsonNull;
-    }
+   @Override
+   public boolean equals(Object other) {
+      return this == other || other instanceof JsonNull;
+   }
 }
-

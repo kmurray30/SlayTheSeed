@@ -1,12 +1,5 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.pattern;
 
-import org.apache.logging.log4j.core.pattern.PatternConverter;
-
-public interface ArrayPatternConverter
-extends PatternConverter {
-    public void format(StringBuilder var1, Object ... var2);
+public interface ArrayPatternConverter extends PatternConverter {
+   void format(final StringBuilder toAppendTo, Object... objects);
 }
-

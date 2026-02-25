@@ -1,33 +1,25 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.message;
 
-import org.apache.logging.log4j.message.Message;
-import org.apache.logging.log4j.message.MessageFactory;
+public interface MessageFactory2 extends MessageFactory {
+   Message newMessage(CharSequence charSequence);
 
-public interface MessageFactory2
-extends MessageFactory {
-    public Message newMessage(CharSequence var1);
+   Message newMessage(String message, Object p0);
 
-    public Message newMessage(String var1, Object var2);
+   Message newMessage(String message, Object p0, Object p1);
 
-    public Message newMessage(String var1, Object var2, Object var3);
+   Message newMessage(String message, Object p0, Object p1, Object p2);
 
-    public Message newMessage(String var1, Object var2, Object var3, Object var4);
+   Message newMessage(String message, Object p0, Object p1, Object p2, Object p3);
 
-    public Message newMessage(String var1, Object var2, Object var3, Object var4, Object var5);
+   Message newMessage(String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public Message newMessage(String var1, Object var2, Object var3, Object var4, Object var5, Object var6);
+   Message newMessage(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public Message newMessage(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7);
+   Message newMessage(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public Message newMessage(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8);
+   Message newMessage(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7);
 
-    public Message newMessage(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   Message newMessage(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8);
 
-    public Message newMessage(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
-
-    public Message newMessage(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   Message newMessage(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9);
 }
-

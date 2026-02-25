@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.lookup;
 
 import java.util.HashMap;
@@ -8,84 +5,76 @@ import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
-import org.apache.logging.log4j.core.lookup.MainMapLookup;
-import org.apache.logging.log4j.core.lookup.StrLookup;
 import org.apache.logging.log4j.message.MapMessage;
 
-@Plugin(name="map", category="Lookup")
-public class MapLookup
-implements StrLookup {
-    private final Map<String, String> map;
+@Plugin(name = "map", category = "Lookup")
+public class MapLookup implements StrLookup {
+   private final Map<String, String> map;
 
-    public MapLookup() {
-        this.map = null;
-    }
+   public MapLookup() {
+      this.map = null;
+   }
 
-    public MapLookup(Map<String, String> map) {
-        this.map = map;
-    }
+   public MapLookup(final Map<String, String> map) {
+      this.map = map;
+   }
 
-    static Map<String, String> initMap(String[] srcArgs, Map<String, String> destMap) {
-        for (int i = 0; i < srcArgs.length; ++i) {
-            int next = i + 1;
-            String value = srcArgs[i];
-            destMap.put(Integer.toString(i), value);
-            destMap.put(value, next < srcArgs.length ? srcArgs[next] : null);
-        }
-        return destMap;
-    }
+   static Map<String, String> initMap(final String[] srcArgs, final Map<String, String> destMap) {
+      for (int i = 0; i < srcArgs.length; i++) {
+         int next = i + 1;
+         String value = srcArgs[i];
+         destMap.put(Integer.toString(i), value);
+         destMap.put(value, next < srcArgs.length ? srcArgs[next] : null);
+      }
 
-    static HashMap<String, String> newMap(int initialCapacity) {
-        return new HashMap<String, String>(initialCapacity);
-    }
+      return destMap;
+   }
 
-    @Deprecated
-    public static void setMainArguments(String ... args) {
-        MainMapLookup.setMainArguments(args);
-    }
+   static HashMap<String, String> newMap(final int initialCapacity) {
+      return new HashMap<>(initialCapacity);
+   }
 
-    static Map<String, String> toMap(List<String> args) {
-        if (args == null) {
-            return null;
-        }
-        int size = args.size();
-        return MapLookup.initMap(args.toArray(new String[size]), MapLookup.newMap(size));
-    }
+   @Deprecated
+   public static void setMainArguments(final String... args) {
+      MainMapLookup.setMainArguments(args);
+   }
 
-    static Map<String, String> toMap(String[] args) {
-        if (args == null) {
-            return null;
-        }
-        return MapLookup.initMap(args, MapLookup.newMap(args.length));
-    }
+   static Map<String, String> toMap(final List<String> args) {
+      if (args == null) {
+         return null;
+      } else {
+         int size = args.size();
+         return initMap(args.toArray(new String[size]), newMap(size));
+      }
+   }
 
-    protected Map<String, String> getMap() {
-        return this.map;
-    }
+   static Map<String, String> toMap(final String[] args) {
+      return args == null ? null : initMap(args, newMap(args.length));
+   }
 
-    @Override
-    public String lookup(LogEvent event, String key) {
-        String obj;
-        boolean isMapMessage;
-        boolean bl = isMapMessage = event != null && event.getMessage() instanceof MapMessage;
-        if (this.map == null && !isMapMessage) {
-            return null;
-        }
-        if (this.map != null && this.map.containsKey(key) && (obj = this.map.get(key)) != null) {
-            return obj;
-        }
-        if (isMapMessage) {
-            return ((MapMessage)event.getMessage()).get(key);
-        }
-        return null;
-    }
+   protected Map<String, String> getMap() {
+      return this.map;
+   }
 
-    @Override
-    public String lookup(String key) {
-        if (this.map == null) {
-            return null;
-        }
-        return this.map.get(key);
-    }
+   @Override
+   public String lookup(final LogEvent event, final String key) {
+      boolean isMapMessage = event != null && event.getMessage() instanceof MapMessage;
+      if (this.map == null && !isMapMessage) {
+         return null;
+      } else {
+         if (this.map != null && this.map.containsKey(key)) {
+            String obj = this.map.get(key);
+            if (obj != null) {
+               return obj;
+            }
+         }
+
+         return isMapMessage ? ((MapMessage)event.getMessage()).get(key) : null;
+      }
+   }
+
+   @Override
+   public String lookup(final String key) {
+      return this.map == null ? null : this.map.get(key);
+   }
 }
-

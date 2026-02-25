@@ -1,53 +1,51 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.selector;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.core.LoggerContext;
 
 public interface ContextSelector {
-    public static final long DEFAULT_STOP_TIMEOUT = 50L;
+   long DEFAULT_STOP_TIMEOUT = 50L;
 
-    default public void shutdown(String fqcn, ClassLoader loader, boolean currentContext, boolean allContexts) {
-        if (this.hasContext(fqcn, loader, currentContext)) {
-            this.getContext(fqcn, loader, currentContext).stop(50L, TimeUnit.MILLISECONDS);
-        }
-    }
+   default void shutdown(final String fqcn, final ClassLoader loader, final boolean currentContext, final boolean allContexts) {
+      if (this.hasContext(fqcn, loader, currentContext)) {
+         this.getContext(fqcn, loader, currentContext).stop(50L, TimeUnit.MILLISECONDS);
+      }
+   }
 
-    default public boolean hasContext(String fqcn, ClassLoader loader, boolean currentContext) {
-        return false;
-    }
+   default boolean hasContext(String fqcn, ClassLoader loader, boolean currentContext) {
+      return false;
+   }
 
-    public LoggerContext getContext(String var1, ClassLoader var2, boolean var3);
+   LoggerContext getContext(String fqcn, ClassLoader loader, boolean currentContext);
 
-    default public LoggerContext getContext(String fqcn, ClassLoader loader, Map.Entry<String, Object> entry, boolean currentContext) {
-        LoggerContext lc = this.getContext(fqcn, loader, currentContext);
-        if (lc != null) {
-            lc.putObject(entry.getKey(), entry.getValue());
-        }
-        return lc;
-    }
+   default LoggerContext getContext(String fqcn, ClassLoader loader, Entry<String, Object> entry, boolean currentContext) {
+      LoggerContext lc = this.getContext(fqcn, loader, currentContext);
+      if (lc != null) {
+         lc.putObject(entry.getKey(), entry.getValue());
+      }
 
-    public LoggerContext getContext(String var1, ClassLoader var2, boolean var3, URI var4);
+      return lc;
+   }
 
-    default public LoggerContext getContext(String fqcn, ClassLoader loader, Map.Entry<String, Object> entry, boolean currentContext, URI configLocation) {
-        LoggerContext lc = this.getContext(fqcn, loader, currentContext, configLocation);
-        if (lc != null) {
-            lc.putObject(entry.getKey(), entry.getValue());
-        }
-        return lc;
-    }
+   LoggerContext getContext(String fqcn, ClassLoader loader, boolean currentContext, URI configLocation);
 
-    public List<LoggerContext> getLoggerContexts();
+   default LoggerContext getContext(String fqcn, ClassLoader loader, Entry<String, Object> entry, boolean currentContext, URI configLocation) {
+      LoggerContext lc = this.getContext(fqcn, loader, currentContext, configLocation);
+      if (lc != null) {
+         lc.putObject(entry.getKey(), entry.getValue());
+      }
 
-    public void removeContext(LoggerContext var1);
+      return lc;
+   }
 
-    default public boolean isClassLoaderDependent() {
-        return true;
-    }
+   List<LoggerContext> getLoggerContexts();
+
+   void removeContext(LoggerContext context);
+
+   default boolean isClassLoaderDependent() {
+      return true;
+   }
 }
-

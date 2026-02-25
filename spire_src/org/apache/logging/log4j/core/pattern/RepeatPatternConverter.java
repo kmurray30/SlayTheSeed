@@ -1,67 +1,60 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.pattern;
 
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
-import org.apache.logging.log4j.core.pattern.ConverterKeys;
-import org.apache.logging.log4j.core.pattern.LogEventPatternConverter;
 import org.apache.logging.log4j.util.PerformanceSensitive;
 import org.apache.logging.log4j.util.Strings;
 
-@Plugin(name="repeat", category="Converter")
-@ConverterKeys(value={":|", "repeat"})
-@PerformanceSensitive(value={"allocation"})
-public final class RepeatPatternConverter
-extends LogEventPatternConverter {
-    private final String result;
+@Plugin(name = "repeat", category = "Converter")
+@ConverterKeys({":|", "repeat"})
+@PerformanceSensitive("allocation")
+public final class RepeatPatternConverter extends LogEventPatternConverter {
+   private final String result;
 
-    public static RepeatPatternConverter newInstance(Configuration config, String[] options) {
-        if (options.length != 2) {
-            LOGGER.error("Incorrect number of options on repeat. Expected 2 received " + options.length);
-            return null;
-        }
-        if (options[0] == null) {
-            LOGGER.error("No string supplied on repeat");
-            return null;
-        }
-        if (options[1] == null) {
-            LOGGER.error("No repeat count supplied on repeat");
-            return null;
-        }
-        int count = 0;
-        String result = options[0];
-        try {
+   public static RepeatPatternConverter newInstance(final Configuration config, final String[] options) {
+      if (options.length != 2) {
+         LOGGER.error("Incorrect number of options on repeat. Expected 2 received " + options.length);
+         return null;
+      } else if (options[0] == null) {
+         LOGGER.error("No string supplied on repeat");
+         return null;
+      } else if (options[1] == null) {
+         LOGGER.error("No repeat count supplied on repeat");
+         return null;
+      } else {
+         int count = 0;
+         String result = options[0];
+
+         try {
             count = Integer.parseInt(options[1].trim());
             result = Strings.repeat(options[0], count);
-        }
-        catch (Exception ex) {
-            LOGGER.error("The repeat count is not an integer: {}", (Object)options[1].trim());
-        }
-        return new RepeatPatternConverter(result);
-    }
+         } catch (Exception var5) {
+            LOGGER.error("The repeat count is not an integer: {}", options[1].trim());
+         }
 
-    private RepeatPatternConverter(String result) {
-        super("repeat", "repeat");
-        this.result = result;
-    }
+         return new RepeatPatternConverter(result);
+      }
+   }
 
-    @Override
-    public void format(Object obj, StringBuilder toAppendTo) {
-        this.format(toAppendTo);
-    }
+   private RepeatPatternConverter(final String result) {
+      super("repeat", "repeat");
+      this.result = result;
+   }
 
-    @Override
-    public void format(LogEvent event, StringBuilder toAppendTo) {
-        this.format(toAppendTo);
-    }
+   @Override
+   public void format(final Object obj, final StringBuilder toAppendTo) {
+      this.format(toAppendTo);
+   }
 
-    private void format(StringBuilder toAppendTo) {
-        if (this.result != null) {
-            toAppendTo.append(this.result);
-        }
-    }
+   @Override
+   public void format(final LogEvent event, final StringBuilder toAppendTo) {
+      this.format(toAppendTo);
+   }
+
+   private void format(final StringBuilder toAppendTo) {
+      if (this.result != null) {
+         toAppendTo.append(this.result);
+      }
+   }
 }
-

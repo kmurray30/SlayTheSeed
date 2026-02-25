@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.message;
 
 import java.lang.annotation.Documented;
@@ -10,8 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Documented
-@Target(value={ElementType.TYPE})
-@Retention(value=RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface AsynchronouslyFormattable {
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.spi;
 
 import java.util.ArrayList;
@@ -9,212 +6,210 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import org.apache.logging.log4j.ThreadContext;
-import org.apache.logging.log4j.spi.ThreadContextStack;
 import org.apache.logging.log4j.util.StringBuilderFormattable;
 
-public class MutableThreadContextStack
-implements ThreadContextStack,
-StringBuilderFormattable {
-    private static final long serialVersionUID = 50505011L;
-    private final List<String> list;
-    private boolean frozen;
+public class MutableThreadContextStack implements ThreadContextStack, StringBuilderFormattable {
+   private static final long serialVersionUID = 50505011L;
+   private final List<String> list;
+   private boolean frozen;
 
-    public MutableThreadContextStack() {
-        this(new ArrayList<String>());
-    }
+   public MutableThreadContextStack() {
+      this(new ArrayList<>());
+   }
 
-    public MutableThreadContextStack(List<String> list) {
-        this.list = new ArrayList<String>(list);
-    }
+   public MutableThreadContextStack(final List<String> list) {
+      this.list = new ArrayList<>(list);
+   }
 
-    private MutableThreadContextStack(MutableThreadContextStack stack) {
-        this.list = new ArrayList<String>(stack.list);
-    }
+   private MutableThreadContextStack(final MutableThreadContextStack stack) {
+      this.list = new ArrayList<>(stack.list);
+   }
 
-    private void checkInvariants() {
-        if (this.frozen) {
-            throw new UnsupportedOperationException("context stack has been frozen");
-        }
-    }
+   private void checkInvariants() {
+      if (this.frozen) {
+         throw new UnsupportedOperationException("context stack has been frozen");
+      }
+   }
 
-    @Override
-    public String pop() {
-        this.checkInvariants();
-        if (this.list.isEmpty()) {
-            return null;
-        }
-        int last = this.list.size() - 1;
-        String result = this.list.remove(last);
-        return result;
-    }
+   @Override
+   public String pop() {
+      this.checkInvariants();
+      if (this.list.isEmpty()) {
+         return null;
+      } else {
+         int last = this.list.size() - 1;
+         return this.list.remove(last);
+      }
+   }
 
-    @Override
-    public String peek() {
-        if (this.list.isEmpty()) {
-            return null;
-        }
-        int last = this.list.size() - 1;
-        return this.list.get(last);
-    }
+   @Override
+   public String peek() {
+      if (this.list.isEmpty()) {
+         return null;
+      } else {
+         int last = this.list.size() - 1;
+         return this.list.get(last);
+      }
+   }
 
-    @Override
-    public void push(String message) {
-        this.checkInvariants();
-        this.list.add(message);
-    }
+   @Override
+   public void push(final String message) {
+      this.checkInvariants();
+      this.list.add(message);
+   }
 
-    @Override
-    public int getDepth() {
-        return this.list.size();
-    }
+   @Override
+   public int getDepth() {
+      return this.list.size();
+   }
 
-    @Override
-    public List<String> asList() {
-        return this.list;
-    }
+   @Override
+   public List<String> asList() {
+      return this.list;
+   }
 
-    @Override
-    public void trim(int depth) {
-        this.checkInvariants();
-        if (depth < 0) {
-            throw new IllegalArgumentException("Maximum stack depth cannot be negative");
-        }
-        if (this.list == null) {
-            return;
-        }
-        ArrayList<String> copy = new ArrayList<String>(this.list.size());
-        int count = Math.min(depth, this.list.size());
-        for (int i = 0; i < count; ++i) {
+   @Override
+   public void trim(final int depth) {
+      this.checkInvariants();
+      if (depth < 0) {
+         throw new IllegalArgumentException("Maximum stack depth cannot be negative");
+      } else if (this.list != null) {
+         List<String> copy = new ArrayList<>(this.list.size());
+         int count = Math.min(depth, this.list.size());
+
+         for (int i = 0; i < count; i++) {
             copy.add(this.list.get(i));
-        }
-        this.list.clear();
-        this.list.addAll(copy);
-    }
+         }
 
-    @Override
-    public ThreadContextStack copy() {
-        return new MutableThreadContextStack(this);
-    }
+         this.list.clear();
+         this.list.addAll(copy);
+      }
+   }
 
-    @Override
-    public void clear() {
-        this.checkInvariants();
-        this.list.clear();
-    }
+   public ThreadContextStack copy() {
+      return new MutableThreadContextStack(this);
+   }
 
-    @Override
-    public int size() {
-        return this.list.size();
-    }
+   @Override
+   public void clear() {
+      this.checkInvariants();
+      this.list.clear();
+   }
 
-    @Override
-    public boolean isEmpty() {
-        return this.list.isEmpty();
-    }
+   @Override
+   public int size() {
+      return this.list.size();
+   }
 
-    @Override
-    public boolean contains(Object o) {
-        return this.list.contains(o);
-    }
+   @Override
+   public boolean isEmpty() {
+      return this.list.isEmpty();
+   }
 
-    @Override
-    public Iterator<String> iterator() {
-        return this.list.iterator();
-    }
+   @Override
+   public boolean contains(final Object o) {
+      return this.list.contains(o);
+   }
 
-    @Override
-    public Object[] toArray() {
-        return this.list.toArray();
-    }
+   @Override
+   public Iterator<String> iterator() {
+      return this.list.iterator();
+   }
 
-    @Override
-    public <T> T[] toArray(T[] ts) {
-        return this.list.toArray(ts);
-    }
+   @Override
+   public Object[] toArray() {
+      return this.list.toArray();
+   }
 
-    @Override
-    public boolean add(String s) {
-        this.checkInvariants();
-        return this.list.add(s);
-    }
+   @Override
+   public <T> T[] toArray(final T[] ts) {
+      return (T[])this.list.toArray(ts);
+   }
 
-    @Override
-    public boolean remove(Object o) {
-        this.checkInvariants();
-        return this.list.remove(o);
-    }
+   public boolean add(final String s) {
+      this.checkInvariants();
+      return this.list.add(s);
+   }
 
-    @Override
-    public boolean containsAll(Collection<?> objects) {
-        return this.list.containsAll(objects);
-    }
+   @Override
+   public boolean remove(final Object o) {
+      this.checkInvariants();
+      return this.list.remove(o);
+   }
 
-    @Override
-    public boolean addAll(Collection<? extends String> strings) {
-        this.checkInvariants();
-        return this.list.addAll(strings);
-    }
+   @Override
+   public boolean containsAll(final Collection<?> objects) {
+      return this.list.containsAll(objects);
+   }
 
-    @Override
-    public boolean removeAll(Collection<?> objects) {
-        this.checkInvariants();
-        return this.list.removeAll(objects);
-    }
+   @Override
+   public boolean addAll(final Collection<? extends String> strings) {
+      this.checkInvariants();
+      return this.list.addAll(strings);
+   }
 
-    @Override
-    public boolean retainAll(Collection<?> objects) {
-        this.checkInvariants();
-        return this.list.retainAll(objects);
-    }
+   @Override
+   public boolean removeAll(final Collection<?> objects) {
+      this.checkInvariants();
+      return this.list.removeAll(objects);
+   }
 
-    public String toString() {
-        return String.valueOf(this.list);
-    }
+   @Override
+   public boolean retainAll(final Collection<?> objects) {
+      this.checkInvariants();
+      return this.list.retainAll(objects);
+   }
 
-    @Override
-    public void formatTo(StringBuilder buffer) {
-        buffer.append('[');
-        for (int i = 0; i < this.list.size(); ++i) {
-            if (i > 0) {
-                buffer.append(',').append(' ');
-            }
-            buffer.append(this.list.get(i));
-        }
-        buffer.append(']');
-    }
+   @Override
+   public String toString() {
+      return String.valueOf(this.list);
+   }
 
-    @Override
-    public int hashCode() {
-        return 31 + Objects.hashCode(this.list);
-    }
+   @Override
+   public void formatTo(final StringBuilder buffer) {
+      buffer.append('[');
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof ThreadContextStack)) {
-            return false;
-        }
-        ThreadContextStack other = (ThreadContextStack)obj;
-        List<String> otherAsList = other.asList();
-        return Objects.equals(this.list, otherAsList);
-    }
+      for (int i = 0; i < this.list.size(); i++) {
+         if (i > 0) {
+            buffer.append(',').append(' ');
+         }
 
-    @Override
-    public ThreadContext.ContextStack getImmutableStackOrNull() {
-        return this.copy();
-    }
+         buffer.append(this.list.get(i));
+      }
 
-    public void freeze() {
-        this.frozen = true;
-    }
+      buffer.append(']');
+   }
 
-    public boolean isFrozen() {
-        return this.frozen;
-    }
+   @Override
+   public int hashCode() {
+      return 31 + Objects.hashCode(this.list);
+   }
+
+   @Override
+   public boolean equals(final Object obj) {
+      if (this == obj) {
+         return true;
+      } else if (obj == null) {
+         return false;
+      } else if (!(obj instanceof ThreadContextStack)) {
+         return false;
+      } else {
+         ThreadContextStack other = (ThreadContextStack)obj;
+         List<String> otherAsList = other.asList();
+         return Objects.equals(this.list, otherAsList);
+      }
+   }
+
+   @Override
+   public ThreadContext.ContextStack getImmutableStackOrNull() {
+      return this.copy();
+   }
+
+   public void freeze() {
+      this.frozen = true;
+   }
+
+   public boolean isFrozen() {
+      return this.frozen;
+   }
 }
-

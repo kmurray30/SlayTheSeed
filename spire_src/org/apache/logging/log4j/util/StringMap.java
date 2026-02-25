@@ -1,26 +1,21 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.util;
 
-import org.apache.logging.log4j.util.ReadOnlyStringMap;
+public interface StringMap extends ReadOnlyStringMap {
+   void clear();
 
-public interface StringMap
-extends ReadOnlyStringMap {
-    public void clear();
+   @Override
+   boolean equals(final Object obj);
 
-    public boolean equals(Object var1);
+   void freeze();
 
-    public void freeze();
+   @Override
+   int hashCode();
 
-    public int hashCode();
+   boolean isFrozen();
 
-    public boolean isFrozen();
+   void putAll(final ReadOnlyStringMap source);
 
-    public void putAll(ReadOnlyStringMap var1);
+   void putValue(final String key, final Object value);
 
-    public void putValue(String var1, Object var2);
-
-    public void remove(String var1);
+   void remove(final String key);
 }
-

@@ -1,32 +1,28 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.codedisaster.steamworks;
 
 public abstract class SteamNativeIntHandle {
-    int handle;
+   int handle;
 
-    SteamNativeIntHandle(int handle) {
-        this.handle = handle;
-    }
+   SteamNativeIntHandle(int handle) {
+      this.handle = handle;
+   }
 
-    public static <T extends SteamNativeIntHandle> int getNativeHandle(T handle) {
-        return handle.handle;
-    }
+   public static <T extends SteamNativeIntHandle> int getNativeHandle(T handle) {
+      return handle.handle;
+   }
 
-    public int hashCode() {
-        return Integer.valueOf(this.handle).hashCode();
-    }
+   @Override
+   public int hashCode() {
+      return Integer.valueOf(this.handle).hashCode();
+   }
 
-    public boolean equals(Object other) {
-        if (other instanceof SteamNativeIntHandle) {
-            return this.handle == ((SteamNativeIntHandle)other).handle;
-        }
-        return false;
-    }
+   @Override
+   public boolean equals(Object other) {
+      return other instanceof SteamNativeIntHandle ? this.handle == ((SteamNativeIntHandle)other).handle : false;
+   }
 
-    public String toString() {
-        return Integer.toHexString(this.handle);
-    }
+   @Override
+   public String toString() {
+      return Integer.toHexString(this.handle);
+   }
 }
-

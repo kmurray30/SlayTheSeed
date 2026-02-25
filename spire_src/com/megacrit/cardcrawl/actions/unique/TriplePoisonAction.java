@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.actions.unique;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
@@ -8,21 +5,27 @@ import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.PoisonPower;
 
-public class TriplePoisonAction
-extends AbstractGameAction {
-    public TriplePoisonAction(AbstractCreature target, AbstractCreature source) {
-        this.target = target;
-        this.source = source;
-        this.actionType = AbstractGameAction.ActionType.DEBUFF;
-        this.attackEffect = AbstractGameAction.AttackEffect.FIRE;
-    }
+public class TriplePoisonAction extends AbstractGameAction {
+   public TriplePoisonAction(AbstractCreature target, AbstractCreature source) {
+      this.target = target;
+      this.source = source;
+      this.actionType = AbstractGameAction.ActionType.DEBUFF;
+      this.attackEffect = AbstractGameAction.AttackEffect.FIRE;
+   }
 
-    @Override
-    public void update() {
-        if (this.target.hasPower("Poison")) {
-            this.addToTop(new ApplyPowerAction(this.target, this.source, new PoisonPower(this.target, this.source, this.target.getPower((String)"Poison").amount * 2), this.target.getPower((String)"Poison").amount * 2));
-        }
-        this.isDone = true;
-    }
+   @Override
+   public void update() {
+      if (this.target.hasPower("Poison")) {
+         this.addToTop(
+            new ApplyPowerAction(
+               this.target,
+               this.source,
+               new PoisonPower(this.target, this.source, this.target.getPower("Poison").amount * 2),
+               this.target.getPower("Poison").amount * 2
+            )
+         );
+      }
+
+      this.isDone = true;
+   }
 }
-

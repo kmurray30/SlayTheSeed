@@ -1,28 +1,19 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core;
 
 import java.io.Serializable;
-import org.apache.logging.log4j.core.ErrorHandler;
-import org.apache.logging.log4j.core.Layout;
-import org.apache.logging.log4j.core.LifeCycle;
-import org.apache.logging.log4j.core.LogEvent;
 
-public interface Appender
-extends LifeCycle {
-    public static final String ELEMENT_TYPE = "appender";
+public interface Appender extends LifeCycle {
+   String ELEMENT_TYPE = "appender";
 
-    public void append(LogEvent var1);
+   void append(LogEvent event);
 
-    public String getName();
+   String getName();
 
-    public Layout<? extends Serializable> getLayout();
+   Layout<? extends Serializable> getLayout();
 
-    public boolean ignoreExceptions();
+   boolean ignoreExceptions();
 
-    public ErrorHandler getHandler();
+   ErrorHandler getHandler();
 
-    public void setHandler(ErrorHandler var1);
+   void setHandler(ErrorHandler handler);
 }
-

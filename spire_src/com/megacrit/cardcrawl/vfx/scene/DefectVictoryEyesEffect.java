@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.scene;
 
 import com.badlogic.gdx.Gdx;
@@ -13,40 +10,73 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.MathHelper;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
-public class DefectVictoryEyesEffect
-extends AbstractGameEffect {
-    private float x;
-    private float y;
-    private static Texture img;
+public class DefectVictoryEyesEffect extends AbstractGameEffect {
+   private float x;
+   private float y;
+   private static Texture img;
 
-    public DefectVictoryEyesEffect() {
-        this.renderBehind = true;
-        if (img == null) {
-            img = ImageMaster.loadImage("images/vfx/defect/eyes2.png");
-        }
-        this.x = (float)Settings.WIDTH / 2.0f;
-        this.y = (float)Settings.HEIGHT / 2.0f - 50.0f * Settings.scale;
-        this.scale = 1.5f * Settings.scale;
-        this.color = new Color(0.5f, 0.8f, 1.0f, 0.0f);
-    }
+   public DefectVictoryEyesEffect() {
+      this.renderBehind = true;
+      if (img == null) {
+         img = ImageMaster.loadImage("images/vfx/defect/eyes2.png");
+      }
 
-    @Override
-    public void update() {
-        this.color.a = MathHelper.slowColorLerpSnap(this.color.a, 0.5f);
-        this.duration += Gdx.graphics.getDeltaTime();
-    }
+      this.x = Settings.WIDTH / 2.0F;
+      this.y = Settings.HEIGHT / 2.0F - 50.0F * Settings.scale;
+      this.scale = 1.5F * Settings.scale;
+      this.color = new Color(0.5F, 0.8F, 1.0F, 0.0F);
+   }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        sb.setColor(this.color);
-        sb.setBlendFunction(770, 1);
-        sb.draw(img, this.x - 512.0f, this.y - 180.0f, 512.0f, 180.0f, 1024.0f, 360.0f, this.scale * (MathUtils.cos(this.duration * 4.0f) / 20.0f + 1.0f), this.scale * MathUtils.random(0.99f, 1.01f), this.rotation, 0, 0, 1024, 360, false, false);
-        sb.draw(img, this.x - 512.0f, this.y - 180.0f, 512.0f, 180.0f, 1024.0f, 360.0f, this.scale * (MathUtils.cos(this.duration * 5.0f) / 30.0f + 1.0f) * MathUtils.random(0.99f, 1.01f), this.scale * MathUtils.random(0.99f, 1.01f), this.rotation, 0, 0, 1024, 360, false, false);
-        sb.setBlendFunction(770, 771);
-    }
+   @Override
+   public void update() {
+      this.color.a = MathHelper.slowColorLerpSnap(this.color.a, 0.5F);
+      this.duration = this.duration + Gdx.graphics.getDeltaTime();
+   }
 
-    @Override
-    public void dispose() {
-    }
+   @Override
+   public void render(SpriteBatch sb) {
+      sb.setColor(this.color);
+      sb.setBlendFunction(770, 1);
+      sb.draw(
+         img,
+         this.x - 512.0F,
+         this.y - 180.0F,
+         512.0F,
+         180.0F,
+         1024.0F,
+         360.0F,
+         this.scale * (MathUtils.cos(this.duration * 4.0F) / 20.0F + 1.0F),
+         this.scale * MathUtils.random(0.99F, 1.01F),
+         this.rotation,
+         0,
+         0,
+         1024,
+         360,
+         false,
+         false
+      );
+      sb.draw(
+         img,
+         this.x - 512.0F,
+         this.y - 180.0F,
+         512.0F,
+         180.0F,
+         1024.0F,
+         360.0F,
+         this.scale * (MathUtils.cos(this.duration * 5.0F) / 30.0F + 1.0F) * MathUtils.random(0.99F, 1.01F),
+         this.scale * MathUtils.random(0.99F, 1.01F),
+         this.rotation,
+         0,
+         0,
+         1024,
+         360,
+         false,
+         false
+      );
+      sb.setBlendFunction(770, 771);
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

@@ -1,19 +1,11 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.message;
 
-import org.apache.logging.log4j.message.EntryMessage;
-import org.apache.logging.log4j.message.ExitMessage;
-import org.apache.logging.log4j.message.Message;
-
 public interface FlowMessageFactory {
-    public EntryMessage newEntryMessage(Message var1);
+   EntryMessage newEntryMessage(Message message);
 
-    public ExitMessage newExitMessage(Object var1, Message var2);
+   ExitMessage newExitMessage(Object result, Message message);
 
-    public ExitMessage newExitMessage(EntryMessage var1);
+   ExitMessage newExitMessage(EntryMessage message);
 
-    public ExitMessage newExitMessage(Object var1, EntryMessage var2);
+   ExitMessage newExitMessage(Object result, EntryMessage message);
 }
-

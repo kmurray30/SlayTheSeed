@@ -1,9 +1,5 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.utils;
 
 public interface Disposable {
-    public void dispose();
+   void dispose();
 }
-

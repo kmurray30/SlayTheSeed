@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.config;
 
 import java.util.ArrayList;
@@ -10,100 +7,103 @@ import java.util.Map;
 import org.apache.logging.log4j.core.config.plugins.util.PluginType;
 
 public class Node {
-    public static final String CATEGORY = "Core";
-    private Node parent;
-    private final String name;
-    private String value;
-    private final PluginType<?> type;
-    private final Map<String, String> attributes = new HashMap<String, String>();
-    private final List<Node> children = new ArrayList<Node>();
-    private Object object;
+   public static final String CATEGORY = "Core";
+   private Node parent;
+   private final String name;
+   private String value;
+   private final PluginType<?> type;
+   private final Map<String, String> attributes = new HashMap<>();
+   private final List<Node> children = new ArrayList<>();
+   private Object object;
 
-    public Node(Node parent, String name, PluginType<?> type) {
-        this.parent = parent;
-        this.name = name;
-        this.type = type;
-    }
+   public Node(final Node parent, final String name, final PluginType<?> type) {
+      this.parent = parent;
+      this.name = name;
+      this.type = type;
+   }
 
-    public Node() {
-        this.parent = null;
-        this.name = null;
-        this.type = null;
-    }
+   public Node() {
+      this.parent = null;
+      this.name = null;
+      this.type = null;
+   }
 
-    public Node(Node node) {
-        this.parent = node.parent;
-        this.name = node.name;
-        this.type = node.type;
-        this.attributes.putAll(node.getAttributes());
-        this.value = node.getValue();
-        for (Node child : node.getChildren()) {
-            this.children.add(new Node(child));
-        }
-        this.object = node.object;
-    }
+   public Node(final Node node) {
+      this.parent = node.parent;
+      this.name = node.name;
+      this.type = node.type;
+      this.attributes.putAll(node.getAttributes());
+      this.value = node.getValue();
 
-    public void setParent(Node parent) {
-        this.parent = parent;
-    }
+      for (Node child : node.getChildren()) {
+         this.children.add(new Node(child));
+      }
 
-    public Map<String, String> getAttributes() {
-        return this.attributes;
-    }
+      this.object = node.object;
+   }
 
-    public List<Node> getChildren() {
-        return this.children;
-    }
+   public void setParent(Node parent) {
+      this.parent = parent;
+   }
 
-    public boolean hasChildren() {
-        return !this.children.isEmpty();
-    }
+   public Map<String, String> getAttributes() {
+      return this.attributes;
+   }
 
-    public String getValue() {
-        return this.value;
-    }
+   public List<Node> getChildren() {
+      return this.children;
+   }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+   public boolean hasChildren() {
+      return !this.children.isEmpty();
+   }
 
-    public Node getParent() {
-        return this.parent;
-    }
+   public String getValue() {
+      return this.value;
+   }
 
-    public String getName() {
-        return this.name;
-    }
+   public void setValue(final String value) {
+      this.value = value;
+   }
 
-    public boolean isRoot() {
-        return this.parent == null;
-    }
+   public Node getParent() {
+      return this.parent;
+   }
 
-    public void setObject(Object obj) {
-        this.object = obj;
-    }
+   public String getName() {
+      return this.name;
+   }
 
-    public <T> T getObject() {
-        return (T)this.object;
-    }
+   public boolean isRoot() {
+      return this.parent == null;
+   }
 
-    public <T> T getObject(Class<T> clazz) {
-        return clazz.cast(this.object);
-    }
+   public void setObject(final Object obj) {
+      this.object = obj;
+   }
 
-    public boolean isInstanceOf(Class<?> clazz) {
-        return clazz.isInstance(this.object);
-    }
+   public <T> T getObject() {
+      return (T)this.object;
+   }
 
-    public PluginType<?> getType() {
-        return this.type;
-    }
+   public <T> T getObject(final Class<T> clazz) {
+      return clazz.cast(this.object);
+   }
 
-    public String toString() {
-        if (this.object == null) {
-            return "null";
-        }
-        return this.type.isObjectPrintable() ? this.object.toString() : this.type.getPluginClass().getName() + " with name " + this.name;
-    }
+   public boolean isInstanceOf(final Class<?> clazz) {
+      return clazz.isInstance(this.object);
+   }
+
+   public PluginType<?> getType() {
+      return this.type;
+   }
+
+   @Override
+   public String toString() {
+      if (this.object == null) {
+         return "null";
+      } else {
+         return this.type.isObjectPrintable() ? this.object.toString() : this.type.getPluginClass().getName() + " with name " + this.name;
+      }
+   }
 }
-

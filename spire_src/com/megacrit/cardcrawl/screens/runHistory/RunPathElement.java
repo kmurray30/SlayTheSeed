@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.screens.runHistory;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -25,588 +22,676 @@ import java.util.Arrays;
 import java.util.List;
 
 public class RunPathElement {
-    private static final boolean SHOW_ROOM_TYPE = true;
-    private static final boolean SHOW_HP = true;
-    private static final boolean SHOW_GOLD = true;
-    private static final boolean SHOW_FIGHT_DETAILS = true;
-    private static final boolean SHOW_EVENT_DETAILS = true;
-    private static final boolean SHOW_EVENT_PLAYER_CHOICE = true;
-    private static final boolean SHOW_CARD_PICK_DETAILS = true;
-    private static final boolean SHOW_CARD_SKIP_INFO = true;
-    private static final boolean SHOW_RELIC_OBTAIN_DETAILS = true;
-    private static final boolean SHOW_POTION_OBTAIN_DETAILS = true;
-    private static final boolean SHOW_CAMPFIRE_CHOICE_DETAILS = true;
-    private static final boolean SHOW_PURCHASE_DETAILS = true;
-    private static final float ICON_SIZE = 48.0f * Settings.scale;
-    private static final float ICON_HOVER_SCALE = 2.0f;
-    private static final UIStrings uiStrings = CardCrawlGame.languagePack.getUIString("RunHistoryPathNodes");
-    public static final String[] TEXT = RunPathElement.uiStrings.TEXT;
-    private static final String NEW_LINE = " NL ";
-    private static final String TAB = " TAB ";
-    private static final String TEXT_ERROR = TEXT[0];
-    private static final String TEXT_MONSTER = TEXT[1];
-    private static final String TEXT_ELITE = TEXT[2];
-    private static final String TEXT_EVENT = TEXT[3];
-    private static final String TEXT_BOSS = TEXT[4];
-    private static final String TEXT_TREASURE = TEXT[5];
-    private static final String TEXT_BOSS_TREASURE = TEXT[6];
-    private static final String TEXT_CAMPFIRE = TEXT[7];
-    private static final String TEXT_SHOP = TEXT[8];
-    private static final String TEXT_UNKNOWN_MONSTER = TEXT[9];
-    private static final String TEXT_UNKN0WN_SHOP = TEXT[10];
-    private static final String TEXT_UNKNOWN_TREASURE = TEXT[11];
-    private static final String TEXT_FLOOR_FORMAT = TEXT[12];
-    private static final String TEXT_SIMPLE_FLOOR_FORMAT = TEXT[13];
-    private static final String TEXT_DAMAGE_FORMAT = TEXT[14];
-    private static final String TEXT_TURNS_FORMAT = TEXT[15];
-    private static final String TEXT_COMBAT_HP_FORMAT = TEXT[16];
-    private static final String TEXT_GOLD_FORMAT = TEXT[17];
-    private static final String TEXT_OBTAIN_HEADER = TEXT[18];
-    private static final String TEXT_SKIP_HEADER = TEXT[19];
-    private static final String TEXT_MISSING_INFO = TEXT[20];
-    private static final String TEXT_SINGING_BOWL_CHOICE = TEXT[21];
-    private static final String TEXT_OBTAIN_TYPE_CARD = TEXT[22];
-    private static final String TEXT_OBTAIN_TYPE_RELIC = TEXT[23];
-    private static final String TEXT_OBTAIN_TYPE_POTION = TEXT[24];
-    private static final String TEXT_OBTAIN_TYPE_SPECIAL = TEXT[25];
-    private static final String TEXT_REST_OPTION = TEXT[26];
-    private static final String TEXT_SMITH_OPTION = TEXT[27];
-    private static final String TEXT_TOKE_OPTION = TEXT[28];
-    private static final String TEXT_DIG_OPTION = TEXT[29];
-    private static final String TEXT_LIFT_OPTION = TEXT[30];
-    private static final String TEXT_RECALL_OPTION = TEXT[46];
-    private static final String TEXT_PURCHASED = TEXT[31];
-    private static final String TEXT_SPENT = TEXT[32];
-    private static final String TEXT_TOOK = TEXT[33];
-    private static final String TEXT_LOST = TEXT[34];
-    private static final String TEXT_GENERIC_MAX_HP_FORMAT = TEXT[35];
-    private static final String TEXT_HEALED = TEXT[36];
-    private static final String TEXT_GAINED = TEXT[37];
-    private static final String TEXT_IGNORED = TEXT[38];
-    private static final String TEXT_GENERIC_HP_FORMAT = TEXT[39];
-    private static final String TEXT_EVENT_DAMAGE = TEXT[42];
-    private static final String TEXT_UPGRADED = TEXT[43];
-    private static final String TEXT_TRANSFORMED = TEXT[44];
-    private static final String TEXT_LOST_RELIC = TEXT[45];
-    private static final String TEXT_REMOVE_OPTION = TEXT_TOKE_OPTION;
-    public Hitbox hb = new Hitbox(ICON_SIZE, ICON_SIZE);
-    public PathNodeType nodeType;
-    private int floor;
-    public int col;
-    public int row;
-    private Integer currentHP;
-    private Integer maxHP;
-    private Integer gold;
-    private BattleStats battleStats;
-    private EventStats eventStats;
-    private CardChoiceStats cardChoiceStats;
-    private List<String> relicsObtained;
-    private List<String> potionsObtained;
-    private CampfireChoice campfireChoice;
-    private List<String> shopPurchases;
-    private List<String> shopPurges;
-    private String cachedTooltip = null;
+   private static final boolean SHOW_ROOM_TYPE = true;
+   private static final boolean SHOW_HP = true;
+   private static final boolean SHOW_GOLD = true;
+   private static final boolean SHOW_FIGHT_DETAILS = true;
+   private static final boolean SHOW_EVENT_DETAILS = true;
+   private static final boolean SHOW_EVENT_PLAYER_CHOICE = true;
+   private static final boolean SHOW_CARD_PICK_DETAILS = true;
+   private static final boolean SHOW_CARD_SKIP_INFO = true;
+   private static final boolean SHOW_RELIC_OBTAIN_DETAILS = true;
+   private static final boolean SHOW_POTION_OBTAIN_DETAILS = true;
+   private static final boolean SHOW_CAMPFIRE_CHOICE_DETAILS = true;
+   private static final boolean SHOW_PURCHASE_DETAILS = true;
+   private static final float ICON_SIZE = 48.0F * Settings.scale;
+   private static final float ICON_HOVER_SCALE = 2.0F;
+   private static final UIStrings uiStrings = CardCrawlGame.languagePack.getUIString("RunHistoryPathNodes");
+   public static final String[] TEXT;
+   private static final String NEW_LINE = " NL ";
+   private static final String TAB = " TAB ";
+   private static final String TEXT_ERROR;
+   private static final String TEXT_MONSTER;
+   private static final String TEXT_ELITE;
+   private static final String TEXT_EVENT;
+   private static final String TEXT_BOSS;
+   private static final String TEXT_TREASURE;
+   private static final String TEXT_BOSS_TREASURE;
+   private static final String TEXT_CAMPFIRE;
+   private static final String TEXT_SHOP;
+   private static final String TEXT_UNKNOWN_MONSTER;
+   private static final String TEXT_UNKN0WN_SHOP;
+   private static final String TEXT_UNKNOWN_TREASURE;
+   private static final String TEXT_FLOOR_FORMAT;
+   private static final String TEXT_SIMPLE_FLOOR_FORMAT;
+   private static final String TEXT_DAMAGE_FORMAT;
+   private static final String TEXT_TURNS_FORMAT;
+   private static final String TEXT_COMBAT_HP_FORMAT;
+   private static final String TEXT_GOLD_FORMAT;
+   private static final String TEXT_OBTAIN_HEADER;
+   private static final String TEXT_SKIP_HEADER;
+   private static final String TEXT_MISSING_INFO;
+   private static final String TEXT_SINGING_BOWL_CHOICE;
+   private static final String TEXT_OBTAIN_TYPE_CARD;
+   private static final String TEXT_OBTAIN_TYPE_RELIC;
+   private static final String TEXT_OBTAIN_TYPE_POTION;
+   private static final String TEXT_OBTAIN_TYPE_SPECIAL;
+   private static final String TEXT_REST_OPTION;
+   private static final String TEXT_SMITH_OPTION;
+   private static final String TEXT_TOKE_OPTION;
+   private static final String TEXT_DIG_OPTION;
+   private static final String TEXT_LIFT_OPTION;
+   private static final String TEXT_RECALL_OPTION;
+   private static final String TEXT_PURCHASED;
+   private static final String TEXT_SPENT;
+   private static final String TEXT_TOOK;
+   private static final String TEXT_LOST;
+   private static final String TEXT_GENERIC_MAX_HP_FORMAT;
+   private static final String TEXT_HEALED;
+   private static final String TEXT_GAINED;
+   private static final String TEXT_IGNORED;
+   private static final String TEXT_GENERIC_HP_FORMAT;
+   private static final String TEXT_EVENT_DAMAGE;
+   private static final String TEXT_UPGRADED;
+   private static final String TEXT_TRANSFORMED;
+   private static final String TEXT_LOST_RELIC;
+   private static final String TEXT_REMOVE_OPTION;
+   public Hitbox hb;
+   public RunPathElement.PathNodeType nodeType;
+   private int floor;
+   public int col;
+   public int row;
+   private Integer currentHP;
+   private Integer maxHP;
+   private Integer gold;
+   private BattleStats battleStats;
+   private EventStats eventStats;
+   private CardChoiceStats cardChoiceStats;
+   private List<String> relicsObtained;
+   private List<String> potionsObtained;
+   private CampfireChoice campfireChoice;
+   private List<String> shopPurchases;
+   private List<String> shopPurges;
+   private String cachedTooltip = null;
 
-    public RunPathElement(String roomKey, int floorNum) {
-        this.nodeType = this.pathNodeTypeForRoomKey(roomKey);
-        this.floor = floorNum;
-    }
+   public RunPathElement(String roomKey, int floorNum) {
+      this.hb = new Hitbox(ICON_SIZE, ICON_SIZE);
+      this.nodeType = this.pathNodeTypeForRoomKey(roomKey);
+      this.floor = floorNum;
+   }
 
-    public void addHpData(Integer current, Integer max) {
-        this.currentHP = current;
-        this.maxHP = max;
-    }
+   public void addHpData(Integer current, Integer max) {
+      this.currentHP = current;
+      this.maxHP = max;
+   }
 
-    public void addGoldData(Integer gold) {
-        this.gold = gold;
-    }
+   public void addGoldData(Integer gold) {
+      this.gold = gold;
+   }
 
-    public void addBattleData(BattleStats battle) {
-        this.battleStats = battle;
-    }
+   public void addBattleData(BattleStats battle) {
+      this.battleStats = battle;
+   }
 
-    public void addEventData(EventStats event) {
-        this.eventStats = event;
-    }
+   public void addEventData(EventStats event) {
+      this.eventStats = event;
+   }
 
-    public void addCardChoiceData(CardChoiceStats choice) {
-        this.cardChoiceStats = choice;
-    }
+   public void addCardChoiceData(CardChoiceStats choice) {
+      this.cardChoiceStats = choice;
+   }
 
-    public void addRelicObtainStats(List<String> relicKeys) {
-        this.relicsObtained = relicKeys;
-    }
+   public void addRelicObtainStats(List<String> relicKeys) {
+      this.relicsObtained = relicKeys;
+   }
 
-    public void addRelicObtainStats(String relicKey) {
-        this.addRelicObtainStats(Arrays.asList(relicKey));
-    }
+   public void addRelicObtainStats(String relicKey) {
+      this.addRelicObtainStats(Arrays.asList(relicKey));
+   }
 
-    public void addPotionObtainStats(List<String> potionKey) {
-        this.potionsObtained = potionKey;
-    }
+   public void addPotionObtainStats(List<String> potionKey) {
+      this.potionsObtained = potionKey;
+   }
 
-    public void addCampfireChoiceData(CampfireChoice choice) {
-        this.campfireChoice = choice;
-    }
+   public void addCampfireChoiceData(CampfireChoice choice) {
+      this.campfireChoice = choice;
+   }
 
-    public void addShopPurchaseData(ArrayList<String> keys) {
-        this.shopPurchases = keys;
-    }
+   public void addShopPurchaseData(ArrayList<String> keys) {
+      this.shopPurchases = keys;
+   }
 
-    public void addPurgeData(ArrayList<String> keys) {
-        this.shopPurges = keys;
-    }
+   public void addPurgeData(ArrayList<String> keys) {
+      this.shopPurges = keys;
+   }
 
-    public void update() {
-        this.hb.update();
-        if (this.hb.hovered) {
-            float tipX = this.hb.x + 64.0f * Settings.scale;
-            float tipY = this.hb.y + ICON_SIZE / 2.0f;
-            String header = String.format(TEXT_SIMPLE_FLOOR_FORMAT, this.floor);
-            TipHelper.renderGenericTip(tipX, tipY, header, this.getTipDescriptionText());
-        }
-    }
+   public void update() {
+      this.hb.update();
+      if (this.hb.hovered) {
+         float tipX = this.hb.x + 64.0F * Settings.scale;
+         float tipY = this.hb.y + ICON_SIZE / 2.0F;
+         String header = String.format(TEXT_SIMPLE_FLOOR_FORMAT, this.floor);
+         TipHelper.renderGenericTip(tipX, tipY, header, this.getTipDescriptionText());
+      }
+   }
 
-    private String getTipHeaderWithRoomTypeText() {
-        return String.format(TEXT_FLOOR_FORMAT, Integer.toString(this.floor), this.stringForType());
-    }
+   private String getTipHeaderWithRoomTypeText() {
+      return String.format(TEXT_FLOOR_FORMAT, Integer.toString(this.floor), this.stringForType());
+   }
 
-    private String getTipDescriptionText() {
-        int i;
-        boolean showCards;
-        boolean displayGold;
-        boolean displayHP;
-        if (this.cachedTooltip != null) {
-            return this.cachedTooltip;
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.stringForType());
-        boolean bl = displayHP = this.currentHP != null && this.maxHP != null;
-        if (displayHP) {
+   private String getTipDescriptionText() {
+      if (this.cachedTooltip != null) {
+         return this.cachedTooltip;
+      } else {
+         StringBuilder sb = new StringBuilder();
+         sb.append(this.stringForType());
+         boolean displayHP = this.currentHP != null && this.maxHP != null;
+         if (displayHP) {
             if (sb.length() > 0) {
-                sb.append(NEW_LINE);
+               sb.append(" NL ");
             }
+
             sb.append(String.format(TEXT_COMBAT_HP_FORMAT, this.currentHP, this.maxHP));
-            sb.append(TAB);
-        }
-        boolean bl2 = displayGold = this.gold != null;
-        if (displayGold) {
+            sb.append(" TAB ");
+         }
+
+         boolean displayGold = this.gold != null;
+         if (displayGold) {
             sb.append(String.format(TEXT_GOLD_FORMAT, this.gold));
-        }
-        if (this.eventStats != null) {
-            String cardName;
-            String cardID;
-            int i2;
+         }
+
+         if (this.eventStats != null) {
             if (sb.length() > 0) {
-                sb.append(NEW_LINE);
+               sb.append(" NL ");
             }
+
             sb.append(this.localizedEventNameForKey(this.eventStats.event_name));
-            if (!this.eventStats.player_choice.equals("Took Portal") && this.eventStats.max_hp_gain == 0 && this.eventStats.max_hp_loss == 0 && this.eventStats.gold_loss == 0 && this.eventStats.gold_gain == 0 && this.eventStats.damage_taken == 0 && this.eventStats.damage_healed == 0 && this.eventStats.cards_removed == null && this.eventStats.cards_obtained == null && this.eventStats.cards_transformed == null && this.eventStats.cards_upgraded == null && this.eventStats.relics_obtained == null && this.eventStats.relics_lost == null && this.eventStats.potions_obtained == null && this.battleStats == null) {
-                sb.append(NEW_LINE);
-                sb.append(TAB).append(TEXT_IGNORED);
+            if (!this.eventStats.player_choice.equals("Took Portal")
+               && this.eventStats.max_hp_gain == 0
+               && this.eventStats.max_hp_loss == 0
+               && this.eventStats.gold_loss == 0
+               && this.eventStats.gold_gain == 0
+               && this.eventStats.damage_taken == 0
+               && this.eventStats.damage_healed == 0
+               && this.eventStats.cards_removed == null
+               && this.eventStats.cards_obtained == null
+               && this.eventStats.cards_transformed == null
+               && this.eventStats.cards_upgraded == null
+               && this.eventStats.relics_obtained == null
+               && this.eventStats.relics_lost == null
+               && this.eventStats.potions_obtained == null
+               && this.battleStats == null) {
+               sb.append(" NL ");
+               sb.append(" TAB ").append(TEXT_IGNORED);
             }
+
             if (this.eventStats.relics_lost != null && !this.eventStats.relics_lost.isEmpty()) {
-                sb.append(NEW_LINE);
-                for (i2 = 0; i2 < this.eventStats.relics_lost.size(); ++i2) {
-                    String relicID = this.eventStats.relics_lost.get(i2);
-                    String relicName = RelicLibrary.getRelic((String)relicID).name;
-                    sb.append(TAB).append(String.format(TEXT_LOST_RELIC, relicName));
-                    if (i2 >= this.eventStats.relics_lost.size() - 1) continue;
-                    sb.append(NEW_LINE);
-                }
+               sb.append(" NL ");
+
+               for (int i = 0; i < this.eventStats.relics_lost.size(); i++) {
+                  String relicID = this.eventStats.relics_lost.get(i);
+                  String relicName = RelicLibrary.getRelic(relicID).name;
+                  sb.append(" TAB ").append(String.format(TEXT_LOST_RELIC, relicName));
+                  if (i < this.eventStats.relics_lost.size() - 1) {
+                     sb.append(" NL ");
+                  }
+               }
             }
+
             if (this.eventStats.max_hp_loss != 0) {
-                sb.append(NEW_LINE);
-                sb.append(TAB).append(TEXT_LOST);
-                sb.append(String.format(TEXT_GENERIC_MAX_HP_FORMAT, this.eventStats.max_hp_loss));
+               sb.append(" NL ");
+               sb.append(" TAB ").append(TEXT_LOST);
+               sb.append(String.format(TEXT_GENERIC_MAX_HP_FORMAT, this.eventStats.max_hp_loss));
             }
+
             if (this.eventStats.damage_taken != 0) {
-                sb.append(NEW_LINE);
-                sb.append(TAB).append(TEXT_TOOK);
-                sb.append(String.format(TEXT_EVENT_DAMAGE, this.eventStats.damage_taken));
+               sb.append(" NL ");
+               sb.append(" TAB ").append(TEXT_TOOK);
+               sb.append(String.format(TEXT_EVENT_DAMAGE, this.eventStats.damage_taken));
             }
+
             if (this.eventStats.gold_loss != 0) {
-                sb.append(NEW_LINE);
-                sb.append(TAB).append(TEXT_SPENT);
-                sb.append(String.format(TEXT_GOLD_FORMAT, this.eventStats.gold_loss));
+               sb.append(" NL ");
+               sb.append(" TAB ").append(TEXT_SPENT);
+               sb.append(String.format(TEXT_GOLD_FORMAT, this.eventStats.gold_loss));
             }
+
             if (this.eventStats.max_hp_gain != 0) {
-                sb.append(NEW_LINE);
-                sb.append(TAB).append(TEXT_GAINED);
-                sb.append(String.format(TEXT_GENERIC_MAX_HP_FORMAT, this.eventStats.max_hp_gain));
+               sb.append(" NL ");
+               sb.append(" TAB ").append(TEXT_GAINED);
+               sb.append(String.format(TEXT_GENERIC_MAX_HP_FORMAT, this.eventStats.max_hp_gain));
             }
+
             if (this.eventStats.damage_healed != 0) {
-                sb.append(NEW_LINE);
-                sb.append(TAB).append(TEXT_HEALED);
-                sb.append(String.format(TEXT_GENERIC_HP_FORMAT, this.eventStats.damage_healed));
+               sb.append(" NL ");
+               sb.append(" TAB ").append(TEXT_HEALED);
+               sb.append(String.format(TEXT_GENERIC_HP_FORMAT, this.eventStats.damage_healed));
             }
+
             if (this.eventStats.gold_gain != 0) {
-                sb.append(NEW_LINE);
-                sb.append(TAB).append(TEXT_GAINED);
-                sb.append(String.format(TEXT_GOLD_FORMAT, this.eventStats.gold_gain));
+               sb.append(" NL ");
+               sb.append(" TAB ").append(TEXT_GAINED);
+               sb.append(String.format(TEXT_GOLD_FORMAT, this.eventStats.gold_gain));
             }
+
             if (this.eventStats.cards_removed != null && !this.eventStats.cards_removed.isEmpty()) {
-                sb.append(NEW_LINE);
-                for (i2 = 0; i2 < this.eventStats.cards_removed.size(); ++i2) {
-                    cardID = this.eventStats.cards_removed.get(i2);
-                    cardName = CardLibrary.getCardNameFromMetricID(cardID);
-                    sb.append(TAB).append(String.format(TEXT_REMOVE_OPTION, cardName));
-                    if (i2 >= this.eventStats.cards_removed.size() - 1) continue;
-                    sb.append(NEW_LINE);
-                }
+               sb.append(" NL ");
+
+               for (int ix = 0; ix < this.eventStats.cards_removed.size(); ix++) {
+                  String cardID = this.eventStats.cards_removed.get(ix);
+                  String cardName = CardLibrary.getCardNameFromMetricID(cardID);
+                  sb.append(" TAB ").append(String.format(TEXT_REMOVE_OPTION, cardName));
+                  if (ix < this.eventStats.cards_removed.size() - 1) {
+                     sb.append(" NL ");
+                  }
+               }
             }
+
             if (this.eventStats.cards_upgraded != null && !this.eventStats.cards_upgraded.isEmpty()) {
-                sb.append(NEW_LINE);
-                for (i2 = 0; i2 < this.eventStats.cards_upgraded.size(); ++i2) {
-                    cardID = this.eventStats.cards_upgraded.get(i2);
-                    cardName = CardLibrary.getCardNameFromMetricID(cardID);
-                    sb.append(TAB).append(String.format(TEXT_UPGRADED, cardName));
-                    if (i2 >= this.eventStats.cards_upgraded.size() - 1) continue;
-                    sb.append(NEW_LINE);
-                }
+               sb.append(" NL ");
+
+               for (int ixx = 0; ixx < this.eventStats.cards_upgraded.size(); ixx++) {
+                  String cardID = this.eventStats.cards_upgraded.get(ixx);
+                  String cardName = CardLibrary.getCardNameFromMetricID(cardID);
+                  sb.append(" TAB ").append(String.format(TEXT_UPGRADED, cardName));
+                  if (ixx < this.eventStats.cards_upgraded.size() - 1) {
+                     sb.append(" NL ");
+                  }
+               }
             }
+
             if (this.eventStats.cards_transformed != null && !this.eventStats.cards_transformed.isEmpty()) {
-                sb.append(NEW_LINE);
-                for (i2 = 0; i2 < this.eventStats.cards_transformed.size(); ++i2) {
-                    cardID = this.eventStats.cards_transformed.get(i2);
-                    cardName = CardLibrary.getCardNameFromMetricID(cardID);
-                    sb.append(TAB).append(String.format(TEXT_TRANSFORMED, cardName));
-                    if (i2 >= this.eventStats.cards_transformed.size() - 1) continue;
-                    sb.append(NEW_LINE);
-                }
+               sb.append(" NL ");
+
+               for (int ixxx = 0; ixxx < this.eventStats.cards_transformed.size(); ixxx++) {
+                  String cardID = this.eventStats.cards_transformed.get(ixxx);
+                  String cardName = CardLibrary.getCardNameFromMetricID(cardID);
+                  sb.append(" TAB ").append(String.format(TEXT_TRANSFORMED, cardName));
+                  if (ixxx < this.eventStats.cards_transformed.size() - 1) {
+                     sb.append(" NL ");
+                  }
+               }
             }
-            if ((this.eventStats.cards_obtained != null && !this.eventStats.cards_obtained.isEmpty() || this.eventStats.relics_obtained != null && !this.eventStats.relics_obtained.isEmpty() || this.eventStats.potions_obtained != null && !this.eventStats.potions_obtained.isEmpty()) && this.relicsObtained == null && this.battleStats == null && this.cardChoiceStats == null && this.potionsObtained == null) {
-                String name;
-                sb.append(NEW_LINE).append(TEXT_OBTAIN_HEADER);
-                if (this.eventStats.relics_obtained != null && !this.eventStats.relics_obtained.isEmpty()) {
-                    if (sb.length() > 0) {
-                        sb.append(NEW_LINE);
-                    }
-                    for (i2 = 0; i2 < this.eventStats.relics_obtained.size(); ++i2) {
-                        name = RelicLibrary.getRelic((String)this.eventStats.relics_obtained.get((int)i2)).name;
-                        if (i2 > 0) {
-                            sb.append(NEW_LINE);
-                        }
-                        sb.append(TAB).append(TEXT_OBTAIN_TYPE_RELIC).append(name);
-                    }
-                }
-                if (!(this.eventStats.cards_obtained == null || this.eventStats.cards_obtained.isEmpty() || this.eventStats.cards_obtained.isEmpty() || this.eventStats.cards_obtained.equals("SKIP"))) {
-                    if (sb.length() > 0) {
-                        sb.append(NEW_LINE);
-                    }
-                    for (i2 = 0; i2 < this.eventStats.cards_obtained.size(); ++i2) {
-                        name = CardLibrary.getCardNameFromMetricID(this.eventStats.cards_obtained.get(i2));
-                        if (i2 > 0) {
-                            sb.append(NEW_LINE);
-                        }
-                        sb.append(TAB).append(TEXT_OBTAIN_TYPE_CARD).append(name);
-                    }
-                }
-                if (this.eventStats.potions_obtained != null && !this.eventStats.potions_obtained.isEmpty()) {
-                    if (sb.length() > 0) {
-                        sb.append(NEW_LINE);
-                    }
-                    for (String key : this.eventStats.potions_obtained) {
-                        sb.append(TAB).append(TEXT_OBTAIN_TYPE_POTION).append(PotionHelper.getPotion((String)key).name);
-                    }
-                }
+
+            if ((
+                  this.eventStats.cards_obtained != null && !this.eventStats.cards_obtained.isEmpty()
+                     || this.eventStats.relics_obtained != null && !this.eventStats.relics_obtained.isEmpty()
+                     || this.eventStats.potions_obtained != null && !this.eventStats.potions_obtained.isEmpty()
+               )
+               && this.relicsObtained == null
+               && this.battleStats == null
+               && this.cardChoiceStats == null
+               && this.potionsObtained == null) {
+               sb.append(" NL ").append(TEXT_OBTAIN_HEADER);
+               if (this.eventStats.relics_obtained != null && !this.eventStats.relics_obtained.isEmpty()) {
+                  if (sb.length() > 0) {
+                     sb.append(" NL ");
+                  }
+
+                  for (int ixxxx = 0; ixxxx < this.eventStats.relics_obtained.size(); ixxxx++) {
+                     String name = RelicLibrary.getRelic(this.eventStats.relics_obtained.get(ixxxx)).name;
+                     if (ixxxx > 0) {
+                        sb.append(" NL ");
+                     }
+
+                     sb.append(" TAB ").append(TEXT_OBTAIN_TYPE_RELIC).append(name);
+                  }
+               }
+
+               if (this.eventStats.cards_obtained != null
+                  && !this.eventStats.cards_obtained.isEmpty()
+                  && !this.eventStats.cards_obtained.isEmpty()
+                  && !this.eventStats.cards_obtained.equals("SKIP")) {
+                  if (sb.length() > 0) {
+                     sb.append(" NL ");
+                  }
+
+                  for (int ixxxx = 0; ixxxx < this.eventStats.cards_obtained.size(); ixxxx++) {
+                     String name = CardLibrary.getCardNameFromMetricID(this.eventStats.cards_obtained.get(ixxxx));
+                     if (ixxxx > 0) {
+                        sb.append(" NL ");
+                     }
+
+                     sb.append(" TAB ").append(TEXT_OBTAIN_TYPE_CARD).append(name);
+                  }
+               }
+
+               if (this.eventStats.potions_obtained != null && !this.eventStats.potions_obtained.isEmpty()) {
+                  if (sb.length() > 0) {
+                     sb.append(" NL ");
+                  }
+
+                  for (String key : this.eventStats.potions_obtained) {
+                     sb.append(" TAB ").append(TEXT_OBTAIN_TYPE_POTION).append(PotionHelper.getPotion(key).name);
+                  }
+               }
             }
-        }
-        if (this.battleStats != null) {
+         }
+
+         if (this.battleStats != null) {
             if (sb.length() > 0) {
-                sb.append(NEW_LINE);
+               sb.append(" NL ");
             }
+
             sb.append(this.localizedEnemyNameForKey(this.battleStats.enemies));
-            sb.append(NEW_LINE);
-            sb.append(TAB).append(String.format(TEXT_DAMAGE_FORMAT, this.battleStats.damage));
-            sb.append(NEW_LINE);
-            sb.append(TAB).append(String.format(TEXT_TURNS_FORMAT, this.battleStats.turns));
-        }
-        if (this.campfireChoice != null) {
+            sb.append(" NL ");
+            sb.append(" TAB ").append(String.format(TEXT_DAMAGE_FORMAT, this.battleStats.damage));
+            sb.append(" NL ");
+            sb.append(" TAB ").append(String.format(TEXT_TURNS_FORMAT, this.battleStats.turns));
+         }
+
+         if (this.campfireChoice != null) {
             if (sb.length() > 0) {
-                sb.append(NEW_LINE);
+               sb.append(" NL ");
             }
-            switch (this.campfireChoice.key) {
-                case "REST": {
-                    sb.append(TEXT_REST_OPTION);
-                    break;
-                }
-                case "SMITH": {
-                    sb.append(String.format(TEXT_SMITH_OPTION, CardLibrary.getCardNameFromMetricID(this.campfireChoice.data)));
-                    break;
-                }
-                case "PURGE": {
-                    sb.append(String.format(TEXT_TOKE_OPTION, CardLibrary.getCardNameFromMetricID(this.campfireChoice.data)));
-                    break;
-                }
-                case "DIG": {
-                    sb.append(TEXT_DIG_OPTION);
-                    break;
-                }
-                case "LIFT": {
-                    sb.append(String.format(TEXT_LIFT_OPTION, this.campfireChoice.data, 3));
-                    break;
-                }
-                case "RECALL": {
-                    sb.append(TEXT_RECALL_OPTION);
-                    break;
-                }
-                default: {
-                    sb.append(TEXT_MISSING_INFO);
-                }
+
+            String var16 = this.campfireChoice.key;
+            switch (var16) {
+               case "REST":
+                  sb.append(TEXT_REST_OPTION);
+                  break;
+               case "SMITH":
+                  sb.append(String.format(TEXT_SMITH_OPTION, CardLibrary.getCardNameFromMetricID(this.campfireChoice.data)));
+                  break;
+               case "PURGE":
+                  sb.append(String.format(TEXT_TOKE_OPTION, CardLibrary.getCardNameFromMetricID(this.campfireChoice.data)));
+                  break;
+               case "DIG":
+                  sb.append(TEXT_DIG_OPTION);
+                  break;
+               case "LIFT":
+                  sb.append(String.format(TEXT_LIFT_OPTION, this.campfireChoice.data, 3));
+                  break;
+               case "RECALL":
+                  sb.append(TEXT_RECALL_OPTION);
+                  break;
+               default:
+                  sb.append(TEXT_MISSING_INFO);
             }
-        }
-        boolean showRelic = this.relicsObtained != null;
-        boolean showPotion = this.potionsObtained != null;
-        boolean bl3 = showCards = this.cardChoiceStats != null && !this.cardChoiceStats.picked.equals("SKIP");
-        if (showRelic || showPotion || showCards) {
-            sb.append(NEW_LINE).append(TEXT_OBTAIN_HEADER);
-        }
-        if (showRelic) {
+         }
+
+         boolean showRelic = this.relicsObtained != null;
+         boolean showPotion = this.potionsObtained != null;
+         boolean showCards = this.cardChoiceStats != null && !this.cardChoiceStats.picked.equals("SKIP");
+         if (showRelic || showPotion || showCards) {
+            sb.append(" NL ").append(TEXT_OBTAIN_HEADER);
+         }
+
+         if (showRelic) {
             if (sb.length() > 0) {
-                sb.append(NEW_LINE);
+               sb.append(" NL ");
             }
-            for (i = 0; i < this.relicsObtained.size(); ++i) {
-                String name = RelicLibrary.getRelic((String)this.relicsObtained.get((int)i)).name;
-                if (i > 0) {
-                    sb.append(NEW_LINE);
-                }
-                sb.append(TAB).append(TEXT_OBTAIN_TYPE_RELIC).append(name);
+
+            for (int ixxxx = 0; ixxxx < this.relicsObtained.size(); ixxxx++) {
+               String name = RelicLibrary.getRelic(this.relicsObtained.get(ixxxx)).name;
+               if (ixxxx > 0) {
+                  sb.append(" NL ");
+               }
+
+               sb.append(" TAB ").append(TEXT_OBTAIN_TYPE_RELIC).append(name);
             }
-        }
-        if (showCards && !this.cardChoiceStats.picked.isEmpty() && !this.cardChoiceStats.picked.equals("SKIP")) {
-            String text = this.cardChoiceStats.picked.equals("Singing Bowl") ? TEXT_OBTAIN_TYPE_SPECIAL + TEXT_SINGING_BOWL_CHOICE : TEXT_OBTAIN_TYPE_CARD + CardLibrary.getCardNameFromMetricID(this.cardChoiceStats.picked);
+         }
+
+         if (showCards && !this.cardChoiceStats.picked.isEmpty() && !this.cardChoiceStats.picked.equals("SKIP")) {
+            String text;
+            if (this.cardChoiceStats.picked.equals("Singing Bowl")) {
+               text = TEXT_OBTAIN_TYPE_SPECIAL + TEXT_SINGING_BOWL_CHOICE;
+            } else {
+               text = TEXT_OBTAIN_TYPE_CARD + CardLibrary.getCardNameFromMetricID(this.cardChoiceStats.picked);
+            }
+
             if (sb.length() > 0) {
-                sb.append(NEW_LINE);
+               sb.append(" NL ");
             }
-            sb.append(TAB).append(text);
-        }
-        if (showPotion) {
+
+            sb.append(" TAB ").append(text);
+         }
+
+         if (showPotion) {
             if (sb.length() > 0) {
-                sb.append(NEW_LINE);
+               sb.append(" NL ");
             }
+
             for (String key : this.potionsObtained) {
-                sb.append(TAB).append(TEXT_OBTAIN_TYPE_POTION).append(PotionHelper.getPotion((String)key).name);
+               sb.append(" TAB ").append(TEXT_OBTAIN_TYPE_POTION).append(PotionHelper.getPotion(key).name);
             }
-        }
-        if (this.cardChoiceStats != null) {
-            sb.append(NEW_LINE);
+         }
+
+         if (this.cardChoiceStats != null) {
+            sb.append(" NL ");
             sb.append(TEXT_SKIP_HEADER);
-            sb.append(NEW_LINE);
-            for (i = 0; i < this.cardChoiceStats.not_picked.size(); ++i) {
-                String cardID = this.cardChoiceStats.not_picked.get(i);
-                String cardName = CardLibrary.getCardNameFromMetricID(cardID);
-                sb.append(TAB).append(TEXT_OBTAIN_TYPE_CARD).append(cardName);
-                if (i >= this.cardChoiceStats.not_picked.size() - 1) continue;
-                sb.append(NEW_LINE);
+            sb.append(" NL ");
+
+            for (int ixxxx = 0; ixxxx < this.cardChoiceStats.not_picked.size(); ixxxx++) {
+               String cardID = this.cardChoiceStats.not_picked.get(ixxxx);
+               String cardName = CardLibrary.getCardNameFromMetricID(cardID);
+               sb.append(" TAB ").append(TEXT_OBTAIN_TYPE_CARD).append(cardName);
+               if (ixxxx < this.cardChoiceStats.not_picked.size() - 1) {
+                  sb.append(" NL ");
+               }
             }
-        }
-        if (this.shopPurchases != null) {
-            sb.append(NEW_LINE).append(TEXT_PURCHASED);
+         }
+
+         if (this.shopPurchases != null) {
+            sb.append(" NL ").append(TEXT_PURCHASED);
+
             for (String key : this.shopPurchases) {
-                String text = null;
-                if (CardLibrary.isACard(key)) {
-                    text = TEXT_OBTAIN_TYPE_CARD + CardLibrary.getCardNameFromMetricID(key);
-                } else if (RelicLibrary.isARelic(key)) {
-                    text = TEXT_OBTAIN_TYPE_RELIC + RelicLibrary.getRelic((String)key).name;
-                } else if (PotionHelper.isAPotion(key)) {
-                    text = TEXT_OBTAIN_TYPE_POTION + PotionHelper.getPotion((String)key).name;
-                }
-                if (text == null) continue;
-                sb.append(NEW_LINE).append(TAB).append(text);
+               String textx = null;
+               if (CardLibrary.isACard(key)) {
+                  textx = TEXT_OBTAIN_TYPE_CARD + CardLibrary.getCardNameFromMetricID(key);
+               } else if (RelicLibrary.isARelic(key)) {
+                  textx = TEXT_OBTAIN_TYPE_RELIC + RelicLibrary.getRelic(key).name;
+               } else if (PotionHelper.isAPotion(key)) {
+                  textx = TEXT_OBTAIN_TYPE_POTION + PotionHelper.getPotion(key).name;
+               }
+
+               if (textx != null) {
+                  sb.append(" NL ").append(" TAB ").append(textx);
+               }
             }
-        }
-        if (this.shopPurges != null) {
+         }
+
+         if (this.shopPurges != null) {
             for (String key : this.shopPurges) {
-                sb.append(NEW_LINE).append(String.format(TEXT_REMOVE_OPTION, CardLibrary.getCardNameFromMetricID(key)));
+               sb.append(" NL ").append(String.format(TEXT_REMOVE_OPTION, CardLibrary.getCardNameFromMetricID(key)));
             }
-        }
-        if (sb.length() > 0) {
+         }
+
+         if (sb.length() > 0) {
             this.cachedTooltip = sb.toString();
             return this.cachedTooltip;
-        }
-        return TEXT_MISSING_INFO;
-    }
+         } else {
+            return TEXT_MISSING_INFO;
+         }
+      }
+   }
 
-    public boolean isHovered() {
-        return this.hb.hovered;
-    }
+   public boolean isHovered() {
+      return this.hb.hovered;
+   }
 
-    public void position(float x, float y) {
-        this.hb.move(x, y - ICON_SIZE);
-    }
+   public void position(float x, float y) {
+      this.hb.move(x, y - ICON_SIZE);
+   }
 
-    public static float getApproximateWidth() {
-        return ICON_SIZE;
-    }
+   public static float getApproximateWidth() {
+      return ICON_SIZE;
+   }
 
-    public static float getApproximateHeight() {
-        return ICON_SIZE;
-    }
+   public static float getApproximateHeight() {
+      return ICON_SIZE;
+   }
 
-    public void render(SpriteBatch sb) {
-        Texture image = this.imageForType(this.nodeType);
-        if (this.isHovered()) {
-            float hoverSize = ICON_SIZE * 2.0f;
-            float offset = (hoverSize - ICON_SIZE) / 2.0f;
-            sb.draw(image, this.hb.x - offset, this.hb.y - offset, hoverSize, hoverSize);
-        } else {
-            sb.draw(image, this.hb.x, this.hb.y, ICON_SIZE, ICON_SIZE);
-        }
-        this.hb.render(sb);
-    }
+   public void render(SpriteBatch sb) {
+      Texture image = this.imageForType(this.nodeType);
+      if (this.isHovered()) {
+         float hoverSize = ICON_SIZE * 2.0F;
+         float offset = (hoverSize - ICON_SIZE) / 2.0F;
+         sb.draw(image, this.hb.x - offset, this.hb.y - offset, hoverSize, hoverSize);
+      } else {
+         sb.draw(image, this.hb.x, this.hb.y, ICON_SIZE, ICON_SIZE);
+      }
 
-    public String localizedEnemyNameForKey(String enemyId) {
-        return MonsterHelper.getEncounterName(enemyId);
-    }
+      this.hb.render(sb);
+   }
 
-    public String localizedEventNameForKey(String eventId) {
-        return EventHelper.getEventName(eventId);
-    }
+   public String localizedEnemyNameForKey(String enemyId) {
+      return MonsterHelper.getEncounterName(enemyId);
+   }
 
-    public PathNodeType pathNodeTypeForRoomKey(String roomKey) {
-        switch (roomKey) {
-            case "M": {
-                return PathNodeType.MONSTER;
-            }
-            case "E": {
-                return PathNodeType.ELITE;
-            }
-            case "?": {
-                return PathNodeType.EVENT;
-            }
-            case "B": 
-            case "BOSS": {
-                return PathNodeType.BOSS;
-            }
-            case "T": {
-                return PathNodeType.TREASURE;
-            }
-            case "T!": {
-                return PathNodeType.BOSS_TREASURE;
-            }
-            case "R": {
-                return PathNodeType.CAMPFIRE;
-            }
-            case "$": {
-                return PathNodeType.SHOP;
-            }
-            case "?(M)": {
-                return PathNodeType.UNKNOWN_MONSTER;
-            }
-            case "?($)": {
-                return PathNodeType.UNKNOWN_SHOP;
-            }
-            case "?(T)": {
-                return PathNodeType.UNKNOWN_TREASURE;
-            }
-            case "?(_)": {
-                return PathNodeType.EVENT;
-            }
-            case "<3": {
-                return PathNodeType.HEART;
-            }
-        }
-        return PathNodeType.ERROR;
-    }
+   public String localizedEventNameForKey(String eventId) {
+      return EventHelper.getEventName(eventId);
+   }
 
-    public Texture imageForType(PathNodeType nodeType) {
-        switch (nodeType) {
-            case MONSTER: {
-                return ImageMaster.RUN_HISTORY_MAP_ICON_MONSTER;
-            }
-            case ELITE: {
-                return ImageMaster.RUN_HISTORY_MAP_ICON_ELITE;
-            }
-            case EVENT: {
-                return ImageMaster.RUN_HISTORY_MAP_ICON_EVENT;
-            }
-            case BOSS: {
-                return ImageMaster.RUN_HISTORY_MAP_ICON_BOSS;
-            }
-            case TREASURE: {
-                return ImageMaster.RUN_HISTORY_MAP_ICON_CHEST;
-            }
-            case BOSS_TREASURE: {
-                return ImageMaster.RUN_HISTORY_MAP_ICON_BOSS_CHEST;
-            }
-            case CAMPFIRE: {
-                return ImageMaster.RUN_HISTORY_MAP_ICON_REST;
-            }
-            case SHOP: {
-                return ImageMaster.RUN_HISTORY_MAP_ICON_SHOP;
-            }
-            case UNKNOWN_MONSTER: {
-                return ImageMaster.RUN_HISTORY_MAP_ICON_UNKNOWN_MONSTER;
-            }
-            case UNKNOWN_SHOP: {
-                return ImageMaster.RUN_HISTORY_MAP_ICON_UNKNOWN_SHOP;
-            }
-            case UNKNOWN_TREASURE: {
-                return ImageMaster.RUN_HISTORY_MAP_ICON_UNKNOWN_CHEST;
-            }
-        }
-        return ImageMaster.RUN_HISTORY_MAP_ICON_EVENT;
-    }
+   public RunPathElement.PathNodeType pathNodeTypeForRoomKey(String roomKey) {
+      switch (roomKey) {
+         case "M":
+            return RunPathElement.PathNodeType.MONSTER;
+         case "E":
+            return RunPathElement.PathNodeType.ELITE;
+         case "?":
+            return RunPathElement.PathNodeType.EVENT;
+         case "B":
+         case "BOSS":
+            return RunPathElement.PathNodeType.BOSS;
+         case "T":
+            return RunPathElement.PathNodeType.TREASURE;
+         case "T!":
+            return RunPathElement.PathNodeType.BOSS_TREASURE;
+         case "R":
+            return RunPathElement.PathNodeType.CAMPFIRE;
+         case "$":
+            return RunPathElement.PathNodeType.SHOP;
+         case "?(M)":
+            return RunPathElement.PathNodeType.UNKNOWN_MONSTER;
+         case "?($)":
+            return RunPathElement.PathNodeType.UNKNOWN_SHOP;
+         case "?(T)":
+            return RunPathElement.PathNodeType.UNKNOWN_TREASURE;
+         case "?(_)":
+            return RunPathElement.PathNodeType.EVENT;
+         case "<3":
+            return RunPathElement.PathNodeType.HEART;
+         default:
+            return RunPathElement.PathNodeType.ERROR;
+      }
+   }
 
-    private String stringForType() {
-        return this.stringForType(this.nodeType);
-    }
+   public Texture imageForType(RunPathElement.PathNodeType nodeType) {
+      switch (nodeType) {
+         case MONSTER:
+            return ImageMaster.RUN_HISTORY_MAP_ICON_MONSTER;
+         case ELITE:
+            return ImageMaster.RUN_HISTORY_MAP_ICON_ELITE;
+         case EVENT:
+            return ImageMaster.RUN_HISTORY_MAP_ICON_EVENT;
+         case BOSS:
+            return ImageMaster.RUN_HISTORY_MAP_ICON_BOSS;
+         case TREASURE:
+            return ImageMaster.RUN_HISTORY_MAP_ICON_CHEST;
+         case BOSS_TREASURE:
+            return ImageMaster.RUN_HISTORY_MAP_ICON_BOSS_CHEST;
+         case CAMPFIRE:
+            return ImageMaster.RUN_HISTORY_MAP_ICON_REST;
+         case SHOP:
+            return ImageMaster.RUN_HISTORY_MAP_ICON_SHOP;
+         case UNKNOWN_MONSTER:
+            return ImageMaster.RUN_HISTORY_MAP_ICON_UNKNOWN_MONSTER;
+         case UNKNOWN_SHOP:
+            return ImageMaster.RUN_HISTORY_MAP_ICON_UNKNOWN_SHOP;
+         case UNKNOWN_TREASURE:
+            return ImageMaster.RUN_HISTORY_MAP_ICON_UNKNOWN_CHEST;
+         default:
+            return ImageMaster.RUN_HISTORY_MAP_ICON_EVENT;
+      }
+   }
 
-    private String stringForType(PathNodeType type) {
-        switch (type) {
-            case MONSTER: {
-                return TEXT_MONSTER;
-            }
-            case ELITE: {
-                return TEXT_ELITE;
-            }
-            case EVENT: {
-                return TEXT_EVENT;
-            }
-            case BOSS: {
-                return TEXT_BOSS;
-            }
-            case TREASURE: {
-                return TEXT_TREASURE;
-            }
-            case BOSS_TREASURE: {
-                return TEXT_BOSS_TREASURE;
-            }
-            case CAMPFIRE: {
-                return TEXT_CAMPFIRE;
-            }
-            case SHOP: {
-                return TEXT_SHOP;
-            }
-            case UNKNOWN_MONSTER: {
-                return TEXT_UNKNOWN_MONSTER;
-            }
-            case UNKNOWN_SHOP: {
-                return TEXT_UNKN0WN_SHOP;
-            }
-            case UNKNOWN_TREASURE: {
-                return TEXT_UNKNOWN_TREASURE;
-            }
-        }
-        return TEXT_ERROR;
-    }
+   private String stringForType() {
+      return this.stringForType(this.nodeType);
+   }
 
-    public static enum PathNodeType {
-        ERROR,
-        MONSTER,
-        ELITE,
-        EVENT,
-        BOSS,
-        TREASURE,
-        BOSS_TREASURE,
-        CAMPFIRE,
-        SHOP,
-        UNKNOWN_MONSTER,
-        UNKNOWN_SHOP,
-        UNKNOWN_TREASURE,
-        HEART;
+   private String stringForType(RunPathElement.PathNodeType type) {
+      switch (type) {
+         case MONSTER:
+            return TEXT_MONSTER;
+         case ELITE:
+            return TEXT_ELITE;
+         case EVENT:
+            return TEXT_EVENT;
+         case BOSS:
+            return TEXT_BOSS;
+         case TREASURE:
+            return TEXT_TREASURE;
+         case BOSS_TREASURE:
+            return TEXT_BOSS_TREASURE;
+         case CAMPFIRE:
+            return TEXT_CAMPFIRE;
+         case SHOP:
+            return TEXT_SHOP;
+         case UNKNOWN_MONSTER:
+            return TEXT_UNKNOWN_MONSTER;
+         case UNKNOWN_SHOP:
+            return TEXT_UNKN0WN_SHOP;
+         case UNKNOWN_TREASURE:
+            return TEXT_UNKNOWN_TREASURE;
+         default:
+            return TEXT_ERROR;
+      }
+   }
 
-    }
+   static {
+      TEXT = uiStrings.TEXT;
+      TEXT_ERROR = TEXT[0];
+      TEXT_MONSTER = TEXT[1];
+      TEXT_ELITE = TEXT[2];
+      TEXT_EVENT = TEXT[3];
+      TEXT_BOSS = TEXT[4];
+      TEXT_TREASURE = TEXT[5];
+      TEXT_BOSS_TREASURE = TEXT[6];
+      TEXT_CAMPFIRE = TEXT[7];
+      TEXT_SHOP = TEXT[8];
+      TEXT_UNKNOWN_MONSTER = TEXT[9];
+      TEXT_UNKN0WN_SHOP = TEXT[10];
+      TEXT_UNKNOWN_TREASURE = TEXT[11];
+      TEXT_FLOOR_FORMAT = TEXT[12];
+      TEXT_SIMPLE_FLOOR_FORMAT = TEXT[13];
+      TEXT_DAMAGE_FORMAT = TEXT[14];
+      TEXT_TURNS_FORMAT = TEXT[15];
+      TEXT_COMBAT_HP_FORMAT = TEXT[16];
+      TEXT_GOLD_FORMAT = TEXT[17];
+      TEXT_OBTAIN_HEADER = TEXT[18];
+      TEXT_SKIP_HEADER = TEXT[19];
+      TEXT_MISSING_INFO = TEXT[20];
+      TEXT_SINGING_BOWL_CHOICE = TEXT[21];
+      TEXT_OBTAIN_TYPE_CARD = TEXT[22];
+      TEXT_OBTAIN_TYPE_RELIC = TEXT[23];
+      TEXT_OBTAIN_TYPE_POTION = TEXT[24];
+      TEXT_OBTAIN_TYPE_SPECIAL = TEXT[25];
+      TEXT_REST_OPTION = TEXT[26];
+      TEXT_SMITH_OPTION = TEXT[27];
+      TEXT_TOKE_OPTION = TEXT[28];
+      TEXT_DIG_OPTION = TEXT[29];
+      TEXT_LIFT_OPTION = TEXT[30];
+      TEXT_RECALL_OPTION = TEXT[46];
+      TEXT_PURCHASED = TEXT[31];
+      TEXT_SPENT = TEXT[32];
+      TEXT_TOOK = TEXT[33];
+      TEXT_LOST = TEXT[34];
+      TEXT_GENERIC_MAX_HP_FORMAT = TEXT[35];
+      TEXT_HEALED = TEXT[36];
+      TEXT_GAINED = TEXT[37];
+      TEXT_IGNORED = TEXT[38];
+      TEXT_GENERIC_HP_FORMAT = TEXT[39];
+      TEXT_EVENT_DAMAGE = TEXT[42];
+      TEXT_UPGRADED = TEXT[43];
+      TEXT_TRANSFORMED = TEXT[44];
+      TEXT_LOST_RELIC = TEXT[45];
+      TEXT_REMOVE_OPTION = TEXT_TOKE_OPTION;
+   }
+
+   public static enum PathNodeType {
+      ERROR,
+      MONSTER,
+      ELITE,
+      EVENT,
+      BOSS,
+      TREASURE,
+      BOSS_TREASURE,
+      CAMPFIRE,
+      SHOP,
+      UNKNOWN_MONSTER,
+      UNKNOWN_SHOP,
+      UNKNOWN_TREASURE,
+      HEART;
+   }
 }
-

@@ -1,51 +1,47 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx;
 
 import java.util.Map;
 
 public interface Preferences {
-    public Preferences putBoolean(String var1, boolean var2);
+   Preferences putBoolean(String var1, boolean var2);
 
-    public Preferences putInteger(String var1, int var2);
+   Preferences putInteger(String var1, int var2);
 
-    public Preferences putLong(String var1, long var2);
+   Preferences putLong(String var1, long var2);
 
-    public Preferences putFloat(String var1, float var2);
+   Preferences putFloat(String var1, float var2);
 
-    public Preferences putString(String var1, String var2);
+   Preferences putString(String var1, String var2);
 
-    public Preferences put(Map<String, ?> var1);
+   Preferences put(Map<String, ?> var1);
 
-    public boolean getBoolean(String var1);
+   boolean getBoolean(String var1);
 
-    public int getInteger(String var1);
+   int getInteger(String var1);
 
-    public long getLong(String var1);
+   long getLong(String var1);
 
-    public float getFloat(String var1);
+   float getFloat(String var1);
 
-    public String getString(String var1);
+   String getString(String var1);
 
-    public boolean getBoolean(String var1, boolean var2);
+   boolean getBoolean(String var1, boolean var2);
 
-    public int getInteger(String var1, int var2);
+   int getInteger(String var1, int var2);
 
-    public long getLong(String var1, long var2);
+   long getLong(String var1, long var2);
 
-    public float getFloat(String var1, float var2);
+   float getFloat(String var1, float var2);
 
-    public String getString(String var1, String var2);
+   String getString(String var1, String var2);
 
-    public Map<String, ?> get();
+   Map<String, ?> get();
 
-    public boolean contains(String var1);
+   boolean contains(String var1);
 
-    public void clear();
+   void clear();
 
-    public void remove(String var1);
+   void remove(String var1);
 
-    public void flush();
+   void flush();
 }
-

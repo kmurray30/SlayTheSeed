@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.combat;
 
 import com.badlogic.gdx.Gdx;
@@ -11,52 +8,51 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
-public class HealNumberEffect
-extends AbstractGameEffect {
-    private static final float EFFECT_DUR = 1.2f;
-    private float x;
-    private float y;
-    private float vX;
-    private float vY;
-    private static final float OFFSET_Y = 150.0f * Settings.scale;
-    private static final float GRAVITY_Y = -2000.0f * Settings.scale;
-    private int number;
-    private float scale = 1.0f;
+public class HealNumberEffect extends AbstractGameEffect {
+   private static final float EFFECT_DUR = 1.2F;
+   private float x;
+   private float y;
+   private float vX;
+   private float vY;
+   private static final float OFFSET_Y = 150.0F * Settings.scale;
+   private static final float GRAVITY_Y = -2000.0F * Settings.scale;
+   private int number;
+   private float scale = 1.0F;
 
-    public HealNumberEffect(float x, float y, int number) {
-        this.duration = 1.2f;
-        this.startingDuration = 1.2f;
-        this.x = x;
-        this.y = y + OFFSET_Y;
-        this.vX = MathUtils.random(100.0f * Settings.scale, 150.0f * Settings.scale);
-        if (MathUtils.randomBoolean()) {
-            this.vX = -this.vX;
-        }
-        this.vY = MathUtils.random(400.0f * Settings.scale, 500.0f * Settings.scale);
-        this.number = number;
-        this.color = Color.CHARTREUSE.cpy();
-    }
+   public HealNumberEffect(float x, float y, int number) {
+      this.duration = 1.2F;
+      this.startingDuration = 1.2F;
+      this.x = x;
+      this.y = y + OFFSET_Y;
+      this.vX = MathUtils.random(100.0F * Settings.scale, 150.0F * Settings.scale);
+      if (MathUtils.randomBoolean()) {
+         this.vX = -this.vX;
+      }
 
-    @Override
-    public void update() {
-        this.x += Gdx.graphics.getDeltaTime() * this.vX;
-        this.y += Gdx.graphics.getDeltaTime() * this.vY;
-        this.vY += Gdx.graphics.getDeltaTime() * GRAVITY_Y;
-        super.update();
-        this.scale = Settings.scale * this.duration / 1.2f * 3.0f;
-        if (this.scale <= 0.0f) {
-            this.scale = 0.01f;
-        }
-    }
+      this.vY = MathUtils.random(400.0F * Settings.scale, 500.0F * Settings.scale);
+      this.number = number;
+      this.color = Color.CHARTREUSE.cpy();
+   }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        FontHelper.damageNumberFont.getData().setScale(this.scale);
-        FontHelper.renderFontCentered(sb, FontHelper.damageNumberFont, Integer.toString(this.number), this.x, this.y, this.color);
-    }
+   @Override
+   public void update() {
+      this.x = this.x + Gdx.graphics.getDeltaTime() * this.vX;
+      this.y = this.y + Gdx.graphics.getDeltaTime() * this.vY;
+      this.vY = this.vY + Gdx.graphics.getDeltaTime() * GRAVITY_Y;
+      super.update();
+      this.scale = Settings.scale * this.duration / 1.2F * 3.0F;
+      if (this.scale <= 0.0F) {
+         this.scale = 0.01F;
+      }
+   }
 
-    @Override
-    public void dispose() {
-    }
+   @Override
+   public void render(SpriteBatch sb) {
+      FontHelper.damageNumberFont.getData().setScale(this.scale);
+      FontHelper.renderFontCentered(sb, FontHelper.damageNumberFont, Integer.toString(this.number), this.x, this.y, this.color);
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

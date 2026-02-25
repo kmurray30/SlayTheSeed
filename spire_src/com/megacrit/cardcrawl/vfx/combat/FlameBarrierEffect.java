@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.combat;
 
 import com.badlogic.gdx.Gdx;
@@ -18,49 +15,63 @@ import com.megacrit.cardcrawl.vfx.BorderLongFlashEffect;
 import com.megacrit.cardcrawl.vfx.ExhaustEmberEffect;
 import com.megacrit.cardcrawl.vfx.scene.TorchParticleXLEffect;
 
-public class FlameBarrierEffect
-extends AbstractGameEffect {
-    private float x;
-    private float y;
-    private static final float X_RADIUS = 200.0f * Settings.scale;
-    private static final float Y_RADIUS = 250.0f * Settings.scale;
-    private boolean flashedBorder = true;
-    private Vector2 v = new Vector2(0.0f, 0.0f);
+public class FlameBarrierEffect extends AbstractGameEffect {
+   private float x;
+   private float y;
+   private static final float X_RADIUS = 200.0F * Settings.scale;
+   private static final float Y_RADIUS = 250.0F * Settings.scale;
+   private boolean flashedBorder = true;
+   private Vector2 v = new Vector2(0.0F, 0.0F);
 
-    public FlameBarrierEffect(float x, float y) {
-        this.duration = 0.5f;
-        this.x = x;
-        this.y = y;
-        this.renderBehind = false;
-    }
+   public FlameBarrierEffect(float x, float y) {
+      this.duration = 0.5F;
+      this.x = x;
+      this.y = y;
+      this.renderBehind = false;
+   }
 
-    @Override
-    public void update() {
-        if (this.flashedBorder) {
-            CardCrawlGame.sound.play("ATTACK_FLAME_BARRIER", 0.05f);
-            this.flashedBorder = false;
-            AbstractDungeon.effectsQueue.add(new BorderFlashEffect(new Color(1.0f, 1.0f, 0.1f, 1.0f)));
-            AbstractDungeon.effectsQueue.add(new BorderLongFlashEffect(new Color(1.0f, 0.4f, 0.1f, 1.0f)));
-        }
-        float tmp = Interpolation.fade.apply(-209.0f, 30.0f, this.duration / 0.5f) * ((float)Math.PI / 180);
-        this.v.x = MathUtils.cos(tmp) * X_RADIUS;
-        this.v.y = -MathUtils.sin(tmp) * Y_RADIUS;
-        AbstractDungeon.effectsQueue.add(new TorchParticleXLEffect(this.x + this.v.x + MathUtils.random(-30.0f, 30.0f) * Settings.scale, this.y + this.v.y + MathUtils.random(-10.0f, 10.0f) * Settings.scale));
-        AbstractDungeon.effectsQueue.add(new TorchParticleXLEffect(this.x + this.v.x + MathUtils.random(-30.0f, 30.0f) * Settings.scale, this.y + this.v.y + MathUtils.random(-10.0f, 10.0f) * Settings.scale));
-        AbstractDungeon.effectsQueue.add(new TorchParticleXLEffect(this.x + this.v.x + MathUtils.random(-30.0f, 30.0f) * Settings.scale, this.y + this.v.y + MathUtils.random(-10.0f, 10.0f) * Settings.scale));
-        AbstractDungeon.effectsQueue.add(new ExhaustEmberEffect(this.x + this.v.x, this.y + this.v.y));
-        this.duration -= Gdx.graphics.getDeltaTime();
-        if (this.duration < 0.0f) {
-            this.isDone = true;
-        }
-    }
+   @Override
+   public void update() {
+      if (this.flashedBorder) {
+         CardCrawlGame.sound.play("ATTACK_FLAME_BARRIER", 0.05F);
+         this.flashedBorder = false;
+         AbstractDungeon.effectsQueue.add(new BorderFlashEffect(new Color(1.0F, 1.0F, 0.1F, 1.0F)));
+         AbstractDungeon.effectsQueue.add(new BorderLongFlashEffect(new Color(1.0F, 0.4F, 0.1F, 1.0F)));
+      }
 
-    @Override
-    public void render(SpriteBatch sb) {
-    }
+      float tmp = Interpolation.fade.apply(-209.0F, 30.0F, this.duration / 0.5F) * (float) (Math.PI / 180.0);
+      this.v.x = MathUtils.cos(tmp) * X_RADIUS;
+      this.v.y = -MathUtils.sin(tmp) * Y_RADIUS;
+      AbstractDungeon.effectsQueue
+         .add(
+            new TorchParticleXLEffect(
+               this.x + this.v.x + MathUtils.random(-30.0F, 30.0F) * Settings.scale, this.y + this.v.y + MathUtils.random(-10.0F, 10.0F) * Settings.scale
+            )
+         );
+      AbstractDungeon.effectsQueue
+         .add(
+            new TorchParticleXLEffect(
+               this.x + this.v.x + MathUtils.random(-30.0F, 30.0F) * Settings.scale, this.y + this.v.y + MathUtils.random(-10.0F, 10.0F) * Settings.scale
+            )
+         );
+      AbstractDungeon.effectsQueue
+         .add(
+            new TorchParticleXLEffect(
+               this.x + this.v.x + MathUtils.random(-30.0F, 30.0F) * Settings.scale, this.y + this.v.y + MathUtils.random(-10.0F, 10.0F) * Settings.scale
+            )
+         );
+      AbstractDungeon.effectsQueue.add(new ExhaustEmberEffect(this.x + this.v.x, this.y + this.v.y));
+      this.duration = this.duration - Gdx.graphics.getDeltaTime();
+      if (this.duration < 0.0F) {
+         this.isDone = true;
+      }
+   }
 
-    @Override
-    public void dispose() {
-    }
+   @Override
+   public void render(SpriteBatch sb) {
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

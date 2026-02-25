@@ -1,68 +1,67 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl.util;
 
 import org.lwjgl.Sys;
 
 public class Timer {
-    private static long resolution = Sys.getTimerResolution();
-    private static final int QUERY_INTERVAL = 50;
-    private static int queryCount;
-    private static long currentTime;
-    private long startTime;
-    private long lastTime;
-    private boolean paused;
+   private static long resolution = Sys.getTimerResolution();
+   private static final int QUERY_INTERVAL = 50;
+   private static int queryCount;
+   private static long currentTime;
+   private long startTime;
+   private long lastTime;
+   private boolean paused;
 
-    public Timer() {
-        this.reset();
-        this.resume();
-    }
+   public Timer() {
+      this.reset();
+      this.resume();
+   }
 
-    public float getTime() {
-        if (!this.paused) {
-            this.lastTime = currentTime - this.startTime;
-        }
-        return (float)((double)this.lastTime / (double)resolution);
-    }
+   public float getTime() {
+      if (!this.paused) {
+         this.lastTime = currentTime - this.startTime;
+      }
 
-    public boolean isPaused() {
-        return this.paused;
-    }
+      return (float)((double)this.lastTime / resolution);
+   }
 
-    public void pause() {
-        this.paused = true;
-    }
+   public boolean isPaused() {
+      return this.paused;
+   }
 
-    public void reset() {
-        this.set(0.0f);
-    }
+   public void pause() {
+      this.paused = true;
+   }
 
-    public void resume() {
-        this.paused = false;
-        this.startTime = currentTime - this.lastTime;
-    }
+   public void reset() {
+      this.set(0.0F);
+   }
 
-    public void set(float newTime) {
-        long newTimeInTicks = (long)((double)newTime * (double)resolution);
-        this.startTime = currentTime - newTimeInTicks;
-        this.lastTime = newTimeInTicks;
-    }
+   public void resume() {
+      this.paused = false;
+      this.startTime = currentTime - this.lastTime;
+   }
 
-    public static void tick() {
-        currentTime = Sys.getTime();
-        if (++queryCount > 50) {
-            queryCount = 0;
-            resolution = Sys.getTimerResolution();
-        }
-    }
+   public void set(float newTime) {
+      long newTimeInTicks = (long)((double)newTime * resolution);
+      this.startTime = currentTime - newTimeInTicks;
+      this.lastTime = newTimeInTicks;
+   }
 
-    public String toString() {
-        return "Timer[Time=" + this.getTime() + ", Paused=" + this.paused + "]";
-    }
+   public static void tick() {
+      currentTime = Sys.getTime();
+      queryCount++;
+      if (queryCount > 50) {
+         queryCount = 0;
+         resolution = Sys.getTimerResolution();
+      }
+   }
 
-    static {
-        Timer.tick();
-    }
+   @Override
+   public String toString() {
+      return "Timer[Time=" + this.getTime() + ", Paused=" + this.paused + "]";
+   }
+
+   static {
+      tick();
+   }
 }
-

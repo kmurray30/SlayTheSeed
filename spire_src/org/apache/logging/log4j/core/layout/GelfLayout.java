@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.layout;
 
 import java.io.ByteArrayOutputStream;
@@ -11,6 +8,7 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.zip.DeflaterOutputStream;
@@ -23,12 +21,6 @@ import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
-import org.apache.logging.log4j.core.layout.AbstractLayout;
-import org.apache.logging.log4j.core.layout.AbstractStringLayout;
-import org.apache.logging.log4j.core.layout.ByteBufferDestination;
-import org.apache.logging.log4j.core.layout.Encoder;
-import org.apache.logging.log4j.core.layout.PatternLayout;
-import org.apache.logging.log4j.core.layout.PatternSelector;
 import org.apache.logging.log4j.core.layout.internal.ExcludeChecker;
 import org.apache.logging.log4j.core.layout.internal.IncludeChecker;
 import org.apache.logging.log4j.core.layout.internal.ListChecker;
@@ -45,548 +37,630 @@ import org.apache.logging.log4j.util.StringBuilderFormattable;
 import org.apache.logging.log4j.util.Strings;
 import org.apache.logging.log4j.util.TriConsumer;
 
-@Plugin(name="GelfLayout", category="Core", elementType="layout", printObject=true)
-public final class GelfLayout
-extends AbstractStringLayout {
-    private static final char C = ',';
-    private static final int COMPRESSION_THRESHOLD = 1024;
-    private static final char Q = '\"';
-    private static final String QC = "\",";
-    private static final String QU = "\"_";
-    private final KeyValuePair[] additionalFields;
-    private final int compressionThreshold;
-    private final CompressionType compressionType;
-    private final String host;
-    private final boolean includeStacktrace;
-    private final boolean includeThreadContext;
-    private final boolean includeMapMessage;
-    private final boolean includeNullDelimiter;
-    private final boolean includeNewLineDelimiter;
-    private final boolean omitEmptyFields;
-    private final PatternLayout layout;
-    private final FieldWriter mdcWriter;
-    private final FieldWriter mapWriter;
-    private static final ThreadLocal<StringBuilder> messageStringBuilder = new ThreadLocal();
-    private static final ThreadLocal<StringBuilder> timestampStringBuilder = new ThreadLocal();
+@Plugin(name = "GelfLayout", category = "Core", elementType = "layout", printObject = true)
+public final class GelfLayout extends AbstractStringLayout {
+   private static final char C = ',';
+   private static final int COMPRESSION_THRESHOLD = 1024;
+   private static final char Q = '"';
+   private static final String QC = "\",";
+   private static final String QU = "\"_";
+   private final KeyValuePair[] additionalFields;
+   private final int compressionThreshold;
+   private final GelfLayout.CompressionType compressionType;
+   private final String host;
+   private final boolean includeStacktrace;
+   private final boolean includeThreadContext;
+   private final boolean includeMapMessage;
+   private final boolean includeNullDelimiter;
+   private final boolean includeNewLineDelimiter;
+   private final boolean omitEmptyFields;
+   private final PatternLayout layout;
+   private final GelfLayout.FieldWriter mdcWriter;
+   private final GelfLayout.FieldWriter mapWriter;
+   private static final ThreadLocal<StringBuilder> messageStringBuilder = new ThreadLocal<>();
+   private static final ThreadLocal<StringBuilder> timestampStringBuilder = new ThreadLocal<>();
 
-    @Deprecated
-    public GelfLayout(String host, KeyValuePair[] additionalFields, CompressionType compressionType, int compressionThreshold, boolean includeStacktrace) {
-        this(null, host, additionalFields, compressionType, compressionThreshold, includeStacktrace, true, true, false, false, false, null, null, null, "", "");
-    }
+   @Deprecated
+   public GelfLayout(
+      final String host,
+      final KeyValuePair[] additionalFields,
+      final GelfLayout.CompressionType compressionType,
+      final int compressionThreshold,
+      final boolean includeStacktrace
+   ) {
+      this(null, host, additionalFields, compressionType, compressionThreshold, includeStacktrace, true, true, false, false, false, null, null, null, "", "");
+   }
 
-    private GelfLayout(Configuration config, String host, KeyValuePair[] additionalFields, CompressionType compressionType, int compressionThreshold, boolean includeStacktrace, boolean includeThreadContext, boolean includeMapMessage, boolean includeNullDelimiter, boolean includeNewLineDelimiter, boolean omitEmptyFields, ListChecker mdcChecker, ListChecker mapChecker, PatternLayout patternLayout, String mdcPrefix, String mapPrefix) {
-        super(config, StandardCharsets.UTF_8, null, null);
-        this.host = host != null ? host : NetUtils.getLocalHostname();
-        KeyValuePair[] keyValuePairArray = this.additionalFields = additionalFields != null ? additionalFields : KeyValuePair.EMPTY_ARRAY;
-        if (config == null) {
-            for (KeyValuePair additionalField : this.additionalFields) {
-                if (!GelfLayout.valueNeedsLookup(additionalField.getValue())) continue;
-                throw new IllegalArgumentException("configuration needs to be set when there are additional fields with variables");
+   private GelfLayout(
+      final Configuration config,
+      final String host,
+      final KeyValuePair[] additionalFields,
+      final GelfLayout.CompressionType compressionType,
+      final int compressionThreshold,
+      final boolean includeStacktrace,
+      final boolean includeThreadContext,
+      final boolean includeMapMessage,
+      final boolean includeNullDelimiter,
+      final boolean includeNewLineDelimiter,
+      final boolean omitEmptyFields,
+      final ListChecker mdcChecker,
+      final ListChecker mapChecker,
+      final PatternLayout patternLayout,
+      final String mdcPrefix,
+      final String mapPrefix
+   ) {
+      super(config, StandardCharsets.UTF_8, null, null);
+      this.host = host != null ? host : NetUtils.getLocalHostname();
+      this.additionalFields = additionalFields != null ? additionalFields : KeyValuePair.EMPTY_ARRAY;
+      if (config == null) {
+         for (KeyValuePair additionalField : this.additionalFields) {
+            if (valueNeedsLookup(additionalField.getValue())) {
+               throw new IllegalArgumentException("configuration needs to be set when there are additional fields with variables");
             }
-        }
-        this.compressionType = compressionType;
-        this.compressionThreshold = compressionThreshold;
-        this.includeStacktrace = includeStacktrace;
-        this.includeThreadContext = includeThreadContext;
-        this.includeMapMessage = includeMapMessage;
-        this.includeNullDelimiter = includeNullDelimiter;
-        this.includeNewLineDelimiter = includeNewLineDelimiter;
-        this.omitEmptyFields = omitEmptyFields;
-        if (includeNullDelimiter && compressionType != CompressionType.OFF) {
-            throw new IllegalArgumentException("null delimiter cannot be used with compression");
-        }
-        this.mdcWriter = new FieldWriter(mdcChecker, mdcPrefix);
-        this.mapWriter = new FieldWriter(mapChecker, mapPrefix);
-        this.layout = patternLayout;
-    }
+         }
+      }
 
-    public String toString() {
-        String mapVars;
-        StringBuilder sb = new StringBuilder();
-        sb.append("host=").append(this.host);
-        sb.append(", compressionType=").append(this.compressionType.toString());
-        sb.append(", compressionThreshold=").append(this.compressionThreshold);
-        sb.append(", includeStackTrace=").append(this.includeStacktrace);
-        sb.append(", includeThreadContext=").append(this.includeThreadContext);
-        sb.append(", includeNullDelimiter=").append(this.includeNullDelimiter);
-        sb.append(", includeNewLineDelimiter=").append(this.includeNewLineDelimiter);
-        String threadVars = this.mdcWriter.getChecker().toString();
-        if (threadVars.length() > 0) {
-            sb.append(", ").append(threadVars);
-        }
-        if ((mapVars = this.mapWriter.getChecker().toString()).length() > 0) {
-            sb.append(", ").append(mapVars);
-        }
-        if (this.layout != null) {
-            sb.append(", PatternLayout{").append(this.layout.toString()).append("}");
-        }
-        return sb.toString();
-    }
+      this.compressionType = compressionType;
+      this.compressionThreshold = compressionThreshold;
+      this.includeStacktrace = includeStacktrace;
+      this.includeThreadContext = includeThreadContext;
+      this.includeMapMessage = includeMapMessage;
+      this.includeNullDelimiter = includeNullDelimiter;
+      this.includeNewLineDelimiter = includeNewLineDelimiter;
+      this.omitEmptyFields = omitEmptyFields;
+      if (includeNullDelimiter && compressionType != GelfLayout.CompressionType.OFF) {
+         throw new IllegalArgumentException("null delimiter cannot be used with compression");
+      } else {
+         this.mdcWriter = new GelfLayout.FieldWriter(mdcChecker, mdcPrefix);
+         this.mapWriter = new GelfLayout.FieldWriter(mapChecker, mapPrefix);
+         this.layout = patternLayout;
+      }
+   }
 
-    @Deprecated
-    public static GelfLayout createLayout(@PluginAttribute(value="host") String host, @PluginElement(value="AdditionalField") KeyValuePair[] additionalFields, @PluginAttribute(value="compressionType", defaultString="GZIP") CompressionType compressionType, @PluginAttribute(value="compressionThreshold", defaultInt=1024) int compressionThreshold, @PluginAttribute(value="includeStacktrace", defaultBoolean=true) boolean includeStacktrace) {
-        return new GelfLayout(null, host, additionalFields, compressionType, compressionThreshold, includeStacktrace, true, true, false, false, false, null, null, null, "", "");
-    }
+   @Override
+   public String toString() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("host=").append(this.host);
+      sb.append(", compressionType=").append(this.compressionType.toString());
+      sb.append(", compressionThreshold=").append(this.compressionThreshold);
+      sb.append(", includeStackTrace=").append(this.includeStacktrace);
+      sb.append(", includeThreadContext=").append(this.includeThreadContext);
+      sb.append(", includeNullDelimiter=").append(this.includeNullDelimiter);
+      sb.append(", includeNewLineDelimiter=").append(this.includeNewLineDelimiter);
+      String threadVars = this.mdcWriter.getChecker().toString();
+      if (threadVars.length() > 0) {
+         sb.append(", ").append(threadVars);
+      }
 
-    @PluginBuilderFactory
-    public static <B extends Builder<B>> B newBuilder() {
-        return (B)((Builder)new Builder().asBuilder());
-    }
+      String mapVars = this.mapWriter.getChecker().toString();
+      if (mapVars.length() > 0) {
+         sb.append(", ").append(mapVars);
+      }
 
-    @Override
-    public Map<String, String> getContentFormat() {
-        return Collections.emptyMap();
-    }
+      if (this.layout != null) {
+         sb.append(", PatternLayout{").append(this.layout.toString()).append("}");
+      }
 
-    @Override
-    public String getContentType() {
-        return "application/json; charset=" + this.getCharset();
-    }
+      return sb.toString();
+   }
 
-    @Override
-    public byte[] toByteArray(LogEvent event) {
-        StringBuilder text = this.toText(event, GelfLayout.getStringBuilder(), false);
-        byte[] bytes = this.getBytes(text.toString());
-        return this.compressionType != CompressionType.OFF && bytes.length > this.compressionThreshold ? this.compress(bytes) : bytes;
-    }
+   @Deprecated
+   public static GelfLayout createLayout(
+      @PluginAttribute("host") final String host,
+      @PluginElement("AdditionalField") final KeyValuePair[] additionalFields,
+      @PluginAttribute(value = "compressionType", defaultString = "GZIP") final GelfLayout.CompressionType compressionType,
+      @PluginAttribute(value = "compressionThreshold", defaultInt = 1024) final int compressionThreshold,
+      @PluginAttribute(value = "includeStacktrace", defaultBoolean = true) final boolean includeStacktrace
+   ) {
+      return new GelfLayout(
+         null, host, additionalFields, compressionType, compressionThreshold, includeStacktrace, true, true, false, false, false, null, null, null, "", ""
+      );
+   }
 
-    @Override
-    public void encode(LogEvent event, ByteBufferDestination destination) {
-        if (this.compressionType != CompressionType.OFF) {
-            super.encode(event, destination);
-            return;
-        }
-        StringBuilder text = this.toText(event, GelfLayout.getStringBuilder(), true);
-        Encoder<StringBuilder> helper = this.getStringBuilderEncoder();
-        helper.encode(text, destination);
-    }
+   @PluginBuilderFactory
+   public static <B extends GelfLayout.Builder<B>> B newBuilder() {
+      return new GelfLayout.Builder<B>().asBuilder();
+   }
 
-    @Override
-    public boolean requiresLocation() {
-        return Objects.nonNull(this.layout) && this.layout.requiresLocation();
-    }
+   @Override
+   public Map<String, String> getContentFormat() {
+      return Collections.emptyMap();
+   }
 
-    /*
-     * Enabled aggressive block sorting
-     * Enabled unnecessary exception pruning
-     * Enabled aggressive exception aggregation
-     */
-    private byte[] compress(byte[] bytes) {
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream(this.compressionThreshold / 8);
-            try (DeflaterOutputStream stream = this.compressionType.createDeflaterOutputStream(baos);){
-                if (stream == null) {
-                    byte[] byArray = bytes;
-                    return byArray;
-                }
-                stream.write(bytes);
-                stream.finish();
-                return baos.toByteArray();
+   @Override
+   public String getContentType() {
+      return "application/json; charset=" + this.getCharset();
+   }
+
+   @Override
+   public byte[] toByteArray(final LogEvent event) {
+      StringBuilder text = this.toText(event, getStringBuilder(), false);
+      byte[] bytes = this.getBytes(text.toString());
+      return this.compressionType != GelfLayout.CompressionType.OFF && bytes.length > this.compressionThreshold ? this.compress(bytes) : bytes;
+   }
+
+   @Override
+   public void encode(final LogEvent event, final ByteBufferDestination destination) {
+      if (this.compressionType != GelfLayout.CompressionType.OFF) {
+         super.encode(event, destination);
+      } else {
+         StringBuilder text = this.toText(event, getStringBuilder(), true);
+         Encoder<StringBuilder> helper = this.getStringBuilderEncoder();
+         helper.encode(text, destination);
+      }
+   }
+
+   @Override
+   public boolean requiresLocation() {
+      return Objects.nonNull(this.layout) && this.layout.requiresLocation();
+   }
+
+   private byte[] compress(final byte[] bytes) {
+      try {
+         ByteArrayOutputStream baos = new ByteArrayOutputStream(this.compressionThreshold / 8);
+
+         byte[] var5;
+         try (DeflaterOutputStream stream = this.compressionType.createDeflaterOutputStream(baos)) {
+            if (stream != null) {
+               stream.write(bytes);
+               stream.finish();
+               return baos.toByteArray();
             }
-        }
-        catch (IOException e) {
-            StatusLogger.getLogger().error(e);
-            return bytes;
-        }
-    }
 
-    @Override
-    public String toSerializable(LogEvent event) {
-        StringBuilder text = this.toText(event, GelfLayout.getStringBuilder(), false);
-        return text.toString();
-    }
+            var5 = bytes;
+         }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    private StringBuilder toText(LogEvent event, StringBuilder builder, boolean gcFree) {
-        builder.append('{');
-        builder.append("\"version\":\"1.1\",");
-        builder.append("\"host\":\"");
-        JsonUtils.quoteAsString(GelfLayout.toNullSafeString(this.host), builder);
-        builder.append(QC);
-        builder.append("\"timestamp\":").append(GelfLayout.formatTimestamp(event.getTimeMillis())).append(',');
-        builder.append("\"level\":").append(this.formatLevel(event.getLevel())).append(',');
-        if (event.getThreadName() != null) {
-            builder.append("\"_thread\":\"");
-            JsonUtils.quoteAsString(event.getThreadName(), builder);
-            builder.append(QC);
-        }
-        if (event.getLoggerName() != null) {
-            builder.append("\"_logger\":\"");
-            JsonUtils.quoteAsString(event.getLoggerName(), builder);
-            builder.append(QC);
-        }
-        if (this.additionalFields.length > 0) {
-            StrSubstitutor strSubstitutor = this.getConfiguration().getStrSubstitutor();
-            for (KeyValuePair additionalField : this.additionalFields) {
-                String value2;
-                String string = value2 = GelfLayout.valueNeedsLookup(additionalField.getValue()) ? strSubstitutor.replace(event, additionalField.getValue()) : additionalField.getValue();
-                if (!Strings.isNotEmpty(value2) && this.omitEmptyFields) continue;
-                builder.append(QU);
-                JsonUtils.quoteAsString(additionalField.getKey(), builder);
-                builder.append("\":\"");
-                JsonUtils.quoteAsString(GelfLayout.toNullSafeString(value2), builder);
-                builder.append(QC);
+         return var5;
+      } catch (IOException var18) {
+         StatusLogger.getLogger().error(var18);
+         return bytes;
+      }
+   }
+
+   public String toSerializable(final LogEvent event) {
+      StringBuilder text = this.toText(event, getStringBuilder(), false);
+      return text.toString();
+   }
+
+   private StringBuilder toText(final LogEvent event, final StringBuilder builder, final boolean gcFree) {
+      builder.append('{');
+      builder.append("\"version\":\"1.1\",");
+      builder.append("\"host\":\"");
+      JsonUtils.quoteAsString(toNullSafeString(this.host), builder);
+      builder.append("\",");
+      builder.append("\"timestamp\":").append(formatTimestamp(event.getTimeMillis())).append(',');
+      builder.append("\"level\":").append(this.formatLevel(event.getLevel())).append(',');
+      if (event.getThreadName() != null) {
+         builder.append("\"_thread\":\"");
+         JsonUtils.quoteAsString(event.getThreadName(), builder);
+         builder.append("\",");
+      }
+
+      if (event.getLoggerName() != null) {
+         builder.append("\"_logger\":\"");
+         JsonUtils.quoteAsString(event.getLoggerName(), builder);
+         builder.append("\",");
+      }
+
+      if (this.additionalFields.length > 0) {
+         StrSubstitutor strSubstitutor = this.getConfiguration().getStrSubstitutor();
+
+         for (KeyValuePair additionalField : this.additionalFields) {
+            String value = valueNeedsLookup(additionalField.getValue())
+               ? strSubstitutor.replace(event, additionalField.getValue())
+               : additionalField.getValue();
+            if (Strings.isNotEmpty(value) || !this.omitEmptyFields) {
+               builder.append("\"_");
+               JsonUtils.quoteAsString(additionalField.getKey(), builder);
+               builder.append("\":\"");
+               JsonUtils.quoteAsString(toNullSafeString(value), builder);
+               builder.append("\",");
             }
-        }
-        if (this.includeThreadContext) {
-            event.getContextData().forEach(this.mdcWriter, builder);
-        }
-        if (this.includeMapMessage && event.getMessage() instanceof MapMessage) {
-            ((MapMessage)event.getMessage()).forEach((key, value) -> this.mapWriter.accept((String)key, value, builder));
-        }
-        if (event.getThrown() != null || this.layout != null) {
-            builder.append("\"full_message\":\"");
-            if (this.layout != null) {
-                StringBuilder messageBuffer = GelfLayout.getMessageStringBuilder();
-                this.layout.serialize(event, messageBuffer);
-                JsonUtils.quoteAsString(messageBuffer, builder);
-            } else if (this.includeStacktrace) {
-                JsonUtils.quoteAsString(GelfLayout.formatThrowable(event.getThrown()), builder);
-            } else {
-                JsonUtils.quoteAsString(event.getThrown().toString(), builder);
+         }
+      }
+
+      if (this.includeThreadContext) {
+         event.getContextData().forEach(this.mdcWriter, builder);
+      }
+
+      if (this.includeMapMessage && event.getMessage() instanceof MapMessage) {
+         ((MapMessage)event.getMessage()).forEach((key, valuex) -> this.mapWriter.accept(key, valuex, builder));
+      }
+
+      if (event.getThrown() != null || this.layout != null) {
+         builder.append("\"full_message\":\"");
+         if (this.layout != null) {
+            StringBuilder messageBuffer = getMessageStringBuilder();
+            this.layout.serialize(event, messageBuffer);
+            JsonUtils.quoteAsString(messageBuffer, builder);
+         } else if (this.includeStacktrace) {
+            JsonUtils.quoteAsString(formatThrowable(event.getThrown()), builder);
+         } else {
+            JsonUtils.quoteAsString(event.getThrown().toString(), builder);
+         }
+
+         builder.append("\",");
+      }
+
+      builder.append("\"short_message\":\"");
+      Message message = event.getMessage();
+      if (message instanceof CharSequence) {
+         JsonUtils.quoteAsString((CharSequence)message, builder);
+      } else if (gcFree && message instanceof StringBuilderFormattable) {
+         StringBuilder messageBuffer = getMessageStringBuilder();
+
+         try {
+            ((StringBuilderFormattable)message).formatTo(messageBuffer);
+            JsonUtils.quoteAsString(messageBuffer, builder);
+         } finally {
+            trimToMaxSize(messageBuffer);
+         }
+      } else {
+         JsonUtils.quoteAsString(toNullSafeString(message.getFormattedMessage()), builder);
+      }
+
+      builder.append('"');
+      builder.append('}');
+      if (this.includeNullDelimiter) {
+         builder.append('\u0000');
+      }
+
+      if (this.includeNewLineDelimiter) {
+         builder.append('\n');
+      }
+
+      return builder;
+   }
+
+   private static boolean valueNeedsLookup(final String value) {
+      return value != null && value.contains("${");
+   }
+
+   private static StringBuilder getMessageStringBuilder() {
+      StringBuilder result = messageStringBuilder.get();
+      if (result == null) {
+         result = new StringBuilder(1024);
+         messageStringBuilder.set(result);
+      }
+
+      result.setLength(0);
+      return result;
+   }
+
+   private static CharSequence toNullSafeString(final CharSequence s) {
+      return (CharSequence)(s == null ? "" : s);
+   }
+
+   static CharSequence formatTimestamp(final long timeMillis) {
+      if (timeMillis < 1000L) {
+         return "0";
+      } else {
+         StringBuilder builder = getTimestampStringBuilder();
+         builder.append(timeMillis);
+         builder.insert(builder.length() - 3, '.');
+         return builder;
+      }
+   }
+
+   private static StringBuilder getTimestampStringBuilder() {
+      StringBuilder result = timestampStringBuilder.get();
+      if (result == null) {
+         result = new StringBuilder(20);
+         timestampStringBuilder.set(result);
+      }
+
+      result.setLength(0);
+      return result;
+   }
+
+   private int formatLevel(final Level level) {
+      return Severity.getSeverity(level).getCode();
+   }
+
+   static CharSequence formatThrowable(final Throwable throwable) {
+      StringWriter sw = new StringWriter(2048);
+      PrintWriter pw = new PrintWriter(sw);
+      throwable.printStackTrace(pw);
+      pw.flush();
+      return sw.getBuffer();
+   }
+
+   public static class Builder<B extends GelfLayout.Builder<B>>
+      extends AbstractStringLayout.Builder<B>
+      implements org.apache.logging.log4j.core.util.Builder<GelfLayout> {
+      @PluginBuilderAttribute
+      private String host;
+      @PluginElement("AdditionalField")
+      private KeyValuePair[] additionalFields;
+      @PluginBuilderAttribute
+      private GelfLayout.CompressionType compressionType = GelfLayout.CompressionType.GZIP;
+      @PluginBuilderAttribute
+      private int compressionThreshold = 1024;
+      @PluginBuilderAttribute
+      private boolean includeStacktrace = true;
+      @PluginBuilderAttribute
+      private boolean includeThreadContext = true;
+      @PluginBuilderAttribute
+      private boolean includeNullDelimiter = false;
+      @PluginBuilderAttribute
+      private boolean includeNewLineDelimiter = false;
+      @PluginBuilderAttribute
+      private String threadContextIncludes = null;
+      @PluginBuilderAttribute
+      private String threadContextExcludes = null;
+      @PluginBuilderAttribute
+      private String mapMessageIncludes = null;
+      @PluginBuilderAttribute
+      private String mapMessageExcludes = null;
+      @PluginBuilderAttribute
+      private boolean includeMapMessage = true;
+      @PluginBuilderAttribute
+      private boolean omitEmptyFields = false;
+      @PluginBuilderAttribute
+      private String messagePattern = null;
+      @PluginBuilderAttribute
+      private String threadContextPrefix = "";
+      @PluginBuilderAttribute
+      private String mapPrefix = "";
+      @PluginElement("PatternSelector")
+      private PatternSelector patternSelector = null;
+
+      public Builder() {
+         this.setCharset(StandardCharsets.UTF_8);
+      }
+
+      public GelfLayout build() {
+         ListChecker mdcChecker = this.createChecker(this.threadContextExcludes, this.threadContextIncludes);
+         ListChecker mapChecker = this.createChecker(this.mapMessageExcludes, this.mapMessageIncludes);
+         PatternLayout patternLayout = null;
+         if (this.messagePattern != null && this.patternSelector != null) {
+            AbstractLayout.LOGGER.error("A message pattern and PatternSelector cannot both be specified on GelfLayout, ignoring message pattern");
+            this.messagePattern = null;
+         }
+
+         if (this.messagePattern != null) {
+            patternLayout = PatternLayout.newBuilder()
+               .withPattern(this.messagePattern)
+               .withAlwaysWriteExceptions(this.includeStacktrace)
+               .withConfiguration(this.getConfiguration())
+               .build();
+         }
+
+         if (this.patternSelector != null) {
+            patternLayout = PatternLayout.newBuilder()
+               .withPatternSelector(this.patternSelector)
+               .withAlwaysWriteExceptions(this.includeStacktrace)
+               .withConfiguration(this.getConfiguration())
+               .build();
+         }
+
+         return new GelfLayout(
+            this.getConfiguration(),
+            this.host,
+            this.additionalFields,
+            this.compressionType,
+            this.compressionThreshold,
+            this.includeStacktrace,
+            this.includeThreadContext,
+            this.includeMapMessage,
+            this.includeNullDelimiter,
+            this.includeNewLineDelimiter,
+            this.omitEmptyFields,
+            mdcChecker,
+            mapChecker,
+            patternLayout,
+            this.threadContextPrefix,
+            this.mapPrefix
+         );
+      }
+
+      private ListChecker createChecker(String excludes, String includes) {
+         ListChecker checker = null;
+         if (excludes != null) {
+            String[] array = excludes.split(Patterns.COMMA_SEPARATOR);
+            if (array.length > 0) {
+               List<String> excludeList = new ArrayList<>(array.length);
+
+               for (String str : array) {
+                  excludeList.add(str.trim());
+               }
+
+               checker = new ExcludeChecker(excludeList);
             }
-            builder.append(QC);
-        }
-        builder.append("\"short_message\":\"");
-        Message message = event.getMessage();
-        if (message instanceof CharSequence) {
-            JsonUtils.quoteAsString((CharSequence)((Object)message), builder);
-        } else if (gcFree && message instanceof StringBuilderFormattable) {
-            StringBuilder messageBuffer = GelfLayout.getMessageStringBuilder();
-            try {
-                ((StringBuilderFormattable)((Object)message)).formatTo(messageBuffer);
-                JsonUtils.quoteAsString(messageBuffer, builder);
+         }
+
+         if (includes != null) {
+            String[] array = includes.split(Patterns.COMMA_SEPARATOR);
+            if (array.length > 0) {
+               List<String> includeList = new ArrayList<>(array.length);
+
+               for (String str : array) {
+                  includeList.add(str.trim());
+               }
+
+               checker = new IncludeChecker(includeList);
             }
-            finally {
-                GelfLayout.trimToMaxSize(messageBuffer);
-            }
-        } else {
-            JsonUtils.quoteAsString(GelfLayout.toNullSafeString(message.getFormattedMessage()), builder);
-        }
-        builder.append('\"');
-        builder.append('}');
-        if (this.includeNullDelimiter) {
-            builder.append('\u0000');
-        }
-        if (this.includeNewLineDelimiter) {
-            builder.append('\n');
-        }
-        return builder;
-    }
+         }
 
-    private static boolean valueNeedsLookup(String value) {
-        return value != null && value.contains("${");
-    }
+         if (checker == null) {
+            checker = ListChecker.NOOP_CHECKER;
+         }
 
-    private static StringBuilder getMessageStringBuilder() {
-        StringBuilder result = messageStringBuilder.get();
-        if (result == null) {
-            result = new StringBuilder(1024);
-            messageStringBuilder.set(result);
-        }
-        result.setLength(0);
-        return result;
-    }
+         return checker;
+      }
 
-    private static CharSequence toNullSafeString(CharSequence s) {
-        return s == null ? "" : s;
-    }
+      public String getHost() {
+         return this.host;
+      }
 
-    static CharSequence formatTimestamp(long timeMillis) {
-        if (timeMillis < 1000L) {
-            return "0";
-        }
-        StringBuilder builder = GelfLayout.getTimestampStringBuilder();
-        builder.append(timeMillis);
-        builder.insert(builder.length() - 3, '.');
-        return builder;
-    }
+      public GelfLayout.CompressionType getCompressionType() {
+         return this.compressionType;
+      }
 
-    private static StringBuilder getTimestampStringBuilder() {
-        StringBuilder result = timestampStringBuilder.get();
-        if (result == null) {
-            result = new StringBuilder(20);
-            timestampStringBuilder.set(result);
-        }
-        result.setLength(0);
-        return result;
-    }
+      public int getCompressionThreshold() {
+         return this.compressionThreshold;
+      }
 
-    private int formatLevel(Level level) {
-        return Severity.getSeverity(level).getCode();
-    }
+      public boolean isIncludeStacktrace() {
+         return this.includeStacktrace;
+      }
 
-    static CharSequence formatThrowable(Throwable throwable) {
-        StringWriter sw = new StringWriter(2048);
-        PrintWriter pw = new PrintWriter(sw);
-        throwable.printStackTrace(pw);
-        pw.flush();
-        return sw.getBuffer();
-    }
+      public boolean isIncludeThreadContext() {
+         return this.includeThreadContext;
+      }
 
-    private class FieldWriter
-    implements TriConsumer<String, Object, StringBuilder> {
-        private final ListChecker checker;
-        private final String prefix;
+      public boolean isIncludeNullDelimiter() {
+         return this.includeNullDelimiter;
+      }
 
-        FieldWriter(ListChecker checker, String prefix) {
-            this.checker = checker;
-            this.prefix = prefix;
-        }
+      public boolean isIncludeNewLineDelimiter() {
+         return this.includeNewLineDelimiter;
+      }
 
-        @Override
-        public void accept(String key, Object value, StringBuilder stringBuilder) {
-            String stringValue = String.valueOf(value);
-            if (this.checker.check(key) && (Strings.isNotEmpty(stringValue) || !GelfLayout.this.omitEmptyFields)) {
-                stringBuilder.append(GelfLayout.QU);
-                JsonUtils.quoteAsString(Strings.concat(this.prefix, key), stringBuilder);
-                stringBuilder.append("\":\"");
-                JsonUtils.quoteAsString(GelfLayout.toNullSafeString(stringValue), stringBuilder);
-                stringBuilder.append(GelfLayout.QC);
-            }
-        }
+      public KeyValuePair[] getAdditionalFields() {
+         return this.additionalFields;
+      }
 
-        public ListChecker getChecker() {
-            return this.checker;
-        }
-    }
+      public B setHost(final String host) {
+         this.host = host;
+         return this.asBuilder();
+      }
 
-    public static class Builder<B extends Builder<B>>
-    extends AbstractStringLayout.Builder<B>
-    implements org.apache.logging.log4j.core.util.Builder<GelfLayout> {
-        @PluginBuilderAttribute
-        private String host;
-        @PluginElement(value="AdditionalField")
-        private KeyValuePair[] additionalFields;
-        @PluginBuilderAttribute
-        private CompressionType compressionType = CompressionType.GZIP;
-        @PluginBuilderAttribute
-        private int compressionThreshold = 1024;
-        @PluginBuilderAttribute
-        private boolean includeStacktrace = true;
-        @PluginBuilderAttribute
-        private boolean includeThreadContext = true;
-        @PluginBuilderAttribute
-        private boolean includeNullDelimiter = false;
-        @PluginBuilderAttribute
-        private boolean includeNewLineDelimiter = false;
-        @PluginBuilderAttribute
-        private String threadContextIncludes = null;
-        @PluginBuilderAttribute
-        private String threadContextExcludes = null;
-        @PluginBuilderAttribute
-        private String mapMessageIncludes = null;
-        @PluginBuilderAttribute
-        private String mapMessageExcludes = null;
-        @PluginBuilderAttribute
-        private boolean includeMapMessage = true;
-        @PluginBuilderAttribute
-        private boolean omitEmptyFields = false;
-        @PluginBuilderAttribute
-        private String messagePattern = null;
-        @PluginBuilderAttribute
-        private String threadContextPrefix = "";
-        @PluginBuilderAttribute
-        private String mapPrefix = "";
-        @PluginElement(value="PatternSelector")
-        private PatternSelector patternSelector = null;
+      public B setCompressionType(final GelfLayout.CompressionType compressionType) {
+         this.compressionType = compressionType;
+         return this.asBuilder();
+      }
 
-        public Builder() {
-            this.setCharset(StandardCharsets.UTF_8);
-        }
+      public B setCompressionThreshold(final int compressionThreshold) {
+         this.compressionThreshold = compressionThreshold;
+         return this.asBuilder();
+      }
 
-        @Override
-        public GelfLayout build() {
-            ListChecker mdcChecker = this.createChecker(this.threadContextExcludes, this.threadContextIncludes);
-            ListChecker mapChecker = this.createChecker(this.mapMessageExcludes, this.mapMessageIncludes);
-            PatternLayout patternLayout = null;
-            if (this.messagePattern != null && this.patternSelector != null) {
-                AbstractLayout.LOGGER.error("A message pattern and PatternSelector cannot both be specified on GelfLayout, ignoring message pattern");
-                this.messagePattern = null;
-            }
-            if (this.messagePattern != null) {
-                patternLayout = PatternLayout.newBuilder().withPattern(this.messagePattern).withAlwaysWriteExceptions(this.includeStacktrace).withConfiguration(this.getConfiguration()).build();
-            }
-            if (this.patternSelector != null) {
-                patternLayout = PatternLayout.newBuilder().withPatternSelector(this.patternSelector).withAlwaysWriteExceptions(this.includeStacktrace).withConfiguration(this.getConfiguration()).build();
-            }
-            return new GelfLayout(this.getConfiguration(), this.host, this.additionalFields, this.compressionType, this.compressionThreshold, this.includeStacktrace, this.includeThreadContext, this.includeMapMessage, this.includeNullDelimiter, this.includeNewLineDelimiter, this.omitEmptyFields, mdcChecker, mapChecker, patternLayout, this.threadContextPrefix, this.mapPrefix);
-        }
+      public B setIncludeStacktrace(final boolean includeStacktrace) {
+         this.includeStacktrace = includeStacktrace;
+         return this.asBuilder();
+      }
 
-        private ListChecker createChecker(String excludes, String includes) {
-            String[] array;
-            ListChecker checker = null;
-            if (excludes != null && (array = excludes.split(Patterns.COMMA_SEPARATOR)).length > 0) {
-                ArrayList<String> excludeList = new ArrayList<String>(array.length);
-                for (String str : array) {
-                    excludeList.add(str.trim());
-                }
-                checker = new ExcludeChecker(excludeList);
-            }
-            if (includes != null && (array = includes.split(Patterns.COMMA_SEPARATOR)).length > 0) {
-                ArrayList<String> includeList = new ArrayList<String>(array.length);
-                for (String str : array) {
-                    includeList.add(str.trim());
-                }
-                checker = new IncludeChecker(includeList);
-            }
-            if (checker == null) {
-                checker = ListChecker.NOOP_CHECKER;
-            }
-            return checker;
-        }
+      public B setIncludeThreadContext(final boolean includeThreadContext) {
+         this.includeThreadContext = includeThreadContext;
+         return this.asBuilder();
+      }
 
-        public String getHost() {
-            return this.host;
-        }
+      public B setIncludeNullDelimiter(final boolean includeNullDelimiter) {
+         this.includeNullDelimiter = includeNullDelimiter;
+         return this.asBuilder();
+      }
 
-        public CompressionType getCompressionType() {
-            return this.compressionType;
-        }
+      public B setIncludeNewLineDelimiter(final boolean includeNewLineDelimiter) {
+         this.includeNewLineDelimiter = includeNewLineDelimiter;
+         return this.asBuilder();
+      }
 
-        public int getCompressionThreshold() {
-            return this.compressionThreshold;
-        }
+      public B setAdditionalFields(final KeyValuePair[] additionalFields) {
+         this.additionalFields = additionalFields;
+         return this.asBuilder();
+      }
 
-        public boolean isIncludeStacktrace() {
-            return this.includeStacktrace;
-        }
+      public B setMessagePattern(final String pattern) {
+         this.messagePattern = pattern;
+         return this.asBuilder();
+      }
 
-        public boolean isIncludeThreadContext() {
-            return this.includeThreadContext;
-        }
+      public B setPatternSelector(final PatternSelector patternSelector) {
+         this.patternSelector = patternSelector;
+         return this.asBuilder();
+      }
 
-        public boolean isIncludeNullDelimiter() {
-            return this.includeNullDelimiter;
-        }
+      public B setMdcIncludes(final String mdcIncludes) {
+         this.threadContextIncludes = mdcIncludes;
+         return this.asBuilder();
+      }
 
-        public boolean isIncludeNewLineDelimiter() {
-            return this.includeNewLineDelimiter;
-        }
+      public B setMdcExcludes(final String mdcExcludes) {
+         this.threadContextExcludes = mdcExcludes;
+         return this.asBuilder();
+      }
 
-        public KeyValuePair[] getAdditionalFields() {
-            return this.additionalFields;
-        }
+      public B setIncludeMapMessage(final boolean includeMapMessage) {
+         this.includeMapMessage = includeMapMessage;
+         return this.asBuilder();
+      }
 
-        public B setHost(String host) {
-            this.host = host;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B setMapMessageIncludes(final String mapMessageIncludes) {
+         this.mapMessageIncludes = mapMessageIncludes;
+         return this.asBuilder();
+      }
 
-        public B setCompressionType(CompressionType compressionType) {
-            this.compressionType = compressionType;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B setMapMessageExcludes(final String mapMessageExcludes) {
+         this.mapMessageExcludes = mapMessageExcludes;
+         return this.asBuilder();
+      }
 
-        public B setCompressionThreshold(int compressionThreshold) {
-            this.compressionThreshold = compressionThreshold;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B setThreadContextPrefix(final String prefix) {
+         if (prefix != null) {
+            this.threadContextPrefix = prefix;
+         }
 
-        public B setIncludeStacktrace(boolean includeStacktrace) {
-            this.includeStacktrace = includeStacktrace;
-            return (B)((Builder)this.asBuilder());
-        }
+         return this.asBuilder();
+      }
 
-        public B setIncludeThreadContext(boolean includeThreadContext) {
-            this.includeThreadContext = includeThreadContext;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B setMapPrefix(final String prefix) {
+         if (prefix != null) {
+            this.mapPrefix = prefix;
+         }
 
-        public B setIncludeNullDelimiter(boolean includeNullDelimiter) {
-            this.includeNullDelimiter = includeNullDelimiter;
-            return (B)((Builder)this.asBuilder());
-        }
+         return this.asBuilder();
+      }
+   }
 
-        public B setIncludeNewLineDelimiter(boolean includeNewLineDelimiter) {
-            this.includeNewLineDelimiter = includeNewLineDelimiter;
-            return (B)((Builder)this.asBuilder());
-        }
+   public static enum CompressionType {
+      GZIP {
+         @Override
+         public DeflaterOutputStream createDeflaterOutputStream(final OutputStream os) throws IOException {
+            return new GZIPOutputStream(os);
+         }
+      },
+      ZLIB {
+         @Override
+         public DeflaterOutputStream createDeflaterOutputStream(final OutputStream os) throws IOException {
+            return new DeflaterOutputStream(os);
+         }
+      },
+      OFF {
+         @Override
+         public DeflaterOutputStream createDeflaterOutputStream(final OutputStream os) throws IOException {
+            return null;
+         }
+      };
 
-        public B setAdditionalFields(KeyValuePair[] additionalFields) {
-            this.additionalFields = additionalFields;
-            return (B)((Builder)this.asBuilder());
-        }
+      private CompressionType() {
+      }
 
-        public B setMessagePattern(String pattern) {
-            this.messagePattern = pattern;
-            return (B)((Builder)this.asBuilder());
-        }
+      public abstract DeflaterOutputStream createDeflaterOutputStream(OutputStream os) throws IOException;
+   }
 
-        public B setPatternSelector(PatternSelector patternSelector) {
-            this.patternSelector = patternSelector;
-            return (B)((Builder)this.asBuilder());
-        }
+   private class FieldWriter implements TriConsumer<String, Object, StringBuilder> {
+      private final ListChecker checker;
+      private final String prefix;
 
-        public B setMdcIncludes(String mdcIncludes) {
-            this.threadContextIncludes = mdcIncludes;
-            return (B)((Builder)this.asBuilder());
-        }
+      FieldWriter(ListChecker checker, String prefix) {
+         this.checker = checker;
+         this.prefix = prefix;
+      }
 
-        public B setMdcExcludes(String mdcExcludes) {
-            this.threadContextExcludes = mdcExcludes;
-            return (B)((Builder)this.asBuilder());
-        }
+      public void accept(final String key, final Object value, final StringBuilder stringBuilder) {
+         String stringValue = String.valueOf(value);
+         if (this.checker.check(key) && (Strings.isNotEmpty(stringValue) || !GelfLayout.this.omitEmptyFields)) {
+            stringBuilder.append("\"_");
+            JsonUtils.quoteAsString(Strings.concat(this.prefix, key), stringBuilder);
+            stringBuilder.append("\":\"");
+            JsonUtils.quoteAsString(GelfLayout.toNullSafeString(stringValue), stringBuilder);
+            stringBuilder.append("\",");
+         }
+      }
 
-        public B setIncludeMapMessage(boolean includeMapMessage) {
-            this.includeMapMessage = includeMapMessage;
-            return (B)((Builder)this.asBuilder());
-        }
-
-        public B setMapMessageIncludes(String mapMessageIncludes) {
-            this.mapMessageIncludes = mapMessageIncludes;
-            return (B)((Builder)this.asBuilder());
-        }
-
-        public B setMapMessageExcludes(String mapMessageExcludes) {
-            this.mapMessageExcludes = mapMessageExcludes;
-            return (B)((Builder)this.asBuilder());
-        }
-
-        public B setThreadContextPrefix(String prefix) {
-            if (prefix != null) {
-                this.threadContextPrefix = prefix;
-            }
-            return (B)((Builder)this.asBuilder());
-        }
-
-        public B setMapPrefix(String prefix) {
-            if (prefix != null) {
-                this.mapPrefix = prefix;
-            }
-            return (B)((Builder)this.asBuilder());
-        }
-    }
-
-    public static enum CompressionType {
-        GZIP{
-
-            @Override
-            public DeflaterOutputStream createDeflaterOutputStream(OutputStream os) throws IOException {
-                return new GZIPOutputStream(os);
-            }
-        }
-        ,
-        ZLIB{
-
-            @Override
-            public DeflaterOutputStream createDeflaterOutputStream(OutputStream os) throws IOException {
-                return new DeflaterOutputStream(os);
-            }
-        }
-        ,
-        OFF{
-
-            @Override
-            public DeflaterOutputStream createDeflaterOutputStream(OutputStream os) throws IOException {
-                return null;
-            }
-        };
-
-
-        public abstract DeflaterOutputStream createDeflaterOutputStream(OutputStream var1) throws IOException;
-    }
+      public ListChecker getChecker() {
+         return this.checker;
+      }
+   }
 }
-

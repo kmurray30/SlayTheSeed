@@ -1,29 +1,24 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core;
 
 public interface LifeCycle {
-    public State getState();
+   LifeCycle.State getState();
 
-    public void initialize();
+   void initialize();
 
-    public void start();
+   void start();
 
-    public void stop();
+   void stop();
 
-    public boolean isStarted();
+   boolean isStarted();
 
-    public boolean isStopped();
+   boolean isStopped();
 
-    public static enum State {
-        INITIALIZING,
-        INITIALIZED,
-        STARTING,
-        STARTED,
-        STOPPING,
-        STOPPED;
-
-    }
+   public static enum State {
+      INITIALIZING,
+      INITIALIZED,
+      STARTING,
+      STARTED,
+      STOPPING,
+      STOPPED;
+   }
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.cards.red;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
@@ -16,37 +13,47 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.WeakPower;
 import com.megacrit.cardcrawl.vfx.combat.IntimidateEffect;
 
-public class Intimidate
-extends AbstractCard {
-    public static final String ID = "Intimidate";
-    private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("Intimidate");
+public class Intimidate extends AbstractCard {
+   public static final String ID = "Intimidate";
+   private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("Intimidate");
 
-    public Intimidate() {
-        super(ID, Intimidate.cardStrings.NAME, "red/skill/intimidate", 0, Intimidate.cardStrings.DESCRIPTION, AbstractCard.CardType.SKILL, AbstractCard.CardColor.RED, AbstractCard.CardRarity.UNCOMMON, AbstractCard.CardTarget.ALL_ENEMY);
-        this.exhaust = true;
-        this.magicNumber = this.baseMagicNumber = 1;
-    }
+   public Intimidate() {
+      super(
+         "Intimidate",
+         cardStrings.NAME,
+         "red/skill/intimidate",
+         0,
+         cardStrings.DESCRIPTION,
+         AbstractCard.CardType.SKILL,
+         AbstractCard.CardColor.RED,
+         AbstractCard.CardRarity.UNCOMMON,
+         AbstractCard.CardTarget.ALL_ENEMY
+      );
+      this.exhaust = true;
+      this.baseMagicNumber = 1;
+      this.magicNumber = this.baseMagicNumber;
+   }
 
-    @Override
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new SFXAction("INTIMIDATE"));
-        this.addToBot(new VFXAction(p, new IntimidateEffect(AbstractDungeon.player.hb.cX, AbstractDungeon.player.hb.cY), 1.0f));
-        for (AbstractMonster mo : AbstractDungeon.getCurrRoom().monsters.monsters) {
-            this.addToBot(new ApplyPowerAction(mo, p, new WeakPower(mo, this.magicNumber, false), this.magicNumber, true, AbstractGameAction.AttackEffect.NONE));
-        }
-    }
+   @Override
+   public void use(AbstractPlayer p, AbstractMonster m) {
+      this.addToBot(new SFXAction("INTIMIDATE"));
+      this.addToBot(new VFXAction(p, new IntimidateEffect(AbstractDungeon.player.hb.cX, AbstractDungeon.player.hb.cY), 1.0F));
 
-    @Override
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeMagicNumber(1);
-        }
-    }
+      for (AbstractMonster mo : AbstractDungeon.getCurrRoom().monsters.monsters) {
+         this.addToBot(new ApplyPowerAction(mo, p, new WeakPower(mo, this.magicNumber, false), this.magicNumber, true, AbstractGameAction.AttackEffect.NONE));
+      }
+   }
 
-    @Override
-    public AbstractCard makeCopy() {
-        return new Intimidate();
-    }
+   @Override
+   public void upgrade() {
+      if (!this.upgraded) {
+         this.upgradeName();
+         this.upgradeMagicNumber(1);
+      }
+   }
+
+   @Override
+   public AbstractCard makeCopy() {
+      return new Intimidate();
+   }
 }
-

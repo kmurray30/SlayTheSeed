@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.scenes.scene2d.utils;
 
 import com.badlogic.gdx.Gdx;
@@ -12,94 +9,102 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
 public class ScissorStack {
-    private static Array<Rectangle> scissors = new Array();
-    static Vector3 tmp = new Vector3();
-    static final Rectangle viewport = new Rectangle();
+   private static Array<Rectangle> scissors = new Array<>();
+   static Vector3 tmp = new Vector3();
+   static final Rectangle viewport = new Rectangle();
 
-    public static boolean pushScissors(Rectangle scissor) {
-        ScissorStack.fix(scissor);
-        if (ScissorStack.scissors.size == 0) {
-            if (scissor.width < 1.0f || scissor.height < 1.0f) {
-                return false;
-            }
-            Gdx.gl.glEnable(3089);
-        } else {
-            Rectangle parent = scissors.get(ScissorStack.scissors.size - 1);
-            float minX = Math.max(parent.x, scissor.x);
-            float maxX = Math.min(parent.x + parent.width, scissor.x + scissor.width);
-            if (maxX - minX < 1.0f) {
-                return false;
-            }
-            float minY = Math.max(parent.y, scissor.y);
-            float maxY = Math.min(parent.y + parent.height, scissor.y + scissor.height);
-            if (maxY - minY < 1.0f) {
-                return false;
-            }
-            scissor.x = minX;
-            scissor.y = minY;
-            scissor.width = maxX - minX;
-            scissor.height = Math.max(1.0f, maxY - minY);
-        }
-        scissors.add(scissor);
-        HdpiUtils.glScissor((int)scissor.x, (int)scissor.y, (int)scissor.width, (int)scissor.height);
-        return true;
-    }
+   public static boolean pushScissors(Rectangle scissor) {
+      fix(scissor);
+      if (scissors.size == 0) {
+         if (scissor.width < 1.0F || scissor.height < 1.0F) {
+            return false;
+         }
 
-    public static Rectangle popScissors() {
-        Rectangle old = scissors.pop();
-        if (ScissorStack.scissors.size == 0) {
-            Gdx.gl.glDisable(3089);
-        } else {
-            Rectangle scissor = scissors.peek();
-            HdpiUtils.glScissor((int)scissor.x, (int)scissor.y, (int)scissor.width, (int)scissor.height);
-        }
-        return old;
-    }
+         Gdx.gl.glEnable(3089);
+      } else {
+         Rectangle parent = scissors.get(scissors.size - 1);
+         float minX = Math.max(parent.x, scissor.x);
+         float maxX = Math.min(parent.x + parent.width, scissor.x + scissor.width);
+         if (maxX - minX < 1.0F) {
+            return false;
+         }
 
-    public static Rectangle peekScissors() {
-        return scissors.peek();
-    }
+         float minY = Math.max(parent.y, scissor.y);
+         float maxY = Math.min(parent.y + parent.height, scissor.y + scissor.height);
+         if (maxY - minY < 1.0F) {
+            return false;
+         }
 
-    private static void fix(Rectangle rect) {
-        rect.x = Math.round(rect.x);
-        rect.y = Math.round(rect.y);
-        rect.width = Math.round(rect.width);
-        rect.height = Math.round(rect.height);
-        if (rect.width < 0.0f) {
-            rect.width = -rect.width;
-            rect.x -= rect.width;
-        }
-        if (rect.height < 0.0f) {
-            rect.height = -rect.height;
-            rect.y -= rect.height;
-        }
-    }
+         scissor.x = minX;
+         scissor.y = minY;
+         scissor.width = maxX - minX;
+         scissor.height = Math.max(1.0F, maxY - minY);
+      }
 
-    public static void calculateScissors(Camera camera, Matrix4 batchTransform, Rectangle area, Rectangle scissor) {
-        ScissorStack.calculateScissors(camera, 0.0f, 0.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), batchTransform, area, scissor);
-    }
+      scissors.add(scissor);
+      HdpiUtils.glScissor((int)scissor.x, (int)scissor.y, (int)scissor.width, (int)scissor.height);
+      return true;
+   }
 
-    public static void calculateScissors(Camera camera, float viewportX, float viewportY, float viewportWidth, float viewportHeight, Matrix4 batchTransform, Rectangle area, Rectangle scissor) {
-        tmp.set(area.x, area.y, 0.0f);
-        tmp.mul(batchTransform);
-        camera.project(tmp, viewportX, viewportY, viewportWidth, viewportHeight);
-        scissor.x = ScissorStack.tmp.x;
-        scissor.y = ScissorStack.tmp.y;
-        tmp.set(area.x + area.width, area.y + area.height, 0.0f);
-        tmp.mul(batchTransform);
-        camera.project(tmp, viewportX, viewportY, viewportWidth, viewportHeight);
-        scissor.width = ScissorStack.tmp.x - scissor.x;
-        scissor.height = ScissorStack.tmp.y - scissor.y;
-    }
+   public static Rectangle popScissors() {
+      Rectangle old = scissors.pop();
+      if (scissors.size == 0) {
+         Gdx.gl.glDisable(3089);
+      } else {
+         Rectangle scissor = scissors.peek();
+         HdpiUtils.glScissor((int)scissor.x, (int)scissor.y, (int)scissor.width, (int)scissor.height);
+      }
 
-    public static Rectangle getViewport() {
-        if (ScissorStack.scissors.size == 0) {
-            viewport.set(0.0f, 0.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            return viewport;
-        }
-        Rectangle scissor = scissors.peek();
-        viewport.set(scissor);
-        return viewport;
-    }
+      return old;
+   }
+
+   public static Rectangle peekScissors() {
+      return scissors.peek();
+   }
+
+   private static void fix(Rectangle rect) {
+      rect.x = Math.round(rect.x);
+      rect.y = Math.round(rect.y);
+      rect.width = Math.round(rect.width);
+      rect.height = Math.round(rect.height);
+      if (rect.width < 0.0F) {
+         rect.width = -rect.width;
+         rect.x = rect.x - rect.width;
+      }
+
+      if (rect.height < 0.0F) {
+         rect.height = -rect.height;
+         rect.y = rect.y - rect.height;
+      }
+   }
+
+   public static void calculateScissors(Camera camera, Matrix4 batchTransform, Rectangle area, Rectangle scissor) {
+      calculateScissors(camera, 0.0F, 0.0F, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), batchTransform, area, scissor);
+   }
+
+   public static void calculateScissors(
+      Camera camera, float viewportX, float viewportY, float viewportWidth, float viewportHeight, Matrix4 batchTransform, Rectangle area, Rectangle scissor
+   ) {
+      tmp.set(area.x, area.y, 0.0F);
+      tmp.mul(batchTransform);
+      camera.project(tmp, viewportX, viewportY, viewportWidth, viewportHeight);
+      scissor.x = tmp.x;
+      scissor.y = tmp.y;
+      tmp.set(area.x + area.width, area.y + area.height, 0.0F);
+      tmp.mul(batchTransform);
+      camera.project(tmp, viewportX, viewportY, viewportWidth, viewportHeight);
+      scissor.width = tmp.x - scissor.x;
+      scissor.height = tmp.y - scissor.y;
+   }
+
+   public static Rectangle getViewport() {
+      if (scissors.size == 0) {
+         viewport.set(0.0F, 0.0F, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+         return viewport;
+      } else {
+         Rectangle scissor = scissors.peek();
+         viewport.set(scissor);
+         return viewport;
+      }
+   }
 }
-

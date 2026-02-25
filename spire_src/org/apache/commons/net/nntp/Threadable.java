@@ -1,23 +1,19 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.commons.net.nntp;
 
 public interface Threadable {
-    public boolean isDummy();
+   boolean isDummy();
 
-    public String messageThreadId();
+   String messageThreadId();
 
-    public String[] messageThreadReferences();
+   String[] messageThreadReferences();
 
-    public String simplifiedSubject();
+   String simplifiedSubject();
 
-    public boolean subjectIsReply();
+   boolean subjectIsReply();
 
-    public void setChild(Threadable var1);
+   void setChild(Threadable var1);
 
-    public void setNext(Threadable var1);
+   void setNext(Threadable var1);
 
-    public Threadable makeDummy();
+   Threadable makeDummy();
 }
-

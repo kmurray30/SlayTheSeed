@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.selector;
 
 import java.net.URI;
@@ -10,56 +7,53 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.impl.ContextAnchor;
-import org.apache.logging.log4j.core.selector.ContextSelector;
 
-public class BasicContextSelector
-implements ContextSelector {
-    private static final LoggerContext CONTEXT = new LoggerContext("Default");
+public class BasicContextSelector implements ContextSelector {
+   private static final LoggerContext CONTEXT = new LoggerContext("Default");
 
-    @Override
-    public void shutdown(String fqcn, ClassLoader loader, boolean currentContext, boolean allContexts) {
-        LoggerContext ctx = this.getContext(fqcn, loader, currentContext);
-        if (ctx != null && ctx.isStarted()) {
-            ctx.stop(50L, TimeUnit.MILLISECONDS);
-        }
-    }
+   @Override
+   public void shutdown(String fqcn, ClassLoader loader, boolean currentContext, boolean allContexts) {
+      LoggerContext ctx = this.getContext(fqcn, loader, currentContext);
+      if (ctx != null && ctx.isStarted()) {
+         ctx.stop(50L, TimeUnit.MILLISECONDS);
+      }
+   }
 
-    @Override
-    public boolean hasContext(String fqcn, ClassLoader loader, boolean currentContext) {
-        LoggerContext ctx = this.getContext(fqcn, loader, currentContext);
-        return ctx != null && ctx.isStarted();
-    }
+   @Override
+   public boolean hasContext(String fqcn, ClassLoader loader, boolean currentContext) {
+      LoggerContext ctx = this.getContext(fqcn, loader, currentContext);
+      return ctx != null && ctx.isStarted();
+   }
 
-    @Override
-    public LoggerContext getContext(String fqcn, ClassLoader loader, boolean currentContext) {
-        LoggerContext ctx = ContextAnchor.THREAD_CONTEXT.get();
-        return ctx != null ? ctx : CONTEXT;
-    }
+   @Override
+   public LoggerContext getContext(final String fqcn, final ClassLoader loader, final boolean currentContext) {
+      LoggerContext ctx = ContextAnchor.THREAD_CONTEXT.get();
+      return ctx != null ? ctx : CONTEXT;
+   }
 
-    @Override
-    public LoggerContext getContext(String fqcn, ClassLoader loader, boolean currentContext, URI configLocation) {
-        LoggerContext ctx = ContextAnchor.THREAD_CONTEXT.get();
-        return ctx != null ? ctx : CONTEXT;
-    }
+   @Override
+   public LoggerContext getContext(final String fqcn, final ClassLoader loader, final boolean currentContext, final URI configLocation) {
+      LoggerContext ctx = ContextAnchor.THREAD_CONTEXT.get();
+      return ctx != null ? ctx : CONTEXT;
+   }
 
-    public LoggerContext locateContext(String name, String configLocation) {
-        return CONTEXT;
-    }
+   public LoggerContext locateContext(final String name, final String configLocation) {
+      return CONTEXT;
+   }
 
-    @Override
-    public void removeContext(LoggerContext context) {
-    }
+   @Override
+   public void removeContext(final LoggerContext context) {
+   }
 
-    @Override
-    public boolean isClassLoaderDependent() {
-        return false;
-    }
+   @Override
+   public boolean isClassLoaderDependent() {
+      return false;
+   }
 
-    @Override
-    public List<LoggerContext> getLoggerContexts() {
-        ArrayList<LoggerContext> list = new ArrayList<LoggerContext>();
-        list.add(CONTEXT);
-        return Collections.unmodifiableList(list);
-    }
+   @Override
+   public List<LoggerContext> getLoggerContexts() {
+      List<LoggerContext> list = new ArrayList<>();
+      list.add(CONTEXT);
+      return Collections.unmodifiableList(list);
+   }
 }
-

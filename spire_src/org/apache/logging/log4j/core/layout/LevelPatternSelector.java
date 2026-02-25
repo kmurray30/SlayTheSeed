@@ -1,11 +1,9 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.layout;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LogEvent;
@@ -16,167 +14,194 @@ import org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory;
 import org.apache.logging.log4j.core.config.plugins.PluginConfiguration;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.impl.LocationAware;
-import org.apache.logging.log4j.core.layout.PatternLayout;
-import org.apache.logging.log4j.core.layout.PatternMatch;
-import org.apache.logging.log4j.core.layout.PatternSelector;
 import org.apache.logging.log4j.core.pattern.PatternFormatter;
 import org.apache.logging.log4j.core.pattern.PatternParser;
 import org.apache.logging.log4j.status.StatusLogger;
 
-@Plugin(name="LevelPatternSelector", category="Core", elementType="patternSelector", printObject=true)
-public class LevelPatternSelector
-implements PatternSelector,
-LocationAware {
-    private final Map<String, PatternFormatter[]> formatterMap = new HashMap<String, PatternFormatter[]>();
-    private final Map<String, String> patternMap = new HashMap<String, String>();
-    private final PatternFormatter[] defaultFormatters;
-    private final String defaultPattern;
-    private static Logger LOGGER = StatusLogger.getLogger();
-    private final boolean requiresLocation;
+@Plugin(name = "LevelPatternSelector", category = "Core", elementType = "patternSelector", printObject = true)
+public class LevelPatternSelector implements PatternSelector, LocationAware {
+   private final Map<String, PatternFormatter[]> formatterMap = new HashMap<>();
+   private final Map<String, String> patternMap = new HashMap<>();
+   private final PatternFormatter[] defaultFormatters;
+   private final String defaultPattern;
+   private static Logger LOGGER = StatusLogger.getLogger();
+   private final boolean requiresLocation;
 
-    @Deprecated
-    public LevelPatternSelector(PatternMatch[] properties, String defaultPattern, boolean alwaysWriteExceptions, boolean noConsoleNoAnsi, Configuration config) {
-        this(properties, defaultPattern, alwaysWriteExceptions, false, noConsoleNoAnsi, config);
-    }
+   @Deprecated
+   public LevelPatternSelector(
+      final PatternMatch[] properties,
+      final String defaultPattern,
+      final boolean alwaysWriteExceptions,
+      final boolean noConsoleNoAnsi,
+      final Configuration config
+   ) {
+      this(properties, defaultPattern, alwaysWriteExceptions, false, noConsoleNoAnsi, config);
+   }
 
-    private LevelPatternSelector(PatternMatch[] properties, String defaultPattern, boolean alwaysWriteExceptions, boolean disableAnsi, boolean noConsoleNoAnsi, Configuration config) {
-        boolean needsLocation = false;
-        PatternParser parser = PatternLayout.createPatternParser(config);
-        for (PatternMatch property : properties) {
-            try {
-                List<PatternFormatter> list = parser.parse(property.getPattern(), alwaysWriteExceptions, disableAnsi, noConsoleNoAnsi);
-                PatternFormatter[] formatters = list.toArray(PatternFormatter.EMPTY_ARRAY);
-                this.formatterMap.put(property.getKey(), formatters);
-                for (int i = 0; !needsLocation && i < formatters.length; ++i) {
-                    needsLocation = formatters[i].requiresLocation();
-                }
-                this.patternMap.put(property.getKey(), property.getPattern());
+   private LevelPatternSelector(
+      final PatternMatch[] properties,
+      final String defaultPattern,
+      final boolean alwaysWriteExceptions,
+      final boolean disableAnsi,
+      final boolean noConsoleNoAnsi,
+      final Configuration config
+   ) {
+      boolean needsLocation = false;
+      PatternParser parser = PatternLayout.createPatternParser(config);
+
+      for (PatternMatch property : properties) {
+         try {
+            List<PatternFormatter> list = parser.parse(property.getPattern(), alwaysWriteExceptions, disableAnsi, noConsoleNoAnsi);
+            PatternFormatter[] formatters = list.toArray(PatternFormatter.EMPTY_ARRAY);
+            this.formatterMap.put(property.getKey(), formatters);
+
+            for (int i = 0; !needsLocation && i < formatters.length; i++) {
+               needsLocation = formatters[i].requiresLocation();
             }
-            catch (RuntimeException ex) {
-                throw new IllegalArgumentException("Cannot parse pattern '" + property.getPattern() + "'", ex);
+
+            this.patternMap.put(property.getKey(), property.getPattern());
+         } catch (RuntimeException var17) {
+            throw new IllegalArgumentException("Cannot parse pattern '" + property.getPattern() + "'", var17);
+         }
+      }
+
+      try {
+         List<PatternFormatter> list = parser.parse(defaultPattern, alwaysWriteExceptions, disableAnsi, noConsoleNoAnsi);
+         this.defaultFormatters = list.toArray(PatternFormatter.EMPTY_ARRAY);
+         this.defaultPattern = defaultPattern;
+
+         for (int i = 0; !needsLocation && i < this.defaultFormatters.length; i++) {
+            needsLocation = this.defaultFormatters[i].requiresLocation();
+         }
+      } catch (RuntimeException var16) {
+         throw new IllegalArgumentException("Cannot parse pattern '" + defaultPattern + "'", var16);
+      }
+
+      this.requiresLocation = needsLocation;
+   }
+
+   @Override
+   public boolean requiresLocation() {
+      return this.requiresLocation;
+   }
+
+   @Override
+   public PatternFormatter[] getFormatters(final LogEvent event) {
+      Level level = event.getLevel();
+      if (level == null) {
+         return this.defaultFormatters;
+      } else {
+         for (String key : this.formatterMap.keySet()) {
+            if (level.name().equalsIgnoreCase(key)) {
+               return this.formatterMap.get(key);
             }
-        }
-        try {
-            List<PatternFormatter> list = parser.parse(defaultPattern, alwaysWriteExceptions, disableAnsi, noConsoleNoAnsi);
-            this.defaultFormatters = list.toArray(PatternFormatter.EMPTY_ARRAY);
-            this.defaultPattern = defaultPattern;
-            for (int i = 0; !needsLocation && i < this.defaultFormatters.length; ++i) {
-                needsLocation = this.defaultFormatters[i].requiresLocation();
-            }
-        }
-        catch (RuntimeException ex) {
-            throw new IllegalArgumentException("Cannot parse pattern '" + defaultPattern + "'", ex);
-        }
-        this.requiresLocation = needsLocation;
-    }
+         }
 
-    @Override
-    public boolean requiresLocation() {
-        return this.requiresLocation;
-    }
+         return this.defaultFormatters;
+      }
+   }
 
-    @Override
-    public PatternFormatter[] getFormatters(LogEvent event) {
-        Level level = event.getLevel();
-        if (level == null) {
-            return this.defaultFormatters;
-        }
-        for (String key : this.formatterMap.keySet()) {
-            if (!level.name().equalsIgnoreCase(key)) continue;
-            return this.formatterMap.get(key);
-        }
-        return this.defaultFormatters;
-    }
+   @PluginBuilderFactory
+   public static LevelPatternSelector.Builder newBuilder() {
+      return new LevelPatternSelector.Builder();
+   }
 
-    @PluginBuilderFactory
-    public static Builder newBuilder() {
-        return new Builder();
-    }
+   @Deprecated
+   public static LevelPatternSelector createSelector(
+      final PatternMatch[] properties,
+      final String defaultPattern,
+      final boolean alwaysWriteExceptions,
+      final boolean noConsoleNoAnsi,
+      final Configuration configuration
+   ) {
+      LevelPatternSelector.Builder builder = newBuilder();
+      builder.setProperties(properties);
+      builder.setDefaultPattern(defaultPattern);
+      builder.setAlwaysWriteExceptions(alwaysWriteExceptions);
+      builder.setNoConsoleNoAnsi(noConsoleNoAnsi);
+      builder.setConfiguration(configuration);
+      return builder.build();
+   }
 
-    @Deprecated
-    public static LevelPatternSelector createSelector(PatternMatch[] properties, String defaultPattern, boolean alwaysWriteExceptions, boolean noConsoleNoAnsi, Configuration configuration) {
-        Builder builder = LevelPatternSelector.newBuilder();
-        builder.setProperties(properties);
-        builder.setDefaultPattern(defaultPattern);
-        builder.setAlwaysWriteExceptions(alwaysWriteExceptions);
-        builder.setNoConsoleNoAnsi(noConsoleNoAnsi);
-        builder.setConfiguration(configuration);
-        return builder.build();
-    }
+   @Override
+   public String toString() {
+      StringBuilder sb = new StringBuilder();
+      boolean first = true;
 
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        boolean first = true;
-        for (Map.Entry<String, String> entry : this.patternMap.entrySet()) {
-            if (!first) {
-                sb.append(", ");
-            }
-            sb.append("key=\"").append(entry.getKey()).append("\", pattern=\"").append(entry.getValue()).append("\"");
-            first = false;
-        }
-        if (!first) {
+      for (Entry<String, String> entry : this.patternMap.entrySet()) {
+         if (!first) {
             sb.append(", ");
-        }
-        sb.append("default=\"").append(this.defaultPattern).append("\"");
-        return sb.toString();
-    }
+         }
 
-    public static class Builder
-    implements org.apache.logging.log4j.core.util.Builder<LevelPatternSelector> {
-        @PluginElement(value="PatternMatch")
-        private PatternMatch[] properties;
-        @PluginBuilderAttribute(value="defaultPattern")
-        private String defaultPattern;
-        @PluginBuilderAttribute(value="alwaysWriteExceptions")
-        private boolean alwaysWriteExceptions = true;
-        @PluginBuilderAttribute(value="disableAnsi")
-        private boolean disableAnsi;
-        @PluginBuilderAttribute(value="noConsoleNoAnsi")
-        private boolean noConsoleNoAnsi;
-        @PluginConfiguration
-        private Configuration configuration;
+         sb.append("key=\"").append(entry.getKey()).append("\", pattern=\"").append(entry.getValue()).append("\"");
+         first = false;
+      }
 
-        @Override
-        public LevelPatternSelector build() {
-            if (this.defaultPattern == null) {
-                this.defaultPattern = "%m%n";
-            }
-            if (this.properties == null || this.properties.length == 0) {
-                LOGGER.warn("No marker patterns were provided with PatternMatch");
-                return null;
-            }
-            return new LevelPatternSelector(this.properties, this.defaultPattern, this.alwaysWriteExceptions, this.disableAnsi, this.noConsoleNoAnsi, this.configuration);
-        }
+      if (!first) {
+         sb.append(", ");
+      }
 
-        public Builder setProperties(PatternMatch[] properties) {
-            this.properties = properties;
-            return this;
-        }
+      sb.append("default=\"").append(this.defaultPattern).append("\"");
+      return sb.toString();
+   }
 
-        public Builder setDefaultPattern(String defaultPattern) {
-            this.defaultPattern = defaultPattern;
-            return this;
-        }
+   public static class Builder implements org.apache.logging.log4j.core.util.Builder<LevelPatternSelector> {
+      @PluginElement("PatternMatch")
+      private PatternMatch[] properties;
+      @PluginBuilderAttribute("defaultPattern")
+      private String defaultPattern;
+      @PluginBuilderAttribute("alwaysWriteExceptions")
+      private boolean alwaysWriteExceptions = true;
+      @PluginBuilderAttribute("disableAnsi")
+      private boolean disableAnsi;
+      @PluginBuilderAttribute("noConsoleNoAnsi")
+      private boolean noConsoleNoAnsi;
+      @PluginConfiguration
+      private Configuration configuration;
 
-        public Builder setAlwaysWriteExceptions(boolean alwaysWriteExceptions) {
-            this.alwaysWriteExceptions = alwaysWriteExceptions;
-            return this;
-        }
+      public LevelPatternSelector build() {
+         if (this.defaultPattern == null) {
+            this.defaultPattern = "%m%n";
+         }
 
-        public Builder setDisableAnsi(boolean disableAnsi) {
-            this.disableAnsi = disableAnsi;
-            return this;
-        }
+         if (this.properties != null && this.properties.length != 0) {
+            return new LevelPatternSelector(
+               this.properties, this.defaultPattern, this.alwaysWriteExceptions, this.disableAnsi, this.noConsoleNoAnsi, this.configuration
+            );
+         } else {
+            LevelPatternSelector.LOGGER.warn("No marker patterns were provided with PatternMatch");
+            return null;
+         }
+      }
 
-        public Builder setNoConsoleNoAnsi(boolean noConsoleNoAnsi) {
-            this.noConsoleNoAnsi = noConsoleNoAnsi;
-            return this;
-        }
+      public LevelPatternSelector.Builder setProperties(final PatternMatch[] properties) {
+         this.properties = properties;
+         return this;
+      }
 
-        public Builder setConfiguration(Configuration configuration) {
-            this.configuration = configuration;
-            return this;
-        }
-    }
+      public LevelPatternSelector.Builder setDefaultPattern(final String defaultPattern) {
+         this.defaultPattern = defaultPattern;
+         return this;
+      }
+
+      public LevelPatternSelector.Builder setAlwaysWriteExceptions(final boolean alwaysWriteExceptions) {
+         this.alwaysWriteExceptions = alwaysWriteExceptions;
+         return this;
+      }
+
+      public LevelPatternSelector.Builder setDisableAnsi(final boolean disableAnsi) {
+         this.disableAnsi = disableAnsi;
+         return this;
+      }
+
+      public LevelPatternSelector.Builder setNoConsoleNoAnsi(final boolean noConsoleNoAnsi) {
+         this.noConsoleNoAnsi = noConsoleNoAnsi;
+         return this;
+      }
+
+      public LevelPatternSelector.Builder setConfiguration(final Configuration configuration) {
+         this.configuration = configuration;
+         return this;
+      }
+   }
 }
-

@@ -1,35 +1,27 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.config.arbiters;
 
-import org.apache.logging.log4j.core.config.arbiters.Arbiter;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory;
 
-@Plugin(name="DefaultArbiter", category="Core", elementType="Arbiter", deferChildren=true, printObject=true)
-public class DefaultArbiter
-implements Arbiter {
-    @Override
-    public boolean isCondition() {
-        return true;
-    }
+@Plugin(name = "DefaultArbiter", category = "Core", elementType = "Arbiter", deferChildren = true, printObject = true)
+public class DefaultArbiter implements Arbiter {
+   @Override
+   public boolean isCondition() {
+      return true;
+   }
 
-    @PluginBuilderFactory
-    public static Builder newBuilder() {
-        return new Builder();
-    }
+   @PluginBuilderFactory
+   public static DefaultArbiter.Builder newBuilder() {
+      return new DefaultArbiter.Builder();
+   }
 
-    public static class Builder
-    implements org.apache.logging.log4j.core.util.Builder<DefaultArbiter> {
-        public Builder asBuilder() {
-            return this;
-        }
+   public static class Builder implements org.apache.logging.log4j.core.util.Builder<DefaultArbiter> {
+      public DefaultArbiter.Builder asBuilder() {
+         return this;
+      }
 
-        @Override
-        public DefaultArbiter build() {
-            return new DefaultArbiter();
-        }
-    }
+      public DefaultArbiter build() {
+         return new DefaultArbiter();
+      }
+   }
 }
-

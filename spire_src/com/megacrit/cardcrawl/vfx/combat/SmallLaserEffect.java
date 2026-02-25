@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.combat;
 
 import com.badlogic.gdx.Gdx;
@@ -14,54 +11,80 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
-public class SmallLaserEffect
-extends AbstractGameEffect {
-    private float sX;
-    private float sY;
-    private float dX;
-    private float dY;
-    private float dst;
-    private static final float DUR = 0.5f;
-    private static TextureAtlas.AtlasRegion img;
+public class SmallLaserEffect extends AbstractGameEffect {
+   private float sX;
+   private float sY;
+   private float dX;
+   private float dY;
+   private float dst;
+   private static final float DUR = 0.5F;
+   private static TextureAtlas.AtlasRegion img;
 
-    public SmallLaserEffect(float sX, float sY, float dX, float dY) {
-        if (img == null) {
-            img = ImageMaster.vfxAtlas.findRegion("combat/laserThin");
-        }
-        this.sX = sX;
-        this.sY = sY;
-        this.dX = dX;
-        this.dY = dY;
-        this.dst = Vector2.dst(this.sX, this.sY, this.dX, this.dY) / Settings.scale;
-        this.color = Color.CYAN.cpy();
-        this.duration = 0.5f;
-        this.startingDuration = 0.5f;
-        this.rotation = MathUtils.atan2(dX - sX, dY - sY);
-        this.rotation *= 57.295776f;
-        this.rotation = -this.rotation + 90.0f;
-    }
+   public SmallLaserEffect(float sX, float sY, float dX, float dY) {
+      if (img == null) {
+         img = ImageMaster.vfxAtlas.findRegion("combat/laserThin");
+      }
 
-    @Override
-    public void update() {
-        this.duration -= Gdx.graphics.getDeltaTime();
-        this.color.a = this.duration > this.startingDuration / 2.0f ? Interpolation.pow2In.apply(1.0f, 0.0f, (this.duration - 0.25f) * 4.0f) : Interpolation.bounceIn.apply(0.0f, 1.0f, this.duration * 4.0f);
-        if (this.duration < 0.0f) {
-            this.isDone = true;
-        }
-    }
+      this.sX = sX;
+      this.sY = sY;
+      this.dX = dX;
+      this.dY = dY;
+      this.dst = Vector2.dst(this.sX, this.sY, this.dX, this.dY) / Settings.scale;
+      this.color = Color.CYAN.cpy();
+      this.duration = 0.5F;
+      this.startingDuration = 0.5F;
+      this.rotation = MathUtils.atan2(dX - sX, dY - sY);
+      this.rotation *= 180.0F / (float)Math.PI;
+      this.rotation = -this.rotation + 90.0F;
+   }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        sb.setBlendFunction(770, 1);
-        sb.setColor(this.color);
-        sb.draw(img, this.sX, this.sY - (float)SmallLaserEffect.img.packedHeight / 2.0f + 10.0f * Settings.scale, 0.0f, (float)SmallLaserEffect.img.packedHeight / 2.0f, this.dst, 50.0f, this.scale + MathUtils.random(-0.01f, 0.01f), this.scale, this.rotation);
-        sb.setColor(new Color(0.3f, 0.3f, 1.0f, this.color.a));
-        sb.draw(img, this.sX, this.sY - (float)SmallLaserEffect.img.packedHeight / 2.0f, 0.0f, (float)SmallLaserEffect.img.packedHeight / 2.0f, this.dst, MathUtils.random(50.0f, 90.0f), this.scale + MathUtils.random(-0.02f, 0.02f), this.scale, this.rotation);
-        sb.setBlendFunction(770, 771);
-    }
+   @Override
+   public void update() {
+      this.duration = this.duration - Gdx.graphics.getDeltaTime();
+      if (this.duration > this.startingDuration / 2.0F) {
+         this.color.a = Interpolation.pow2In.apply(1.0F, 0.0F, (this.duration - 0.25F) * 4.0F);
+      } else {
+         this.color.a = Interpolation.bounceIn.apply(0.0F, 1.0F, this.duration * 4.0F);
+      }
 
-    @Override
-    public void dispose() {
-    }
+      if (this.duration < 0.0F) {
+         this.isDone = true;
+      }
+   }
+
+   @Override
+   public void render(SpriteBatch sb) {
+      sb.setBlendFunction(770, 1);
+      sb.setColor(this.color);
+      sb.draw(
+         img,
+         this.sX,
+         this.sY - img.packedHeight / 2.0F + 10.0F * Settings.scale,
+         0.0F,
+         img.packedHeight / 2.0F,
+         this.dst,
+         50.0F,
+         this.scale + MathUtils.random(-0.01F, 0.01F),
+         this.scale,
+         this.rotation
+      );
+      sb.setColor(new Color(0.3F, 0.3F, 1.0F, this.color.a));
+      sb.draw(
+         img,
+         this.sX,
+         this.sY - img.packedHeight / 2.0F,
+         0.0F,
+         img.packedHeight / 2.0F,
+         this.dst,
+         MathUtils.random(50.0F, 90.0F),
+         this.scale + MathUtils.random(-0.02F, 0.02F),
+         this.scale,
+         this.rotation
+      );
+      sb.setBlendFunction(770, 771);
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

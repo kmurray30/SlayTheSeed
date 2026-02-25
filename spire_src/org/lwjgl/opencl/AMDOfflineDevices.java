@@ -1,12 +1,8 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl.opencl;
 
 public final class AMDOfflineDevices {
-    public static final int CL_CONTEXT_OFFLINE_DEVICES_AMD = 16447;
+   public static final int CL_CONTEXT_OFFLINE_DEVICES_AMD = 16447;
 
-    private AMDOfflineDevices() {
-    }
+   private AMDOfflineDevices() {
+   }
 }
-

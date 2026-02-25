@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.config;
 
 import java.util.List;
@@ -11,13 +8,6 @@ import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.async.AsyncLoggerConfigDelegate;
-import org.apache.logging.log4j.core.config.ConfigurationListener;
-import org.apache.logging.log4j.core.config.ConfigurationScheduler;
-import org.apache.logging.log4j.core.config.ConfigurationSource;
-import org.apache.logging.log4j.core.config.CustomLevelConfig;
-import org.apache.logging.log4j.core.config.LoggerConfig;
-import org.apache.logging.log4j.core.config.Node;
-import org.apache.logging.log4j.core.config.ReliabilityStrategy;
 import org.apache.logging.log4j.core.filter.Filterable;
 import org.apache.logging.log4j.core.lookup.ConfigurationStrSubstitutor;
 import org.apache.logging.log4j.core.lookup.StrSubstitutor;
@@ -26,84 +16,79 @@ import org.apache.logging.log4j.core.script.ScriptManager;
 import org.apache.logging.log4j.core.util.NanoClock;
 import org.apache.logging.log4j.core.util.WatchManager;
 
-public interface Configuration
-extends Filterable {
-    public static final String CONTEXT_PROPERTIES = "ContextProperties";
+public interface Configuration extends Filterable {
+   String CONTEXT_PROPERTIES = "ContextProperties";
 
-    public String getName();
+   String getName();
 
-    public LoggerConfig getLoggerConfig(String var1);
+   LoggerConfig getLoggerConfig(String name);
 
-    public <T extends Appender> T getAppender(String var1);
+   <T extends Appender> T getAppender(String name);
 
-    public Map<String, Appender> getAppenders();
+   Map<String, Appender> getAppenders();
 
-    public void addAppender(Appender var1);
+   void addAppender(final Appender appender);
 
-    public Map<String, LoggerConfig> getLoggers();
+   Map<String, LoggerConfig> getLoggers();
 
-    public void addLoggerAppender(Logger var1, Appender var2);
+   void addLoggerAppender(Logger logger, Appender appender);
 
-    public void addLoggerFilter(Logger var1, Filter var2);
+   void addLoggerFilter(Logger logger, Filter filter);
 
-    public void setLoggerAdditive(Logger var1, boolean var2);
+   void setLoggerAdditive(Logger logger, boolean additive);
 
-    public void addLogger(String var1, LoggerConfig var2);
+   void addLogger(final String name, final LoggerConfig loggerConfig);
 
-    public void removeLogger(String var1);
+   void removeLogger(final String name);
 
-    public List<String> getPluginPackages();
+   List<String> getPluginPackages();
 
-    public Map<String, String> getProperties();
+   Map<String, String> getProperties();
 
-    public LoggerConfig getRootLogger();
+   LoggerConfig getRootLogger();
 
-    public void addListener(ConfigurationListener var1);
+   void addListener(ConfigurationListener listener);
 
-    public void removeListener(ConfigurationListener var1);
+   void removeListener(ConfigurationListener listener);
 
-    public StrSubstitutor getStrSubstitutor();
+   StrSubstitutor getStrSubstitutor();
 
-    default public StrSubstitutor getConfigurationStrSubstitutor() {
-        StrSubstitutor defaultSubstitutor = this.getStrSubstitutor();
-        if (defaultSubstitutor == null) {
-            return new ConfigurationStrSubstitutor();
-        }
-        return new ConfigurationStrSubstitutor(defaultSubstitutor);
-    }
+   default StrSubstitutor getConfigurationStrSubstitutor() {
+      StrSubstitutor defaultSubstitutor = this.getStrSubstitutor();
+      return defaultSubstitutor == null ? new ConfigurationStrSubstitutor() : new ConfigurationStrSubstitutor(defaultSubstitutor);
+   }
 
-    public void createConfiguration(Node var1, LogEvent var2);
+   void createConfiguration(Node node, LogEvent event);
 
-    public <T> T getComponent(String var1);
+   <T> T getComponent(String name);
 
-    public void addComponent(String var1, Object var2);
+   void addComponent(String name, Object object);
 
-    public void setAdvertiser(Advertiser var1);
+   void setAdvertiser(Advertiser advertiser);
 
-    public Advertiser getAdvertiser();
+   Advertiser getAdvertiser();
 
-    public boolean isShutdownHookEnabled();
+   boolean isShutdownHookEnabled();
 
-    public long getShutdownTimeoutMillis();
+   long getShutdownTimeoutMillis();
 
-    public ConfigurationScheduler getScheduler();
+   ConfigurationScheduler getScheduler();
 
-    public ConfigurationSource getConfigurationSource();
+   ConfigurationSource getConfigurationSource();
 
-    public List<CustomLevelConfig> getCustomLevels();
+   List<CustomLevelConfig> getCustomLevels();
 
-    public ScriptManager getScriptManager();
+   ScriptManager getScriptManager();
 
-    public AsyncLoggerConfigDelegate getAsyncLoggerConfigDelegate();
+   AsyncLoggerConfigDelegate getAsyncLoggerConfigDelegate();
 
-    public WatchManager getWatchManager();
+   WatchManager getWatchManager();
 
-    public ReliabilityStrategy getReliabilityStrategy(LoggerConfig var1);
+   ReliabilityStrategy getReliabilityStrategy(LoggerConfig loggerConfig);
 
-    public NanoClock getNanoClock();
+   NanoClock getNanoClock();
 
-    public void setNanoClock(NanoClock var1);
+   void setNanoClock(NanoClock nanoClock);
 
-    public LoggerContext getLoggerContext();
+   LoggerContext getLoggerContext();
 }
-

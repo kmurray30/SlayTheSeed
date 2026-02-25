@@ -1,27 +1,21 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.gikk.twirk.types.usernotice.subtype;
 
-import com.gikk.twirk.types.usernotice.subtype.SubscriptionGift;
-import com.gikk.twirk.types.usernotice.subtype.SubscriptionPlan;
 import java.util.Optional;
 
 public interface Subscription {
-    public SubscriptionPlan getSubscriptionPlan();
+   SubscriptionPlan getSubscriptionPlan();
 
-    public int getMonths();
+   int getMonths();
 
-    public int getStreak();
+   int getStreak();
 
-    public boolean isSharedStreak();
+   boolean isSharedStreak();
 
-    public String getSubscriptionPlanName();
+   String getSubscriptionPlanName();
 
-    public boolean isResub();
+   boolean isResub();
 
-    public boolean isGift();
+   boolean isGift();
 
-    public Optional<SubscriptionGift> getSubscriptionGift();
+   Optional<SubscriptionGift> getSubscriptionGift();
 }
-

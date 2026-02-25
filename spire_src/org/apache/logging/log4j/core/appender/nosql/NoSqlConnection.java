@@ -1,22 +1,16 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.appender.nosql;
 
 import java.io.Closeable;
-import org.apache.logging.log4j.core.appender.nosql.NoSqlObject;
 
-public interface NoSqlConnection<W, T extends NoSqlObject<W>>
-extends Closeable {
-    public T createObject();
+public interface NoSqlConnection<W, T extends NoSqlObject<W>> extends Closeable {
+   T createObject();
 
-    public T[] createList(int var1);
+   T[] createList(int length);
 
-    public void insertObject(NoSqlObject<W> var1);
+   void insertObject(NoSqlObject<W> object);
 
-    @Override
-    public void close();
+   @Override
+   void close();
 
-    public boolean isClosed();
+   boolean isClosed();
 }
-

@@ -1,14 +1,7 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.util;
 
 import org.apache.logging.log4j.message.MultiformatMessage;
-import org.apache.logging.log4j.util.StringBuilderFormattable;
 
-public interface MultiFormatStringBuilderFormattable
-extends MultiformatMessage,
-StringBuilderFormattable {
-    public void formatTo(String[] var1, StringBuilder var2);
+public interface MultiFormatStringBuilderFormattable extends MultiformatMessage, StringBuilderFormattable {
+   void formatTo(String[] formats, StringBuilder buffer);
 }
-

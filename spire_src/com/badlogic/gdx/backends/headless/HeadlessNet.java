@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.backends.headless;
 
 import com.badlogic.gdx.Gdx;
@@ -14,54 +11,54 @@ import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
 import java.awt.Desktop;
 import java.awt.GraphicsEnvironment;
+import java.awt.Desktop.Action;
 import java.net.URI;
 
-public class HeadlessNet
-implements Net {
-    NetJavaImpl netJavaImpl = new NetJavaImpl();
+public class HeadlessNet implements Net {
+   NetJavaImpl netJavaImpl = new NetJavaImpl();
 
-    @Override
-    public void sendHttpRequest(Net.HttpRequest httpRequest, Net.HttpResponseListener httpResponseListener) {
-        this.netJavaImpl.sendHttpRequest(httpRequest, httpResponseListener);
-    }
+   @Override
+   public void sendHttpRequest(Net.HttpRequest httpRequest, Net.HttpResponseListener httpResponseListener) {
+      this.netJavaImpl.sendHttpRequest(httpRequest, httpResponseListener);
+   }
 
-    @Override
-    public void cancelHttpRequest(Net.HttpRequest httpRequest) {
-        this.netJavaImpl.cancelHttpRequest(httpRequest);
-    }
+   @Override
+   public void cancelHttpRequest(Net.HttpRequest httpRequest) {
+      this.netJavaImpl.cancelHttpRequest(httpRequest);
+   }
 
-    @Override
-    public ServerSocket newServerSocket(Net.Protocol protocol, String hostname, int port, ServerSocketHints hints) {
-        return new NetJavaServerSocketImpl(protocol, hostname, port, hints);
-    }
+   @Override
+   public ServerSocket newServerSocket(Net.Protocol protocol, String hostname, int port, ServerSocketHints hints) {
+      return new NetJavaServerSocketImpl(protocol, hostname, port, hints);
+   }
 
-    @Override
-    public ServerSocket newServerSocket(Net.Protocol protocol, int port, ServerSocketHints hints) {
-        return new NetJavaServerSocketImpl(protocol, port, hints);
-    }
+   @Override
+   public ServerSocket newServerSocket(Net.Protocol protocol, int port, ServerSocketHints hints) {
+      return new NetJavaServerSocketImpl(protocol, port, hints);
+   }
 
-    @Override
-    public Socket newClientSocket(Net.Protocol protocol, String host, int port, SocketHints hints) {
-        return new NetJavaSocketImpl(protocol, host, port, hints);
-    }
+   @Override
+   public Socket newClientSocket(Net.Protocol protocol, String host, int port, SocketHints hints) {
+      return new NetJavaSocketImpl(protocol, host, port, hints);
+   }
 
-    @Override
-    public boolean openURI(String URI2) {
-        boolean result = false;
-        try {
-            if (!GraphicsEnvironment.isHeadless() && Desktop.isDesktopSupported()) {
-                if (Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                    Desktop.getDesktop().browse(URI.create(URI2));
-                    result = true;
-                }
-            } else {
-                Gdx.app.error("HeadlessNet", "Opening URIs on this environment is not supported. Ignoring.");
+   @Override
+   public boolean openURI(String URI) {
+      boolean result = false;
+
+      try {
+         if (!GraphicsEnvironment.isHeadless() && Desktop.isDesktopSupported()) {
+            if (Desktop.getDesktop().isSupported(Action.BROWSE)) {
+               Desktop.getDesktop().browse(URI.create(URI));
+               result = true;
             }
-        }
-        catch (Throwable t) {
-            Gdx.app.error("HeadlessNet", "Failed to open URI. ", t);
-        }
-        return result;
-    }
-}
+         } else {
+            Gdx.app.error("HeadlessNet", "Opening URIs on this environment is not supported. Ignoring.");
+         }
+      } catch (Throwable var4) {
+         Gdx.app.error("HeadlessNet", "Failed to open URI. ", var4);
+      }
 
+      return result;
+   }
+}

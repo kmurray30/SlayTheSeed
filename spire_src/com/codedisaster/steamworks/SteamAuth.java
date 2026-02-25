@@ -1,66 +1,49 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.codedisaster.steamworks;
 
 public class SteamAuth {
+   public static enum AuthSessionResponse {
+      OK,
+      UserNotConnectedToSteam,
+      NoLicenseOrExpired,
+      VACBanned,
+      LoggedInElseWhere,
+      VACCheckTimedOut,
+      AuthTicketCanceled,
+      AuthTicketInvalidAlreadyUsed,
+      AuthTicketInvalid,
+      PublisherIssuedBan;
 
-    public static enum UserHasLicenseForAppResult {
-        HasLicense,
-        DoesNotHaveLicense,
-        NoAuth;
+      private static final SteamAuth.AuthSessionResponse[] values = values();
 
-        private static final UserHasLicenseForAppResult[] values;
+      static SteamAuth.AuthSessionResponse byOrdinal(int authSessionResponse) {
+         return values[authSessionResponse];
+      }
+   }
 
-        static UserHasLicenseForAppResult byOrdinal(int result) {
-            return values[result];
-        }
+   public static enum BeginAuthSessionResult {
+      OK,
+      InvalidTicket,
+      DuplicateRequest,
+      InvalidVersion,
+      GameMismatch,
+      ExpiredTicket;
 
-        static {
-            values = UserHasLicenseForAppResult.values();
-        }
-    }
+      private static final SteamAuth.BeginAuthSessionResult[] values = values();
 
-    public static enum AuthSessionResponse {
-        OK,
-        UserNotConnectedToSteam,
-        NoLicenseOrExpired,
-        VACBanned,
-        LoggedInElseWhere,
-        VACCheckTimedOut,
-        AuthTicketCanceled,
-        AuthTicketInvalidAlreadyUsed,
-        AuthTicketInvalid,
-        PublisherIssuedBan;
+      static SteamAuth.BeginAuthSessionResult byOrdinal(int authSessionResponse) {
+         return values[authSessionResponse];
+      }
+   }
 
-        private static final AuthSessionResponse[] values;
+   public static enum UserHasLicenseForAppResult {
+      HasLicense,
+      DoesNotHaveLicense,
+      NoAuth;
 
-        static AuthSessionResponse byOrdinal(int authSessionResponse) {
-            return values[authSessionResponse];
-        }
+      private static final SteamAuth.UserHasLicenseForAppResult[] values = values();
 
-        static {
-            values = AuthSessionResponse.values();
-        }
-    }
-
-    public static enum BeginAuthSessionResult {
-        OK,
-        InvalidTicket,
-        DuplicateRequest,
-        InvalidVersion,
-        GameMismatch,
-        ExpiredTicket;
-
-        private static final BeginAuthSessionResult[] values;
-
-        static BeginAuthSessionResult byOrdinal(int authSessionResponse) {
-            return values[authSessionResponse];
-        }
-
-        static {
-            values = BeginAuthSessionResult.values();
-        }
-    }
+      static SteamAuth.UserHasLicenseForAppResult byOrdinal(int result) {
+         return values[result];
+      }
+   }
 }
-

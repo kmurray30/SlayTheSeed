@@ -1,29 +1,24 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.net.ssl;
 
 import java.util.Arrays;
-import org.apache.logging.log4j.core.net.ssl.PasswordProvider;
 
-class MemoryPasswordProvider
-implements PasswordProvider {
-    private final char[] password;
+class MemoryPasswordProvider implements PasswordProvider {
+   private final char[] password;
 
-    public MemoryPasswordProvider(char[] chars) {
-        this.password = (char[])(chars != null ? (char[])chars.clone() : null);
-    }
+   public MemoryPasswordProvider(final char[] chars) {
+      if (chars != null) {
+         this.password = (char[])chars.clone();
+      } else {
+         this.password = null;
+      }
+   }
 
-    @Override
-    public char[] getPassword() {
-        if (this.password == null) {
-            return null;
-        }
-        return (char[])this.password.clone();
-    }
+   @Override
+   public char[] getPassword() {
+      return this.password == null ? null : (char[])this.password.clone();
+   }
 
-    public void clearSecrets() {
-        Arrays.fill(this.password, '\u0000');
-    }
+   public void clearSecrets() {
+      Arrays.fill(this.password, '\u0000');
+   }
 }
-

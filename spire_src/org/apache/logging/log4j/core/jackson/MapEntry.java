@@ -1,12 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.fasterxml.jackson.annotation.JsonCreator
- *  com.fasterxml.jackson.annotation.JsonProperty
- *  com.fasterxml.jackson.annotation.JsonPropertyOrder
- *  com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
- */
 package org.apache.logging.log4j.core.jackson;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -14,64 +5,77 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-@JsonPropertyOrder(value={"key", "value"})
+@JsonPropertyOrder({"key", "value"})
 final class MapEntry {
-    @JsonProperty
-    @JacksonXmlProperty(isAttribute=true)
-    private String key;
-    @JsonProperty
-    @JacksonXmlProperty(isAttribute=true)
-    private String value;
+   @JsonProperty
+   @JacksonXmlProperty(isAttribute = true)
+   private String key;
+   @JsonProperty
+   @JacksonXmlProperty(isAttribute = true)
+   private String value;
 
-    @JsonCreator
-    public MapEntry(@JsonProperty(value="key") String key, @JsonProperty(value="value") String value) {
-        this.setKey(key);
-        this.setValue(value);
-    }
+   @JsonCreator
+   public MapEntry(@JsonProperty("key") final String key, @JsonProperty("value") final String value) {
+      this.setKey(key);
+      this.setValue(value);
+   }
 
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+   @Override
+   public boolean equals(final Object obj) {
+      if (this == obj) {
+         return true;
+      } else if (obj == null) {
+         return false;
+      } else if (!(obj instanceof MapEntry)) {
+         return false;
+      } else {
+         MapEntry other = (MapEntry)obj;
+         if (this.getKey() == null) {
+            if (other.getKey() != null) {
+               return false;
+            }
+         } else if (!this.getKey().equals(other.getKey())) {
             return false;
-        }
-        if (!(obj instanceof MapEntry)) {
+         }
+
+         if (this.getValue() == null) {
+            if (other.getValue() != null) {
+               return false;
+            }
+         } else if (!this.getValue().equals(other.getValue())) {
             return false;
-        }
-        MapEntry other = (MapEntry)obj;
-        if (this.getKey() == null ? other.getKey() != null : !this.getKey().equals(other.getKey())) {
-            return false;
-        }
-        return !(this.getValue() == null ? other.getValue() != null : !this.getValue().equals(other.getValue()));
-    }
+         }
 
-    public String getKey() {
-        return this.key;
-    }
+         return true;
+      }
+   }
 
-    public String getValue() {
-        return this.value;
-    }
+   public String getKey() {
+      return this.key;
+   }
 
-    public int hashCode() {
-        int prime = 31;
-        int result = 1;
-        result = 31 * result + (this.getKey() == null ? 0 : this.getKey().hashCode());
-        result = 31 * result + (this.getValue() == null ? 0 : this.getValue().hashCode());
-        return result;
-    }
+   public String getValue() {
+      return this.value;
+   }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
+   @Override
+   public int hashCode() {
+      int prime = 31;
+      int result = 1;
+      result = 31 * result + (this.getKey() == null ? 0 : this.getKey().hashCode());
+      return 31 * result + (this.getValue() == null ? 0 : this.getValue().hashCode());
+   }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+   public void setKey(final String key) {
+      this.key = key;
+   }
 
-    public String toString() {
-        return "" + this.getKey() + "=" + this.getValue();
-    }
+   public void setValue(final String value) {
+      this.value = value;
+   }
+
+   @Override
+   public String toString() {
+      return "" + this.getKey() + "=" + this.getValue();
+   }
 }
-

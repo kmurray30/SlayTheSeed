@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.scene;
 
 import com.badlogic.gdx.Gdx;
@@ -13,58 +10,75 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
-public class EventBgParticle
-extends AbstractGameEffect {
-    private float x;
-    private float y;
-    private float aV;
-    private float offsetX;
-    private static TextureAtlas.AtlasRegion img;
-    private static TextureAtlas.AtlasRegion img2;
-    private TextureAtlas.AtlasRegion useImg;
+public class EventBgParticle extends AbstractGameEffect {
+   private float x;
+   private float y;
+   private float aV;
+   private float offsetX;
+   private static TextureAtlas.AtlasRegion img;
+   private static TextureAtlas.AtlasRegion img2;
+   private TextureAtlas.AtlasRegion useImg;
 
-    public EventBgParticle() {
-        if (img == null) {
-            img = ImageMaster.vfxAtlas.findRegion("eventBgParticle1");
-            img2 = ImageMaster.vfxAtlas.findRegion("eventBgParticle2");
-        }
-        this.useImg = MathUtils.randomBoolean() ? img : img2;
-        this.startingDuration = this.duration = 20.0f;
-        this.x = (float)Settings.WIDTH / 2.0f - (float)(this.useImg.packedWidth / 2);
-        this.y = (float)Settings.HEIGHT / 2.0f - (float)(this.useImg.packedHeight / 2);
-        this.scale = Settings.scale * MathUtils.random(0.3f, 3.0f);
-        this.rotation = MathUtils.random(360.0f);
-        this.offsetX = MathUtils.random(600.0f, 670.0f);
-        this.aV = MathUtils.random(0.01f, 7.0f) + this.offsetX / 300.0f;
-        this.offsetX *= Settings.scale;
-        this.scale += this.offsetX / 900.0f;
-        float g = MathUtils.random(0.05f, 0.1f);
-        this.color = new Color(0.0f, g, g, 0.1f);
-        this.renderBehind = true;
-    }
+   public EventBgParticle() {
+      if (img == null) {
+         img = ImageMaster.vfxAtlas.findRegion("eventBgParticle1");
+         img2 = ImageMaster.vfxAtlas.findRegion("eventBgParticle2");
+      }
 
-    @Override
-    public void update() {
-        this.duration -= Gdx.graphics.getDeltaTime();
-        this.rotation += Gdx.graphics.getDeltaTime() * this.aV;
-        if (this.duration < 0.0f) {
-            this.isDone = true;
-        }
-        if (this.duration > 16.0f) {
-            this.color.a = Interpolation.fade.apply(0.3f, 0.0f, (this.duration - 16.0f) / 4.0f);
-        } else if (this.duration < 4.0f) {
-            this.color.a = Interpolation.fade.apply(0.0f, 0.3f, this.duration / 4.0f);
-        }
-    }
+      if (MathUtils.randomBoolean()) {
+         this.useImg = img;
+      } else {
+         this.useImg = img2;
+      }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        sb.setColor(this.color);
-        sb.draw(this.useImg, this.x - this.offsetX, this.y, (float)this.useImg.packedWidth / 2.0f + this.offsetX, (float)this.useImg.packedHeight / 2.0f, this.useImg.packedWidth, this.useImg.packedHeight, this.scale, this.scale, this.rotation);
-    }
+      this.duration = 20.0F;
+      this.startingDuration = this.duration;
+      this.x = Settings.WIDTH / 2.0F - this.useImg.packedWidth / 2;
+      this.y = Settings.HEIGHT / 2.0F - this.useImg.packedHeight / 2;
+      this.scale = Settings.scale * MathUtils.random(0.3F, 3.0F);
+      this.rotation = MathUtils.random(360.0F);
+      this.offsetX = MathUtils.random(600.0F, 670.0F);
+      this.aV = MathUtils.random(0.01F, 7.0F) + this.offsetX / 300.0F;
+      this.offsetX = this.offsetX * Settings.scale;
+      this.scale = this.scale + this.offsetX / 900.0F;
+      float g = MathUtils.random(0.05F, 0.1F);
+      this.color = new Color(0.0F, g, g, 0.1F);
+      this.renderBehind = true;
+   }
 
-    @Override
-    public void dispose() {
-    }
+   @Override
+   public void update() {
+      this.duration = this.duration - Gdx.graphics.getDeltaTime();
+      this.rotation = this.rotation + Gdx.graphics.getDeltaTime() * this.aV;
+      if (this.duration < 0.0F) {
+         this.isDone = true;
+      }
+
+      if (this.duration > 16.0F) {
+         this.color.a = Interpolation.fade.apply(0.3F, 0.0F, (this.duration - 16.0F) / 4.0F);
+      } else if (this.duration < 4.0F) {
+         this.color.a = Interpolation.fade.apply(0.0F, 0.3F, this.duration / 4.0F);
+      }
+   }
+
+   @Override
+   public void render(SpriteBatch sb) {
+      sb.setColor(this.color);
+      sb.draw(
+         this.useImg,
+         this.x - this.offsetX,
+         this.y,
+         this.useImg.packedWidth / 2.0F + this.offsetX,
+         this.useImg.packedHeight / 2.0F,
+         this.useImg.packedWidth,
+         this.useImg.packedHeight,
+         this.scale,
+         this.scale,
+         this.rotation
+      );
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

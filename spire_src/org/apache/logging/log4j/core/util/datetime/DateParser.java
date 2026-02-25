@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.util.datetime;
 
 import java.text.ParseException;
@@ -11,20 +8,19 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public interface DateParser {
-    public Date parse(String var1) throws ParseException;
+   Date parse(String source) throws ParseException;
 
-    public Date parse(String var1, ParsePosition var2);
+   Date parse(String source, ParsePosition pos);
 
-    public boolean parse(String var1, ParsePosition var2, Calendar var3);
+   boolean parse(String source, ParsePosition pos, Calendar calendar);
 
-    public String getPattern();
+   String getPattern();
 
-    public TimeZone getTimeZone();
+   TimeZone getTimeZone();
 
-    public Locale getLocale();
+   Locale getLocale();
 
-    public Object parseObject(String var1) throws ParseException;
+   Object parseObject(String source) throws ParseException;
 
-    public Object parseObject(String var1, ParsePosition var2);
+   Object parseObject(String source, ParsePosition pos);
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl;
 
 import java.awt.Toolkit;
@@ -9,40 +6,36 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
-import org.lwjgl.DefaultSysImplementation;
-import org.lwjgl.LWJGLUtil;
 
-abstract class J2SESysImplementation
-extends DefaultSysImplementation {
-    J2SESysImplementation() {
-    }
+abstract class J2SESysImplementation extends DefaultSysImplementation {
+   @Override
+   public long getTime() {
+      return System.currentTimeMillis();
+   }
 
-    public long getTime() {
-        return System.currentTimeMillis();
-    }
+   @Override
+   public void alert(String title, String message) {
+      try {
+         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+      } catch (Exception var4) {
+         LWJGLUtil.log("Caught exception while setting LAF: " + var4);
+      }
 
-    public void alert(String title, String message) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (Exception e) {
-            LWJGLUtil.log("Caught exception while setting LAF: " + e);
-        }
-        JOptionPane.showMessageDialog(null, message, title, 2);
-    }
+      JOptionPane.showMessageDialog(null, message, title, 2);
+   }
 
-    public String getClipboard() {
-        try {
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            Transferable transferable = clipboard.getContents(null);
-            if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-                return (String)transferable.getTransferData(DataFlavor.stringFlavor);
-            }
-        }
-        catch (Exception e) {
-            LWJGLUtil.log("Exception while getting clipboard: " + e);
-        }
-        return null;
-    }
+   @Override
+   public String getClipboard() {
+      try {
+         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+         Transferable transferable = clipboard.getContents(null);
+         if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+            return (String)transferable.getTransferData(DataFlavor.stringFlavor);
+         }
+      } catch (Exception var3) {
+         LWJGLUtil.log("Exception while getting clipboard: " + var3);
+      }
+
+      return null;
+   }
 }
-

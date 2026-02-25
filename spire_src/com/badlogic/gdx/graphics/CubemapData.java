@@ -1,19 +1,15 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.graphics;
 
 public interface CubemapData {
-    public boolean isPrepared();
+   boolean isPrepared();
 
-    public void prepare();
+   void prepare();
 
-    public void consumeCubemapData();
+   void consumeCubemapData();
 
-    public int getWidth();
+   int getWidth();
 
-    public int getHeight();
+   int getHeight();
 
-    public boolean isManaged();
+   boolean isManaged();
 }
-

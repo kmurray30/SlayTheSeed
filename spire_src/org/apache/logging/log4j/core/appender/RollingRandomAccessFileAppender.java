@@ -1,15 +1,12 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.appender;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
-import org.apache.logging.log4j.core.appender.AbstractOutputStreamAppender;
 import org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy;
 import org.apache.logging.log4j.core.appender.rolling.DirectFileRolloverStrategy;
 import org.apache.logging.log4j.core.appender.rolling.DirectWriteRolloverStrategy;
@@ -22,190 +19,267 @@ import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
-import org.apache.logging.log4j.core.filter.AbstractFilterable;
 import org.apache.logging.log4j.core.net.Advertiser;
 import org.apache.logging.log4j.core.util.Booleans;
 import org.apache.logging.log4j.core.util.Integers;
 
-@Plugin(name="RollingRandomAccessFile", category="Core", elementType="appender", printObject=true)
-public final class RollingRandomAccessFileAppender
-extends AbstractOutputStreamAppender<RollingRandomAccessFileManager> {
-    private final String fileName;
-    private final String filePattern;
-    private final Object advertisement;
-    private final Advertiser advertiser;
+@Plugin(name = "RollingRandomAccessFile", category = "Core", elementType = "appender", printObject = true)
+public final class RollingRandomAccessFileAppender extends AbstractOutputStreamAppender<RollingRandomAccessFileManager> {
+   private final String fileName;
+   private final String filePattern;
+   private final Object advertisement;
+   private final Advertiser advertiser;
 
-    private RollingRandomAccessFileAppender(String name, Layout<? extends Serializable> layout, Filter filter, RollingRandomAccessFileManager manager, String fileName, String filePattern, boolean ignoreExceptions, boolean immediateFlush, int bufferSize, Advertiser advertiser, Property[] properties) {
-        super(name, layout, filter, ignoreExceptions, immediateFlush, properties, manager);
-        if (advertiser != null) {
-            HashMap<String, String> configuration = new HashMap<String, String>(layout.getContentFormat());
-            configuration.put("contentType", layout.getContentType());
-            configuration.put("name", name);
-            this.advertisement = advertiser.advertise(configuration);
-        } else {
-            this.advertisement = null;
-        }
-        this.fileName = fileName;
-        this.filePattern = filePattern;
-        this.advertiser = advertiser;
-    }
+   private RollingRandomAccessFileAppender(
+      final String name,
+      final Layout<? extends Serializable> layout,
+      final Filter filter,
+      final RollingRandomAccessFileManager manager,
+      final String fileName,
+      final String filePattern,
+      final boolean ignoreExceptions,
+      final boolean immediateFlush,
+      final int bufferSize,
+      final Advertiser advertiser,
+      final Property[] properties
+   ) {
+      super(name, layout, filter, ignoreExceptions, immediateFlush, properties, manager);
+      if (advertiser != null) {
+         Map<String, String> configuration = new HashMap<>(layout.getContentFormat());
+         configuration.put("contentType", layout.getContentType());
+         configuration.put("name", name);
+         this.advertisement = advertiser.advertise(configuration);
+      } else {
+         this.advertisement = null;
+      }
 
-    @Override
-    public boolean stop(long timeout, TimeUnit timeUnit) {
-        this.setStopping();
-        super.stop(timeout, timeUnit, false);
-        if (this.advertiser != null) {
-            this.advertiser.unadvertise(this.advertisement);
-        }
-        this.setStopped();
-        return true;
-    }
+      this.fileName = fileName;
+      this.filePattern = filePattern;
+      this.advertiser = advertiser;
+   }
 
-    @Override
-    public void append(LogEvent event) {
-        RollingRandomAccessFileManager manager = (RollingRandomAccessFileManager)this.getManager();
-        manager.checkRollover(event);
-        super.append(event);
-    }
+   @Override
+   public boolean stop(final long timeout, final TimeUnit timeUnit) {
+      this.setStopping();
+      super.stop(timeout, timeUnit, false);
+      if (this.advertiser != null) {
+         this.advertiser.unadvertise(this.advertisement);
+      }
 
-    public String getFileName() {
-        return this.fileName;
-    }
+      this.setStopped();
+      return true;
+   }
 
-    public String getFilePattern() {
-        return this.filePattern;
-    }
+   @Override
+   public void append(final LogEvent event) {
+      RollingRandomAccessFileManager manager = this.getManager();
+      manager.checkRollover(event);
+      super.append(event);
+   }
 
-    public int getBufferSize() {
-        return ((RollingRandomAccessFileManager)this.getManager()).getBufferSize();
-    }
+   public String getFileName() {
+      return this.fileName;
+   }
 
-    @Deprecated
-    public static <B extends Builder<B>> RollingRandomAccessFileAppender createAppender(String fileName, String filePattern, String append, String name, String immediateFlush, String bufferSizeStr, TriggeringPolicy policy, RolloverStrategy strategy, Layout<? extends Serializable> layout, Filter filter, String ignoreExceptions, String advertise, String advertiseURI, Configuration configuration) {
-        boolean isAppend = Booleans.parseBoolean(append, true);
-        boolean isIgnoreExceptions = Booleans.parseBoolean(ignoreExceptions, true);
-        boolean isImmediateFlush = Booleans.parseBoolean(immediateFlush, true);
-        boolean isAdvertise = Boolean.parseBoolean(advertise);
-        int bufferSize = Integers.parseInt(bufferSizeStr, 262144);
-        return ((Builder)((Builder)((Builder)((Builder)((Builder)((Builder)((Builder)((AbstractFilterable.Builder)((Builder)((Builder)((Builder)((AbstractOutputStreamAppender.Builder)((Builder)((Builder)((Builder)RollingRandomAccessFileAppender.newBuilder()).withAdvertise(isAdvertise)).withAdvertiseURI(advertiseURI)).withAppend(isAppend)).withBufferSize(bufferSize)).setConfiguration(configuration)).withFileName(fileName)).withFilePattern(filePattern)).setFilter(filter)).setIgnoreExceptions(isIgnoreExceptions)).withImmediateFlush(isImmediateFlush)).setLayout(layout)).setName(name)).withPolicy(policy)).withStrategy(strategy)).build();
-    }
+   public String getFilePattern() {
+      return this.filePattern;
+   }
 
-    @PluginBuilderFactory
-    public static <B extends Builder<B>> B newBuilder() {
-        return (B)((Builder)new Builder().asBuilder());
-    }
+   public int getBufferSize() {
+      return this.getManager().getBufferSize();
+   }
 
-    public static class Builder<B extends Builder<B>>
-    extends AbstractOutputStreamAppender.Builder<B>
-    implements org.apache.logging.log4j.core.util.Builder<RollingRandomAccessFileAppender> {
-        @PluginBuilderAttribute(value="fileName")
-        private String fileName;
-        @PluginBuilderAttribute(value="filePattern")
-        private String filePattern;
-        @PluginBuilderAttribute(value="append")
-        private boolean append = true;
-        @PluginElement(value="Policy")
-        private TriggeringPolicy policy;
-        @PluginElement(value="Strategy")
-        private RolloverStrategy strategy;
-        @PluginBuilderAttribute(value="advertise")
-        private boolean advertise;
-        @PluginBuilderAttribute(value="advertiseURI")
-        private String advertiseURI;
-        @PluginBuilderAttribute
-        private String filePermissions;
-        @PluginBuilderAttribute
-        private String fileOwner;
-        @PluginBuilderAttribute
-        private String fileGroup;
+   @Deprecated
+   public static <B extends RollingRandomAccessFileAppender.Builder<B>> RollingRandomAccessFileAppender createAppender(
+      final String fileName,
+      final String filePattern,
+      final String append,
+      final String name,
+      final String immediateFlush,
+      final String bufferSizeStr,
+      final TriggeringPolicy policy,
+      final RolloverStrategy strategy,
+      final Layout<? extends Serializable> layout,
+      final Filter filter,
+      final String ignoreExceptions,
+      final String advertise,
+      final String advertiseURI,
+      final Configuration configuration
+   ) {
+      boolean isAppend = Booleans.parseBoolean(append, true);
+      boolean isIgnoreExceptions = Booleans.parseBoolean(ignoreExceptions, true);
+      boolean isImmediateFlush = Booleans.parseBoolean(immediateFlush, true);
+      boolean isAdvertise = Boolean.parseBoolean(advertise);
+      int bufferSize = Integers.parseInt(bufferSizeStr, 262144);
+      return ((RollingRandomAccessFileAppender.Builder)((RollingRandomAccessFileAppender.Builder)((RollingRandomAccessFileAppender.Builder)((RollingRandomAccessFileAppender.Builder)((RollingRandomAccessFileAppender.Builder)((RollingRandomAccessFileAppender.Builder)((RollingRandomAccessFileAppender.Builder)newBuilder()
+                              .withAdvertise(isAdvertise)
+                              .withAdvertiseURI(advertiseURI)
+                              .withAppend(isAppend)
+                              .withBufferSize(bufferSize))
+                           .setConfiguration(configuration))
+                        .withFileName(fileName)
+                        .withFilePattern(filePattern)
+                        .setFilter(filter))
+                     .setIgnoreExceptions(isIgnoreExceptions))
+                  .withImmediateFlush(isImmediateFlush))
+               .setLayout(layout))
+            .setName(name))
+         .withPolicy(policy)
+         .withStrategy(strategy)
+         .build();
+   }
 
-        public Builder() {
-            this.withBufferSize(262144);
-            this.setIgnoreExceptions(true);
-            this.withImmediateFlush(true);
-        }
+   @PluginBuilderFactory
+   public static <B extends RollingRandomAccessFileAppender.Builder<B>> B newBuilder() {
+      return new RollingRandomAccessFileAppender.Builder<B>().asBuilder();
+   }
 
-        @Override
-        public RollingRandomAccessFileAppender build() {
-            int bufferSize;
-            String name = this.getName();
-            if (name == null) {
-                LOGGER.error("No name provided for FileAppender");
-                return null;
-            }
+   public static class Builder<B extends RollingRandomAccessFileAppender.Builder<B>>
+      extends AbstractOutputStreamAppender.Builder<B>
+      implements org.apache.logging.log4j.core.util.Builder<RollingRandomAccessFileAppender> {
+      @PluginBuilderAttribute("fileName")
+      private String fileName;
+      @PluginBuilderAttribute("filePattern")
+      private String filePattern;
+      @PluginBuilderAttribute("append")
+      private boolean append = true;
+      @PluginElement("Policy")
+      private TriggeringPolicy policy;
+      @PluginElement("Strategy")
+      private RolloverStrategy strategy;
+      @PluginBuilderAttribute("advertise")
+      private boolean advertise;
+      @PluginBuilderAttribute("advertiseURI")
+      private String advertiseURI;
+      @PluginBuilderAttribute
+      private String filePermissions;
+      @PluginBuilderAttribute
+      private String fileOwner;
+      @PluginBuilderAttribute
+      private String fileGroup;
+
+      public Builder() {
+         this.withBufferSize(262144);
+         this.setIgnoreExceptions(true);
+         this.withImmediateFlush(true);
+      }
+
+      public RollingRandomAccessFileAppender build() {
+         String name = this.getName();
+         if (name == null) {
+            RollingRandomAccessFileAppender.LOGGER.error("No name provided for FileAppender");
+            return null;
+         } else {
             if (this.strategy == null) {
-                this.strategy = this.fileName != null ? DefaultRolloverStrategy.newBuilder().withCompressionLevelStr(String.valueOf(-1)).withConfig(this.getConfiguration()).build() : DirectWriteRolloverStrategy.newBuilder().withCompressionLevelStr(String.valueOf(-1)).withConfig(this.getConfiguration()).build();
+               if (this.fileName != null) {
+                  this.strategy = DefaultRolloverStrategy.newBuilder().withCompressionLevelStr(String.valueOf(-1)).withConfig(this.getConfiguration()).build();
+               } else {
+                  this.strategy = DirectWriteRolloverStrategy.newBuilder()
+                     .withCompressionLevelStr(String.valueOf(-1))
+                     .withConfig(this.getConfiguration())
+                     .build();
+               }
             } else if (this.fileName == null && !(this.strategy instanceof DirectFileRolloverStrategy)) {
-                LOGGER.error("RollingFileAppender '{}': When no file name is provided a DirectFileRolloverStrategy must be configured");
-                return null;
+               RollingRandomAccessFileAppender.LOGGER
+                  .error("RollingFileAppender '{}': When no file name is provided a DirectFileRolloverStrategy must be configured");
+               return null;
             }
+
             if (this.filePattern == null) {
-                LOGGER.error("No filename pattern provided for FileAppender with name " + name);
-                return null;
+               RollingRandomAccessFileAppender.LOGGER.error("No filename pattern provided for FileAppender with name " + name);
+               return null;
+            } else if (this.policy == null) {
+               RollingRandomAccessFileAppender.LOGGER.error("A TriggeringPolicy must be provided");
+               return null;
+            } else {
+               Layout<? extends Serializable> layout = this.getOrCreateLayout();
+               boolean immediateFlush = this.isImmediateFlush();
+               int bufferSize = this.getBufferSize();
+               RollingRandomAccessFileManager manager = RollingRandomAccessFileManager.getRollingRandomAccessFileManager(
+                  this.fileName,
+                  this.filePattern,
+                  this.append,
+                  immediateFlush,
+                  bufferSize,
+                  this.policy,
+                  this.strategy,
+                  this.advertiseURI,
+                  layout,
+                  this.filePermissions,
+                  this.fileOwner,
+                  this.fileGroup,
+                  this.getConfiguration()
+               );
+               if (manager == null) {
+                  return null;
+               } else {
+                  manager.initialize();
+                  return new RollingRandomAccessFileAppender(
+                     name,
+                     layout,
+                     this.getFilter(),
+                     manager,
+                     this.fileName,
+                     this.filePattern,
+                     this.isIgnoreExceptions(),
+                     immediateFlush,
+                     bufferSize,
+                     this.advertise ? this.getConfiguration().getAdvertiser() : null,
+                     this.getPropertyArray()
+                  );
+               }
             }
-            if (this.policy == null) {
-                LOGGER.error("A TriggeringPolicy must be provided");
-                return null;
-            }
-            Layout<Serializable> layout = this.getOrCreateLayout();
-            boolean immediateFlush = this.isImmediateFlush();
-            RollingRandomAccessFileManager manager = RollingRandomAccessFileManager.getRollingRandomAccessFileManager(this.fileName, this.filePattern, this.append, immediateFlush, bufferSize = this.getBufferSize(), this.policy, this.strategy, this.advertiseURI, layout, this.filePermissions, this.fileOwner, this.fileGroup, this.getConfiguration());
-            if (manager == null) {
-                return null;
-            }
-            manager.initialize();
-            return new RollingRandomAccessFileAppender(name, layout, this.getFilter(), manager, this.fileName, this.filePattern, this.isIgnoreExceptions(), immediateFlush, bufferSize, this.advertise ? this.getConfiguration().getAdvertiser() : null, this.getPropertyArray());
-        }
+         }
+      }
 
-        public B withFileName(String fileName) {
-            this.fileName = fileName;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B withFileName(final String fileName) {
+         this.fileName = fileName;
+         return this.asBuilder();
+      }
 
-        public B withFilePattern(String filePattern) {
-            this.filePattern = filePattern;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B withFilePattern(final String filePattern) {
+         this.filePattern = filePattern;
+         return this.asBuilder();
+      }
 
-        public B withAppend(boolean append) {
-            this.append = append;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B withAppend(final boolean append) {
+         this.append = append;
+         return this.asBuilder();
+      }
 
-        public B withPolicy(TriggeringPolicy policy) {
-            this.policy = policy;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B withPolicy(final TriggeringPolicy policy) {
+         this.policy = policy;
+         return this.asBuilder();
+      }
 
-        public B withStrategy(RolloverStrategy strategy) {
-            this.strategy = strategy;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B withStrategy(final RolloverStrategy strategy) {
+         this.strategy = strategy;
+         return this.asBuilder();
+      }
 
-        public B withAdvertise(boolean advertise) {
-            this.advertise = advertise;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B withAdvertise(final boolean advertise) {
+         this.advertise = advertise;
+         return this.asBuilder();
+      }
 
-        public B withAdvertiseURI(String advertiseURI) {
-            this.advertiseURI = advertiseURI;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B withAdvertiseURI(final String advertiseURI) {
+         this.advertiseURI = advertiseURI;
+         return this.asBuilder();
+      }
 
-        public B withFilePermissions(String filePermissions) {
-            this.filePermissions = filePermissions;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B withFilePermissions(final String filePermissions) {
+         this.filePermissions = filePermissions;
+         return this.asBuilder();
+      }
 
-        public B withFileOwner(String fileOwner) {
-            this.fileOwner = fileOwner;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B withFileOwner(final String fileOwner) {
+         this.fileOwner = fileOwner;
+         return this.asBuilder();
+      }
 
-        public B withFileGroup(String fileGroup) {
-            this.fileGroup = fileGroup;
-            return (B)((Builder)this.asBuilder());
-        }
-    }
+      public B withFileGroup(final String fileGroup) {
+         this.fileGroup = fileGroup;
+         return this.asBuilder();
+      }
+   }
 }
-

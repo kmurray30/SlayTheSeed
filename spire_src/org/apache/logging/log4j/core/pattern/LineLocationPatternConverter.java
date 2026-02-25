@@ -1,40 +1,32 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.pattern;
 
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.impl.LocationAware;
-import org.apache.logging.log4j.core.pattern.ConverterKeys;
-import org.apache.logging.log4j.core.pattern.LogEventPatternConverter;
 
-@Plugin(name="LineLocationPatternConverter", category="Converter")
-@ConverterKeys(value={"L", "line"})
-public final class LineLocationPatternConverter
-extends LogEventPatternConverter
-implements LocationAware {
-    private static final LineLocationPatternConverter INSTANCE = new LineLocationPatternConverter();
+@Plugin(name = "LineLocationPatternConverter", category = "Converter")
+@ConverterKeys({"L", "line"})
+public final class LineLocationPatternConverter extends LogEventPatternConverter implements LocationAware {
+   private static final LineLocationPatternConverter INSTANCE = new LineLocationPatternConverter();
 
-    private LineLocationPatternConverter() {
-        super("Line", "line");
-    }
+   private LineLocationPatternConverter() {
+      super("Line", "line");
+   }
 
-    public static LineLocationPatternConverter newInstance(String[] options) {
-        return INSTANCE;
-    }
+   public static LineLocationPatternConverter newInstance(final String[] options) {
+      return INSTANCE;
+   }
 
-    @Override
-    public void format(LogEvent event, StringBuilder output) {
-        StackTraceElement element = event.getSource();
-        if (element != null) {
-            output.append(element.getLineNumber());
-        }
-    }
+   @Override
+   public void format(final LogEvent event, final StringBuilder output) {
+      StackTraceElement element = event.getSource();
+      if (element != null) {
+         output.append(element.getLineNumber());
+      }
+   }
 
-    @Override
-    public boolean requiresLocation() {
-        return true;
-    }
+   @Override
+   public boolean requiresLocation() {
+      return true;
+   }
 }
-

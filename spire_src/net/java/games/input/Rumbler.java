@@ -1,15 +1,9 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package net.java.games.input;
 
-import net.java.games.input.Component;
-
 public interface Rumbler {
-    public void rumble(float var1);
+   void rumble(float var1);
 
-    public String getAxisName();
+   String getAxisName();
 
-    public Component.Identifier getAxisIdentifier();
+   Component.Identifier getAxisIdentifier();
 }
-

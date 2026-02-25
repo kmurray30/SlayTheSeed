@@ -1,93 +1,86 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package net.java.games.input;
 
-import net.java.games.input.AbstractController;
-import net.java.games.input.Component;
-import net.java.games.input.Controller;
-import net.java.games.input.Rumbler;
+public abstract class Mouse extends AbstractController {
+   protected Mouse(String name, Component[] components, Controller[] children, Rumbler[] rumblers) {
+      super(name, components, children, rumblers);
+   }
 
-public abstract class Mouse
-extends AbstractController {
-    protected Mouse(String name, Component[] components, Controller[] children, Rumbler[] rumblers) {
-        super(name, components, children, rumblers);
-    }
+   public Controller.Type getType() {
+      return Controller.Type.MOUSE;
+   }
 
-    public Controller.Type getType() {
-        return Controller.Type.MOUSE;
-    }
+   public Component getX() {
+      return this.getComponent(Component.Identifier.Axis.X);
+   }
 
-    public Component getX() {
-        return this.getComponent(Component.Identifier.Axis.X);
-    }
+   public Component getY() {
+      return this.getComponent(Component.Identifier.Axis.Y);
+   }
 
-    public Component getY() {
-        return this.getComponent(Component.Identifier.Axis.Y);
-    }
+   public Component getWheel() {
+      return this.getComponent(Component.Identifier.Axis.Z);
+   }
 
-    public Component getWheel() {
-        return this.getComponent(Component.Identifier.Axis.Z);
-    }
+   public Component getPrimaryButton() {
+      Component primaryButton = this.getComponent(Component.Identifier.Button.LEFT);
+      if (primaryButton == null) {
+         primaryButton = this.getComponent(Component.Identifier.Button._1);
+      }
 
-    public Component getPrimaryButton() {
-        Component primaryButton = this.getComponent(Component.Identifier.Button.LEFT);
-        if (primaryButton == null) {
-            primaryButton = this.getComponent(Component.Identifier.Button._1);
-        }
-        return primaryButton;
-    }
+      return primaryButton;
+   }
 
-    public Component getSecondaryButton() {
-        Component secondaryButton = this.getComponent(Component.Identifier.Button.RIGHT);
-        if (secondaryButton == null) {
-            secondaryButton = this.getComponent(Component.Identifier.Button._2);
-        }
-        return secondaryButton;
-    }
+   public Component getSecondaryButton() {
+      Component secondaryButton = this.getComponent(Component.Identifier.Button.RIGHT);
+      if (secondaryButton == null) {
+         secondaryButton = this.getComponent(Component.Identifier.Button._2);
+      }
 
-    public Component getTertiaryButton() {
-        Component tertiaryButton = this.getComponent(Component.Identifier.Button.MIDDLE);
-        if (tertiaryButton == null) {
-            tertiaryButton = this.getComponent(Component.Identifier.Button._3);
-        }
-        return tertiaryButton;
-    }
+      return secondaryButton;
+   }
 
-    public Component getLeft() {
-        return this.getComponent(Component.Identifier.Button.LEFT);
-    }
+   public Component getTertiaryButton() {
+      Component tertiaryButton = this.getComponent(Component.Identifier.Button.MIDDLE);
+      if (tertiaryButton == null) {
+         tertiaryButton = this.getComponent(Component.Identifier.Button._3);
+      }
 
-    public Component getRight() {
-        return this.getComponent(Component.Identifier.Button.RIGHT);
-    }
+      return tertiaryButton;
+   }
 
-    public Component getMiddle() {
-        return this.getComponent(Component.Identifier.Button.MIDDLE);
-    }
+   public Component getLeft() {
+      return this.getComponent(Component.Identifier.Button.LEFT);
+   }
 
-    public Component getSide() {
-        return this.getComponent(Component.Identifier.Button.SIDE);
-    }
+   public Component getRight() {
+      return this.getComponent(Component.Identifier.Button.RIGHT);
+   }
 
-    public Component getExtra() {
-        return this.getComponent(Component.Identifier.Button.EXTRA);
-    }
+   public Component getMiddle() {
+      return this.getComponent(Component.Identifier.Button.MIDDLE);
+   }
 
-    public Component getForward() {
-        return this.getComponent(Component.Identifier.Button.FORWARD);
-    }
+   public Component getSide() {
+      return this.getComponent(Component.Identifier.Button.SIDE);
+   }
 
-    public Component getBack() {
-        return this.getComponent(Component.Identifier.Button.BACK);
-    }
+   public Component getExtra() {
+      return this.getComponent(Component.Identifier.Button.EXTRA);
+   }
 
-    public Component getButton3() {
-        return this.getComponent(Component.Identifier.Button._3);
-    }
+   public Component getForward() {
+      return this.getComponent(Component.Identifier.Button.FORWARD);
+   }
 
-    public Component getButton4() {
-        return this.getComponent(Component.Identifier.Button._4);
-    }
+   public Component getBack() {
+      return this.getComponent(Component.Identifier.Button.BACK);
+   }
+
+   public Component getButton3() {
+      return this.getComponent(Component.Identifier.Button._3);
+   }
+
+   public Component getButton4() {
+      return this.getComponent(Component.Identifier.Button._4);
+   }
 }
-

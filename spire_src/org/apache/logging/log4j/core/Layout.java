@@ -1,27 +1,21 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core;
 
 import java.io.Serializable;
 import java.util.Map;
-import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.layout.Encoder;
 
-public interface Layout<T extends Serializable>
-extends Encoder<LogEvent> {
-    public static final String ELEMENT_TYPE = "layout";
+public interface Layout<T extends Serializable> extends Encoder<LogEvent> {
+   String ELEMENT_TYPE = "layout";
 
-    public byte[] getFooter();
+   byte[] getFooter();
 
-    public byte[] getHeader();
+   byte[] getHeader();
 
-    public byte[] toByteArray(LogEvent var1);
+   byte[] toByteArray(LogEvent event);
 
-    public T toSerializable(LogEvent var1);
+   T toSerializable(LogEvent event);
 
-    public String getContentType();
+   String getContentType();
 
-    public Map<String, String> getContentFormat();
+   Map<String, String> getContentFormat();
 }
-

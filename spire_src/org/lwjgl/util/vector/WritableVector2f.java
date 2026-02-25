@@ -1,13 +1,9 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl.util.vector;
 
 public interface WritableVector2f {
-    public void setX(float var1);
+   void setX(float var1);
 
-    public void setY(float var1);
+   void setY(float var1);
 
-    public void set(float var1, float var2);
+   void set(float var1, float var2);
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.util.datetime;
 
 import java.text.DateFormat;
@@ -10,103 +7,120 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import org.apache.logging.log4j.core.util.datetime.Format;
 
 abstract class FormatCache<F extends Format> {
-    static final int NONE = -1;
-    private final ConcurrentMap<MultipartKey, F> cInstanceCache = new ConcurrentHashMap<MultipartKey, F>(7);
-    private static final ConcurrentMap<MultipartKey, String> cDateTimeInstanceCache = new ConcurrentHashMap<MultipartKey, String>(7);
+   static final int NONE = -1;
+   private final ConcurrentMap<FormatCache.MultipartKey, F> cInstanceCache = new ConcurrentHashMap<>(7);
+   private static final ConcurrentMap<FormatCache.MultipartKey, String> cDateTimeInstanceCache = new ConcurrentHashMap<>(7);
 
-    FormatCache() {
-    }
+   public F getInstance() {
+      return this.getDateTimeInstance(3, 3, TimeZone.getDefault(), Locale.getDefault());
+   }
 
-    public F getInstance() {
-        return this.getDateTimeInstance(3, 3, TimeZone.getDefault(), Locale.getDefault());
-    }
-
-    public F getInstance(String pattern, TimeZone timeZone, Locale locale) {
-        Format previousValue;
-        MultipartKey key;
-        Format format;
-        if (pattern == null) {
-            throw new NullPointerException("pattern must not be null");
-        }
-        if (timeZone == null) {
+   public F getInstance(final String pattern, TimeZone timeZone, Locale locale) {
+      if (pattern == null) {
+         throw new NullPointerException("pattern must not be null");
+      } else {
+         if (timeZone == null) {
             timeZone = TimeZone.getDefault();
-        }
-        if (locale == null) {
+         }
+
+         if (locale == null) {
             locale = Locale.getDefault();
-        }
-        if ((format = (Format)this.cInstanceCache.get(key = new MultipartKey(pattern, timeZone, locale))) == null && (previousValue = this.cInstanceCache.putIfAbsent(key, format = this.createInstance(pattern, timeZone, locale))) != null) {
-            format = previousValue;
-        }
-        return (F)format;
-    }
+         }
 
-    protected abstract F createInstance(String var1, TimeZone var2, Locale var3);
-
-    private F getDateTimeInstance(Integer dateStyle, Integer timeStyle, TimeZone timeZone, Locale locale) {
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
-        String pattern = FormatCache.getPatternForStyle(dateStyle, timeStyle, locale);
-        return this.getInstance(pattern, timeZone, locale);
-    }
-
-    F getDateTimeInstance(int dateStyle, int timeStyle, TimeZone timeZone, Locale locale) {
-        return this.getDateTimeInstance((Integer)dateStyle, (Integer)timeStyle, timeZone, locale);
-    }
-
-    F getDateInstance(int dateStyle, TimeZone timeZone, Locale locale) {
-        return this.getDateTimeInstance((Integer)dateStyle, null, timeZone, locale);
-    }
-
-    F getTimeInstance(int timeStyle, TimeZone timeZone, Locale locale) {
-        return this.getDateTimeInstance(null, (Integer)timeStyle, timeZone, locale);
-    }
-
-    static String getPatternForStyle(Integer dateStyle, Integer timeStyle, Locale locale) {
-        MultipartKey key = new MultipartKey(dateStyle, timeStyle, locale);
-        String pattern = (String)cDateTimeInstanceCache.get(key);
-        if (pattern == null) {
-            try {
-                DateFormat formatter = dateStyle == null ? DateFormat.getTimeInstance(timeStyle, locale) : (timeStyle == null ? DateFormat.getDateInstance(dateStyle, locale) : DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale));
-                pattern = ((SimpleDateFormat)formatter).toPattern();
-                String previous = cDateTimeInstanceCache.putIfAbsent(key, pattern);
-                if (previous != null) {
-                    pattern = previous;
-                }
+         FormatCache.MultipartKey key = new FormatCache.MultipartKey(pattern, timeZone, locale);
+         F format = this.cInstanceCache.get(key);
+         if (format == null) {
+            format = this.createInstance(pattern, timeZone, locale);
+            F previousValue = this.cInstanceCache.putIfAbsent(key, format);
+            if (previousValue != null) {
+               format = previousValue;
             }
-            catch (ClassCastException ex) {
-                throw new IllegalArgumentException("No date time pattern for locale: " + locale);
+         }
+
+         return format;
+      }
+   }
+
+   protected abstract F createInstance(String pattern, TimeZone timeZone, Locale locale);
+
+   private F getDateTimeInstance(final Integer dateStyle, final Integer timeStyle, final TimeZone timeZone, Locale locale) {
+      if (locale == null) {
+         locale = Locale.getDefault();
+      }
+
+      String pattern = getPatternForStyle(dateStyle, timeStyle, locale);
+      return this.getInstance(pattern, timeZone, locale);
+   }
+
+   F getDateTimeInstance(final int dateStyle, final int timeStyle, final TimeZone timeZone, final Locale locale) {
+      return this.getDateTimeInstance(dateStyle, Integer.valueOf(timeStyle), timeZone, locale);
+   }
+
+   F getDateInstance(final int dateStyle, final TimeZone timeZone, final Locale locale) {
+      return this.getDateTimeInstance(dateStyle, null, timeZone, locale);
+   }
+
+   F getTimeInstance(final int timeStyle, final TimeZone timeZone, final Locale locale) {
+      return this.getDateTimeInstance(null, timeStyle, timeZone, locale);
+   }
+
+   static String getPatternForStyle(final Integer dateStyle, final Integer timeStyle, final Locale locale) {
+      FormatCache.MultipartKey key = new FormatCache.MultipartKey(dateStyle, timeStyle, locale);
+      String pattern = cDateTimeInstanceCache.get(key);
+      if (pattern == null) {
+         try {
+            DateFormat formatter;
+            if (dateStyle == null) {
+               formatter = DateFormat.getTimeInstance(timeStyle, locale);
+            } else if (timeStyle == null) {
+               formatter = DateFormat.getDateInstance(dateStyle, locale);
+            } else {
+               formatter = DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale);
             }
-        }
-        return pattern;
-    }
 
-    private static class MultipartKey {
-        private final Object[] keys;
-        private int hashCode;
-
-        public MultipartKey(Object ... keys) {
-            this.keys = keys;
-        }
-
-        public boolean equals(Object obj) {
-            return Arrays.equals(this.keys, ((MultipartKey)obj).keys);
-        }
-
-        public int hashCode() {
-            if (this.hashCode == 0) {
-                int rc = 0;
-                for (Object key : this.keys) {
-                    if (key == null) continue;
-                    rc = rc * 7 + key.hashCode();
-                }
-                this.hashCode = rc;
+            pattern = ((SimpleDateFormat)formatter).toPattern();
+            String previous = cDateTimeInstanceCache.putIfAbsent(key, pattern);
+            if (previous != null) {
+               pattern = previous;
             }
-            return this.hashCode;
-        }
-    }
+         } catch (ClassCastException var7) {
+            throw new IllegalArgumentException("No date time pattern for locale: " + locale);
+         }
+      }
+
+      return pattern;
+   }
+
+   private static class MultipartKey {
+      private final Object[] keys;
+      private int hashCode;
+
+      public MultipartKey(final Object... keys) {
+         this.keys = keys;
+      }
+
+      @Override
+      public boolean equals(final Object obj) {
+         return Arrays.equals(this.keys, ((FormatCache.MultipartKey)obj).keys);
+      }
+
+      @Override
+      public int hashCode() {
+         if (this.hashCode == 0) {
+            int rc = 0;
+
+            for (Object key : this.keys) {
+               if (key != null) {
+                  rc = rc * 7 + key.hashCode();
+               }
+            }
+
+            this.hashCode = rc;
+         }
+
+         return this.hashCode;
+      }
+   }
 }
-

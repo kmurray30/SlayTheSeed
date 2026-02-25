@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.appender.rolling.action;
 
 import java.io.IOException;
@@ -13,9 +10,6 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.List;
 import java.util.Set;
-import org.apache.logging.log4j.core.appender.rolling.action.AbstractAction;
-import org.apache.logging.log4j.core.appender.rolling.action.AbstractPathAction;
-import org.apache.logging.log4j.core.appender.rolling.action.PathCondition;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute;
@@ -27,148 +21,180 @@ import org.apache.logging.log4j.core.lookup.StrSubstitutor;
 import org.apache.logging.log4j.core.util.FileUtils;
 import org.apache.logging.log4j.util.Strings;
 
-@Plugin(name="PosixViewAttribute", category="Core", printObject=true)
-public class PosixViewAttributeAction
-extends AbstractPathAction {
-    private final Set<PosixFilePermission> filePermissions;
-    private final String fileOwner;
-    private final String fileGroup;
+@Plugin(name = "PosixViewAttribute", category = "Core", printObject = true)
+public class PosixViewAttributeAction extends AbstractPathAction {
+   private final Set<PosixFilePermission> filePermissions;
+   private final String fileOwner;
+   private final String fileGroup;
 
-    private PosixViewAttributeAction(String basePath, boolean followSymbolicLinks, int maxDepth, PathCondition[] pathConditions, StrSubstitutor subst, Set<PosixFilePermission> filePermissions, String fileOwner, String fileGroup) {
-        super(basePath, followSymbolicLinks, maxDepth, pathConditions, subst);
-        this.filePermissions = filePermissions;
-        this.fileOwner = fileOwner;
-        this.fileGroup = fileGroup;
-    }
+   private PosixViewAttributeAction(
+      final String basePath,
+      final boolean followSymbolicLinks,
+      final int maxDepth,
+      final PathCondition[] pathConditions,
+      final StrSubstitutor subst,
+      final Set<PosixFilePermission> filePermissions,
+      final String fileOwner,
+      final String fileGroup
+   ) {
+      super(basePath, followSymbolicLinks, maxDepth, pathConditions, subst);
+      this.filePermissions = filePermissions;
+      this.fileOwner = fileOwner;
+      this.fileGroup = fileGroup;
+   }
 
-    @PluginBuilderFactory
-    public static Builder newBuilder() {
-        return new Builder();
-    }
+   @PluginBuilderFactory
+   public static PosixViewAttributeAction.Builder newBuilder() {
+      return new PosixViewAttributeAction.Builder();
+   }
 
-    @Override
-    protected FileVisitor<Path> createFileVisitor(final Path basePath, final List<PathCondition> conditions) {
-        return new SimpleFileVisitor<Path>(){
-
-            @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                for (PathCondition pathFilter : conditions) {
-                    Path relative;
-                    if (pathFilter.accept(basePath, relative = basePath.relativize(file), attrs)) continue;
-                    AbstractAction.LOGGER.trace("Not defining posix attribute base={}, relative={}", (Object)basePath, (Object)relative);
-                    return FileVisitResult.CONTINUE;
-                }
-                FileUtils.defineFilePosixAttributeView(file, PosixViewAttributeAction.this.filePermissions, PosixViewAttributeAction.this.fileOwner, PosixViewAttributeAction.this.fileGroup);
-                return FileVisitResult.CONTINUE;
+   @Override
+   protected FileVisitor<Path> createFileVisitor(final Path basePath, final List<PathCondition> conditions) {
+      return new SimpleFileVisitor<Path>() {
+         public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+            for (PathCondition pathFilter : conditions) {
+               Path relative = basePath.relativize(file);
+               if (!pathFilter.accept(basePath, relative, attrs)) {
+                  AbstractAction.LOGGER.trace("Not defining posix attribute base={}, relative={}", basePath, relative);
+                  return FileVisitResult.CONTINUE;
+               }
             }
-        };
-    }
 
-    public Set<PosixFilePermission> getFilePermissions() {
-        return this.filePermissions;
-    }
+            FileUtils.defineFilePosixAttributeView(
+               file, PosixViewAttributeAction.this.filePermissions, PosixViewAttributeAction.this.fileOwner, PosixViewAttributeAction.this.fileGroup
+            );
+            return FileVisitResult.CONTINUE;
+         }
+      };
+   }
 
-    public String getFileOwner() {
-        return this.fileOwner;
-    }
+   public Set<PosixFilePermission> getFilePermissions() {
+      return this.filePermissions;
+   }
 
-    public String getFileGroup() {
-        return this.fileGroup;
-    }
+   public String getFileOwner() {
+      return this.fileOwner;
+   }
 
-    @Override
-    public String toString() {
-        return "PosixViewAttributeAction [filePermissions=" + this.filePermissions + ", fileOwner=" + this.fileOwner + ", fileGroup=" + this.fileGroup + ", getBasePath()=" + this.getBasePath() + ", getMaxDepth()=" + this.getMaxDepth() + ", getPathConditions()=" + this.getPathConditions() + "]";
-    }
+   public String getFileGroup() {
+      return this.fileGroup;
+   }
 
-    public static class Builder
-    implements org.apache.logging.log4j.core.util.Builder<PosixViewAttributeAction> {
-        @PluginConfiguration
-        private Configuration configuration;
-        private StrSubstitutor subst;
-        @PluginBuilderAttribute
-        @Required(message="No base path provided")
-        private String basePath;
-        @PluginBuilderAttribute
-        private boolean followLinks = false;
-        @PluginBuilderAttribute
-        private int maxDepth = 1;
-        @PluginElement(value="PathConditions")
-        private PathCondition[] pathConditions;
-        @PluginBuilderAttribute(value="filePermissions")
-        private String filePermissionsString;
-        private Set<PosixFilePermission> filePermissions;
-        @PluginBuilderAttribute
-        private String fileOwner;
-        @PluginBuilderAttribute
-        private String fileGroup;
+   @Override
+   public String toString() {
+      return "PosixViewAttributeAction [filePermissions="
+         + this.filePermissions
+         + ", fileOwner="
+         + this.fileOwner
+         + ", fileGroup="
+         + this.fileGroup
+         + ", getBasePath()="
+         + this.getBasePath()
+         + ", getMaxDepth()="
+         + this.getMaxDepth()
+         + ", getPathConditions()="
+         + this.getPathConditions()
+         + "]";
+   }
 
-        @Override
-        public PosixViewAttributeAction build() {
-            if (Strings.isEmpty(this.basePath)) {
-                AbstractAction.LOGGER.error("Posix file attribute view action not valid because base path is empty.");
-                return null;
-            }
-            if (this.filePermissions == null && Strings.isEmpty(this.filePermissionsString) && Strings.isEmpty(this.fileOwner) && Strings.isEmpty(this.fileGroup)) {
-                AbstractAction.LOGGER.error("Posix file attribute view not valid because nor permissions, user or group defined.");
-                return null;
-            }
-            if (!FileUtils.isFilePosixAttributeViewSupported()) {
-                AbstractAction.LOGGER.warn("Posix file attribute view defined but it is not supported by this files system.");
-                return null;
-            }
-            return new PosixViewAttributeAction(this.basePath, this.followLinks, this.maxDepth, this.pathConditions, this.subst != null ? this.subst : this.configuration.getStrSubstitutor(), this.filePermissions != null ? this.filePermissions : (this.filePermissionsString != null ? PosixFilePermissions.fromString(this.filePermissionsString) : null), this.fileOwner, this.fileGroup);
-        }
+   public static class Builder implements org.apache.logging.log4j.core.util.Builder<PosixViewAttributeAction> {
+      @PluginConfiguration
+      private Configuration configuration;
+      private StrSubstitutor subst;
+      @PluginBuilderAttribute
+      @Required(message = "No base path provided")
+      private String basePath;
+      @PluginBuilderAttribute
+      private boolean followLinks = false;
+      @PluginBuilderAttribute
+      private int maxDepth = 1;
+      @PluginElement("PathConditions")
+      private PathCondition[] pathConditions;
+      @PluginBuilderAttribute("filePermissions")
+      private String filePermissionsString;
+      private Set<PosixFilePermission> filePermissions;
+      @PluginBuilderAttribute
+      private String fileOwner;
+      @PluginBuilderAttribute
+      private String fileGroup;
 
-        public Builder withConfiguration(Configuration configuration) {
-            this.configuration = configuration;
-            return this;
-        }
+      public PosixViewAttributeAction build() {
+         if (Strings.isEmpty(this.basePath)) {
+            AbstractAction.LOGGER.error("Posix file attribute view action not valid because base path is empty.");
+            return null;
+         } else if (this.filePermissions == null
+            && Strings.isEmpty(this.filePermissionsString)
+            && Strings.isEmpty(this.fileOwner)
+            && Strings.isEmpty(this.fileGroup)) {
+            AbstractAction.LOGGER.error("Posix file attribute view not valid because nor permissions, user or group defined.");
+            return null;
+         } else if (!FileUtils.isFilePosixAttributeViewSupported()) {
+            AbstractAction.LOGGER.warn("Posix file attribute view defined but it is not supported by this files system.");
+            return null;
+         } else {
+            return new PosixViewAttributeAction(
+               this.basePath,
+               this.followLinks,
+               this.maxDepth,
+               this.pathConditions,
+               this.subst != null ? this.subst : this.configuration.getStrSubstitutor(),
+               this.filePermissions != null
+                  ? this.filePermissions
+                  : (this.filePermissionsString != null ? PosixFilePermissions.fromString(this.filePermissionsString) : null),
+               this.fileOwner,
+               this.fileGroup
+            );
+         }
+      }
 
-        public Builder withSubst(StrSubstitutor subst) {
-            this.subst = subst;
-            return this;
-        }
+      public PosixViewAttributeAction.Builder withConfiguration(final Configuration configuration) {
+         this.configuration = configuration;
+         return this;
+      }
 
-        public Builder withBasePath(String basePath) {
-            this.basePath = basePath;
-            return this;
-        }
+      public PosixViewAttributeAction.Builder withSubst(final StrSubstitutor subst) {
+         this.subst = subst;
+         return this;
+      }
 
-        public Builder withFollowLinks(boolean followLinks) {
-            this.followLinks = followLinks;
-            return this;
-        }
+      public PosixViewAttributeAction.Builder withBasePath(final String basePath) {
+         this.basePath = basePath;
+         return this;
+      }
 
-        public Builder withMaxDepth(int maxDepth) {
-            this.maxDepth = maxDepth;
-            return this;
-        }
+      public PosixViewAttributeAction.Builder withFollowLinks(final boolean followLinks) {
+         this.followLinks = followLinks;
+         return this;
+      }
 
-        public Builder withPathConditions(PathCondition[] pathConditions) {
-            this.pathConditions = pathConditions;
-            return this;
-        }
+      public PosixViewAttributeAction.Builder withMaxDepth(final int maxDepth) {
+         this.maxDepth = maxDepth;
+         return this;
+      }
 
-        public Builder withFilePermissionsString(String filePermissionsString) {
-            this.filePermissionsString = filePermissionsString;
-            return this;
-        }
+      public PosixViewAttributeAction.Builder withPathConditions(final PathCondition[] pathConditions) {
+         this.pathConditions = pathConditions;
+         return this;
+      }
 
-        public Builder withFilePermissions(Set<PosixFilePermission> filePermissions) {
-            this.filePermissions = filePermissions;
-            return this;
-        }
+      public PosixViewAttributeAction.Builder withFilePermissionsString(final String filePermissionsString) {
+         this.filePermissionsString = filePermissionsString;
+         return this;
+      }
 
-        public Builder withFileOwner(String fileOwner) {
-            this.fileOwner = fileOwner;
-            return this;
-        }
+      public PosixViewAttributeAction.Builder withFilePermissions(final Set<PosixFilePermission> filePermissions) {
+         this.filePermissions = filePermissions;
+         return this;
+      }
 
-        public Builder withFileGroup(String fileGroup) {
-            this.fileGroup = fileGroup;
-            return this;
-        }
-    }
+      public PosixViewAttributeAction.Builder withFileOwner(final String fileOwner) {
+         this.fileOwner = fileOwner;
+         return this;
+      }
+
+      public PosixViewAttributeAction.Builder withFileGroup(final String fileGroup) {
+         this.fileGroup = fileGroup;
+         return this;
+      }
+   }
 }
-

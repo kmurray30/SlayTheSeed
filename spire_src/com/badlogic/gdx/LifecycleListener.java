@@ -1,13 +1,9 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx;
 
 public interface LifecycleListener {
-    public void pause();
+   void pause();
 
-    public void resume();
+   void resume();
 
-    public void dispose();
+   void dispose();
 }
-

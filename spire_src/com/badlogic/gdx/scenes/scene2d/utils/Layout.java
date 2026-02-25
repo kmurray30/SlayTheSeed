@@ -1,33 +1,29 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.scenes.scene2d.utils;
 
 public interface Layout {
-    public void layout();
+   void layout();
 
-    public void invalidate();
+   void invalidate();
 
-    public void invalidateHierarchy();
+   void invalidateHierarchy();
 
-    public void validate();
+   void validate();
 
-    public void pack();
+   void pack();
 
-    public void setFillParent(boolean var1);
+   void setFillParent(boolean var1);
 
-    public void setLayoutEnabled(boolean var1);
+   void setLayoutEnabled(boolean var1);
 
-    public float getMinWidth();
+   float getMinWidth();
 
-    public float getMinHeight();
+   float getMinHeight();
 
-    public float getPrefWidth();
+   float getPrefWidth();
 
-    public float getPrefHeight();
+   float getPrefHeight();
 
-    public float getMaxWidth();
+   float getMaxWidth();
 
-    public float getMaxHeight();
+   float getMaxHeight();
 }
-

@@ -1,133 +1,127 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.slf4j;
 
-import org.slf4j.Marker;
-
 public interface Logger {
-    public static final String ROOT_LOGGER_NAME = "ROOT";
+   String ROOT_LOGGER_NAME = "ROOT";
 
-    public String getName();
+   String getName();
 
-    public boolean isTraceEnabled();
+   boolean isTraceEnabled();
 
-    public void trace(String var1);
+   void trace(String var1);
 
-    public void trace(String var1, Object var2);
+   void trace(String var1, Object var2);
 
-    public void trace(String var1, Object var2, Object var3);
+   void trace(String var1, Object var2, Object var3);
 
-    public void trace(String var1, Object ... var2);
+   void trace(String var1, Object... var2);
 
-    public void trace(String var1, Throwable var2);
+   void trace(String var1, Throwable var2);
 
-    public boolean isTraceEnabled(Marker var1);
+   boolean isTraceEnabled(Marker var1);
 
-    public void trace(Marker var1, String var2);
+   void trace(Marker var1, String var2);
 
-    public void trace(Marker var1, String var2, Object var3);
+   void trace(Marker var1, String var2, Object var3);
 
-    public void trace(Marker var1, String var2, Object var3, Object var4);
+   void trace(Marker var1, String var2, Object var3, Object var4);
 
-    public void trace(Marker var1, String var2, Object ... var3);
+   void trace(Marker var1, String var2, Object... var3);
 
-    public void trace(Marker var1, String var2, Throwable var3);
+   void trace(Marker var1, String var2, Throwable var3);
 
-    public boolean isDebugEnabled();
+   boolean isDebugEnabled();
 
-    public void debug(String var1);
+   void debug(String var1);
 
-    public void debug(String var1, Object var2);
+   void debug(String var1, Object var2);
 
-    public void debug(String var1, Object var2, Object var3);
+   void debug(String var1, Object var2, Object var3);
 
-    public void debug(String var1, Object ... var2);
+   void debug(String var1, Object... var2);
 
-    public void debug(String var1, Throwable var2);
+   void debug(String var1, Throwable var2);
 
-    public boolean isDebugEnabled(Marker var1);
+   boolean isDebugEnabled(Marker var1);
 
-    public void debug(Marker var1, String var2);
+   void debug(Marker var1, String var2);
 
-    public void debug(Marker var1, String var2, Object var3);
+   void debug(Marker var1, String var2, Object var3);
 
-    public void debug(Marker var1, String var2, Object var3, Object var4);
+   void debug(Marker var1, String var2, Object var3, Object var4);
 
-    public void debug(Marker var1, String var2, Object ... var3);
+   void debug(Marker var1, String var2, Object... var3);
 
-    public void debug(Marker var1, String var2, Throwable var3);
+   void debug(Marker var1, String var2, Throwable var3);
 
-    public boolean isInfoEnabled();
+   boolean isInfoEnabled();
 
-    public void info(String var1);
+   void info(String var1);
 
-    public void info(String var1, Object var2);
+   void info(String var1, Object var2);
 
-    public void info(String var1, Object var2, Object var3);
+   void info(String var1, Object var2, Object var3);
 
-    public void info(String var1, Object ... var2);
+   void info(String var1, Object... var2);
 
-    public void info(String var1, Throwable var2);
+   void info(String var1, Throwable var2);
 
-    public boolean isInfoEnabled(Marker var1);
+   boolean isInfoEnabled(Marker var1);
 
-    public void info(Marker var1, String var2);
+   void info(Marker var1, String var2);
 
-    public void info(Marker var1, String var2, Object var3);
+   void info(Marker var1, String var2, Object var3);
 
-    public void info(Marker var1, String var2, Object var3, Object var4);
+   void info(Marker var1, String var2, Object var3, Object var4);
 
-    public void info(Marker var1, String var2, Object ... var3);
+   void info(Marker var1, String var2, Object... var3);
 
-    public void info(Marker var1, String var2, Throwable var3);
+   void info(Marker var1, String var2, Throwable var3);
 
-    public boolean isWarnEnabled();
+   boolean isWarnEnabled();
 
-    public void warn(String var1);
+   void warn(String var1);
 
-    public void warn(String var1, Object var2);
+   void warn(String var1, Object var2);
 
-    public void warn(String var1, Object ... var2);
+   void warn(String var1, Object... var2);
 
-    public void warn(String var1, Object var2, Object var3);
+   void warn(String var1, Object var2, Object var3);
 
-    public void warn(String var1, Throwable var2);
+   void warn(String var1, Throwable var2);
 
-    public boolean isWarnEnabled(Marker var1);
+   boolean isWarnEnabled(Marker var1);
 
-    public void warn(Marker var1, String var2);
+   void warn(Marker var1, String var2);
 
-    public void warn(Marker var1, String var2, Object var3);
+   void warn(Marker var1, String var2, Object var3);
 
-    public void warn(Marker var1, String var2, Object var3, Object var4);
+   void warn(Marker var1, String var2, Object var3, Object var4);
 
-    public void warn(Marker var1, String var2, Object ... var3);
+   void warn(Marker var1, String var2, Object... var3);
 
-    public void warn(Marker var1, String var2, Throwable var3);
+   void warn(Marker var1, String var2, Throwable var3);
 
-    public boolean isErrorEnabled();
+   boolean isErrorEnabled();
 
-    public void error(String var1);
+   void error(String var1);
 
-    public void error(String var1, Object var2);
+   void error(String var1, Object var2);
 
-    public void error(String var1, Object var2, Object var3);
+   void error(String var1, Object var2, Object var3);
 
-    public void error(String var1, Object ... var2);
+   void error(String var1, Object... var2);
 
-    public void error(String var1, Throwable var2);
+   void error(String var1, Throwable var2);
 
-    public boolean isErrorEnabled(Marker var1);
+   boolean isErrorEnabled(Marker var1);
 
-    public void error(Marker var1, String var2);
+   void error(Marker var1, String var2);
 
-    public void error(Marker var1, String var2, Object var3);
+   void error(Marker var1, String var2, Object var3);
 
-    public void error(Marker var1, String var2, Object var3, Object var4);
+   void error(Marker var1, String var2, Object var3, Object var4);
 
-    public void error(Marker var1, String var2, Object ... var3);
+   void error(Marker var1, String var2, Object... var3);
 
-    public void error(Marker var1, String var2, Throwable var3);
+   void error(Marker var1, String var2, Throwable var3);
 }
-

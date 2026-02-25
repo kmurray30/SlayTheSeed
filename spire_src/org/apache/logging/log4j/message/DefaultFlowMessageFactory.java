@@ -1,167 +1,131 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.message;
 
 import java.io.Serializable;
-import org.apache.logging.log4j.message.EntryMessage;
-import org.apache.logging.log4j.message.ExitMessage;
-import org.apache.logging.log4j.message.FlowMessage;
-import org.apache.logging.log4j.message.FlowMessageFactory;
-import org.apache.logging.log4j.message.Message;
-import org.apache.logging.log4j.message.ReusableMessage;
-import org.apache.logging.log4j.message.SimpleMessage;
 
-public class DefaultFlowMessageFactory
-implements FlowMessageFactory,
-Serializable {
-    private static final String EXIT_DEFAULT_PREFIX = "Exit";
-    private static final String ENTRY_DEFAULT_PREFIX = "Enter";
-    private static final long serialVersionUID = 8578655591131397576L;
-    private final String entryText;
-    private final String exitText;
+public class DefaultFlowMessageFactory implements FlowMessageFactory, Serializable {
+   private static final String EXIT_DEFAULT_PREFIX = "Exit";
+   private static final String ENTRY_DEFAULT_PREFIX = "Enter";
+   private static final long serialVersionUID = 8578655591131397576L;
+   private final String entryText;
+   private final String exitText;
 
-    public DefaultFlowMessageFactory() {
-        this(ENTRY_DEFAULT_PREFIX, EXIT_DEFAULT_PREFIX);
-    }
+   public DefaultFlowMessageFactory() {
+      this("Enter", "Exit");
+   }
 
-    public DefaultFlowMessageFactory(String entryText, String exitText) {
-        this.entryText = entryText;
-        this.exitText = exitText;
-    }
+   public DefaultFlowMessageFactory(final String entryText, final String exitText) {
+      this.entryText = entryText;
+      this.exitText = exitText;
+   }
 
-    public String getEntryText() {
-        return this.entryText;
-    }
+   public String getEntryText() {
+      return this.entryText;
+   }
 
-    public String getExitText() {
-        return this.exitText;
-    }
+   public String getExitText() {
+      return this.exitText;
+   }
 
-    @Override
-    public EntryMessage newEntryMessage(Message message) {
-        return new SimpleEntryMessage(this.entryText, this.makeImmutable(message));
-    }
+   @Override
+   public EntryMessage newEntryMessage(final Message message) {
+      return new DefaultFlowMessageFactory.SimpleEntryMessage(this.entryText, this.makeImmutable(message));
+   }
 
-    private Message makeImmutable(Message message) {
-        if (!(message instanceof ReusableMessage)) {
-            return message;
-        }
-        return new SimpleMessage(message.getFormattedMessage());
-    }
+   private Message makeImmutable(final Message message) {
+      return (Message)(!(message instanceof ReusableMessage) ? message : new SimpleMessage(message.getFormattedMessage()));
+   }
 
-    @Override
-    public ExitMessage newExitMessage(EntryMessage message) {
-        return new SimpleExitMessage(this.exitText, message);
-    }
+   @Override
+   public ExitMessage newExitMessage(final EntryMessage message) {
+      return new DefaultFlowMessageFactory.SimpleExitMessage(this.exitText, message);
+   }
 
-    @Override
-    public ExitMessage newExitMessage(Object result, EntryMessage message) {
-        return new SimpleExitMessage(this.exitText, result, message);
-    }
+   @Override
+   public ExitMessage newExitMessage(final Object result, final EntryMessage message) {
+      return new DefaultFlowMessageFactory.SimpleExitMessage(this.exitText, result, message);
+   }
 
-    @Override
-    public ExitMessage newExitMessage(Object result, Message message) {
-        return new SimpleExitMessage(this.exitText, result, message);
-    }
+   @Override
+   public ExitMessage newExitMessage(final Object result, final Message message) {
+      return new DefaultFlowMessageFactory.SimpleExitMessage(this.exitText, result, message);
+   }
 
-    private static final class SimpleExitMessage
-    extends AbstractFlowMessage
-    implements ExitMessage {
-        private static final long serialVersionUID = 1L;
-        private final Object result;
-        private final boolean isVoid;
+   private static class AbstractFlowMessage implements FlowMessage {
+      private static final long serialVersionUID = 1L;
+      private final Message message;
+      private final String text;
 
-        SimpleExitMessage(String exitText, EntryMessage message) {
-            super(exitText, message.getMessage());
-            this.result = null;
-            this.isVoid = true;
-        }
+      AbstractFlowMessage(final String text, final Message message) {
+         this.message = message;
+         this.text = text;
+      }
 
-        SimpleExitMessage(String exitText, Object result, EntryMessage message) {
-            super(exitText, message.getMessage());
-            this.result = result;
-            this.isVoid = false;
-        }
+      @Override
+      public String getFormattedMessage() {
+         return this.message != null ? this.text + " " + this.message.getFormattedMessage() : this.text;
+      }
 
-        SimpleExitMessage(String exitText, Object result, Message message) {
-            super(exitText, message);
-            this.result = result;
-            this.isVoid = false;
-        }
+      @Override
+      public String getFormat() {
+         return this.message != null ? this.text + ": " + this.message.getFormat() : this.text;
+      }
 
-        @Override
-        public String getFormattedMessage() {
-            String formattedMessage = super.getFormattedMessage();
-            if (this.isVoid) {
-                return formattedMessage;
-            }
-            return formattedMessage + ": " + this.result;
-        }
-    }
+      @Override
+      public Object[] getParameters() {
+         return this.message != null ? this.message.getParameters() : null;
+      }
 
-    private static final class SimpleEntryMessage
-    extends AbstractFlowMessage
-    implements EntryMessage {
-        private static final long serialVersionUID = 1L;
+      @Override
+      public Throwable getThrowable() {
+         return this.message != null ? this.message.getThrowable() : null;
+      }
 
-        SimpleEntryMessage(String entryText, Message message) {
-            super(entryText, message);
-        }
-    }
+      @Override
+      public Message getMessage() {
+         return this.message;
+      }
 
-    private static class AbstractFlowMessage
-    implements FlowMessage {
-        private static final long serialVersionUID = 1L;
-        private final Message message;
-        private final String text;
+      @Override
+      public String getText() {
+         return this.text;
+      }
+   }
 
-        AbstractFlowMessage(String text, Message message) {
-            this.message = message;
-            this.text = text;
-        }
+   private static final class SimpleEntryMessage extends DefaultFlowMessageFactory.AbstractFlowMessage implements EntryMessage {
+      private static final long serialVersionUID = 1L;
 
-        @Override
-        public String getFormattedMessage() {
-            if (this.message != null) {
-                return this.text + " " + this.message.getFormattedMessage();
-            }
-            return this.text;
-        }
+      SimpleEntryMessage(final String entryText, final Message message) {
+         super(entryText, message);
+      }
+   }
 
-        @Override
-        public String getFormat() {
-            if (this.message != null) {
-                return this.text + ": " + this.message.getFormat();
-            }
-            return this.text;
-        }
+   private static final class SimpleExitMessage extends DefaultFlowMessageFactory.AbstractFlowMessage implements ExitMessage {
+      private static final long serialVersionUID = 1L;
+      private final Object result;
+      private final boolean isVoid;
 
-        @Override
-        public Object[] getParameters() {
-            if (this.message != null) {
-                return this.message.getParameters();
-            }
-            return null;
-        }
+      SimpleExitMessage(final String exitText, final EntryMessage message) {
+         super(exitText, message.getMessage());
+         this.result = null;
+         this.isVoid = true;
+      }
 
-        @Override
-        public Throwable getThrowable() {
-            if (this.message != null) {
-                return this.message.getThrowable();
-            }
-            return null;
-        }
+      SimpleExitMessage(final String exitText, final Object result, final EntryMessage message) {
+         super(exitText, message.getMessage());
+         this.result = result;
+         this.isVoid = false;
+      }
 
-        @Override
-        public Message getMessage() {
-            return this.message;
-        }
+      SimpleExitMessage(final String exitText, final Object result, final Message message) {
+         super(exitText, message);
+         this.result = result;
+         this.isVoid = false;
+      }
 
-        @Override
-        public String getText() {
-            return this.text;
-        }
-    }
+      @Override
+      public String getFormattedMessage() {
+         String formattedMessage = super.getFormattedMessage();
+         return this.isVoid ? formattedMessage : formattedMessage + ": " + this.result;
+      }
+   }
 }
-

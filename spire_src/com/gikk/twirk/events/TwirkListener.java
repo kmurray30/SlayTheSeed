@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.gikk.twirk.events;
 
 import com.gikk.twirk.types.clearChat.ClearChat;
@@ -15,55 +12,55 @@ import com.gikk.twirk.types.users.Userstate;
 import java.util.Collection;
 
 public interface TwirkListener {
-    default public void onAnything(String unformatedMessage) {
-    }
+   default void onAnything(String unformatedMessage) {
+   }
 
-    default public void onPrivMsg(TwitchUser sender, TwitchMessage message) {
-    }
+   default void onPrivMsg(TwitchUser sender, TwitchMessage message) {
+   }
 
-    default public void onWhisper(TwitchUser sender, TwitchMessage message) {
-    }
+   default void onWhisper(TwitchUser sender, TwitchMessage message) {
+   }
 
-    default public void onJoin(String joinedNick) {
-    }
+   default void onJoin(String joinedNick) {
+   }
 
-    default public void onPart(String partedNick) {
-    }
+   default void onPart(String partedNick) {
+   }
 
-    default public void onConnect() {
-    }
+   default void onConnect() {
+   }
 
-    default public void onReconnect() {
-    }
+   default void onReconnect() {
+   }
 
-    default public void onDisconnect() {
-    }
+   default void onDisconnect() {
+   }
 
-    default public void onNotice(Notice notice) {
-    }
+   default void onNotice(Notice notice) {
+   }
 
-    default public void onHost(HostTarget hostNotice) {
-    }
+   default void onHost(HostTarget hostNotice) {
+   }
 
-    default public void onMode(Mode mode) {
-    }
+   /** @deprecated */
+   default void onMode(Mode mode) {
+   }
 
-    default public void onUserstate(Userstate userstate) {
-    }
+   default void onUserstate(Userstate userstate) {
+   }
 
-    default public void onRoomstate(Roomstate roomstate) {
-    }
+   default void onRoomstate(Roomstate roomstate) {
+   }
 
-    default public void onClearChat(ClearChat clearChat) {
-    }
+   default void onClearChat(ClearChat clearChat) {
+   }
 
-    default public void onNamesList(Collection<String> namesList) {
-    }
+   default void onNamesList(Collection<String> namesList) {
+   }
 
-    default public void onUsernotice(TwitchUser user, Usernotice usernotice) {
-    }
+   default void onUsernotice(TwitchUser user, Usernotice usernotice) {
+   }
 
-    default public void onUnknown(String unformatedMessage) {
-    }
+   default void onUnknown(String unformatedMessage) {
+   }
 }
-

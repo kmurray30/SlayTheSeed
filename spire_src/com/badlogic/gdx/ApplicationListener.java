@@ -1,19 +1,15 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx;
 
 public interface ApplicationListener {
-    public void create();
+   void create();
 
-    public void resize(int var1, int var2);
+   void resize(int var1, int var2);
 
-    public void render();
+   void render();
 
-    public void pause();
+   void pause();
 
-    public void resume();
+   void resume();
 
-    public void dispose();
+   void dispose();
 }
-

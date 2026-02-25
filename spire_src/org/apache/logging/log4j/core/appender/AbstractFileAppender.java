@@ -1,159 +1,163 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.appender;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
-import org.apache.logging.log4j.core.appender.AbstractManager;
-import org.apache.logging.log4j.core.appender.AbstractOutputStreamAppender;
-import org.apache.logging.log4j.core.appender.OutputStreamManager;
 import org.apache.logging.log4j.core.config.Property;
 import org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute;
 import org.apache.logging.log4j.core.config.plugins.validation.constraints.Required;
 import org.apache.logging.log4j.core.net.Advertiser;
 
-public abstract class AbstractFileAppender<M extends OutputStreamManager>
-extends AbstractOutputStreamAppender<M> {
-    private final String fileName;
-    private final Advertiser advertiser;
-    private final Object advertisement;
+public abstract class AbstractFileAppender<M extends OutputStreamManager> extends AbstractOutputStreamAppender<M> {
+   private final String fileName;
+   private final Advertiser advertiser;
+   private final Object advertisement;
 
-    private AbstractFileAppender(String name, Layout<? extends Serializable> layout, Filter filter, M manager, String filename, boolean ignoreExceptions, boolean immediateFlush, Advertiser advertiser, Property[] properties) {
-        super(name, layout, filter, ignoreExceptions, immediateFlush, properties, manager);
-        if (advertiser != null) {
-            HashMap<String, String> configuration = new HashMap<String, String>(layout.getContentFormat());
-            configuration.putAll(((AbstractManager)manager).getContentFormat());
-            configuration.put("contentType", layout.getContentType());
-            configuration.put("name", name);
-            this.advertisement = advertiser.advertise(configuration);
-        } else {
-            this.advertisement = null;
-        }
-        this.fileName = filename;
-        this.advertiser = advertiser;
-    }
+   private AbstractFileAppender(
+      final String name,
+      final Layout<? extends Serializable> layout,
+      final Filter filter,
+      final M manager,
+      final String filename,
+      final boolean ignoreExceptions,
+      final boolean immediateFlush,
+      final Advertiser advertiser,
+      final Property[] properties
+   ) {
+      super(name, layout, filter, ignoreExceptions, immediateFlush, properties, manager);
+      if (advertiser != null) {
+         Map<String, String> configuration = new HashMap<>(layout.getContentFormat());
+         configuration.putAll(manager.getContentFormat());
+         configuration.put("contentType", layout.getContentType());
+         configuration.put("name", name);
+         this.advertisement = advertiser.advertise(configuration);
+      } else {
+         this.advertisement = null;
+      }
 
-    public String getFileName() {
-        return this.fileName;
-    }
+      this.fileName = filename;
+      this.advertiser = advertiser;
+   }
 
-    @Override
-    public boolean stop(long timeout, TimeUnit timeUnit) {
-        this.setStopping();
-        super.stop(timeout, timeUnit, false);
-        if (this.advertiser != null) {
-            this.advertiser.unadvertise(this.advertisement);
-        }
-        this.setStopped();
-        return true;
-    }
+   public String getFileName() {
+      return this.fileName;
+   }
 
-    public static abstract class Builder<B extends Builder<B>>
-    extends AbstractOutputStreamAppender.Builder<B> {
-        @PluginBuilderAttribute
-        @Required
-        private String fileName;
-        @PluginBuilderAttribute
-        private boolean append = true;
-        @PluginBuilderAttribute
-        private boolean locking;
-        @PluginBuilderAttribute
-        private boolean advertise;
-        @PluginBuilderAttribute
-        private String advertiseUri;
-        @PluginBuilderAttribute
-        private boolean createOnDemand;
-        @PluginBuilderAttribute
-        private String filePermissions;
-        @PluginBuilderAttribute
-        private String fileOwner;
-        @PluginBuilderAttribute
-        private String fileGroup;
+   @Override
+   public boolean stop(final long timeout, final TimeUnit timeUnit) {
+      this.setStopping();
+      super.stop(timeout, timeUnit, false);
+      if (this.advertiser != null) {
+         this.advertiser.unadvertise(this.advertisement);
+      }
 
-        public String getAdvertiseUri() {
-            return this.advertiseUri;
-        }
+      this.setStopped();
+      return true;
+   }
 
-        public String getFileName() {
-            return this.fileName;
-        }
+   public abstract static class Builder<B extends AbstractFileAppender.Builder<B>> extends AbstractOutputStreamAppender.Builder<B> {
+      @PluginBuilderAttribute
+      @Required
+      private String fileName;
+      @PluginBuilderAttribute
+      private boolean append = true;
+      @PluginBuilderAttribute
+      private boolean locking;
+      @PluginBuilderAttribute
+      private boolean advertise;
+      @PluginBuilderAttribute
+      private String advertiseUri;
+      @PluginBuilderAttribute
+      private boolean createOnDemand;
+      @PluginBuilderAttribute
+      private String filePermissions;
+      @PluginBuilderAttribute
+      private String fileOwner;
+      @PluginBuilderAttribute
+      private String fileGroup;
 
-        public boolean isAdvertise() {
-            return this.advertise;
-        }
+      public String getAdvertiseUri() {
+         return this.advertiseUri;
+      }
 
-        public boolean isAppend() {
-            return this.append;
-        }
+      public String getFileName() {
+         return this.fileName;
+      }
 
-        public boolean isCreateOnDemand() {
-            return this.createOnDemand;
-        }
+      public boolean isAdvertise() {
+         return this.advertise;
+      }
 
-        public boolean isLocking() {
-            return this.locking;
-        }
+      public boolean isAppend() {
+         return this.append;
+      }
 
-        public String getFilePermissions() {
-            return this.filePermissions;
-        }
+      public boolean isCreateOnDemand() {
+         return this.createOnDemand;
+      }
 
-        public String getFileOwner() {
-            return this.fileOwner;
-        }
+      public boolean isLocking() {
+         return this.locking;
+      }
 
-        public String getFileGroup() {
-            return this.fileGroup;
-        }
+      public String getFilePermissions() {
+         return this.filePermissions;
+      }
 
-        public B withAdvertise(boolean advertise) {
-            this.advertise = advertise;
-            return (B)((Builder)this.asBuilder());
-        }
+      public String getFileOwner() {
+         return this.fileOwner;
+      }
 
-        public B withAdvertiseUri(String advertiseUri) {
-            this.advertiseUri = advertiseUri;
-            return (B)((Builder)this.asBuilder());
-        }
+      public String getFileGroup() {
+         return this.fileGroup;
+      }
 
-        public B withAppend(boolean append) {
-            this.append = append;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B withAdvertise(final boolean advertise) {
+         this.advertise = advertise;
+         return this.asBuilder();
+      }
 
-        public B withFileName(String fileName) {
-            this.fileName = fileName;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B withAdvertiseUri(final String advertiseUri) {
+         this.advertiseUri = advertiseUri;
+         return this.asBuilder();
+      }
 
-        public B withCreateOnDemand(boolean createOnDemand) {
-            this.createOnDemand = createOnDemand;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B withAppend(final boolean append) {
+         this.append = append;
+         return this.asBuilder();
+      }
 
-        public B withLocking(boolean locking) {
-            this.locking = locking;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B withFileName(final String fileName) {
+         this.fileName = fileName;
+         return this.asBuilder();
+      }
 
-        public B withFilePermissions(String filePermissions) {
-            this.filePermissions = filePermissions;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B withCreateOnDemand(final boolean createOnDemand) {
+         this.createOnDemand = createOnDemand;
+         return this.asBuilder();
+      }
 
-        public B withFileOwner(String fileOwner) {
-            this.fileOwner = fileOwner;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B withLocking(final boolean locking) {
+         this.locking = locking;
+         return this.asBuilder();
+      }
 
-        public B withFileGroup(String fileGroup) {
-            this.fileGroup = fileGroup;
-            return (B)((Builder)this.asBuilder());
-        }
-    }
+      public B withFilePermissions(final String filePermissions) {
+         this.filePermissions = filePermissions;
+         return this.asBuilder();
+      }
+
+      public B withFileOwner(final String fileOwner) {
+         this.fileOwner = fileOwner;
+         return this.asBuilder();
+      }
+
+      public B withFileGroup(final String fileGroup) {
+         this.fileGroup = fileGroup;
+         return this.asBuilder();
+      }
+   }
 }
-

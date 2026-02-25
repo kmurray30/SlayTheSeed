@@ -1,27 +1,23 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl;
 
 interface SysImplementation {
-    public int getRequiredJNIVersion();
+   int getRequiredJNIVersion();
 
-    public int getJNIVersion();
+   int getJNIVersion();
 
-    public int getPointerSize();
+   int getPointerSize();
 
-    public void setDebug(boolean var1);
+   void setDebug(boolean var1);
 
-    public long getTimerResolution();
+   long getTimerResolution();
 
-    public long getTime();
+   long getTime();
 
-    public void alert(String var1, String var2);
+   void alert(String var1, String var2);
 
-    public boolean openURL(String var1);
+   boolean openURL(String var1);
 
-    public String getClipboard();
+   String getClipboard();
 
-    public boolean has64Bit();
+   boolean has64Bit();
 }
-

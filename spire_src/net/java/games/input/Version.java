@@ -1,26 +1,24 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package net.java.games.input;
 
 public final class Version {
-    private static final String apiVersion = "2.0.5";
-    private static final String buildNumber = "1088";
-    private static final String antBuildNumberToken = "@BUILD_NUMBER@";
-    private static final String antAPIVersionToken = "@API_VERSION@";
+   private static final String apiVersion = "2.0.5";
+   private static final String buildNumber = "1088";
+   private static final String antBuildNumberToken = "@BUILD_NUMBER@";
+   private static final String antAPIVersionToken = "@API_VERSION@";
 
-    private Version() {
-    }
+   private Version() {
+   }
 
-    public static String getVersion() {
-        String version = "Unversioned";
-        if (!antAPIVersionToken.equals(apiVersion)) {
-            version = apiVersion;
-        }
-        if (!antBuildNumberToken.equals(buildNumber)) {
-            version = version + "-b1088";
-        }
-        return version;
-    }
+   public static String getVersion() {
+      String version = "Unversioned";
+      if (!"@API_VERSION@".equals("2.0.5")) {
+         version = "2.0.5";
+      }
+
+      if (!"@BUILD_NUMBER@".equals("1088")) {
+         version = version + "-b1088";
+      }
+
+      return version;
+   }
 }
-

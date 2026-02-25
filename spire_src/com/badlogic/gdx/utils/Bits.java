@@ -1,281 +1,306 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.utils;
 
 public class Bits {
-    long[] bits = new long[]{0L};
+   long[] bits = new long[]{0L};
 
-    public Bits() {
-    }
+   public Bits() {
+   }
 
-    public Bits(int nbits) {
-        this.checkCapacity(nbits >>> 6);
-    }
+   public Bits(int nbits) {
+      this.checkCapacity(nbits >>> 6);
+   }
 
-    public boolean get(int index) {
-        int word = index >>> 6;
-        if (word >= this.bits.length) {
-            return false;
-        }
-        return (this.bits[word] & 1L << (index & 0x3F)) != 0L;
-    }
+   public boolean get(int index) {
+      int word = index >>> 6;
+      return word >= this.bits.length ? false : (this.bits[word] & 1L << (index & 63)) != 0L;
+   }
 
-    public boolean getAndClear(int index) {
-        int word = index >>> 6;
-        if (word >= this.bits.length) {
-            return false;
-        }
-        long oldBits = this.bits[word];
-        int n = word;
-        this.bits[n] = this.bits[n] & (1L << (index & 0x3F) ^ 0xFFFFFFFFFFFFFFFFL);
-        return this.bits[word] != oldBits;
-    }
+   public boolean getAndClear(int index) {
+      int word = index >>> 6;
+      if (word >= this.bits.length) {
+         return false;
+      } else {
+         long oldBits = this.bits[word];
+         this.bits[word] = this.bits[word] & ~(1L << (index & 63));
+         return this.bits[word] != oldBits;
+      }
+   }
 
-    public boolean getAndSet(int index) {
-        int word = index >>> 6;
-        this.checkCapacity(word);
-        long oldBits = this.bits[word];
-        int n = word;
-        this.bits[n] = this.bits[n] | 1L << (index & 0x3F);
-        return this.bits[word] == oldBits;
-    }
+   public boolean getAndSet(int index) {
+      int word = index >>> 6;
+      this.checkCapacity(word);
+      long oldBits = this.bits[word];
+      this.bits[word] = this.bits[word] | 1L << (index & 63);
+      return this.bits[word] == oldBits;
+   }
 
-    public void set(int index) {
-        int word = index >>> 6;
-        this.checkCapacity(word);
-        int n = word;
-        this.bits[n] = this.bits[n] | 1L << (index & 0x3F);
-    }
+   public void set(int index) {
+      int word = index >>> 6;
+      this.checkCapacity(word);
+      this.bits[word] = this.bits[word] | 1L << (index & 63);
+   }
 
-    public void flip(int index) {
-        int word = index >>> 6;
-        this.checkCapacity(word);
-        int n = word;
-        this.bits[n] = this.bits[n] ^ 1L << (index & 0x3F);
-    }
+   public void flip(int index) {
+      int word = index >>> 6;
+      this.checkCapacity(word);
+      this.bits[word] = this.bits[word] ^ 1L << (index & 63);
+   }
 
-    private void checkCapacity(int len) {
-        if (len >= this.bits.length) {
-            long[] newBits = new long[len + 1];
-            System.arraycopy(this.bits, 0, newBits, 0, this.bits.length);
-            this.bits = newBits;
-        }
-    }
+   private void checkCapacity(int len) {
+      if (len >= this.bits.length) {
+         long[] newBits = new long[len + 1];
+         System.arraycopy(this.bits, 0, newBits, 0, this.bits.length);
+         this.bits = newBits;
+      }
+   }
 
-    public void clear(int index) {
-        int word = index >>> 6;
-        if (word >= this.bits.length) {
-            return;
-        }
-        int n = word;
-        this.bits[n] = this.bits[n] & (1L << (index & 0x3F) ^ 0xFFFFFFFFFFFFFFFFL);
-    }
+   public void clear(int index) {
+      int word = index >>> 6;
+      if (word < this.bits.length) {
+         this.bits[word] = this.bits[word] & ~(1L << (index & 63));
+      }
+   }
 
-    public void clear() {
-        long[] bits = this.bits;
-        int length = bits.length;
-        for (int i = 0; i < length; ++i) {
-            bits[i] = 0L;
-        }
-    }
+   public void clear() {
+      long[] bits = this.bits;
+      int length = bits.length;
 
-    public int numBits() {
-        return this.bits.length << 6;
-    }
+      for (int i = 0; i < length; i++) {
+         bits[i] = 0L;
+      }
+   }
 
-    public int length() {
-        long[] bits = this.bits;
-        for (int word = bits.length - 1; word >= 0; --word) {
-            long bitsAtWord = bits[word];
-            if (bitsAtWord == 0L) continue;
-            for (int bit = 63; bit >= 0; --bit) {
-                if ((bitsAtWord & 1L << (bit & 0x3F)) == 0L) continue;
-                return (word << 6) + bit + 1;
+   public int numBits() {
+      return this.bits.length << 6;
+   }
+
+   public int length() {
+      long[] bits = this.bits;
+
+      for (int word = bits.length - 1; word >= 0; word--) {
+         long bitsAtWord = bits[word];
+         if (bitsAtWord != 0L) {
+            for (int bit = 63; bit >= 0; bit--) {
+               if ((bitsAtWord & 1L << (bit & 63)) != 0L) {
+                  return (word << 6) + bit + 1;
+               }
             }
-        }
-        return 0;
-    }
+         }
+      }
 
-    public boolean isEmpty() {
-        long[] bits = this.bits;
-        int length = bits.length;
-        for (int i = 0; i < length; ++i) {
-            if (bits[i] == 0L) continue;
+      return 0;
+   }
+
+   public boolean isEmpty() {
+      long[] bits = this.bits;
+      int length = bits.length;
+
+      for (int i = 0; i < length; i++) {
+         if (bits[i] != 0L) {
             return false;
-        }
-        return true;
-    }
+         }
+      }
 
-    public int nextSetBit(int fromIndex) {
-        int i;
-        int word = fromIndex >>> 6;
-        long[] bits = this.bits;
-        int bitsLength = bits.length;
-        if (word >= bitsLength) {
-            return -1;
-        }
-        long bitsAtWord = bits[word];
-        if (bitsAtWord != 0L) {
-            for (i = fromIndex & 0x3F; i < 64; ++i) {
-                if ((bitsAtWord & 1L << (i & 0x3F)) == 0L) continue;
-                return (word << 6) + i;
-            }
-        }
-        ++word;
-        while (word < bitsLength) {
-            if (word != 0 && (bitsAtWord = bits[word]) != 0L) {
-                for (i = 0; i < 64; ++i) {
-                    if ((bitsAtWord & 1L << (i & 0x3F)) == 0L) continue;
-                    return (word << 6) + i;
-                }
-            }
-            ++word;
-        }
-        return -1;
-    }
+      return true;
+   }
 
-    public int nextClearBit(int fromIndex) {
-        int i;
-        int word = fromIndex >>> 6;
-        long[] bits = this.bits;
-        int bitsLength = bits.length;
-        if (word >= bitsLength) {
-            return bits.length << 6;
-        }
-        long bitsAtWord = bits[word];
-        for (i = fromIndex & 0x3F; i < 64; ++i) {
-            if ((bitsAtWord & 1L << (i & 0x3F)) != 0L) continue;
-            return (word << 6) + i;
-        }
-        ++word;
-        while (word < bitsLength) {
+   public int nextSetBit(int fromIndex) {
+      long[] bits = this.bits;
+      int word = fromIndex >>> 6;
+      int bitsLength = bits.length;
+      if (word >= bitsLength) {
+         return -1;
+      } else {
+         long bitsAtWord = bits[word];
+         if (bitsAtWord != 0L) {
+            for (int i = fromIndex & 63; i < 64; i++) {
+               if ((bitsAtWord & 1L << (i & 63)) != 0L) {
+                  return (word << 6) + i;
+               }
+            }
+         }
+
+         word++;
+
+         for (; word < bitsLength; word++) {
+            if (word != 0) {
+               bitsAtWord = bits[word];
+               if (bitsAtWord != 0L) {
+                  for (int ix = 0; ix < 64; ix++) {
+                     if ((bitsAtWord & 1L << (ix & 63)) != 0L) {
+                        return (word << 6) + ix;
+                     }
+                  }
+               }
+            }
+         }
+
+         return -1;
+      }
+   }
+
+   public int nextClearBit(int fromIndex) {
+      long[] bits = this.bits;
+      int word = fromIndex >>> 6;
+      int bitsLength = bits.length;
+      if (word >= bitsLength) {
+         return bits.length << 6;
+      } else {
+         long bitsAtWord = bits[word];
+
+         for (int i = fromIndex & 63; i < 64; i++) {
+            if ((bitsAtWord & 1L << (i & 63)) == 0L) {
+               return (word << 6) + i;
+            }
+         }
+
+         word++;
+
+         while (word < bitsLength) {
             if (word == 0) {
-                return word << 6;
+               return word << 6;
             }
+
             bitsAtWord = bits[word];
-            for (i = 0; i < 64; ++i) {
-                if ((bitsAtWord & 1L << (i & 0x3F)) != 0L) continue;
-                return (word << 6) + i;
+
+            for (int ix = 0; ix < 64; ix++) {
+               if ((bitsAtWord & 1L << (ix & 63)) == 0L) {
+                  return (word << 6) + ix;
+               }
             }
-            ++word;
-        }
-        return bits.length << 6;
-    }
 
-    public void and(Bits other) {
-        int i;
-        int commonWords = Math.min(this.bits.length, other.bits.length);
-        for (i = 0; commonWords > i; ++i) {
-            int n = i;
-            this.bits[n] = this.bits[n] & other.bits[i];
-        }
-        if (this.bits.length > commonWords) {
-            int s = this.bits.length;
-            for (i = commonWords; s > i; ++i) {
-                this.bits[i] = 0L;
-            }
-        }
-    }
+            word++;
+         }
 
-    public void andNot(Bits other) {
-        int j = this.bits.length;
-        int k = other.bits.length;
-        for (int i = 0; i < j && i < k; ++i) {
-            int n = i;
-            this.bits[n] = this.bits[n] & (other.bits[i] ^ 0xFFFFFFFFFFFFFFFFL);
-        }
-    }
+         return bits.length << 6;
+      }
+   }
 
-    public void or(Bits other) {
-        int i;
-        int commonWords = Math.min(this.bits.length, other.bits.length);
-        for (i = 0; commonWords > i; ++i) {
-            int n = i;
-            this.bits[n] = this.bits[n] | other.bits[i];
-        }
-        if (commonWords < other.bits.length) {
-            this.checkCapacity(other.bits.length);
-            int s = other.bits.length;
-            for (i = commonWords; s > i; ++i) {
-                this.bits[i] = other.bits[i];
-            }
-        }
-    }
+   public void and(Bits other) {
+      int commonWords = Math.min(this.bits.length, other.bits.length);
 
-    public void xor(Bits other) {
-        int i;
-        int commonWords = Math.min(this.bits.length, other.bits.length);
-        for (i = 0; commonWords > i; ++i) {
-            int n = i;
-            this.bits[n] = this.bits[n] ^ other.bits[i];
-        }
-        if (commonWords < other.bits.length) {
-            this.checkCapacity(other.bits.length);
-            int s = other.bits.length;
-            for (i = commonWords; s > i; ++i) {
-                this.bits[i] = other.bits[i];
-            }
-        }
-    }
+      for (int i = 0; commonWords > i; i++) {
+         this.bits[i] = this.bits[i] & other.bits[i];
+      }
 
-    public boolean intersects(Bits other) {
-        long[] bits = this.bits;
-        long[] otherBits = other.bits;
-        for (int i = Math.min(bits.length, otherBits.length) - 1; i >= 0; --i) {
-            if ((bits[i] & otherBits[i]) == 0L) continue;
+      if (this.bits.length > commonWords) {
+         int i = commonWords;
+
+         for (int s = this.bits.length; s > i; i++) {
+            this.bits[i] = 0L;
+         }
+      }
+   }
+
+   public void andNot(Bits other) {
+      int i = 0;
+      int j = this.bits.length;
+
+      for (int k = other.bits.length; i < j && i < k; i++) {
+         this.bits[i] = this.bits[i] & ~other.bits[i];
+      }
+   }
+
+   public void or(Bits other) {
+      int commonWords = Math.min(this.bits.length, other.bits.length);
+
+      for (int i = 0; commonWords > i; i++) {
+         this.bits[i] = this.bits[i] | other.bits[i];
+      }
+
+      if (commonWords < other.bits.length) {
+         this.checkCapacity(other.bits.length);
+         int i = commonWords;
+
+         for (int s = other.bits.length; s > i; i++) {
+            this.bits[i] = other.bits[i];
+         }
+      }
+   }
+
+   public void xor(Bits other) {
+      int commonWords = Math.min(this.bits.length, other.bits.length);
+
+      for (int i = 0; commonWords > i; i++) {
+         this.bits[i] = this.bits[i] ^ other.bits[i];
+      }
+
+      if (commonWords < other.bits.length) {
+         this.checkCapacity(other.bits.length);
+         int i = commonWords;
+
+         for (int s = other.bits.length; s > i; i++) {
+            this.bits[i] = other.bits[i];
+         }
+      }
+   }
+
+   public boolean intersects(Bits other) {
+      long[] bits = this.bits;
+      long[] otherBits = other.bits;
+
+      for (int i = Math.min(bits.length, otherBits.length) - 1; i >= 0; i--) {
+         if ((bits[i] & otherBits[i]) != 0L) {
             return true;
-        }
-        return false;
-    }
+         }
+      }
 
-    public boolean containsAll(Bits other) {
-        int bitsLength;
-        int i;
-        long[] bits = this.bits;
-        long[] otherBits = other.bits;
-        int otherBitsLength = otherBits.length;
-        for (i = bitsLength = bits.length; i < otherBitsLength; ++i) {
-            if (otherBits[i] == 0L) continue;
-            return false;
-        }
-        for (i = Math.min(bitsLength, otherBitsLength) - 1; i >= 0; --i) {
-            if ((bits[i] & otherBits[i]) == otherBits[i]) continue;
-            return false;
-        }
-        return true;
-    }
+      return false;
+   }
 
-    public int hashCode() {
-        int word = this.length() >>> 6;
-        int hash = 0;
-        for (int i = 0; word >= i; ++i) {
-            hash = 127 * hash + (int)(this.bits[i] ^ this.bits[i] >>> 32);
-        }
-        return hash;
-    }
+   public boolean containsAll(Bits other) {
+      long[] bits = this.bits;
+      long[] otherBits = other.bits;
+      int otherBitsLength = otherBits.length;
+      int bitsLength = bits.length;
 
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+      for (int i = bitsLength; i < otherBitsLength; i++) {
+         if (otherBits[i] != 0L) {
             return false;
-        }
-        if (this.getClass() != obj.getClass()) {
+         }
+      }
+
+      for (int ix = Math.min(bitsLength, otherBitsLength) - 1; ix >= 0; ix--) {
+         if ((bits[ix] & otherBits[ix]) != otherBits[ix]) {
             return false;
-        }
-        Bits other = (Bits)obj;
-        long[] otherBits = other.bits;
-        int commonWords = Math.min(this.bits.length, otherBits.length);
-        for (int i = 0; commonWords > i; ++i) {
-            if (this.bits[i] == otherBits[i]) continue;
-            return false;
-        }
-        if (this.bits.length == otherBits.length) {
-            return true;
-        }
-        return this.length() == other.length();
-    }
+         }
+      }
+
+      return true;
+   }
+
+   @Override
+   public int hashCode() {
+      int word = this.length() >>> 6;
+      int hash = 0;
+
+      for (int i = 0; word >= i; i++) {
+         hash = 127 * hash + (int)(this.bits[i] ^ this.bits[i] >>> 32);
+      }
+
+      return hash;
+   }
+
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj) {
+         return true;
+      } else if (obj == null) {
+         return false;
+      } else if (this.getClass() != obj.getClass()) {
+         return false;
+      } else {
+         Bits other = (Bits)obj;
+         long[] otherBits = other.bits;
+         int commonWords = Math.min(this.bits.length, otherBits.length);
+
+         for (int i = 0; commonWords > i; i++) {
+            if (this.bits[i] != otherBits[i]) {
+               return false;
+            }
+         }
+
+         return this.bits.length == otherBits.length ? true : this.length() == other.length();
+      }
+   }
 }
-

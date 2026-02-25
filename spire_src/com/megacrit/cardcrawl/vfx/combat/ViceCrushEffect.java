@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.combat;
 
 import com.badlogic.gdx.Gdx;
@@ -16,77 +13,145 @@ import com.megacrit.cardcrawl.helpers.ScreenShake;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import com.megacrit.cardcrawl.vfx.BorderFlashEffect;
 
-public class ViceCrushEffect
-extends AbstractGameEffect {
-    private static TextureAtlas.AtlasRegion img;
-    private boolean impactHook = false;
-    private float x;
-    private float x2;
-    private float y;
-    private float startX;
-    private float startX2;
-    private float targetX;
-    private float targetX2;
+public class ViceCrushEffect extends AbstractGameEffect {
+   private static TextureAtlas.AtlasRegion img;
+   private boolean impactHook = false;
+   private float x;
+   private float x2;
+   private float y;
+   private float startX;
+   private float startX2;
+   private float targetX;
+   private float targetX2;
 
-    public ViceCrushEffect(float x, float y) {
-        if (img == null) {
-            img = ImageMaster.vfxAtlas.findRegion("combat/weightyImpact");
-        }
-        this.startX = x - 300.0f * Settings.scale - (float)ViceCrushEffect.img.packedWidth / 2.0f;
-        this.startX2 = x + 300.0f * Settings.scale - (float)ViceCrushEffect.img.packedWidth / 2.0f;
-        this.targetX = x - 120.0f * Settings.scale - (float)ViceCrushEffect.img.packedWidth / 2.0f;
-        this.targetX2 = x + 120.0f * Settings.scale - (float)ViceCrushEffect.img.packedWidth / 2.0f;
-        this.x = this.startX;
-        this.x2 = this.startX2;
-        this.y = y - (float)ViceCrushEffect.img.packedHeight / 2.0f;
-        this.scale = 1.1f;
-        this.duration = 0.7f;
-        this.startingDuration = 0.7f;
-        this.rotation = 90.0f;
-        this.color = Color.PURPLE.cpy();
-        this.color.a = 0.0f;
-    }
+   public ViceCrushEffect(float x, float y) {
+      if (img == null) {
+         img = ImageMaster.vfxAtlas.findRegion("combat/weightyImpact");
+      }
 
-    @Override
-    public void update() {
-        if (this.duration == this.startingDuration) {
-            CardCrawlGame.sound.playA("ATTACK_MAGIC_FAST_3", -0.4f);
-        }
-        this.duration -= Gdx.graphics.getDeltaTime();
-        if (this.duration < 0.0f) {
-            this.isDone = true;
-        } else if (this.duration < 0.2f) {
-            if (!this.impactHook) {
-                this.impactHook = true;
-                AbstractDungeon.effectsQueue.add(new BorderFlashEffect(Color.PURPLE));
-                CardCrawlGame.screenShake.shake(ScreenShake.ShakeIntensity.HIGH, ScreenShake.ShakeDur.MED, true);
-            }
-            this.color.a = Interpolation.fade.apply(0.0f, 1.0f, this.duration * 5.0f);
-        } else {
-            this.color.a = Interpolation.fade.apply(1.0f, 0.0f, this.duration / this.startingDuration);
-        }
-        this.scale += 1.1f * Gdx.graphics.getDeltaTime();
-        this.x = Interpolation.fade.apply(this.targetX, this.startX, this.duration / this.startingDuration);
-        this.x2 = Interpolation.fade.apply(this.targetX2, this.startX2, this.duration / this.startingDuration);
-    }
+      this.startX = x - 300.0F * Settings.scale - img.packedWidth / 2.0F;
+      this.startX2 = x + 300.0F * Settings.scale - img.packedWidth / 2.0F;
+      this.targetX = x - 120.0F * Settings.scale - img.packedWidth / 2.0F;
+      this.targetX2 = x + 120.0F * Settings.scale - img.packedWidth / 2.0F;
+      this.x = this.startX;
+      this.x2 = this.startX2;
+      this.y = y - img.packedHeight / 2.0F;
+      this.scale = 1.1F;
+      this.duration = 0.7F;
+      this.startingDuration = 0.7F;
+      this.rotation = 90.0F;
+      this.color = Color.PURPLE.cpy();
+      this.color.a = 0.0F;
+   }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        sb.setBlendFunction(770, 1);
-        sb.setColor(new Color(0.5f, 0.5f, 0.9f, this.color.a));
-        sb.draw(img, this.x, this.y, (float)ViceCrushEffect.img.packedWidth / 2.0f, (float)ViceCrushEffect.img.packedHeight / 2.0f, ViceCrushEffect.img.packedWidth, ViceCrushEffect.img.packedHeight, this.scale * this.scale * Settings.scale * 0.5f, this.scale * Settings.scale * (this.duration + 0.8f), this.rotation);
-        sb.draw(img, this.x2, this.y, (float)ViceCrushEffect.img.packedWidth / 2.0f, (float)ViceCrushEffect.img.packedHeight / 2.0f, ViceCrushEffect.img.packedWidth, ViceCrushEffect.img.packedHeight, this.scale * this.scale * Settings.scale * 0.5f, this.scale * Settings.scale * (this.duration + 0.8f), this.rotation - 180.0f);
-        sb.setColor(new Color(0.7f, 0.5f, 0.9f, this.color.a));
-        sb.draw(img, this.x, this.y, (float)ViceCrushEffect.img.packedWidth / 2.0f, (float)ViceCrushEffect.img.packedHeight / 2.0f, ViceCrushEffect.img.packedWidth, ViceCrushEffect.img.packedHeight, this.scale * this.scale * Settings.scale * 0.75f, this.scale * Settings.scale * (this.duration + 0.8f), this.rotation);
-        sb.draw(img, this.x2, this.y, (float)ViceCrushEffect.img.packedWidth / 2.0f, (float)ViceCrushEffect.img.packedHeight / 2.0f, ViceCrushEffect.img.packedWidth, ViceCrushEffect.img.packedHeight, this.scale * this.scale * Settings.scale * 0.75f, this.scale * Settings.scale * (this.duration + 0.8f), this.rotation - 180.0f);
-        sb.setColor(this.color);
-        sb.draw(img, this.x, this.y, (float)ViceCrushEffect.img.packedWidth / 2.0f, (float)ViceCrushEffect.img.packedHeight / 2.0f, ViceCrushEffect.img.packedWidth, ViceCrushEffect.img.packedHeight, this.scale * this.scale * Settings.scale, this.scale * Settings.scale * (this.duration + 1.0f), this.rotation);
-        sb.draw(img, this.x2, this.y, (float)ViceCrushEffect.img.packedWidth / 2.0f, (float)ViceCrushEffect.img.packedHeight / 2.0f, ViceCrushEffect.img.packedWidth, ViceCrushEffect.img.packedHeight, this.scale * this.scale * Settings.scale, this.scale * Settings.scale * (this.duration + 1.0f), this.rotation - 180.0f);
-        sb.setBlendFunction(770, 771);
-    }
+   @Override
+   public void update() {
+      if (this.duration == this.startingDuration) {
+         CardCrawlGame.sound.playA("ATTACK_MAGIC_FAST_3", -0.4F);
+      }
 
-    @Override
-    public void dispose() {
-    }
+      this.duration = this.duration - Gdx.graphics.getDeltaTime();
+      if (this.duration < 0.0F) {
+         this.isDone = true;
+      } else if (this.duration < 0.2F) {
+         if (!this.impactHook) {
+            this.impactHook = true;
+            AbstractDungeon.effectsQueue.add(new BorderFlashEffect(Color.PURPLE));
+            CardCrawlGame.screenShake.shake(ScreenShake.ShakeIntensity.HIGH, ScreenShake.ShakeDur.MED, true);
+         }
+
+         this.color.a = Interpolation.fade.apply(0.0F, 1.0F, this.duration * 5.0F);
+      } else {
+         this.color.a = Interpolation.fade.apply(1.0F, 0.0F, this.duration / this.startingDuration);
+      }
+
+      this.scale = this.scale + 1.1F * Gdx.graphics.getDeltaTime();
+      this.x = Interpolation.fade.apply(this.targetX, this.startX, this.duration / this.startingDuration);
+      this.x2 = Interpolation.fade.apply(this.targetX2, this.startX2, this.duration / this.startingDuration);
+   }
+
+   @Override
+   public void render(SpriteBatch sb) {
+      sb.setBlendFunction(770, 1);
+      sb.setColor(new Color(0.5F, 0.5F, 0.9F, this.color.a));
+      sb.draw(
+         img,
+         this.x,
+         this.y,
+         img.packedWidth / 2.0F,
+         img.packedHeight / 2.0F,
+         img.packedWidth,
+         img.packedHeight,
+         this.scale * this.scale * Settings.scale * 0.5F,
+         this.scale * Settings.scale * (this.duration + 0.8F),
+         this.rotation
+      );
+      sb.draw(
+         img,
+         this.x2,
+         this.y,
+         img.packedWidth / 2.0F,
+         img.packedHeight / 2.0F,
+         img.packedWidth,
+         img.packedHeight,
+         this.scale * this.scale * Settings.scale * 0.5F,
+         this.scale * Settings.scale * (this.duration + 0.8F),
+         this.rotation - 180.0F
+      );
+      sb.setColor(new Color(0.7F, 0.5F, 0.9F, this.color.a));
+      sb.draw(
+         img,
+         this.x,
+         this.y,
+         img.packedWidth / 2.0F,
+         img.packedHeight / 2.0F,
+         img.packedWidth,
+         img.packedHeight,
+         this.scale * this.scale * Settings.scale * 0.75F,
+         this.scale * Settings.scale * (this.duration + 0.8F),
+         this.rotation
+      );
+      sb.draw(
+         img,
+         this.x2,
+         this.y,
+         img.packedWidth / 2.0F,
+         img.packedHeight / 2.0F,
+         img.packedWidth,
+         img.packedHeight,
+         this.scale * this.scale * Settings.scale * 0.75F,
+         this.scale * Settings.scale * (this.duration + 0.8F),
+         this.rotation - 180.0F
+      );
+      sb.setColor(this.color);
+      sb.draw(
+         img,
+         this.x,
+         this.y,
+         img.packedWidth / 2.0F,
+         img.packedHeight / 2.0F,
+         img.packedWidth,
+         img.packedHeight,
+         this.scale * this.scale * Settings.scale,
+         this.scale * Settings.scale * (this.duration + 1.0F),
+         this.rotation
+      );
+      sb.draw(
+         img,
+         this.x2,
+         this.y,
+         img.packedWidth / 2.0F,
+         img.packedHeight / 2.0F,
+         img.packedWidth,
+         img.packedHeight,
+         this.scale * this.scale * Settings.scale,
+         this.scale * Settings.scale * (this.duration + 1.0F),
+         this.rotation - 180.0F
+      );
+      sb.setBlendFunction(770, 771);
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

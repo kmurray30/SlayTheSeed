@@ -1,62 +1,54 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.config.arbiters;
 
-import org.apache.logging.log4j.core.config.arbiters.Arbiter;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory;
 
-@Plugin(name="SystemPropertyArbiter", category="Core", elementType="Arbiter", deferChildren=true, printObject=true)
-public class SystemPropertyArbiter
-implements Arbiter {
-    private final String propertyName;
-    private final String propertyValue;
+@Plugin(name = "SystemPropertyArbiter", category = "Core", elementType = "Arbiter", deferChildren = true, printObject = true)
+public class SystemPropertyArbiter implements Arbiter {
+   private final String propertyName;
+   private final String propertyValue;
 
-    private SystemPropertyArbiter(String propertyName, String propertyValue) {
-        this.propertyName = propertyName;
-        this.propertyValue = propertyValue;
-    }
+   private SystemPropertyArbiter(final String propertyName, final String propertyValue) {
+      this.propertyName = propertyName;
+      this.propertyValue = propertyValue;
+   }
 
-    @Override
-    public boolean isCondition() {
-        String value = System.getProperty(this.propertyName);
-        return value != null && (this.propertyValue == null || value.equals(this.propertyValue));
-    }
+   @Override
+   public boolean isCondition() {
+      String value = System.getProperty(this.propertyName);
+      return value != null && (this.propertyValue == null || value.equals(this.propertyValue));
+   }
 
-    @PluginBuilderFactory
-    public static Builder newBuilder() {
-        return new Builder();
-    }
+   @PluginBuilderFactory
+   public static SystemPropertyArbiter.Builder newBuilder() {
+      return new SystemPropertyArbiter.Builder();
+   }
 
-    public static class Builder
-    implements org.apache.logging.log4j.core.util.Builder<SystemPropertyArbiter> {
-        public static final String ATTR_PROPERTY_NAME = "propertyName";
-        public static final String ATTR_PROPERTY_VALUE = "propertyValue";
-        @PluginBuilderAttribute(value="propertyName")
-        private String propertyName;
-        @PluginBuilderAttribute(value="propertyValue")
-        private String propertyValue;
+   public static class Builder implements org.apache.logging.log4j.core.util.Builder<SystemPropertyArbiter> {
+      public static final String ATTR_PROPERTY_NAME = "propertyName";
+      public static final String ATTR_PROPERTY_VALUE = "propertyValue";
+      @PluginBuilderAttribute("propertyName")
+      private String propertyName;
+      @PluginBuilderAttribute("propertyValue")
+      private String propertyValue;
 
-        public Builder setPropertyName(String propertyName) {
-            this.propertyName = propertyName;
-            return this.asBuilder();
-        }
+      public SystemPropertyArbiter.Builder setPropertyName(final String propertyName) {
+         this.propertyName = propertyName;
+         return this.asBuilder();
+      }
 
-        public Builder setPropertyValue(String propertyValue) {
-            this.propertyName = propertyValue;
-            return this.asBuilder();
-        }
+      public SystemPropertyArbiter.Builder setPropertyValue(final String propertyValue) {
+         this.propertyName = propertyValue;
+         return this.asBuilder();
+      }
 
-        public Builder asBuilder() {
-            return this;
-        }
+      public SystemPropertyArbiter.Builder asBuilder() {
+         return this;
+      }
 
-        @Override
-        public SystemPropertyArbiter build() {
-            return new SystemPropertyArbiter(this.propertyName, this.propertyValue);
-        }
-    }
+      public SystemPropertyArbiter build() {
+         return new SystemPropertyArbiter(this.propertyName, this.propertyValue);
+      }
+   }
 }
-

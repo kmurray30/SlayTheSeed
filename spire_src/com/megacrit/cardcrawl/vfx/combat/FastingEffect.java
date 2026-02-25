@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.combat;
 
 import com.badlogic.gdx.Gdx;
@@ -13,52 +10,74 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
-public class FastingEffect
-extends AbstractGameEffect {
-    private static TextureAtlas.AtlasRegion img;
-    private float x;
-    private float y;
+public class FastingEffect extends AbstractGameEffect {
+   private static TextureAtlas.AtlasRegion img;
+   private float x;
+   private float y;
 
-    public FastingEffect(float x, float y, Color c) {
-        if (img == null) {
-            img = ImageMaster.WHITE_RING;
-        }
-        this.startingDuration = 1.0f;
-        this.duration = 1.0f;
-        this.scale = 3.0f * Settings.scale;
-        this.color = c.cpy();
-        this.color.a = 0.0f;
-        this.rotation = MathUtils.random(0.0f, 360.0f);
-        this.x = x - (float)FastingEffect.img.packedWidth / 2.0f;
-        this.y = y - (float)FastingEffect.img.packedHeight / 2.0f;
-    }
+   public FastingEffect(float x, float y, Color c) {
+      if (img == null) {
+         img = ImageMaster.WHITE_RING;
+      }
 
-    @Override
-    public void update() {
-        this.duration -= Gdx.graphics.getDeltaTime();
-        this.rotation -= Gdx.graphics.getDeltaTime() * 205.0f;
-        if (this.duration > 0.5f) {
-            this.color.a = Interpolation.fade.apply(0.45f, 0.0f, (this.duration - 0.5f) * 2.0f);
-        } else {
-            this.color.a = Interpolation.fade.apply(0.0f, 0.45f, this.duration * 2.0f);
-            this.scale = Interpolation.swingOut.apply(0.0f, 3.0f * Settings.scale, this.duration * 2.0f);
-        }
-        if (this.duration < 0.0f) {
-            this.isDone = true;
-        }
-    }
+      this.startingDuration = 1.0F;
+      this.duration = 1.0F;
+      this.scale = 3.0F * Settings.scale;
+      this.color = c.cpy();
+      this.color.a = 0.0F;
+      this.rotation = MathUtils.random(0.0F, 360.0F);
+      this.x = x - img.packedWidth / 2.0F;
+      this.y = y - img.packedHeight / 2.0F;
+   }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        sb.setBlendFunction(770, 1);
-        sb.setColor(this.color);
-        sb.draw(img, this.x, this.y, (float)FastingEffect.img.packedWidth / 2.0f, (float)FastingEffect.img.packedHeight / 2.0f, FastingEffect.img.packedWidth, FastingEffect.img.packedHeight, this.scale + MathUtils.random(-0.05f, 0.05f), this.scale + MathUtils.random(-0.05f, 0.05f), this.rotation);
-        sb.draw(img, this.x, this.y, (float)FastingEffect.img.packedWidth / 2.0f, (float)FastingEffect.img.packedHeight / 2.0f, FastingEffect.img.packedWidth, FastingEffect.img.packedHeight, this.scale + MathUtils.random(-0.05f, 0.05f), this.scale + MathUtils.random(-0.05f, 0.05f), this.rotation + 180.0f);
-        sb.setBlendFunction(770, 771);
-    }
+   @Override
+   public void update() {
+      this.duration = this.duration - Gdx.graphics.getDeltaTime();
+      this.rotation = this.rotation - Gdx.graphics.getDeltaTime() * 205.0F;
+      if (this.duration > 0.5F) {
+         this.color.a = Interpolation.fade.apply(0.45F, 0.0F, (this.duration - 0.5F) * 2.0F);
+      } else {
+         this.color.a = Interpolation.fade.apply(0.0F, 0.45F, this.duration * 2.0F);
+         this.scale = Interpolation.swingOut.apply(0.0F, 3.0F * Settings.scale, this.duration * 2.0F);
+      }
 
-    @Override
-    public void dispose() {
-    }
+      if (this.duration < 0.0F) {
+         this.isDone = true;
+      }
+   }
+
+   @Override
+   public void render(SpriteBatch sb) {
+      sb.setBlendFunction(770, 1);
+      sb.setColor(this.color);
+      sb.draw(
+         img,
+         this.x,
+         this.y,
+         img.packedWidth / 2.0F,
+         img.packedHeight / 2.0F,
+         img.packedWidth,
+         img.packedHeight,
+         this.scale + MathUtils.random(-0.05F, 0.05F),
+         this.scale + MathUtils.random(-0.05F, 0.05F),
+         this.rotation
+      );
+      sb.draw(
+         img,
+         this.x,
+         this.y,
+         img.packedWidth / 2.0F,
+         img.packedHeight / 2.0F,
+         img.packedWidth,
+         img.packedHeight,
+         this.scale + MathUtils.random(-0.05F, 0.05F),
+         this.scale + MathUtils.random(-0.05F, 0.05F),
+         this.rotation + 180.0F
+      );
+      sb.setBlendFunction(770, 771);
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

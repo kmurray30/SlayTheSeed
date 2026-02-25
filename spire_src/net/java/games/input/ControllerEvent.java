@@ -1,19 +1,13 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package net.java.games.input;
 
-import net.java.games.input.Controller;
-
 public class ControllerEvent {
-    private Controller controller;
+   private Controller controller;
 
-    public ControllerEvent(Controller c) {
-        this.controller = c;
-    }
+   public ControllerEvent(Controller c) {
+      this.controller = c;
+   }
 
-    public Controller getController() {
-        return this.controller;
-    }
+   public Controller getController() {
+      return this.controller;
+   }
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.cards.red;
 
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
@@ -13,34 +10,43 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.StrengthPower;
 import com.megacrit.cardcrawl.vfx.combat.InflameEffect;
 
-public class Inflame
-extends AbstractCard {
-    public static final String ID = "Inflame";
-    private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("Inflame");
+public class Inflame extends AbstractCard {
+   public static final String ID = "Inflame";
+   private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("Inflame");
 
-    public Inflame() {
-        super(ID, Inflame.cardStrings.NAME, "red/power/inflame", 1, Inflame.cardStrings.DESCRIPTION, AbstractCard.CardType.POWER, AbstractCard.CardColor.RED, AbstractCard.CardRarity.UNCOMMON, AbstractCard.CardTarget.SELF);
-        this.magicNumber = this.baseMagicNumber = 2;
-    }
+   public Inflame() {
+      super(
+         "Inflame",
+         cardStrings.NAME,
+         "red/power/inflame",
+         1,
+         cardStrings.DESCRIPTION,
+         AbstractCard.CardType.POWER,
+         AbstractCard.CardColor.RED,
+         AbstractCard.CardRarity.UNCOMMON,
+         AbstractCard.CardTarget.SELF
+      );
+      this.baseMagicNumber = 2;
+      this.magicNumber = this.baseMagicNumber;
+   }
 
-    @Override
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new VFXAction(p, new InflameEffect(p), 1.0f));
-        this.addToBot(new ApplyPowerAction(p, p, new StrengthPower(p, this.magicNumber), this.magicNumber));
-    }
+   @Override
+   public void use(AbstractPlayer p, AbstractMonster m) {
+      this.addToBot(new VFXAction(p, new InflameEffect(p), 1.0F));
+      this.addToBot(new ApplyPowerAction(p, p, new StrengthPower(p, this.magicNumber), this.magicNumber));
+   }
 
-    @Override
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeMagicNumber(1);
-            this.initializeDescription();
-        }
-    }
+   @Override
+   public void upgrade() {
+      if (!this.upgraded) {
+         this.upgradeName();
+         this.upgradeMagicNumber(1);
+         this.initializeDescription();
+      }
+   }
 
-    @Override
-    public AbstractCard makeCopy() {
-        return new Inflame();
-    }
+   @Override
+   public AbstractCard makeCopy() {
+      return new Inflame();
+   }
 }
-

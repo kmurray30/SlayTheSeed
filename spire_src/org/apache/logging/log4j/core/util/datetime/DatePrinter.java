@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.util.datetime;
 
 import java.text.FieldPosition;
@@ -10,24 +7,23 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public interface DatePrinter {
-    public String format(long var1);
+   String format(long millis);
 
-    public String format(Date var1);
+   String format(Date date);
 
-    public String format(Calendar var1);
+   String format(Calendar calendar);
 
-    public <B extends Appendable> B format(long var1, B var3);
+   <B extends Appendable> B format(long millis, B buf);
 
-    public <B extends Appendable> B format(Date var1, B var2);
+   <B extends Appendable> B format(Date date, B buf);
 
-    public <B extends Appendable> B format(Calendar var1, B var2);
+   <B extends Appendable> B format(Calendar calendar, B buf);
 
-    public String getPattern();
+   String getPattern();
 
-    public TimeZone getTimeZone();
+   TimeZone getTimeZone();
 
-    public Locale getLocale();
+   Locale getLocale();
 
-    public StringBuilder format(Object var1, StringBuilder var2, FieldPosition var3);
+   StringBuilder format(Object obj, StringBuilder toAppendTo, FieldPosition pos);
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.config.plugins.visitors;
 
 import java.lang.annotation.Annotation;
@@ -11,16 +8,15 @@ import org.apache.logging.log4j.core.config.Node;
 import org.apache.logging.log4j.core.lookup.StrSubstitutor;
 
 public interface PluginVisitor<A extends Annotation> {
-    public PluginVisitor<A> setAnnotation(Annotation var1);
+   PluginVisitor<A> setAnnotation(Annotation annotation);
 
-    public PluginVisitor<A> setAliases(String ... var1);
+   PluginVisitor<A> setAliases(String... aliases);
 
-    public PluginVisitor<A> setConversionType(Class<?> var1);
+   PluginVisitor<A> setConversionType(Class<?> conversionType);
 
-    public PluginVisitor<A> setStrSubstitutor(StrSubstitutor var1);
+   PluginVisitor<A> setStrSubstitutor(StrSubstitutor substitutor);
 
-    public PluginVisitor<A> setMember(Member var1);
+   PluginVisitor<A> setMember(Member member);
 
-    public Object visit(Configuration var1, Node var2, LogEvent var3, StringBuilder var4);
+   Object visit(Configuration configuration, Node node, LogEvent event, StringBuilder log);
 }
-

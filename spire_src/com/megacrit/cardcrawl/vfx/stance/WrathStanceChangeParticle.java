@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.stance;
 
 import com.badlogic.gdx.Gdx;
@@ -14,51 +11,64 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
-public class WrathStanceChangeParticle
-extends AbstractGameEffect {
-    private TextureAtlas.AtlasRegion img = ImageMaster.STRIKE_LINE;
-    private float x;
-    private float y;
-    private float delayTimer;
+public class WrathStanceChangeParticle extends AbstractGameEffect {
+   private TextureAtlas.AtlasRegion img = ImageMaster.STRIKE_LINE;
+   private float x;
+   private float y;
+   private float delayTimer;
 
-    public WrathStanceChangeParticle(float playerX) {
-        this.duration = this.startingDuration = 1.0f;
-        this.color = new Color(1.0f, MathUtils.random(0.1f, 0.3f), 0.1f, 0.0f);
-        this.x = MathUtils.random(-30.0f, 30.0f) * Settings.scale - (float)this.img.packedWidth / 2.0f;
-        this.y = (float)Settings.HEIGHT / 2.0f + MathUtils.random(-150.0f, 150.0f) * Settings.scale - (float)this.img.packedHeight / 2.0f;
-        this.scale = MathUtils.random(2.2f, 2.5f) * Settings.scale;
-        this.delayTimer = MathUtils.random(0.5f);
-        this.rotation = MathUtils.random(89.0f, 91.0f);
-        this.renderBehind = MathUtils.randomBoolean(0.9f);
-    }
+   public WrathStanceChangeParticle(float playerX) {
+      this.startingDuration = 1.0F;
+      this.duration = this.startingDuration;
+      this.color = new Color(1.0F, MathUtils.random(0.1F, 0.3F), 0.1F, 0.0F);
+      this.x = MathUtils.random(-30.0F, 30.0F) * Settings.scale - this.img.packedWidth / 2.0F;
+      this.y = Settings.HEIGHT / 2.0F + MathUtils.random(-150.0F, 150.0F) * Settings.scale - this.img.packedHeight / 2.0F;
+      this.scale = MathUtils.random(2.2F, 2.5F) * Settings.scale;
+      this.delayTimer = MathUtils.random(0.5F);
+      this.rotation = MathUtils.random(89.0F, 91.0F);
+      this.renderBehind = MathUtils.randomBoolean(0.9F);
+   }
 
-    @Override
-    public void update() {
-        if (this.delayTimer > 0.0f) {
-            this.delayTimer -= Gdx.graphics.getDeltaTime();
-            return;
-        }
-        this.duration -= Gdx.graphics.getDeltaTime();
-        if (this.duration < 0.0f) {
+   @Override
+   public void update() {
+      if (this.delayTimer > 0.0F) {
+         this.delayTimer = this.delayTimer - Gdx.graphics.getDeltaTime();
+      } else {
+         this.duration = this.duration - Gdx.graphics.getDeltaTime();
+         if (this.duration < 0.0F) {
             this.isDone = true;
-            return;
-        }
-        this.color.a = this.duration > this.startingDuration / 2.0f ? Interpolation.pow3In.apply(0.6f, 0.0f, (this.duration - this.startingDuration / 2.0f) / (this.startingDuration / 2.0f)) : Interpolation.fade.apply(0.0f, 0.6f, this.duration / (this.startingDuration / 2.0f));
-    }
+         } else {
+            if (this.duration > this.startingDuration / 2.0F) {
+               this.color.a = Interpolation.pow3In.apply(0.6F, 0.0F, (this.duration - this.startingDuration / 2.0F) / (this.startingDuration / 2.0F));
+            } else {
+               this.color.a = Interpolation.fade.apply(0.0F, 0.6F, this.duration / (this.startingDuration / 2.0F));
+            }
+         }
+      }
+   }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        if (this.delayTimer > 0.0f) {
-            return;
-        }
-        sb.setColor(this.color);
-        sb.setBlendFunction(770, 1);
-        sb.draw(this.img, AbstractDungeon.player.hb.cX + this.x, this.y, (float)this.img.packedWidth / 2.0f, (float)this.img.packedHeight / 2.0f, this.img.packedWidth, this.img.packedHeight, this.scale * MathUtils.random(2.9f, 3.1f), this.scale * MathUtils.random(0.95f, 1.05f), this.rotation);
-        sb.setBlendFunction(770, 771);
-    }
+   @Override
+   public void render(SpriteBatch sb) {
+      if (!(this.delayTimer > 0.0F)) {
+         sb.setColor(this.color);
+         sb.setBlendFunction(770, 1);
+         sb.draw(
+            this.img,
+            AbstractDungeon.player.hb.cX + this.x,
+            this.y,
+            this.img.packedWidth / 2.0F,
+            this.img.packedHeight / 2.0F,
+            this.img.packedWidth,
+            this.img.packedHeight,
+            this.scale * MathUtils.random(2.9F, 3.1F),
+            this.scale * MathUtils.random(0.95F, 1.05F),
+            this.rotation
+         );
+         sb.setBlendFunction(770, 771);
+      }
+   }
 
-    @Override
-    public void dispose() {
-    }
+   @Override
+   public void dispose() {
+   }
 }
-

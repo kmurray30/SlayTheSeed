@@ -1,71 +1,69 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.scenes.scene2d;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Pool;
 
-public abstract class Action
-implements Pool.Poolable {
-    protected Actor actor;
-    protected Actor target;
-    private Pool pool;
+public abstract class Action implements Pool.Poolable {
+   protected Actor actor;
+   protected Actor target;
+   private Pool pool;
 
-    public abstract boolean act(float var1);
+   public abstract boolean act(float var1);
 
-    public void restart() {
-    }
+   public void restart() {
+   }
 
-    public void setActor(Actor actor) {
-        this.actor = actor;
-        if (this.target == null) {
-            this.setTarget(actor);
-        }
-        if (actor == null && this.pool != null) {
-            this.pool.free(this);
-            this.pool = null;
-        }
-    }
+   public void setActor(Actor actor) {
+      this.actor = actor;
+      if (this.target == null) {
+         this.setTarget(actor);
+      }
 
-    public Actor getActor() {
-        return this.actor;
-    }
+      if (actor == null && this.pool != null) {
+         this.pool.free(this);
+         this.pool = null;
+      }
+   }
 
-    public void setTarget(Actor target) {
-        this.target = target;
-    }
+   public Actor getActor() {
+      return this.actor;
+   }
 
-    public Actor getTarget() {
-        return this.target;
-    }
+   public void setTarget(Actor target) {
+      this.target = target;
+   }
 
-    @Override
-    public void reset() {
-        this.actor = null;
-        this.target = null;
-        this.pool = null;
-        this.restart();
-    }
+   public Actor getTarget() {
+      return this.target;
+   }
 
-    public Pool getPool() {
-        return this.pool;
-    }
+   @Override
+   public void reset() {
+      this.actor = null;
+      this.target = null;
+      this.pool = null;
+      this.restart();
+   }
 
-    public void setPool(Pool pool) {
-        this.pool = pool;
-    }
+   public Pool getPool() {
+      return this.pool;
+   }
 
-    public String toString() {
-        String name = this.getClass().getName();
-        int dotIndex = name.lastIndexOf(46);
-        if (dotIndex != -1) {
-            name = name.substring(dotIndex + 1);
-        }
-        if (name.endsWith("Action")) {
-            name = name.substring(0, name.length() - 6);
-        }
-        return name;
-    }
+   public void setPool(Pool pool) {
+      this.pool = pool;
+   }
+
+   @Override
+   public String toString() {
+      String name = this.getClass().getName();
+      int dotIndex = name.lastIndexOf(46);
+      if (dotIndex != -1) {
+         name = name.substring(dotIndex + 1);
+      }
+
+      if (name.endsWith("Action")) {
+         name = name.substring(0, name.length() - 6);
+      }
+
+      return name;
+   }
 }
-

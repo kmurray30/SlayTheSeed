@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.cards.red;
 
 import com.badlogic.gdx.graphics.Color;
@@ -15,34 +12,43 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.RagePower;
 import com.megacrit.cardcrawl.vfx.combat.ShockWaveEffect;
 
-public class Rage
-extends AbstractCard {
-    public static final String ID = "Rage";
-    private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("Rage");
+public class Rage extends AbstractCard {
+   public static final String ID = "Rage";
+   private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("Rage");
 
-    public Rage() {
-        super(ID, Rage.cardStrings.NAME, "red/skill/rage", 0, Rage.cardStrings.DESCRIPTION, AbstractCard.CardType.SKILL, AbstractCard.CardColor.RED, AbstractCard.CardRarity.UNCOMMON, AbstractCard.CardTarget.SELF);
-        this.magicNumber = this.baseMagicNumber = 3;
-    }
+   public Rage() {
+      super(
+         "Rage",
+         cardStrings.NAME,
+         "red/skill/rage",
+         0,
+         cardStrings.DESCRIPTION,
+         AbstractCard.CardType.SKILL,
+         AbstractCard.CardColor.RED,
+         AbstractCard.CardRarity.UNCOMMON,
+         AbstractCard.CardTarget.SELF
+      );
+      this.baseMagicNumber = 3;
+      this.magicNumber = this.baseMagicNumber;
+   }
 
-    @Override
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new SFXAction("RAGE"));
-        this.addToBot(new VFXAction(p, new ShockWaveEffect(p.hb.cX, p.hb.cY, Color.ORANGE, ShockWaveEffect.ShockWaveType.CHAOTIC), 1.0f));
-        this.addToBot(new ApplyPowerAction(p, p, new RagePower(p, this.magicNumber), this.magicNumber));
-    }
+   @Override
+   public void use(AbstractPlayer p, AbstractMonster m) {
+      this.addToBot(new SFXAction("RAGE"));
+      this.addToBot(new VFXAction(p, new ShockWaveEffect(p.hb.cX, p.hb.cY, Color.ORANGE, ShockWaveEffect.ShockWaveType.CHAOTIC), 1.0F));
+      this.addToBot(new ApplyPowerAction(p, p, new RagePower(p, this.magicNumber), this.magicNumber));
+   }
 
-    @Override
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeMagicNumber(2);
-        }
-    }
+   @Override
+   public void upgrade() {
+      if (!this.upgraded) {
+         this.upgradeName();
+         this.upgradeMagicNumber(2);
+      }
+   }
 
-    @Override
-    public AbstractCard makeCopy() {
-        return new Rage();
-    }
+   @Override
+   public AbstractCard makeCopy() {
+      return new Rage();
+   }
 }
-

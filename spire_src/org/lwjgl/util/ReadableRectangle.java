@@ -1,15 +1,5 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl.util;
 
-import org.lwjgl.util.ReadableDimension;
-import org.lwjgl.util.ReadablePoint;
-import org.lwjgl.util.WritableRectangle;
-
-public interface ReadableRectangle
-extends ReadableDimension,
-ReadablePoint {
-    public void getBounds(WritableRectangle var1);
+public interface ReadableRectangle extends ReadableDimension, ReadablePoint {
+   void getBounds(WritableRectangle var1);
 }
-

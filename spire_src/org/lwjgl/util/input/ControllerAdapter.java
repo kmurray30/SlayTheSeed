@@ -1,137 +1,166 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl.util.input;
 
 import org.lwjgl.input.Controller;
 
-public class ControllerAdapter
-implements Controller {
-    public String getName() {
-        return "Dummy Controller";
-    }
+public class ControllerAdapter implements Controller {
+   @Override
+   public String getName() {
+      return "Dummy Controller";
+   }
 
-    public int getIndex() {
-        return 0;
-    }
+   @Override
+   public int getIndex() {
+      return 0;
+   }
 
-    public int getButtonCount() {
-        return 0;
-    }
+   @Override
+   public int getButtonCount() {
+      return 0;
+   }
 
-    public String getButtonName(int index) {
-        return "button n/a";
-    }
+   @Override
+   public String getButtonName(int index) {
+      return "button n/a";
+   }
 
-    public boolean isButtonPressed(int index) {
-        return false;
-    }
+   @Override
+   public boolean isButtonPressed(int index) {
+      return false;
+   }
 
-    public void poll() {
-    }
+   @Override
+   public void poll() {
+   }
 
-    public float getPovX() {
-        return 0.0f;
-    }
+   @Override
+   public float getPovX() {
+      return 0.0F;
+   }
 
-    public float getPovY() {
-        return 0.0f;
-    }
+   @Override
+   public float getPovY() {
+      return 0.0F;
+   }
 
-    public float getDeadZone(int index) {
-        return 0.0f;
-    }
+   @Override
+   public float getDeadZone(int index) {
+      return 0.0F;
+   }
 
-    public void setDeadZone(int index, float zone) {
-    }
+   @Override
+   public void setDeadZone(int index, float zone) {
+   }
 
-    public int getAxisCount() {
-        return 0;
-    }
+   @Override
+   public int getAxisCount() {
+      return 0;
+   }
 
-    public String getAxisName(int index) {
-        return "axis n/a";
-    }
+   @Override
+   public String getAxisName(int index) {
+      return "axis n/a";
+   }
 
-    public float getAxisValue(int index) {
-        return 0.0f;
-    }
+   @Override
+   public float getAxisValue(int index) {
+      return 0.0F;
+   }
 
-    public float getXAxisValue() {
-        return 0.0f;
-    }
+   @Override
+   public float getXAxisValue() {
+      return 0.0F;
+   }
 
-    public float getXAxisDeadZone() {
-        return 0.0f;
-    }
+   @Override
+   public float getXAxisDeadZone() {
+      return 0.0F;
+   }
 
-    public void setXAxisDeadZone(float zone) {
-    }
+   @Override
+   public void setXAxisDeadZone(float zone) {
+   }
 
-    public float getYAxisValue() {
-        return 0.0f;
-    }
+   @Override
+   public float getYAxisValue() {
+      return 0.0F;
+   }
 
-    public float getYAxisDeadZone() {
-        return 0.0f;
-    }
+   @Override
+   public float getYAxisDeadZone() {
+      return 0.0F;
+   }
 
-    public void setYAxisDeadZone(float zone) {
-    }
+   @Override
+   public void setYAxisDeadZone(float zone) {
+   }
 
-    public float getZAxisValue() {
-        return 0.0f;
-    }
+   @Override
+   public float getZAxisValue() {
+      return 0.0F;
+   }
 
-    public float getZAxisDeadZone() {
-        return 0.0f;
-    }
+   @Override
+   public float getZAxisDeadZone() {
+      return 0.0F;
+   }
 
-    public void setZAxisDeadZone(float zone) {
-    }
+   @Override
+   public void setZAxisDeadZone(float zone) {
+   }
 
-    public float getRXAxisValue() {
-        return 0.0f;
-    }
+   @Override
+   public float getRXAxisValue() {
+      return 0.0F;
+   }
 
-    public float getRXAxisDeadZone() {
-        return 0.0f;
-    }
+   @Override
+   public float getRXAxisDeadZone() {
+      return 0.0F;
+   }
 
-    public void setRXAxisDeadZone(float zone) {
-    }
+   @Override
+   public void setRXAxisDeadZone(float zone) {
+   }
 
-    public float getRYAxisValue() {
-        return 0.0f;
-    }
+   @Override
+   public float getRYAxisValue() {
+      return 0.0F;
+   }
 
-    public float getRYAxisDeadZone() {
-        return 0.0f;
-    }
+   @Override
+   public float getRYAxisDeadZone() {
+      return 0.0F;
+   }
 
-    public void setRYAxisDeadZone(float zone) {
-    }
+   @Override
+   public void setRYAxisDeadZone(float zone) {
+   }
 
-    public float getRZAxisValue() {
-        return 0.0f;
-    }
+   @Override
+   public float getRZAxisValue() {
+      return 0.0F;
+   }
 
-    public float getRZAxisDeadZone() {
-        return 0.0f;
-    }
+   @Override
+   public float getRZAxisDeadZone() {
+      return 0.0F;
+   }
 
-    public void setRZAxisDeadZone(float zone) {
-    }
+   @Override
+   public void setRZAxisDeadZone(float zone) {
+   }
 
-    public int getRumblerCount() {
-        return 0;
-    }
+   @Override
+   public int getRumblerCount() {
+      return 0;
+   }
 
-    public String getRumblerName(int index) {
-        return "rumber n/a";
-    }
+   @Override
+   public String getRumblerName(int index) {
+      return "rumber n/a";
+   }
 
-    public void setRumblerStrength(int index, float strength) {
-    }
+   @Override
+   public void setRumblerStrength(int index, float strength) {
+   }
 }
-

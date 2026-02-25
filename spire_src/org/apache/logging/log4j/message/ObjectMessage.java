@@ -1,98 +1,95 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.util.StringBuilderFormattable;
 import org.apache.logging.log4j.util.StringBuilders;
 
-public class ObjectMessage
-implements Message,
-StringBuilderFormattable {
-    private static final long serialVersionUID = -5903272448334166185L;
-    private transient Object obj;
-    private transient String objectString;
+public class ObjectMessage implements Message, StringBuilderFormattable {
+   private static final long serialVersionUID = -5903272448334166185L;
+   private transient Object obj;
+   private transient String objectString;
 
-    public ObjectMessage(Object obj) {
-        this.obj = obj == null ? "null" : obj;
-    }
+   public ObjectMessage(final Object obj) {
+      this.obj = obj == null ? "null" : obj;
+   }
 
-    @Override
-    public String getFormattedMessage() {
-        if (this.objectString == null) {
-            this.objectString = String.valueOf(this.obj);
-        }
-        return this.objectString;
-    }
+   @Override
+   public String getFormattedMessage() {
+      if (this.objectString == null) {
+         this.objectString = String.valueOf(this.obj);
+      }
 
-    @Override
-    public void formatTo(StringBuilder buffer) {
-        if (this.objectString != null) {
-            buffer.append(this.objectString);
-        } else {
-            StringBuilders.appendValue(buffer, this.obj);
-        }
-    }
+      return this.objectString;
+   }
 
-    @Override
-    public String getFormat() {
-        return this.getFormattedMessage();
-    }
+   @Override
+   public void formatTo(final StringBuilder buffer) {
+      if (this.objectString != null) {
+         buffer.append(this.objectString);
+      } else {
+         StringBuilders.appendValue(buffer, this.obj);
+      }
+   }
 
-    public Object getParameter() {
-        return this.obj;
-    }
+   @Override
+   public String getFormat() {
+      return this.getFormattedMessage();
+   }
 
-    @Override
-    public Object[] getParameters() {
-        return new Object[]{this.obj};
-    }
+   public Object getParameter() {
+      return this.obj;
+   }
 
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || this.getClass() != o.getClass()) {
-            return false;
-        }
-        ObjectMessage that = (ObjectMessage)o;
-        return this.obj == null ? that.obj == null : this.equalObjectsOrStrings(this.obj, that.obj);
-    }
+   @Override
+   public Object[] getParameters() {
+      return new Object[]{this.obj};
+   }
 
-    private boolean equalObjectsOrStrings(Object left, Object right) {
-        return left.equals(right) || String.valueOf(left).equals(String.valueOf(right));
-    }
+   @Override
+   public boolean equals(final Object o) {
+      if (this == o) {
+         return true;
+      } else if (o != null && this.getClass() == o.getClass()) {
+         ObjectMessage that = (ObjectMessage)o;
+         return this.obj == null ? that.obj == null : this.equalObjectsOrStrings(this.obj, that.obj);
+      } else {
+         return false;
+      }
+   }
 
-    public int hashCode() {
-        return this.obj != null ? this.obj.hashCode() : 0;
-    }
+   private boolean equalObjectsOrStrings(final Object left, final Object right) {
+      return left.equals(right) || String.valueOf(left).equals(String.valueOf(right));
+   }
 
-    public String toString() {
-        return this.getFormattedMessage();
-    }
+   @Override
+   public int hashCode() {
+      return this.obj != null ? this.obj.hashCode() : 0;
+   }
 
-    private void writeObject(ObjectOutputStream out) throws IOException {
-        out.defaultWriteObject();
-        if (this.obj instanceof Serializable) {
-            out.writeObject(this.obj);
-        } else {
-            out.writeObject(String.valueOf(this.obj));
-        }
-    }
+   @Override
+   public String toString() {
+      return this.getFormattedMessage();
+   }
 
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
-        this.obj = in.readObject();
-    }
+   private void writeObject(final ObjectOutputStream out) throws IOException {
+      out.defaultWriteObject();
+      if (this.obj instanceof Serializable) {
+         out.writeObject(this.obj);
+      } else {
+         out.writeObject(String.valueOf(this.obj));
+      }
+   }
 
-    @Override
-    public Throwable getThrowable() {
-        return this.obj instanceof Throwable ? (Throwable)this.obj : null;
-    }
+   private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
+      in.defaultReadObject();
+      this.obj = in.readObject();
+   }
+
+   @Override
+   public Throwable getThrowable() {
+      return this.obj instanceof Throwable ? (Throwable)this.obj : null;
+   }
 }
-

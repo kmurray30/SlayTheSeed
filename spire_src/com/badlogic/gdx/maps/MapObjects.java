@@ -1,73 +1,73 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.maps;
 
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import java.util.Iterator;
 
-public class MapObjects
-implements Iterable<MapObject> {
-    private Array<MapObject> objects = new Array();
+public class MapObjects implements Iterable<MapObject> {
+   private Array<MapObject> objects = new Array<>();
 
-    public MapObject get(int index) {
-        return this.objects.get(index);
-    }
+   public MapObject get(int index) {
+      return this.objects.get(index);
+   }
 
-    public MapObject get(String name) {
-        int n = this.objects.size;
-        for (int i = 0; i < n; ++i) {
-            MapObject object = this.objects.get(i);
-            if (!name.equals(object.getName())) continue;
+   public MapObject get(String name) {
+      int i = 0;
+
+      for (int n = this.objects.size; i < n; i++) {
+         MapObject object = this.objects.get(i);
+         if (name.equals(object.getName())) {
             return object;
-        }
-        return null;
-    }
+         }
+      }
 
-    public int getIndex(String name) {
-        return this.getIndex(this.get(name));
-    }
+      return null;
+   }
 
-    public int getIndex(MapObject object) {
-        return this.objects.indexOf(object, true);
-    }
+   public int getIndex(String name) {
+      return this.getIndex(this.get(name));
+   }
 
-    public int getCount() {
-        return this.objects.size;
-    }
+   public int getIndex(MapObject object) {
+      return this.objects.indexOf(object, true);
+   }
 
-    public void add(MapObject object) {
-        this.objects.add(object);
-    }
+   public int getCount() {
+      return this.objects.size;
+   }
 
-    public void remove(int index) {
-        this.objects.removeIndex(index);
-    }
+   public void add(MapObject object) {
+      this.objects.add(object);
+   }
 
-    public void remove(MapObject object) {
-        this.objects.removeValue(object, true);
-    }
+   public void remove(int index) {
+      this.objects.removeIndex(index);
+   }
 
-    public <T extends MapObject> Array<T> getByType(Class<T> type) {
-        return this.getByType(type, new Array());
-    }
+   public void remove(MapObject object) {
+      this.objects.removeValue(object, true);
+   }
 
-    public <T extends MapObject> Array<T> getByType(Class<T> type, Array<T> fill) {
-        fill.clear();
-        int n = this.objects.size;
-        for (int i = 0; i < n; ++i) {
-            MapObject object = this.objects.get(i);
-            if (!ClassReflection.isInstance(type, object)) continue;
-            fill.add(object);
-        }
-        return fill;
-    }
+   public <T extends MapObject> Array<T> getByType(Class<T> type) {
+      return this.getByType(type, new Array<>());
+   }
 
-    @Override
-    public Iterator<MapObject> iterator() {
-        return this.objects.iterator();
-    }
+   public <T extends MapObject> Array<T> getByType(Class<T> type, Array<T> fill) {
+      fill.clear();
+      int i = 0;
+
+      for (int n = this.objects.size; i < n; i++) {
+         MapObject object = this.objects.get(i);
+         if (ClassReflection.isInstance(type, object)) {
+            fill.add((T)object);
+         }
+      }
+
+      return fill;
+   }
+
+   @Override
+   public Iterator<MapObject> iterator() {
+      return this.objects.iterator();
+   }
 }
-

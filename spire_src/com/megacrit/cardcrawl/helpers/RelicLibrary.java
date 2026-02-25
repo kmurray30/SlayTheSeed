@@ -1,12 +1,8 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.helpers;
 
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.metrics.BotDataUploader;
 import com.megacrit.cardcrawl.relics.Abacus;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
@@ -192,589 +188,649 @@ import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Map.Entry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class RelicLibrary {
-    private static final Logger logger = LogManager.getLogger(RelicLibrary.class.getName());
-    public static int totalRelicCount = 0;
-    public static int seenRelics = 0;
-    private static HashMap<String, AbstractRelic> sharedRelics = new HashMap();
-    private static HashMap<String, AbstractRelic> redRelics = new HashMap();
-    private static HashMap<String, AbstractRelic> greenRelics = new HashMap();
-    private static HashMap<String, AbstractRelic> blueRelics = new HashMap();
-    private static HashMap<String, AbstractRelic> purpleRelics = new HashMap();
-    public static ArrayList<AbstractRelic> starterList = new ArrayList();
-    public static ArrayList<AbstractRelic> commonList = new ArrayList();
-    public static ArrayList<AbstractRelic> uncommonList = new ArrayList();
-    public static ArrayList<AbstractRelic> rareList = new ArrayList();
-    public static ArrayList<AbstractRelic> bossList = new ArrayList();
-    public static ArrayList<AbstractRelic> specialList = new ArrayList();
-    public static ArrayList<AbstractRelic> shopList = new ArrayList();
-    public static ArrayList<AbstractRelic> redList = new ArrayList();
-    public static ArrayList<AbstractRelic> greenList = new ArrayList();
-    public static ArrayList<AbstractRelic> blueList = new ArrayList();
-    public static ArrayList<AbstractRelic> whiteList = new ArrayList();
+   private static final Logger logger = LogManager.getLogger(RelicLibrary.class.getName());
+   public static int totalRelicCount = 0;
+   public static int seenRelics = 0;
+   private static HashMap<String, AbstractRelic> sharedRelics = new HashMap<>();
+   private static HashMap<String, AbstractRelic> redRelics = new HashMap<>();
+   private static HashMap<String, AbstractRelic> greenRelics = new HashMap<>();
+   private static HashMap<String, AbstractRelic> blueRelics = new HashMap<>();
+   private static HashMap<String, AbstractRelic> purpleRelics = new HashMap<>();
+   public static ArrayList<AbstractRelic> starterList = new ArrayList<>();
+   public static ArrayList<AbstractRelic> commonList = new ArrayList<>();
+   public static ArrayList<AbstractRelic> uncommonList = new ArrayList<>();
+   public static ArrayList<AbstractRelic> rareList = new ArrayList<>();
+   public static ArrayList<AbstractRelic> bossList = new ArrayList<>();
+   public static ArrayList<AbstractRelic> specialList = new ArrayList<>();
+   public static ArrayList<AbstractRelic> shopList = new ArrayList<>();
+   public static ArrayList<AbstractRelic> redList = new ArrayList<>();
+   public static ArrayList<AbstractRelic> greenList = new ArrayList<>();
+   public static ArrayList<AbstractRelic> blueList = new ArrayList<>();
+   public static ArrayList<AbstractRelic> whiteList = new ArrayList<>();
 
-    public static void initialize() {
-        long startTime = System.currentTimeMillis();
-        RelicLibrary.add(new Abacus());
-        RelicLibrary.add(new Akabeko());
-        RelicLibrary.add(new Anchor());
-        RelicLibrary.add(new AncientTeaSet());
-        RelicLibrary.add(new ArtOfWar());
-        RelicLibrary.add(new Astrolabe());
-        RelicLibrary.add(new BagOfMarbles());
-        RelicLibrary.add(new BagOfPreparation());
-        RelicLibrary.add(new BirdFacedUrn());
-        RelicLibrary.add(new BlackStar());
-        RelicLibrary.add(new BloodVial());
-        RelicLibrary.add(new BloodyIdol());
-        RelicLibrary.add(new BlueCandle());
-        RelicLibrary.add(new Boot());
-        RelicLibrary.add(new BottledFlame());
-        RelicLibrary.add(new BottledLightning());
-        RelicLibrary.add(new BottledTornado());
-        RelicLibrary.add(new BronzeScales());
-        RelicLibrary.add(new BustedCrown());
-        RelicLibrary.add(new Calipers());
-        RelicLibrary.add(new CallingBell());
-        RelicLibrary.add(new CaptainsWheel());
-        RelicLibrary.add(new Cauldron());
-        RelicLibrary.add(new CentennialPuzzle());
-        RelicLibrary.add(new CeramicFish());
-        RelicLibrary.add(new ChemicalX());
-        RelicLibrary.add(new ClockworkSouvenir());
-        RelicLibrary.add(new CoffeeDripper());
-        RelicLibrary.add(new Courier());
-        RelicLibrary.add(new CultistMask());
-        RelicLibrary.add(new CursedKey());
-        RelicLibrary.add(new DarkstonePeriapt());
-        RelicLibrary.add(new DeadBranch());
-        RelicLibrary.add(new DollysMirror());
-        RelicLibrary.add(new DreamCatcher());
-        RelicLibrary.add(new DuVuDoll());
-        RelicLibrary.add(new Ectoplasm());
-        RelicLibrary.add(new EmptyCage());
-        RelicLibrary.add(new Enchiridion());
-        RelicLibrary.add(new EternalFeather());
-        RelicLibrary.add(new FaceOfCleric());
-        RelicLibrary.add(new FossilizedHelix());
-        RelicLibrary.add(new FrozenEgg2());
-        RelicLibrary.add(new FrozenEye());
-        RelicLibrary.add(new FusionHammer());
-        RelicLibrary.add(new GamblingChip());
-        RelicLibrary.add(new Ginger());
-        RelicLibrary.add(new Girya());
-        RelicLibrary.add(new GoldenIdol());
-        RelicLibrary.add(new GremlinHorn());
-        RelicLibrary.add(new GremlinMask());
-        RelicLibrary.add(new HandDrill());
-        RelicLibrary.add(new HappyFlower());
-        RelicLibrary.add(new HornCleat());
-        RelicLibrary.add(new IceCream());
-        RelicLibrary.add(new IncenseBurner());
-        RelicLibrary.add(new InkBottle());
-        RelicLibrary.add(new JuzuBracelet());
-        RelicLibrary.add(new Kunai());
-        RelicLibrary.add(new Lantern());
-        RelicLibrary.add(new LetterOpener());
-        RelicLibrary.add(new LizardTail());
-        RelicLibrary.add(new Mango());
-        RelicLibrary.add(new MarkOfTheBloom());
-        RelicLibrary.add(new Matryoshka());
-        RelicLibrary.add(new MawBank());
-        RelicLibrary.add(new MealTicket());
-        RelicLibrary.add(new MeatOnTheBone());
-        RelicLibrary.add(new MedicalKit());
-        RelicLibrary.add(new MembershipCard());
-        RelicLibrary.add(new MercuryHourglass());
-        RelicLibrary.add(new MoltenEgg2());
-        RelicLibrary.add(new MummifiedHand());
-        RelicLibrary.add(new MutagenicStrength());
-        RelicLibrary.add(new Necronomicon());
-        RelicLibrary.add(new NeowsLament());
-        RelicLibrary.add(new NilrysCodex());
-        RelicLibrary.add(new NlothsGift());
-        RelicLibrary.add(new NlothsMask());
-        RelicLibrary.add(new Nunchaku());
-        RelicLibrary.add(new OddlySmoothStone());
-        RelicLibrary.add(new OddMushroom());
-        RelicLibrary.add(new OldCoin());
-        RelicLibrary.add(new Omamori());
-        RelicLibrary.add(new OrangePellets());
-        RelicLibrary.add(new Orichalcum());
-        RelicLibrary.add(new OrnamentalFan());
-        RelicLibrary.add(new Orrery());
-        RelicLibrary.add(new PandorasBox());
-        RelicLibrary.add(new Pantograph());
-        RelicLibrary.add(new PeacePipe());
-        RelicLibrary.add(new Pear());
-        RelicLibrary.add(new PenNib());
-        RelicLibrary.add(new PhilosopherStone());
-        RelicLibrary.add(new Pocketwatch());
-        RelicLibrary.add(new PotionBelt());
-        RelicLibrary.add(new PrayerWheel());
-        RelicLibrary.add(new PreservedInsect());
-        RelicLibrary.add(new PrismaticShard());
-        RelicLibrary.add(new QuestionCard());
-        RelicLibrary.add(new RedMask());
-        RelicLibrary.add(new RegalPillow());
-        RelicLibrary.add(new RunicDome());
-        RelicLibrary.add(new RunicPyramid());
-        RelicLibrary.add(new SacredBark());
-        RelicLibrary.add(new Shovel());
-        RelicLibrary.add(new Shuriken());
-        RelicLibrary.add(new SingingBowl());
-        RelicLibrary.add(new SlaversCollar());
-        RelicLibrary.add(new Sling());
-        RelicLibrary.add(new SmilingMask());
-        RelicLibrary.add(new SneckoEye());
-        RelicLibrary.add(new Sozu());
-        RelicLibrary.add(new SpiritPoop());
-        RelicLibrary.add(new SsserpentHead());
-        RelicLibrary.add(new StoneCalendar());
-        RelicLibrary.add(new StrangeSpoon());
-        RelicLibrary.add(new Strawberry());
-        RelicLibrary.add(new StrikeDummy());
-        RelicLibrary.add(new Sundial());
-        RelicLibrary.add(new ThreadAndNeedle());
-        RelicLibrary.add(new TinyChest());
-        RelicLibrary.add(new TinyHouse());
-        RelicLibrary.add(new Toolbox());
-        RelicLibrary.add(new Torii());
-        RelicLibrary.add(new ToxicEgg2());
-        RelicLibrary.add(new ToyOrnithopter());
-        RelicLibrary.add(new TungstenRod());
-        RelicLibrary.add(new Turnip());
-        RelicLibrary.add(new UnceasingTop());
-        RelicLibrary.add(new Vajra());
-        RelicLibrary.add(new VelvetChoker());
-        RelicLibrary.add(new Waffle());
-        RelicLibrary.add(new WarPaint());
-        RelicLibrary.add(new WarpedTongs());
-        RelicLibrary.add(new Whetstone());
-        RelicLibrary.add(new WhiteBeast());
-        RelicLibrary.add(new WingBoots());
-        RelicLibrary.addGreen(new HoveringKite());
-        RelicLibrary.addGreen(new NinjaScroll());
-        RelicLibrary.addGreen(new PaperCrane());
-        RelicLibrary.addGreen(new RingOfTheSerpent());
-        RelicLibrary.addGreen(new SnakeRing());
-        RelicLibrary.addGreen(new SneckoSkull());
-        RelicLibrary.addGreen(new TheSpecimen());
-        RelicLibrary.addGreen(new Tingsha());
-        RelicLibrary.addGreen(new ToughBandages());
-        RelicLibrary.addGreen(new TwistedFunnel());
-        RelicLibrary.addGreen(new WristBlade());
-        RelicLibrary.addRed(new BlackBlood());
-        RelicLibrary.addRed(new Brimstone());
-        RelicLibrary.addRed(new BurningBlood());
-        RelicLibrary.addRed(new ChampionsBelt());
-        RelicLibrary.addRed(new CharonsAshes());
-        RelicLibrary.addRed(new MagicFlower());
-        RelicLibrary.addRed(new MarkOfPain());
-        RelicLibrary.addRed(new PaperFrog());
-        RelicLibrary.addRed(new RedSkull());
-        RelicLibrary.addRed(new RunicCube());
-        RelicLibrary.addRed(new SelfFormingClay());
-        RelicLibrary.addBlue(new CrackedCore());
-        RelicLibrary.addBlue(new DataDisk());
-        RelicLibrary.addBlue(new EmotionChip());
-        RelicLibrary.addBlue(new FrozenCore());
-        RelicLibrary.addBlue(new GoldPlatedCables());
-        RelicLibrary.addBlue(new Inserter());
-        RelicLibrary.addBlue(new NuclearBattery());
-        RelicLibrary.addBlue(new RunicCapacitor());
-        RelicLibrary.addBlue(new SymbioticVirus());
-        RelicLibrary.addPurple(new CloakClasp());
-        RelicLibrary.addPurple(new Damaru());
-        RelicLibrary.addPurple(new GoldenEye());
-        RelicLibrary.addPurple(new HolyWater());
-        RelicLibrary.addPurple(new Melange());
-        RelicLibrary.addPurple(new PureWater());
-        RelicLibrary.addPurple(new VioletLotus());
-        RelicLibrary.addPurple(new TeardropLocket());
-        RelicLibrary.addPurple(new Duality());
-        if (Settings.isBeta) {
-            // empty if block
-        }
-        logger.info("Relic load time: " + (System.currentTimeMillis() - startTime) + "ms");
-        RelicLibrary.sortLists();
-    }
+   public static void initialize() {
+      long startTime = System.currentTimeMillis();
+      add(new Abacus());
+      add(new Akabeko());
+      add(new Anchor());
+      add(new AncientTeaSet());
+      add(new ArtOfWar());
+      add(new Astrolabe());
+      add(new BagOfMarbles());
+      add(new BagOfPreparation());
+      add(new BirdFacedUrn());
+      add(new BlackStar());
+      add(new BloodVial());
+      add(new BloodyIdol());
+      add(new BlueCandle());
+      add(new Boot());
+      add(new BottledFlame());
+      add(new BottledLightning());
+      add(new BottledTornado());
+      add(new BronzeScales());
+      add(new BustedCrown());
+      add(new Calipers());
+      add(new CallingBell());
+      add(new CaptainsWheel());
+      add(new Cauldron());
+      add(new CentennialPuzzle());
+      add(new CeramicFish());
+      add(new ChemicalX());
+      add(new ClockworkSouvenir());
+      add(new CoffeeDripper());
+      add(new Courier());
+      add(new CultistMask());
+      add(new CursedKey());
+      add(new DarkstonePeriapt());
+      add(new DeadBranch());
+      add(new DollysMirror());
+      add(new DreamCatcher());
+      add(new DuVuDoll());
+      add(new Ectoplasm());
+      add(new EmptyCage());
+      add(new Enchiridion());
+      add(new EternalFeather());
+      add(new FaceOfCleric());
+      add(new FossilizedHelix());
+      add(new FrozenEgg2());
+      add(new FrozenEye());
+      add(new FusionHammer());
+      add(new GamblingChip());
+      add(new Ginger());
+      add(new Girya());
+      add(new GoldenIdol());
+      add(new GremlinHorn());
+      add(new GremlinMask());
+      add(new HandDrill());
+      add(new HappyFlower());
+      add(new HornCleat());
+      add(new IceCream());
+      add(new IncenseBurner());
+      add(new InkBottle());
+      add(new JuzuBracelet());
+      add(new Kunai());
+      add(new Lantern());
+      add(new LetterOpener());
+      add(new LizardTail());
+      add(new Mango());
+      add(new MarkOfTheBloom());
+      add(new Matryoshka());
+      add(new MawBank());
+      add(new MealTicket());
+      add(new MeatOnTheBone());
+      add(new MedicalKit());
+      add(new MembershipCard());
+      add(new MercuryHourglass());
+      add(new MoltenEgg2());
+      add(new MummifiedHand());
+      add(new MutagenicStrength());
+      add(new Necronomicon());
+      add(new NeowsLament());
+      add(new NilrysCodex());
+      add(new NlothsGift());
+      add(new NlothsMask());
+      add(new Nunchaku());
+      add(new OddlySmoothStone());
+      add(new OddMushroom());
+      add(new OldCoin());
+      add(new Omamori());
+      add(new OrangePellets());
+      add(new Orichalcum());
+      add(new OrnamentalFan());
+      add(new Orrery());
+      add(new PandorasBox());
+      add(new Pantograph());
+      add(new PeacePipe());
+      add(new Pear());
+      add(new PenNib());
+      add(new PhilosopherStone());
+      add(new Pocketwatch());
+      add(new PotionBelt());
+      add(new PrayerWheel());
+      add(new PreservedInsect());
+      add(new PrismaticShard());
+      add(new QuestionCard());
+      add(new RedMask());
+      add(new RegalPillow());
+      add(new RunicDome());
+      add(new RunicPyramid());
+      add(new SacredBark());
+      add(new Shovel());
+      add(new Shuriken());
+      add(new SingingBowl());
+      add(new SlaversCollar());
+      add(new Sling());
+      add(new SmilingMask());
+      add(new SneckoEye());
+      add(new Sozu());
+      add(new SpiritPoop());
+      add(new SsserpentHead());
+      add(new StoneCalendar());
+      add(new StrangeSpoon());
+      add(new Strawberry());
+      add(new StrikeDummy());
+      add(new Sundial());
+      add(new ThreadAndNeedle());
+      add(new TinyChest());
+      add(new TinyHouse());
+      add(new Toolbox());
+      add(new Torii());
+      add(new ToxicEgg2());
+      add(new ToyOrnithopter());
+      add(new TungstenRod());
+      add(new Turnip());
+      add(new UnceasingTop());
+      add(new Vajra());
+      add(new VelvetChoker());
+      add(new Waffle());
+      add(new WarPaint());
+      add(new WarpedTongs());
+      add(new Whetstone());
+      add(new WhiteBeast());
+      add(new WingBoots());
+      addGreen(new HoveringKite());
+      addGreen(new NinjaScroll());
+      addGreen(new PaperCrane());
+      addGreen(new RingOfTheSerpent());
+      addGreen(new SnakeRing());
+      addGreen(new SneckoSkull());
+      addGreen(new TheSpecimen());
+      addGreen(new Tingsha());
+      addGreen(new ToughBandages());
+      addGreen(new TwistedFunnel());
+      addGreen(new WristBlade());
+      addRed(new BlackBlood());
+      addRed(new Brimstone());
+      addRed(new BurningBlood());
+      addRed(new ChampionsBelt());
+      addRed(new CharonsAshes());
+      addRed(new MagicFlower());
+      addRed(new MarkOfPain());
+      addRed(new PaperFrog());
+      addRed(new RedSkull());
+      addRed(new RunicCube());
+      addRed(new SelfFormingClay());
+      addBlue(new CrackedCore());
+      addBlue(new DataDisk());
+      addBlue(new EmotionChip());
+      addBlue(new FrozenCore());
+      addBlue(new GoldPlatedCables());
+      addBlue(new Inserter());
+      addBlue(new NuclearBattery());
+      addBlue(new RunicCapacitor());
+      addBlue(new SymbioticVirus());
+      addPurple(new CloakClasp());
+      addPurple(new Damaru());
+      addPurple(new GoldenEye());
+      addPurple(new HolyWater());
+      addPurple(new Melange());
+      addPurple(new PureWater());
+      addPurple(new VioletLotus());
+      addPurple(new TeardropLocket());
+      addPurple(new Duality());
+      if (Settings.isBeta) {
+      }
 
-    public static void resetForReload() {
-        totalRelicCount = 0;
-        seenRelics = 0;
-        sharedRelics.clear();
-        redRelics.clear();
-        greenRelics.clear();
-        blueRelics.clear();
-        purpleRelics.clear();
-        starterList.clear();
-        commonList.clear();
-        uncommonList.clear();
-        rareList.clear();
-        bossList.clear();
-        specialList.clear();
-        shopList.clear();
-        redList.clear();
-        greenList.clear();
-        blueList.clear();
-        whiteList.clear();
-    }
+      logger.info("Relic load time: " + (System.currentTimeMillis() - startTime) + "ms");
+      sortLists();
+   }
 
-    private static void sortLists() {
-        Collections.sort(starterList);
-        Collections.sort(commonList);
-        Collections.sort(uncommonList);
-        Collections.sort(rareList);
-        Collections.sort(bossList);
-        Collections.sort(specialList);
-        Collections.sort(shopList);
-        if (Settings.isDev) {
-            logger.info(starterList);
-            logger.info(commonList);
-            logger.info(uncommonList);
-            logger.info(rareList);
-            logger.info(bossList);
-        }
-    }
+   public static void resetForReload() {
+      totalRelicCount = 0;
+      seenRelics = 0;
+      sharedRelics.clear();
+      redRelics.clear();
+      greenRelics.clear();
+      blueRelics.clear();
+      purpleRelics.clear();
+      starterList.clear();
+      commonList.clear();
+      uncommonList.clear();
+      rareList.clear();
+      bossList.clear();
+      specialList.clear();
+      shopList.clear();
+      redList.clear();
+      greenList.clear();
+      blueList.clear();
+      whiteList.clear();
+   }
 
-    private static void printRelicsMissingLargeArt() {
-        boolean common = false;
-        boolean uncommon = false;
-        boolean rare = false;
-        boolean boss = false;
-        boolean shop = false;
-        boolean other = false;
-        logger.info("[ART] START DISPLAYING RELICS WITH MISSING HIGH RES ART");
-        for (Map.Entry<String, AbstractRelic> r : sharedRelics.entrySet()) {
-            AbstractRelic relic = r.getValue();
-            if (ImageMaster.loadImage("images/largeRelics/" + relic.imgUrl) != null) continue;
+   private static void sortLists() {
+      Collections.sort(starterList);
+      Collections.sort(commonList);
+      Collections.sort(uncommonList);
+      Collections.sort(rareList);
+      Collections.sort(bossList);
+      Collections.sort(specialList);
+      Collections.sort(shopList);
+      if (Settings.isDev) {
+         logger.info(starterList);
+         logger.info(commonList);
+         logger.info(uncommonList);
+         logger.info(rareList);
+         logger.info(bossList);
+      }
+   }
+
+   private static void printRelicsMissingLargeArt() {
+      int common = 0;
+      int uncommon = 0;
+      int rare = 0;
+      int boss = 0;
+      int shop = 0;
+      int other = 0;
+      logger.info("[ART] START DISPLAYING RELICS WITH MISSING HIGH RES ART");
+
+      for (Entry<String, AbstractRelic> r : sharedRelics.entrySet()) {
+         AbstractRelic relic = r.getValue();
+         if (ImageMaster.loadImage("images/largeRelics/" + relic.imgUrl) == null) {
             logger.info(relic.name);
-        }
-    }
+         }
+      }
+   }
 
-    private static void printRelicCount() {
-        int common = 0;
-        int uncommon = 0;
-        int rare = 0;
-        int boss = 0;
-        int shop = 0;
-        int other = 0;
-        block7: for (Map.Entry<String, AbstractRelic> r : sharedRelics.entrySet()) {
-            switch (r.getValue().tier) {
-                case COMMON: {
-                    ++common;
-                    continue block7;
-                }
-                case UNCOMMON: {
-                    ++uncommon;
-                    continue block7;
-                }
-                case RARE: {
-                    ++rare;
-                    continue block7;
-                }
-                case BOSS: {
-                    ++boss;
-                    continue block7;
-                }
-                case SHOP: {
-                    ++shop;
-                    continue block7;
-                }
-            }
-            ++other;
-        }
-        if (Settings.isDev) {
-            logger.info("RELIC COUNTS");
-            logger.info("Common: " + common);
-            logger.info("Uncommon: " + uncommon);
-            logger.info("Rare: " + rare);
-            logger.info("Boss: " + boss);
-            logger.info("Shop: " + shop);
-            logger.info("Other: " + other);
-            logger.info("Red: " + redRelics.size());
-            logger.info("Green: " + greenRelics.size());
-            logger.info("Blue: " + blueRelics.size());
-            logger.info("Purple: " + purpleRelics.size());
-        }
-    }
+   private static void printRelicCount() {
+      int common = 0;
+      int uncommon = 0;
+      int rare = 0;
+      int boss = 0;
+      int shop = 0;
+      int other = 0;
 
-    public static void add(AbstractRelic relic) {
-        if (UnlockTracker.isRelicSeen(relic.relicId)) {
-            ++seenRelics;
-        }
-        relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
-        sharedRelics.put(relic.relicId, relic);
-        RelicLibrary.addToTierList(relic);
-        ++totalRelicCount;
-    }
+      for (Entry<String, AbstractRelic> r : sharedRelics.entrySet()) {
+         switch (r.getValue().tier) {
+            case COMMON:
+               common++;
+               break;
+            case UNCOMMON:
+               uncommon++;
+               break;
+            case RARE:
+               rare++;
+               break;
+            case BOSS:
+               boss++;
+               break;
+            case SHOP:
+               shop++;
+               break;
+            default:
+               other++;
+         }
+      }
 
-    public static void addRed(AbstractRelic relic) {
-        if (UnlockTracker.isRelicSeen(relic.relicId)) {
-            ++seenRelics;
-        }
-        relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
-        redRelics.put(relic.relicId, relic);
-        RelicLibrary.addToTierList(relic);
-        redList.add(relic);
-        ++totalRelicCount;
-    }
+      if (Settings.isDev) {
+         logger.info("RELIC COUNTS");
+         logger.info("Common: " + common);
+         logger.info("Uncommon: " + uncommon);
+         logger.info("Rare: " + rare);
+         logger.info("Boss: " + boss);
+         logger.info("Shop: " + shop);
+         logger.info("Other: " + other);
+         logger.info("Red: " + redRelics.size());
+         logger.info("Green: " + greenRelics.size());
+         logger.info("Blue: " + blueRelics.size());
+         logger.info("Purple: " + purpleRelics.size());
+      }
+   }
 
-    public static void addGreen(AbstractRelic relic) {
-        if (UnlockTracker.isRelicSeen(relic.relicId)) {
-            ++seenRelics;
-        }
-        relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
-        greenRelics.put(relic.relicId, relic);
-        RelicLibrary.addToTierList(relic);
-        greenList.add(relic);
-        ++totalRelicCount;
-    }
+   public static void add(AbstractRelic relic) {
+      if (UnlockTracker.isRelicSeen(relic.relicId)) {
+         seenRelics++;
+      }
 
-    public static void addBlue(AbstractRelic relic) {
-        if (UnlockTracker.isRelicSeen(relic.relicId)) {
-            ++seenRelics;
-        }
-        relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
-        blueRelics.put(relic.relicId, relic);
-        RelicLibrary.addToTierList(relic);
-        blueList.add(relic);
-        ++totalRelicCount;
-    }
+      relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
+      sharedRelics.put(relic.relicId, relic);
+      addToTierList(relic);
+      totalRelicCount++;
+   }
 
-    public static void addPurple(AbstractRelic relic) {
-        if (UnlockTracker.isRelicSeen(relic.relicId)) {
-            ++seenRelics;
-        }
-        relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
-        purpleRelics.put(relic.relicId, relic);
-        RelicLibrary.addToTierList(relic);
-        whiteList.add(relic);
-        ++totalRelicCount;
-    }
+   public static void addRed(AbstractRelic relic) {
+      if (UnlockTracker.isRelicSeen(relic.relicId)) {
+         seenRelics++;
+      }
 
-    public static void addToTierList(AbstractRelic relic) {
-        switch (relic.tier) {
-            case STARTER: {
-                starterList.add(relic);
-                break;
-            }
-            case COMMON: {
-                commonList.add(relic);
-                break;
-            }
-            case UNCOMMON: {
-                uncommonList.add(relic);
-                break;
-            }
-            case RARE: {
-                rareList.add(relic);
-                break;
-            }
-            case SHOP: {
-                shopList.add(relic);
-                break;
-            }
-            case SPECIAL: {
-                specialList.add(relic);
-                break;
-            }
-            case BOSS: {
-                bossList.add(relic);
-                break;
-            }
-            case DEPRECATED: {
-                logger.info(relic.relicId + " is deprecated.");
-                break;
-            }
-            default: {
-                logger.info(relic.relicId + " is undefined tier.");
-            }
-        }
-    }
+      relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
+      redRelics.put(relic.relicId, relic);
+      addToTierList(relic);
+      redList.add(relic);
+      totalRelicCount++;
+   }
 
-    public static AbstractRelic getRelic(String key) {
-        if (sharedRelics.containsKey(key)) {
-            return sharedRelics.get(key);
-        }
-        if (redRelics.containsKey(key)) {
-            return redRelics.get(key);
-        }
-        if (greenRelics.containsKey(key)) {
-            return greenRelics.get(key);
-        }
-        if (blueRelics.containsKey(key)) {
-            return blueRelics.get(key);
-        }
-        if (purpleRelics.containsKey(key)) {
-            return purpleRelics.get(key);
-        }
-        return new Circlet();
-    }
+   public static void addGreen(AbstractRelic relic) {
+      if (UnlockTracker.isRelicSeen(relic.relicId)) {
+         seenRelics++;
+      }
 
-    public static boolean isARelic(String key) {
-        return sharedRelics.containsKey(key) || redRelics.containsKey(key) || greenRelics.containsKey(key) || blueRelics.containsKey(key) || purpleRelics.containsKey(key);
-    }
+      relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
+      greenRelics.put(relic.relicId, relic);
+      addToTierList(relic);
+      greenList.add(relic);
+      totalRelicCount++;
+   }
 
-    public static void populateRelicPool(ArrayList<String> pool, AbstractRelic.RelicTier tier, AbstractPlayer.PlayerClass c) {
-        for (Map.Entry<String, AbstractRelic> r : sharedRelics.entrySet()) {
-            if (r.getValue().tier != tier || UnlockTracker.isRelicLocked(r.getKey()) && !Settings.treatEverythingAsUnlocked()) continue;
+   public static void addBlue(AbstractRelic relic) {
+      if (UnlockTracker.isRelicSeen(relic.relicId)) {
+         seenRelics++;
+      }
+
+      relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
+      blueRelics.put(relic.relicId, relic);
+      addToTierList(relic);
+      blueList.add(relic);
+      totalRelicCount++;
+   }
+
+   public static void addPurple(AbstractRelic relic) {
+      if (UnlockTracker.isRelicSeen(relic.relicId)) {
+         seenRelics++;
+      }
+
+      relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
+      purpleRelics.put(relic.relicId, relic);
+      addToTierList(relic);
+      whiteList.add(relic);
+      totalRelicCount++;
+   }
+
+   public static void addToTierList(AbstractRelic relic) {
+      switch (relic.tier) {
+         case COMMON:
+            commonList.add(relic);
+            break;
+         case UNCOMMON:
+            uncommonList.add(relic);
+            break;
+         case RARE:
+            rareList.add(relic);
+            break;
+         case BOSS:
+            bossList.add(relic);
+            break;
+         case SHOP:
+            shopList.add(relic);
+            break;
+         case STARTER:
+            starterList.add(relic);
+            break;
+         case SPECIAL:
+            specialList.add(relic);
+            break;
+         case DEPRECATED:
+            logger.info(relic.relicId + " is deprecated.");
+            break;
+         default:
+            logger.info(relic.relicId + " is undefined tier.");
+      }
+   }
+
+   public static AbstractRelic getRelic(String key) {
+      if (sharedRelics.containsKey(key)) {
+         return sharedRelics.get(key);
+      } else if (redRelics.containsKey(key)) {
+         return redRelics.get(key);
+      } else if (greenRelics.containsKey(key)) {
+         return greenRelics.get(key);
+      } else if (blueRelics.containsKey(key)) {
+         return blueRelics.get(key);
+      } else {
+         return (AbstractRelic)(purpleRelics.containsKey(key) ? purpleRelics.get(key) : new Circlet());
+      }
+   }
+
+   public static boolean isARelic(String key) {
+      return sharedRelics.containsKey(key)
+         || redRelics.containsKey(key)
+         || greenRelics.containsKey(key)
+         || blueRelics.containsKey(key)
+         || purpleRelics.containsKey(key);
+   }
+
+   public static void populateRelicPool(ArrayList<String> pool, AbstractRelic.RelicTier tier, AbstractPlayer.PlayerClass c) {
+      for (Entry<String, AbstractRelic> r : sharedRelics.entrySet()) {
+         if (r.getValue().tier == tier && (!UnlockTracker.isRelicLocked(r.getKey()) || Settings.treatEverythingAsUnlocked())) {
             pool.add(r.getKey());
-        }
-        switch (c) {
-            case IRONCLAD: {
-                for (Map.Entry<String, AbstractRelic> r : redRelics.entrySet()) {
-                    if (r.getValue().tier != tier || UnlockTracker.isRelicLocked(r.getKey()) && !Settings.treatEverythingAsUnlocked()) continue;
-                    pool.add(r.getKey());
-                }
-                break;
-            }
-            case THE_SILENT: {
-                for (Map.Entry<String, AbstractRelic> r : greenRelics.entrySet()) {
-                    if (r.getValue().tier != tier || UnlockTracker.isRelicLocked(r.getKey()) && !Settings.treatEverythingAsUnlocked()) continue;
-                    pool.add(r.getKey());
-                }
-                break;
-            }
-            case DEFECT: {
-                for (Map.Entry<String, AbstractRelic> r : blueRelics.entrySet()) {
-                    if (r.getValue().tier != tier || UnlockTracker.isRelicLocked(r.getKey()) && !Settings.treatEverythingAsUnlocked()) continue;
-                    pool.add(r.getKey());
-                }
-                break;
-            }
-            case WATCHER: {
-                for (Map.Entry<String, AbstractRelic> r : purpleRelics.entrySet()) {
-                    if (r.getValue().tier != tier || UnlockTracker.isRelicLocked(r.getKey()) && !Settings.treatEverythingAsUnlocked()) continue;
-                    pool.add(r.getKey());
-                }
-                break;
-            }
-        }
-    }
+         }
+      }
 
-    public static void addSharedRelics(ArrayList<AbstractRelic> relicPool) {
-        if (Settings.isDev) {
-            logger.info("[RELIC] Adding " + sharedRelics.size() + " shared relics...");
-        }
-        for (Map.Entry<String, AbstractRelic> r : sharedRelics.entrySet()) {
-            relicPool.add(r.getValue());
-        }
-    }
+      switch (c) {
+         case IRONCLAD:
+            for (Entry<String, AbstractRelic> rxxxx : redRelics.entrySet()) {
+               if (rxxxx.getValue().tier == tier && (!UnlockTracker.isRelicLocked(rxxxx.getKey()) || Settings.treatEverythingAsUnlocked())) {
+                  pool.add(rxxxx.getKey());
+               }
+            }
+            break;
+         case THE_SILENT:
+            for (Entry<String, AbstractRelic> rxxx : greenRelics.entrySet()) {
+               if (rxxx.getValue().tier == tier && (!UnlockTracker.isRelicLocked(rxxx.getKey()) || Settings.treatEverythingAsUnlocked())) {
+                  pool.add(rxxx.getKey());
+               }
+            }
+            break;
+         case DEFECT:
+            for (Entry<String, AbstractRelic> rxx : blueRelics.entrySet()) {
+               if (rxx.getValue().tier == tier && (!UnlockTracker.isRelicLocked(rxx.getKey()) || Settings.treatEverythingAsUnlocked())) {
+                  pool.add(rxx.getKey());
+               }
+            }
+            break;
+         case WATCHER:
+            for (Entry<String, AbstractRelic> rx : purpleRelics.entrySet()) {
+               if (rx.getValue().tier == tier && (!UnlockTracker.isRelicLocked(rx.getKey()) || Settings.treatEverythingAsUnlocked())) {
+                  pool.add(rx.getKey());
+               }
+            }
+      }
+   }
 
-    public static void addClassSpecificRelics(ArrayList<AbstractRelic> relicPool) {
-        switch (AbstractDungeon.player.chosenClass) {
-            case IRONCLAD: {
-                if (Settings.isDev) {
-                    logger.info("[RELIC] Adding " + redRelics.size() + " red relics...");
-                }
-                for (Map.Entry<String, AbstractRelic> r : redRelics.entrySet()) {
-                    relicPool.add(r.getValue());
-                }
-                break;
-            }
-            case THE_SILENT: {
-                if (Settings.isDev) {
-                    logger.info("[RELIC] Adding " + greenRelics.size() + " green relics...");
-                }
-                for (Map.Entry<String, AbstractRelic> r : greenRelics.entrySet()) {
-                    relicPool.add(r.getValue());
-                }
-                break;
-            }
-            case DEFECT: {
-                if (Settings.isDev) {
-                    logger.info("[RELIC] Adding " + blueRelics.size() + " blue relics...");
-                }
-                for (Map.Entry<String, AbstractRelic> r : blueRelics.entrySet()) {
-                    relicPool.add(r.getValue());
-                }
-                break;
-            }
-            case WATCHER: {
-                if (Settings.isDev) {
-                    logger.info("[RELIC] Adding " + purpleRelics.size() + " purple relics...");
-                }
-                for (Map.Entry<String, AbstractRelic> r : purpleRelics.entrySet()) {
-                    relicPool.add(r.getValue());
-                }
-                break;
-            }
-        }
-    }
+   public static void addSharedRelics(ArrayList<AbstractRelic> relicPool) {
+      if (Settings.isDev) {
+         logger.info("[RELIC] Adding " + sharedRelics.size() + " shared relics...");
+      }
 
-    public static void uploadRelicData() {
-        ArrayList<String> data = new ArrayList<String>();
-        for (Map.Entry<String, AbstractRelic> r : sharedRelics.entrySet()) {
-            data.add(r.getValue().gameDataUploadData("All"));
-        }
-        for (Map.Entry<String, AbstractRelic> r : redRelics.entrySet()) {
-            data.add(r.getValue().gameDataUploadData("Red"));
-        }
-        for (Map.Entry<String, AbstractRelic> r : greenRelics.entrySet()) {
-            data.add(r.getValue().gameDataUploadData("Green"));
-        }
-        for (Map.Entry<String, AbstractRelic> r : blueRelics.entrySet()) {
-            data.add(r.getValue().gameDataUploadData("Blue"));
-        }
-        for (Map.Entry<String, AbstractRelic> r : purpleRelics.entrySet()) {
-            data.add(r.getValue().gameDataUploadData("Purple"));
-        }
-        BotDataUploader.uploadDataAsync(BotDataUploader.GameDataType.RELIC_DATA, AbstractRelic.gameDataUploadHeader(), data);
-    }
+      for (Entry<String, AbstractRelic> r : sharedRelics.entrySet()) {
+         relicPool.add(r.getValue());
+      }
+   }
 
-    public static ArrayList<AbstractRelic> sortByName(ArrayList<AbstractRelic> group, boolean ascending) {
-        ArrayList<AbstractRelic> tmp = new ArrayList<AbstractRelic>();
-        for (AbstractRelic r : group) {
-            int addIndex = 0;
-            for (AbstractRelic r2 : tmp) {
-                if (!ascending ? r.name.compareTo(r2.name) < 0 : r.name.compareTo(r2.name) > 0) break;
-                ++addIndex;
+   public static void addClassSpecificRelics(ArrayList<AbstractRelic> relicPool) {
+      switch (AbstractDungeon.player.chosenClass) {
+         case IRONCLAD:
+            if (Settings.isDev) {
+               logger.info("[RELIC] Adding " + redRelics.size() + " red relics...");
             }
-            tmp.add(addIndex, r);
-        }
-        return tmp;
-    }
 
-    public static ArrayList<AbstractRelic> sortByStatus(ArrayList<AbstractRelic> group, boolean ascending) {
-        ArrayList<AbstractRelic> tmp = new ArrayList<AbstractRelic>();
-        for (AbstractRelic r : group) {
-            int addIndex = 0;
-            for (AbstractRelic r2 : tmp) {
-                String b;
-                String a;
-                if (!ascending ? (a = UnlockTracker.isRelicLocked(r.relicId) ? "LOCKED" : (UnlockTracker.isRelicSeen(r.relicId) ? "UNSEEN" : "SEEN")).compareTo(b = UnlockTracker.isRelicLocked(r2.relicId) ? "LOCKED" : (UnlockTracker.isRelicSeen(r2.relicId) ? "UNSEEN" : "SEEN")) > 0 : (a = UnlockTracker.isRelicLocked(r.relicId) ? "LOCKED" : (UnlockTracker.isRelicSeen(r.relicId) ? "UNSEEN" : "SEEN")).compareTo(b = UnlockTracker.isRelicLocked(r2.relicId) ? "LOCKED" : (UnlockTracker.isRelicSeen(r2.relicId) ? "UNSEEN" : "SEEN")) < 0) break;
-                ++addIndex;
+            for (Entry<String, AbstractRelic> r : redRelics.entrySet()) {
+               relicPool.add(r.getValue());
             }
-            tmp.add(addIndex, r);
-        }
-        return tmp;
-    }
+            break;
+         case THE_SILENT:
+            if (Settings.isDev) {
+               logger.info("[RELIC] Adding " + greenRelics.size() + " green relics...");
+            }
 
-    public static void unlockAndSeeAllRelics() {
-        for (String string : UnlockTracker.lockedRelics) {
-            UnlockTracker.hardUnlockOverride(string);
-        }
-        for (Map.Entry entry : sharedRelics.entrySet()) {
-            UnlockTracker.markRelicAsSeen((String)entry.getKey());
-        }
-        for (Map.Entry entry : redRelics.entrySet()) {
-            UnlockTracker.markRelicAsSeen((String)entry.getKey());
-        }
-        for (Map.Entry entry : greenRelics.entrySet()) {
-            UnlockTracker.markRelicAsSeen((String)entry.getKey());
-        }
-        for (Map.Entry entry : blueRelics.entrySet()) {
-            UnlockTracker.markRelicAsSeen((String)entry.getKey());
-        }
-        for (Map.Entry entry : purpleRelics.entrySet()) {
-            UnlockTracker.markRelicAsSeen((String)entry.getKey());
-        }
-    }
+            for (Entry<String, AbstractRelic> r : greenRelics.entrySet()) {
+               relicPool.add(r.getValue());
+            }
+            break;
+         case DEFECT:
+            if (Settings.isDev) {
+               logger.info("[RELIC] Adding " + blueRelics.size() + " blue relics...");
+            }
+
+            for (Entry<String, AbstractRelic> r : blueRelics.entrySet()) {
+               relicPool.add(r.getValue());
+            }
+            break;
+         case WATCHER:
+            if (Settings.isDev) {
+               logger.info("[RELIC] Adding " + purpleRelics.size() + " purple relics...");
+            }
+
+            for (Entry<String, AbstractRelic> r : purpleRelics.entrySet()) {
+               relicPool.add(r.getValue());
+            }
+      }
+   }
+
+   public static void uploadRelicData() {
+      ArrayList<String> data = new ArrayList<>();
+
+      for (Entry<String, AbstractRelic> r : sharedRelics.entrySet()) {
+         data.add(r.getValue().gameDataUploadData("All"));
+      }
+
+      for (Entry<String, AbstractRelic> r : redRelics.entrySet()) {
+         data.add(r.getValue().gameDataUploadData("Red"));
+      }
+
+      for (Entry<String, AbstractRelic> r : greenRelics.entrySet()) {
+         data.add(r.getValue().gameDataUploadData("Green"));
+      }
+
+      for (Entry<String, AbstractRelic> r : blueRelics.entrySet()) {
+         data.add(r.getValue().gameDataUploadData("Blue"));
+      }
+
+      for (Entry<String, AbstractRelic> r : purpleRelics.entrySet()) {
+         data.add(r.getValue().gameDataUploadData("Purple"));
+      }
+
+      BotDataUploader.uploadDataAsync(BotDataUploader.GameDataType.RELIC_DATA, AbstractRelic.gameDataUploadHeader(), data);
+   }
+
+   public static ArrayList<AbstractRelic> sortByName(ArrayList<AbstractRelic> group, boolean ascending) {
+      ArrayList<AbstractRelic> tmp = new ArrayList<>();
+
+      for (AbstractRelic r : group) {
+         int addIndex = 0;
+
+         for (AbstractRelic r2 : tmp) {
+            if (!ascending ? r.name.compareTo(r2.name) < 0 : r.name.compareTo(r2.name) > 0) {
+               break;
+            }
+
+            addIndex++;
+         }
+
+         tmp.add(addIndex, r);
+      }
+
+      return tmp;
+   }
+
+   public static ArrayList<AbstractRelic> sortByStatus(ArrayList<AbstractRelic> group, boolean ascending) {
+      ArrayList<AbstractRelic> tmp = new ArrayList<>();
+
+      for (AbstractRelic r : group) {
+         int addIndex = 0;
+
+         for (AbstractRelic r2 : tmp) {
+            if (!ascending) {
+               String a;
+               if (UnlockTracker.isRelicLocked(r.relicId)) {
+                  a = "LOCKED";
+               } else if (UnlockTracker.isRelicSeen(r.relicId)) {
+                  a = "UNSEEN";
+               } else {
+                  a = "SEEN";
+               }
+
+               String b;
+               if (UnlockTracker.isRelicLocked(r2.relicId)) {
+                  b = "LOCKED";
+               } else if (UnlockTracker.isRelicSeen(r2.relicId)) {
+                  b = "UNSEEN";
+               } else {
+                  b = "SEEN";
+               }
+
+               if (a.compareTo(b) > 0) {
+                  break;
+               }
+            } else {
+               String ax;
+               if (UnlockTracker.isRelicLocked(r.relicId)) {
+                  ax = "LOCKED";
+               } else if (UnlockTracker.isRelicSeen(r.relicId)) {
+                  ax = "UNSEEN";
+               } else {
+                  ax = "SEEN";
+               }
+
+               String bx;
+               if (UnlockTracker.isRelicLocked(r2.relicId)) {
+                  bx = "LOCKED";
+               } else if (UnlockTracker.isRelicSeen(r2.relicId)) {
+                  bx = "UNSEEN";
+               } else {
+                  bx = "SEEN";
+               }
+
+               if (ax.compareTo(bx) < 0) {
+                  break;
+               }
+            }
+
+            addIndex++;
+         }
+
+         tmp.add(addIndex, r);
+      }
+
+      return tmp;
+   }
+
+   public static void unlockAndSeeAllRelics() {
+      for (String s : UnlockTracker.lockedRelics) {
+         UnlockTracker.hardUnlockOverride(s);
+      }
+
+      for (Entry<String, AbstractRelic> r : sharedRelics.entrySet()) {
+         UnlockTracker.markRelicAsSeen(r.getKey());
+      }
+
+      for (Entry<String, AbstractRelic> r : redRelics.entrySet()) {
+         UnlockTracker.markRelicAsSeen(r.getKey());
+      }
+
+      for (Entry<String, AbstractRelic> r : greenRelics.entrySet()) {
+         UnlockTracker.markRelicAsSeen(r.getKey());
+      }
+
+      for (Entry<String, AbstractRelic> r : blueRelics.entrySet()) {
+         UnlockTracker.markRelicAsSeen(r.getKey());
+      }
+
+      for (Entry<String, AbstractRelic> r : purpleRelics.entrySet()) {
+         UnlockTracker.markRelicAsSeen(r.getKey());
+      }
+   }
 }
-

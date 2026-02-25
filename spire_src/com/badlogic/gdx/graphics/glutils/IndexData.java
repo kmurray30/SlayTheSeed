@@ -1,32 +1,27 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.graphics.glutils;
 
 import com.badlogic.gdx.utils.Disposable;
 import java.nio.ShortBuffer;
 
-public interface IndexData
-extends Disposable {
-    public int getNumIndices();
+public interface IndexData extends Disposable {
+   int getNumIndices();
 
-    public int getNumMaxIndices();
+   int getNumMaxIndices();
 
-    public void setIndices(short[] var1, int var2, int var3);
+   void setIndices(short[] var1, int var2, int var3);
 
-    public void setIndices(ShortBuffer var1);
+   void setIndices(ShortBuffer var1);
 
-    public void updateIndices(int var1, short[] var2, int var3, int var4);
+   void updateIndices(int var1, short[] var2, int var3, int var4);
 
-    public ShortBuffer getBuffer();
+   ShortBuffer getBuffer();
 
-    public void bind();
+   void bind();
 
-    public void unbind();
+   void unbind();
 
-    public void invalidate();
+   void invalidate();
 
-    @Override
-    public void dispose();
+   @Override
+   void dispose();
 }
-

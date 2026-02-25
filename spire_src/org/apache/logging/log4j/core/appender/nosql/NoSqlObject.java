@@ -1,17 +1,13 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.appender.nosql;
 
 public interface NoSqlObject<W> {
-    public void set(String var1, Object var2);
+   void set(String field, Object value);
 
-    public void set(String var1, NoSqlObject<W> var2);
+   void set(String field, NoSqlObject<W> value);
 
-    public void set(String var1, Object[] var2);
+   void set(String field, Object[] values);
 
-    public void set(String var1, NoSqlObject<W>[] var2);
+   void set(String field, NoSqlObject<W>[] values);
 
-    public W unwrap();
+   W unwrap();
 }
-

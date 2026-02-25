@@ -1,16 +1,11 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.appender.routing;
 
 import org.apache.logging.log4j.core.LogEvent;
-import org.apache.logging.log4j.core.appender.routing.RoutingAppender;
 
 public interface PurgePolicy {
-    public void purge();
+   void purge();
 
-    public void update(String var1, LogEvent var2);
+   void update(String key, LogEvent event);
 
-    public void initialize(RoutingAppender var1);
+   void initialize(RoutingAppender routingAppender);
 }
-

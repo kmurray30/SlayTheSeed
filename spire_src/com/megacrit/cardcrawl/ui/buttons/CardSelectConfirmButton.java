@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.ui.buttons;
 
 import com.badlogic.gdx.Gdx;
@@ -18,131 +15,186 @@ import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.localization.UIStrings;
 
 public class CardSelectConfirmButton {
-    private static final UIStrings uiStrings = CardCrawlGame.languagePack.getUIString("Confirm Button");
-    public static final String[] TEXT = CardSelectConfirmButton.uiStrings.TEXT;
-    private static final int W = 512;
-    private static final int H = 256;
-    private static final float TAKE_Y = 475.0f * Settings.scale;
-    private static final float SHOW_X = (float)Settings.WIDTH - 256.0f * Settings.scale;
-    private static final float HIDE_X = SHOW_X + 400.0f * Settings.scale;
-    private float current_x;
-    private float target_x;
-    private boolean isHidden;
-    public boolean isDisabled;
-    private Color textColor;
-    private Color btnColor;
-    private float target_a;
-    private String buttonText;
-    private static final float HITBOX_W = 260.0f * Settings.scale;
-    private static final float HITBOX_H = 80.0f * Settings.scale;
-    public Hitbox hb;
+   private static final UIStrings uiStrings = CardCrawlGame.languagePack.getUIString("Confirm Button");
+   public static final String[] TEXT;
+   private static final int W = 512;
+   private static final int H = 256;
+   private static final float TAKE_Y = 475.0F * Settings.scale;
+   private static final float SHOW_X = Settings.WIDTH - 256.0F * Settings.scale;
+   private static final float HIDE_X = SHOW_X + 400.0F * Settings.scale;
+   private float current_x = HIDE_X;
+   private float target_x = this.current_x;
+   private boolean isHidden = true;
+   public boolean isDisabled = true;
+   private Color textColor = Color.WHITE.cpy();
+   private Color btnColor = Color.WHITE.cpy();
+   private float target_a = 0.0F;
+   private String buttonText = "NOT_SET";
+   private static final float HITBOX_W = 260.0F * Settings.scale;
+   private static final float HITBOX_H = 80.0F * Settings.scale;
+   public Hitbox hb = new Hitbox(0.0F, 0.0F, HITBOX_W, HITBOX_H);
 
-    public CardSelectConfirmButton() {
-        this.target_x = this.current_x = HIDE_X;
-        this.isHidden = true;
-        this.isDisabled = true;
-        this.textColor = Color.WHITE.cpy();
-        this.btnColor = Color.WHITE.cpy();
-        this.target_a = 0.0f;
-        this.buttonText = "NOT_SET";
-        this.hb = new Hitbox(0.0f, 0.0f, HITBOX_W, HITBOX_H);
-        this.buttonText = TEXT[0];
-        this.hb.move((float)Settings.WIDTH / 2.0f, TAKE_Y);
-    }
+   public CardSelectConfirmButton() {
+      this.buttonText = TEXT[0];
+      this.hb.move(Settings.WIDTH / 2.0F, TAKE_Y);
+   }
 
-    public void update() {
-        if (!this.isHidden) {
-            this.hb.update();
-        }
-        if (!this.isDisabled) {
-            if (this.hb.justHovered) {
-                CardCrawlGame.sound.play("UI_HOVER");
+   public void update() {
+      if (!this.isHidden) {
+         this.hb.update();
+      }
+
+      if (!this.isDisabled) {
+         if (this.hb.justHovered) {
+            CardCrawlGame.sound.play("UI_HOVER");
+         }
+
+         if (this.hb.hovered && InputHelper.justClickedLeft) {
+            this.hb.clickStarted = true;
+            CardCrawlGame.sound.play("UI_CLICK_1");
+         }
+      }
+
+      if (this.current_x != this.target_x) {
+         this.current_x = MathUtils.lerp(this.current_x, this.target_x, Gdx.graphics.getDeltaTime() * 9.0F);
+         if (Math.abs(this.current_x - this.target_x) < Settings.UI_SNAP_THRESHOLD) {
+            this.current_x = this.target_x;
+         }
+      }
+
+      this.textColor.a = MathHelper.fadeLerpSnap(this.textColor.a, this.target_a);
+      this.btnColor.a = this.textColor.a;
+   }
+
+   public void hideInstantly() {
+      this.current_x = HIDE_X;
+      this.target_x = HIDE_X;
+      this.isHidden = true;
+      this.target_a = 0.0F;
+      this.textColor.a = 0.0F;
+   }
+
+   public void hide() {
+      if (!this.isHidden) {
+         this.target_a = 0.0F;
+         this.target_x = HIDE_X;
+         this.isHidden = true;
+      }
+   }
+
+   public void show() {
+      if (this.isHidden) {
+         this.textColor.a = 0.0F;
+         this.target_a = 1.0F;
+         this.target_x = SHOW_X;
+         this.isHidden = false;
+      }
+   }
+
+   public void disable() {
+      if (!this.isDisabled) {
+         this.hb.hovered = false;
+         this.isDisabled = true;
+         this.btnColor = Color.GRAY.cpy();
+         this.textColor = Color.LIGHT_GRAY.cpy();
+      }
+   }
+
+   public void enable() {
+      if (this.isDisabled) {
+         this.isDisabled = false;
+         this.btnColor = Color.WHITE.cpy();
+         this.textColor = Settings.CREAM_COLOR.cpy();
+      }
+   }
+
+   public void render(SpriteBatch sb) {
+      sb.setColor(this.btnColor);
+      this.renderButton(sb);
+      if (this.hb.hovered && !this.isDisabled && !this.hb.clickStarted) {
+         sb.setBlendFunction(770, 1);
+         sb.setColor(new Color(1.0F, 1.0F, 1.0F, 0.3F));
+         this.renderButton(sb);
+         sb.setBlendFunction(770, 771);
+      }
+
+      if (!this.isHidden) {
+         FontHelper.renderFontCentered(sb, FontHelper.buttonLabelFont, this.buttonText, Settings.WIDTH / 2.0F, TAKE_Y, this.textColor);
+      }
+   }
+
+   private void renderButton(SpriteBatch sb) {
+      if (!this.isHidden) {
+         if (this.isDisabled) {
+            sb.draw(
+               ImageMaster.REWARD_SCREEN_TAKE_USED_BUTTON,
+               Settings.WIDTH / 2.0F - 256.0F,
+               TAKE_Y - 128.0F,
+               256.0F,
+               128.0F,
+               512.0F,
+               256.0F,
+               Settings.scale,
+               Settings.scale,
+               0.0F,
+               0,
+               0,
+               512,
+               256,
+               false,
+               false
+            );
+         } else {
+            if (this.hb.clickStarted) {
+               sb.setColor(Color.LIGHT_GRAY);
             }
-            if (this.hb.hovered && InputHelper.justClickedLeft) {
-                this.hb.clickStarted = true;
-                CardCrawlGame.sound.play("UI_CLICK_1");
-            }
-        }
-        if (this.current_x != this.target_x) {
-            this.current_x = MathUtils.lerp(this.current_x, this.target_x, Gdx.graphics.getDeltaTime() * 9.0f);
-            if (Math.abs(this.current_x - this.target_x) < Settings.UI_SNAP_THRESHOLD) {
-                this.current_x = this.target_x;
-            }
-        }
-        this.btnColor.a = this.textColor.a = MathHelper.fadeLerpSnap(this.textColor.a, this.target_a);
-    }
 
-    public void hideInstantly() {
-        this.current_x = HIDE_X;
-        this.target_x = HIDE_X;
-        this.isHidden = true;
-        this.target_a = 0.0f;
-        this.textColor.a = 0.0f;
-    }
+            sb.draw(
+               ImageMaster.REWARD_SCREEN_TAKE_BUTTON,
+               Settings.WIDTH / 2.0F - 256.0F,
+               TAKE_Y - 128.0F,
+               256.0F,
+               128.0F,
+               512.0F,
+               256.0F,
+               Settings.scale,
+               Settings.scale,
+               0.0F,
+               0,
+               0,
+               512,
+               256,
+               false,
+               false
+            );
+         }
 
-    public void hide() {
-        if (!this.isHidden) {
-            this.target_a = 0.0f;
-            this.target_x = HIDE_X;
-            this.isHidden = true;
-        }
-    }
+         if (Settings.isControllerMode) {
+            sb.draw(
+               CInputActionSet.proceed.getKeyImg(),
+               this.hb.cX - 32.0F - 100.0F * Settings.scale,
+               this.hb.cY - 32.0F + 2.0F * Settings.scale,
+               32.0F,
+               32.0F,
+               64.0F,
+               64.0F,
+               Settings.scale,
+               Settings.scale,
+               0.0F,
+               0,
+               0,
+               64,
+               64,
+               false,
+               false
+            );
+         }
 
-    public void show() {
-        if (this.isHidden) {
-            this.textColor.a = 0.0f;
-            this.target_a = 1.0f;
-            this.target_x = SHOW_X;
-            this.isHidden = false;
-        }
-    }
+         this.hb.render(sb);
+      }
+   }
 
-    public void disable() {
-        if (!this.isDisabled) {
-            this.hb.hovered = false;
-            this.isDisabled = true;
-            this.btnColor = Color.GRAY.cpy();
-            this.textColor = Color.LIGHT_GRAY.cpy();
-        }
-    }
-
-    public void enable() {
-        if (this.isDisabled) {
-            this.isDisabled = false;
-            this.btnColor = Color.WHITE.cpy();
-            this.textColor = Settings.CREAM_COLOR.cpy();
-        }
-    }
-
-    public void render(SpriteBatch sb) {
-        sb.setColor(this.btnColor);
-        this.renderButton(sb);
-        if (this.hb.hovered && !this.isDisabled && !this.hb.clickStarted) {
-            sb.setBlendFunction(770, 1);
-            sb.setColor(new Color(1.0f, 1.0f, 1.0f, 0.3f));
-            this.renderButton(sb);
-            sb.setBlendFunction(770, 771);
-        }
-        if (!this.isHidden) {
-            FontHelper.renderFontCentered(sb, FontHelper.buttonLabelFont, this.buttonText, (float)Settings.WIDTH / 2.0f, TAKE_Y, this.textColor);
-        }
-    }
-
-    private void renderButton(SpriteBatch sb) {
-        if (!this.isHidden) {
-            if (this.isDisabled) {
-                sb.draw(ImageMaster.REWARD_SCREEN_TAKE_USED_BUTTON, (float)Settings.WIDTH / 2.0f - 256.0f, TAKE_Y - 128.0f, 256.0f, 128.0f, 512.0f, 256.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 512, 256, false, false);
-            } else {
-                if (this.hb.clickStarted) {
-                    sb.setColor(Color.LIGHT_GRAY);
-                }
-                sb.draw(ImageMaster.REWARD_SCREEN_TAKE_BUTTON, (float)Settings.WIDTH / 2.0f - 256.0f, TAKE_Y - 128.0f, 256.0f, 128.0f, 512.0f, 256.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 512, 256, false, false);
-            }
-            if (Settings.isControllerMode) {
-                sb.draw(CInputActionSet.proceed.getKeyImg(), this.hb.cX - 32.0f - 100.0f * Settings.scale, this.hb.cY - 32.0f + 2.0f * Settings.scale, 32.0f, 32.0f, 64.0f, 64.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 64, 64, false, false);
-            }
-            this.hb.render(sb);
-        }
-    }
+   static {
+      TEXT = uiStrings.TEXT;
+   }
 }
-

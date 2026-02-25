@@ -1,20 +1,16 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.util;
 
 import java.util.Locale;
 
 public final class EnglishEnums {
-    private EnglishEnums() {
-    }
+   private EnglishEnums() {
+   }
 
-    public static <T extends Enum<T>> T valueOf(Class<T> enumType, String name) {
-        return EnglishEnums.valueOf(enumType, name, null);
-    }
+   public static <T extends Enum<T>> T valueOf(final Class<T> enumType, final String name) {
+      return valueOf(enumType, name, null);
+   }
 
-    public static <T extends Enum<T>> T valueOf(Class<T> enumType, String name, T defaultValue) {
-        return name == null ? defaultValue : Enum.valueOf(enumType, name.toUpperCase(Locale.ENGLISH));
-    }
+   public static <T extends Enum<T>> T valueOf(final Class<T> enumType, final String name, final T defaultValue) {
+      return name == null ? defaultValue : Enum.valueOf(enumType, name.toUpperCase(Locale.ENGLISH));
+   }
 }
-

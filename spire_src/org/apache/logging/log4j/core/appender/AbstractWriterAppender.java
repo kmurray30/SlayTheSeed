@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.appender;
 
 import java.util.concurrent.TimeUnit;
@@ -10,78 +7,84 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.StringLayout;
-import org.apache.logging.log4j.core.appender.AbstractAppender;
-import org.apache.logging.log4j.core.appender.AbstractManager;
-import org.apache.logging.log4j.core.appender.AppenderLoggingException;
-import org.apache.logging.log4j.core.appender.WriterManager;
 import org.apache.logging.log4j.core.config.Property;
 
-public abstract class AbstractWriterAppender<M extends WriterManager>
-extends AbstractAppender {
-    protected final boolean immediateFlush;
-    private final M manager;
-    private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
-    private final Lock readLock = this.readWriteLock.readLock();
+public abstract class AbstractWriterAppender<M extends WriterManager> extends AbstractAppender {
+   protected final boolean immediateFlush;
+   private final M manager;
+   private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+   private final Lock readLock = this.readWriteLock.readLock();
 
-    protected AbstractWriterAppender(String name, StringLayout layout, Filter filter, boolean ignoreExceptions, boolean immediateFlush, Property[] properties, M manager) {
-        super(name, filter, layout, ignoreExceptions, properties);
-        this.manager = manager;
-        this.immediateFlush = immediateFlush;
-    }
+   protected AbstractWriterAppender(
+      final String name,
+      final StringLayout layout,
+      final Filter filter,
+      final boolean ignoreExceptions,
+      final boolean immediateFlush,
+      final Property[] properties,
+      final M manager
+   ) {
+      super(name, filter, layout, ignoreExceptions, properties);
+      this.manager = manager;
+      this.immediateFlush = immediateFlush;
+   }
 
-    @Deprecated
-    protected AbstractWriterAppender(String name, StringLayout layout, Filter filter, boolean ignoreExceptions, boolean immediateFlush, M manager) {
-        super(name, filter, layout, ignoreExceptions, Property.EMPTY_ARRAY);
-        this.manager = manager;
-        this.immediateFlush = immediateFlush;
-    }
+   @Deprecated
+   protected AbstractWriterAppender(
+      final String name, final StringLayout layout, final Filter filter, final boolean ignoreExceptions, final boolean immediateFlush, final M manager
+   ) {
+      super(name, filter, layout, ignoreExceptions, Property.EMPTY_ARRAY);
+      this.manager = manager;
+      this.immediateFlush = immediateFlush;
+   }
 
-    @Override
-    public void append(LogEvent event) {
-        this.readLock.lock();
-        try {
-            String str = (String)this.getStringLayout().toSerializable(event);
-            if (str.length() > 0) {
-                ((WriterManager)this.manager).write(str);
-                if (this.immediateFlush || event.isEndOfBatch()) {
-                    ((WriterManager)this.manager).flush();
-                }
+   @Override
+   public void append(final LogEvent event) {
+      this.readLock.lock();
+
+      try {
+         String str = this.getStringLayout().toSerializable(event);
+         if (str.length() > 0) {
+            this.manager.write(str);
+            if (this.immediateFlush || event.isEndOfBatch()) {
+               this.manager.flush();
             }
-        }
-        catch (AppenderLoggingException ex) {
-            this.error("Unable to write " + ((AbstractManager)this.manager).getName() + " for appender " + this.getName(), event, ex);
-            throw ex;
-        }
-        finally {
-            this.readLock.unlock();
-        }
-    }
+         }
+      } catch (AppenderLoggingException var6) {
+         this.error("Unable to write " + this.manager.getName() + " for appender " + this.getName(), event, var6);
+         throw var6;
+      } finally {
+         this.readLock.unlock();
+      }
+   }
 
-    public M getManager() {
-        return this.manager;
-    }
+   public M getManager() {
+      return this.manager;
+   }
 
-    public StringLayout getStringLayout() {
-        return (StringLayout)this.getLayout();
-    }
+   public StringLayout getStringLayout() {
+      return (StringLayout)this.getLayout();
+   }
 
-    @Override
-    public void start() {
-        if (this.getLayout() == null) {
-            LOGGER.error("No layout set for the appender named [{}].", (Object)this.getName());
-        }
-        if (this.manager == null) {
-            LOGGER.error("No OutputStreamManager set for the appender named [{}].", (Object)this.getName());
-        }
-        super.start();
-    }
+   @Override
+   public void start() {
+      if (this.getLayout() == null) {
+         LOGGER.error("No layout set for the appender named [{}].", this.getName());
+      }
 
-    @Override
-    public boolean stop(long timeout, TimeUnit timeUnit) {
-        this.setStopping();
-        boolean stopped = super.stop(timeout, timeUnit, false);
-        this.setStopped();
-        return stopped &= ((AbstractManager)this.manager).stop(timeout, timeUnit);
-    }
+      if (this.manager == null) {
+         LOGGER.error("No OutputStreamManager set for the appender named [{}].", this.getName());
+      }
+
+      super.start();
+   }
+
+   @Override
+   public boolean stop(final long timeout, final TimeUnit timeUnit) {
+      this.setStopping();
+      boolean stopped = super.stop(timeout, timeUnit, false);
+      stopped &= this.manager.stop(timeout, timeUnit);
+      this.setStopped();
+      return stopped;
+   }
 }
-

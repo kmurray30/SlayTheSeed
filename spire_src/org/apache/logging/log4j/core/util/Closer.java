@@ -1,30 +1,26 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.util;
 
 import org.apache.logging.log4j.status.StatusLogger;
 
 public final class Closer {
-    private Closer() {
-    }
+   private Closer() {
+   }
 
-    public static boolean close(AutoCloseable closeable) throws Exception {
-        if (closeable != null) {
-            StatusLogger.getLogger().debug("Closing {} {}", (Object)closeable.getClass().getSimpleName(), (Object)closeable);
-            closeable.close();
-            return true;
-        }
-        return false;
-    }
+   public static boolean close(final AutoCloseable closeable) throws Exception {
+      if (closeable != null) {
+         StatusLogger.getLogger().debug("Closing {} {}", closeable.getClass().getSimpleName(), closeable);
+         closeable.close();
+         return true;
+      } else {
+         return false;
+      }
+   }
 
-    public static boolean closeSilently(AutoCloseable closeable) {
-        try {
-            return Closer.close(closeable);
-        }
-        catch (Exception ignored) {
-            return false;
-        }
-    }
+   public static boolean closeSilently(final AutoCloseable closeable) {
+      try {
+         return close(closeable);
+      } catch (Exception var2) {
+         return false;
+      }
+   }
 }
-

@@ -1,38 +1,33 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx;
 
 import com.badlogic.gdx.files.FileHandle;
 
 public interface Files {
-    public FileHandle getFileHandle(String var1, FileType var2);
+   FileHandle getFileHandle(String var1, Files.FileType var2);
 
-    public FileHandle classpath(String var1);
+   FileHandle classpath(String var1);
 
-    public FileHandle internal(String var1);
+   FileHandle internal(String var1);
 
-    public FileHandle external(String var1);
+   FileHandle external(String var1);
 
-    public FileHandle absolute(String var1);
+   FileHandle absolute(String var1);
 
-    public FileHandle local(String var1);
+   FileHandle local(String var1);
 
-    public String getExternalStoragePath();
+   String getExternalStoragePath();
 
-    public boolean isExternalStorageAvailable();
+   boolean isExternalStorageAvailable();
 
-    public String getLocalStoragePath();
+   String getLocalStoragePath();
 
-    public boolean isLocalStorageAvailable();
+   boolean isLocalStorageAvailable();
 
-    public static enum FileType {
-        Classpath,
-        Internal,
-        External,
-        Absolute,
-        Local;
-
-    }
+   public static enum FileType {
+      Classpath,
+      Internal,
+      External,
+      Absolute,
+      Local;
+   }
 }
-

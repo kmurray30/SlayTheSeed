@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.combat;
 
 import com.badlogic.gdx.Gdx;
@@ -14,53 +11,68 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
-public class WaterSplashParticleEffect
-extends AbstractGameEffect {
-    private TextureAtlas.AtlasRegion img = ImageMaster.DECK_GLOW_1;
-    private float x;
-    private float y;
-    private float vX;
-    private float vY;
-    private float floor;
+public class WaterSplashParticleEffect extends AbstractGameEffect {
+   private TextureAtlas.AtlasRegion img = ImageMaster.DECK_GLOW_1;
+   private float x;
+   private float y;
+   private float vX;
+   private float vY;
+   private float floor;
 
-    public WaterSplashParticleEffect(float x, float y) {
-        this.duration = MathUtils.random(0.5f, 1.0f);
-        this.x = x - (float)(this.img.packedWidth / 2) + MathUtils.random(-10.0f, 10.0f) * Settings.scale;
-        this.y = y - (float)(this.img.packedHeight / 2) - 40.0f * Settings.scale;
-        this.color = new Color(1.0f, 0.2f, 0.1f, 0.0f);
-        this.color.a = 0.0f;
-        this.scale = MathUtils.random(1.5f, 3.5f) * Settings.scale;
-        this.vX = MathUtils.random(-120.0f, 120.0f) * Settings.scale;
-        this.vY = MathUtils.random(150.0f, 300.0f) * Settings.scale;
-        this.floor = y - 40.0f * Settings.scale;
-    }
+   public WaterSplashParticleEffect(float x, float y) {
+      this.duration = MathUtils.random(0.5F, 1.0F);
+      this.x = x - this.img.packedWidth / 2 + MathUtils.random(-10.0F, 10.0F) * Settings.scale;
+      this.y = y - this.img.packedHeight / 2 - 40.0F * Settings.scale;
+      this.color = new Color(1.0F, 0.2F, 0.1F, 0.0F);
+      this.color.a = 0.0F;
+      this.scale = MathUtils.random(1.5F, 3.5F) * Settings.scale;
+      this.vX = MathUtils.random(-120.0F, 120.0F) * Settings.scale;
+      this.vY = MathUtils.random(150.0F, 300.0F) * Settings.scale;
+      this.floor = y - 40.0F * Settings.scale;
+   }
 
-    @Override
-    public void update() {
-        this.vY -= 1000.0f * Settings.scale * Gdx.graphics.getDeltaTime();
-        this.x += this.vX * Gdx.graphics.getDeltaTime();
-        this.y += this.vY * Gdx.graphics.getDeltaTime();
-        Vector2 test = new Vector2(this.vX, this.vY);
-        this.rotation = test.angle() + 45.0f;
-        this.scale -= Gdx.graphics.getDeltaTime() / 2.0f;
-        if (this.y < this.floor && this.vY < 0.0f && this.duration > 0.2f) {
-            this.duration = 0.2f;
-        }
-        this.color.a = this.duration < 0.2f ? Interpolation.fade.apply(0.0f, 1.0f, this.duration * 5.0f) : 1.0f;
-        this.duration -= Gdx.graphics.getDeltaTime();
-        if (this.duration < 0.0f) {
-            this.isDone = true;
-        }
-    }
+   @Override
+   public void update() {
+      this.vY = this.vY - 1000.0F * Settings.scale * Gdx.graphics.getDeltaTime();
+      this.x = this.x + this.vX * Gdx.graphics.getDeltaTime();
+      this.y = this.y + this.vY * Gdx.graphics.getDeltaTime();
+      Vector2 test = new Vector2(this.vX, this.vY);
+      this.rotation = test.angle() + 45.0F;
+      this.scale = this.scale - Gdx.graphics.getDeltaTime() / 2.0F;
+      if (this.y < this.floor && this.vY < 0.0F && this.duration > 0.2F) {
+         this.duration = 0.2F;
+      }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        sb.setColor(this.color);
-        sb.draw(this.img, this.x, this.y, (float)this.img.packedWidth / 2.0f, (float)this.img.packedHeight / 2.0f, this.img.packedWidth, this.img.packedHeight, this.scale, this.scale * 0.54f, this.rotation);
-    }
+      if (this.duration < 0.2F) {
+         this.color.a = Interpolation.fade.apply(0.0F, 1.0F, this.duration * 5.0F);
+      } else {
+         this.color.a = 1.0F;
+      }
 
-    @Override
-    public void dispose() {
-    }
+      this.duration = this.duration - Gdx.graphics.getDeltaTime();
+      if (this.duration < 0.0F) {
+         this.isDone = true;
+      }
+   }
+
+   @Override
+   public void render(SpriteBatch sb) {
+      sb.setColor(this.color);
+      sb.draw(
+         this.img,
+         this.x,
+         this.y,
+         this.img.packedWidth / 2.0F,
+         this.img.packedHeight / 2.0F,
+         this.img.packedWidth,
+         this.img.packedHeight,
+         this.scale,
+         this.scale * 0.54F,
+         this.rotation
+      );
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

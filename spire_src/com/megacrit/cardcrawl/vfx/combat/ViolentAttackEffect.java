@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.combat;
 
 import com.badlogic.gdx.Gdx;
@@ -13,48 +10,72 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ScreenShake;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
-import com.megacrit.cardcrawl.vfx.combat.AnimatedSlashEffect;
-import com.megacrit.cardcrawl.vfx.combat.FlashAtkImgEffect;
 
-public class ViolentAttackEffect
-extends AbstractGameEffect {
-    private float x;
-    private float y;
-    private int count = 5;
+public class ViolentAttackEffect extends AbstractGameEffect {
+   private float x;
+   private float y;
+   private int count = 5;
 
-    public ViolentAttackEffect(float x, float y, Color setColor) {
-        this.x = x;
-        this.y = y;
-        this.duration = 0.0f;
-        this.color = setColor;
-        CardCrawlGame.screenShake.shake(ScreenShake.ShakeIntensity.MED, ScreenShake.ShakeDur.SHORT, false);
-    }
+   public ViolentAttackEffect(float x, float y, Color setColor) {
+      this.x = x;
+      this.y = y;
+      this.duration = 0.0F;
+      this.color = setColor;
+      CardCrawlGame.screenShake.shake(ScreenShake.ShakeIntensity.MED, ScreenShake.ShakeDur.SHORT, false);
+   }
 
-    @Override
-    public void update() {
-        this.duration -= Gdx.graphics.getDeltaTime();
-        if (this.duration < 0.0f) {
-            CardCrawlGame.sound.playA("ATTACK_HEAVY", MathUtils.random(0.2f, 0.5f));
-            AbstractDungeon.effectsQueue.add(new AnimatedSlashEffect(this.x + MathUtils.random(-100.0f, 100.0f) * Settings.scale, this.y + MathUtils.random(-100.0f, 100.0f) * Settings.scale, 0.0f, 0.0f, MathUtils.random(360.0f), MathUtils.random(2.5f, 4.0f), this.color, this.color));
-            if (MathUtils.randomBoolean()) {
-                AbstractDungeon.effectsQueue.add(new FlashAtkImgEffect(this.x + MathUtils.random(-150.0f, 150.0f) * Settings.scale, this.y + MathUtils.random(-150.0f, 150.0f) * Settings.scale, AbstractGameAction.AttackEffect.BLUNT_HEAVY));
-            } else {
-                AbstractDungeon.effectsQueue.add(new FlashAtkImgEffect(this.x + MathUtils.random(-150.0f, 150.0f) * Settings.scale, this.y + MathUtils.random(-150.0f, 150.0f) * Settings.scale, AbstractGameAction.AttackEffect.BLUNT_LIGHT));
-            }
-            this.duration = MathUtils.random(0.05f, 0.1f);
-            --this.count;
-        }
-        if (this.count == 0) {
-            this.isDone = true;
-        }
-    }
+   @Override
+   public void update() {
+      this.duration = this.duration - Gdx.graphics.getDeltaTime();
+      if (this.duration < 0.0F) {
+         CardCrawlGame.sound.playA("ATTACK_HEAVY", MathUtils.random(0.2F, 0.5F));
+         AbstractDungeon.effectsQueue
+            .add(
+               new AnimatedSlashEffect(
+                  this.x + MathUtils.random(-100.0F, 100.0F) * Settings.scale,
+                  this.y + MathUtils.random(-100.0F, 100.0F) * Settings.scale,
+                  0.0F,
+                  0.0F,
+                  MathUtils.random(360.0F),
+                  MathUtils.random(2.5F, 4.0F),
+                  this.color,
+                  this.color
+               )
+            );
+         if (MathUtils.randomBoolean()) {
+            AbstractDungeon.effectsQueue
+               .add(
+                  new FlashAtkImgEffect(
+                     this.x + MathUtils.random(-150.0F, 150.0F) * Settings.scale,
+                     this.y + MathUtils.random(-150.0F, 150.0F) * Settings.scale,
+                     AbstractGameAction.AttackEffect.BLUNT_HEAVY
+                  )
+               );
+         } else {
+            AbstractDungeon.effectsQueue
+               .add(
+                  new FlashAtkImgEffect(
+                     this.x + MathUtils.random(-150.0F, 150.0F) * Settings.scale,
+                     this.y + MathUtils.random(-150.0F, 150.0F) * Settings.scale,
+                     AbstractGameAction.AttackEffect.BLUNT_LIGHT
+                  )
+               );
+         }
 
-    @Override
-    public void render(SpriteBatch sb) {
-    }
+         this.duration = MathUtils.random(0.05F, 0.1F);
+         this.count--;
+      }
 
-    @Override
-    public void dispose() {
-    }
+      if (this.count == 0) {
+         this.isDone = true;
+      }
+   }
+
+   @Override
+   public void render(SpriteBatch sb) {
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

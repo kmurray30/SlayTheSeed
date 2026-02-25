@@ -1,84 +1,80 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.graphics.g3d.particles.values;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g3d.particles.ResourceData;
-import com.badlogic.gdx.graphics.g3d.particles.values.ParticleValue;
-import com.badlogic.gdx.graphics.g3d.particles.values.RangedNumericValue;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 
-public abstract class SpawnShapeValue
-extends ParticleValue
-implements ResourceData.Configurable,
-Json.Serializable {
-    public RangedNumericValue xOffsetValue = new RangedNumericValue();
-    public RangedNumericValue yOffsetValue = new RangedNumericValue();
-    public RangedNumericValue zOffsetValue = new RangedNumericValue();
+public abstract class SpawnShapeValue extends ParticleValue implements ResourceData.Configurable, Json.Serializable {
+   public RangedNumericValue xOffsetValue = new RangedNumericValue();
+   public RangedNumericValue yOffsetValue = new RangedNumericValue();
+   public RangedNumericValue zOffsetValue = new RangedNumericValue();
 
-    public SpawnShapeValue() {
-    }
+   public SpawnShapeValue() {
+   }
 
-    public SpawnShapeValue(SpawnShapeValue spawnShapeValue) {
-        this();
-    }
+   public SpawnShapeValue(SpawnShapeValue spawnShapeValue) {
+      this();
+   }
 
-    public abstract void spawnAux(Vector3 var1, float var2);
+   public abstract void spawnAux(Vector3 var1, float var2);
 
-    public final Vector3 spawn(Vector3 vector, float percent) {
-        this.spawnAux(vector, percent);
-        if (this.xOffsetValue.active) {
-            vector.x += this.xOffsetValue.newLowValue();
-        }
-        if (this.yOffsetValue.active) {
-            vector.y += this.yOffsetValue.newLowValue();
-        }
-        if (this.zOffsetValue.active) {
-            vector.z += this.zOffsetValue.newLowValue();
-        }
-        return vector;
-    }
+   public final Vector3 spawn(Vector3 vector, float percent) {
+      this.spawnAux(vector, percent);
+      if (this.xOffsetValue.active) {
+         vector.x = vector.x + this.xOffsetValue.newLowValue();
+      }
 
-    public void init() {
-    }
+      if (this.yOffsetValue.active) {
+         vector.y = vector.y + this.yOffsetValue.newLowValue();
+      }
 
-    public void start() {
-    }
+      if (this.zOffsetValue.active) {
+         vector.z = vector.z + this.zOffsetValue.newLowValue();
+      }
 
-    @Override
-    public void load(ParticleValue value) {
-        super.load(value);
-        SpawnShapeValue shape = (SpawnShapeValue)value;
-        this.xOffsetValue.load(shape.xOffsetValue);
-        this.yOffsetValue.load(shape.yOffsetValue);
-        this.zOffsetValue.load(shape.zOffsetValue);
-    }
+      return vector;
+   }
 
-    public abstract SpawnShapeValue copy();
+   public void init() {
+   }
 
-    @Override
-    public void write(Json json) {
-        super.write(json);
-        json.writeValue("xOffsetValue", this.xOffsetValue);
-        json.writeValue("yOffsetValue", this.yOffsetValue);
-        json.writeValue("zOffsetValue", this.zOffsetValue);
-    }
+   public void start() {
+   }
 
-    @Override
-    public void read(Json json, JsonValue jsonData) {
-        super.read(json, jsonData);
-        this.xOffsetValue = json.readValue("xOffsetValue", RangedNumericValue.class, jsonData);
-        this.yOffsetValue = json.readValue("yOffsetValue", RangedNumericValue.class, jsonData);
-        this.zOffsetValue = json.readValue("zOffsetValue", RangedNumericValue.class, jsonData);
-    }
+   @Override
+   public void load(ParticleValue value) {
+      super.load(value);
+      SpawnShapeValue shape = (SpawnShapeValue)value;
+      this.xOffsetValue.load(shape.xOffsetValue);
+      this.yOffsetValue.load(shape.yOffsetValue);
+      this.zOffsetValue.load(shape.zOffsetValue);
+   }
 
-    public void save(AssetManager manager, ResourceData data) {
-    }
+   public abstract SpawnShapeValue copy();
 
-    public void load(AssetManager manager, ResourceData data) {
-    }
+   @Override
+   public void write(Json json) {
+      super.write(json);
+      json.writeValue("xOffsetValue", this.xOffsetValue);
+      json.writeValue("yOffsetValue", this.yOffsetValue);
+      json.writeValue("zOffsetValue", this.zOffsetValue);
+   }
+
+   @Override
+   public void read(Json json, JsonValue jsonData) {
+      super.read(json, jsonData);
+      this.xOffsetValue = json.readValue("xOffsetValue", RangedNumericValue.class, jsonData);
+      this.yOffsetValue = json.readValue("yOffsetValue", RangedNumericValue.class, jsonData);
+      this.zOffsetValue = json.readValue("zOffsetValue", RangedNumericValue.class, jsonData);
+   }
+
+   @Override
+   public void save(AssetManager manager, ResourceData data) {
+   }
+
+   @Override
+   public void load(AssetManager manager, ResourceData data) {
+   }
 }
-

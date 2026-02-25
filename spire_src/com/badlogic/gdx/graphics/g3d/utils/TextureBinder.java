@@ -1,24 +1,19 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.graphics.g3d.utils;
 
 import com.badlogic.gdx.graphics.GLTexture;
-import com.badlogic.gdx.graphics.g3d.utils.TextureDescriptor;
 
 public interface TextureBinder {
-    public void begin();
+   void begin();
 
-    public void end();
+   void end();
 
-    public int bind(TextureDescriptor var1);
+   int bind(TextureDescriptor var1);
 
-    public int bind(GLTexture var1);
+   int bind(GLTexture var1);
 
-    public int getBindCount();
+   int getBindCount();
 
-    public int getReuseCount();
+   int getReuseCount();
 
-    public void resetCounts();
+   void resetCounts();
 }
-

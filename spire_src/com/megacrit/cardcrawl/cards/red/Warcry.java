@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.cards.red;
 
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
@@ -14,37 +11,46 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.vfx.combat.ShockWaveEffect;
 
-public class Warcry
-extends AbstractCard {
-    public static final String ID = "Warcry";
-    private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("Warcry");
+public class Warcry extends AbstractCard {
+   public static final String ID = "Warcry";
+   private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("Warcry");
 
-    public Warcry() {
-        super(ID, Warcry.cardStrings.NAME, "red/skill/warcry", 0, Warcry.cardStrings.DESCRIPTION, AbstractCard.CardType.SKILL, AbstractCard.CardColor.RED, AbstractCard.CardRarity.COMMON, AbstractCard.CardTarget.SELF);
-        this.exhaust = true;
-        this.magicNumber = this.baseMagicNumber = 1;
-    }
+   public Warcry() {
+      super(
+         "Warcry",
+         cardStrings.NAME,
+         "red/skill/warcry",
+         0,
+         cardStrings.DESCRIPTION,
+         AbstractCard.CardType.SKILL,
+         AbstractCard.CardColor.RED,
+         AbstractCard.CardRarity.COMMON,
+         AbstractCard.CardTarget.SELF
+      );
+      this.exhaust = true;
+      this.baseMagicNumber = 1;
+      this.magicNumber = this.baseMagicNumber;
+   }
 
-    @Override
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new VFXAction(p, new ShockWaveEffect(p.hb.cX, p.hb.cY, Settings.RED_TEXT_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.5f));
-        this.addToBot(new DrawCardAction(p, this.magicNumber));
-        this.addToBot(new PutOnDeckAction(p, p, 1, false));
-    }
+   @Override
+   public void use(AbstractPlayer p, AbstractMonster m) {
+      this.addToBot(new VFXAction(p, new ShockWaveEffect(p.hb.cX, p.hb.cY, Settings.RED_TEXT_COLOR, ShockWaveEffect.ShockWaveType.ADDITIVE), 0.5F));
+      this.addToBot(new DrawCardAction(p, this.magicNumber));
+      this.addToBot(new PutOnDeckAction(p, p, 1, false));
+   }
 
-    @Override
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeMagicNumber(1);
-            this.rawDescription = Warcry.cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
-        }
-    }
+   @Override
+   public void upgrade() {
+      if (!this.upgraded) {
+         this.upgradeName();
+         this.upgradeMagicNumber(1);
+         this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
+         this.initializeDescription();
+      }
+   }
 
-    @Override
-    public AbstractCard makeCopy() {
-        return new Warcry();
-    }
+   @Override
+   public AbstractCard makeCopy() {
+      return new Warcry();
+   }
 }
-

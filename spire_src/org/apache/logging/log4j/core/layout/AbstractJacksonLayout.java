@@ -1,16 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.fasterxml.jackson.annotation.JsonAnyGetter
- *  com.fasterxml.jackson.annotation.JsonIgnore
- *  com.fasterxml.jackson.annotation.JsonRootName
- *  com.fasterxml.jackson.annotation.JsonUnwrapped
- *  com.fasterxml.jackson.core.JsonGenerationException
- *  com.fasterxml.jackson.databind.JsonMappingException
- *  com.fasterxml.jackson.databind.ObjectWriter
- *  com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
- */
 package org.apache.logging.log4j.core.layout;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -35,7 +22,6 @@ import org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.impl.Log4jLogEvent;
 import org.apache.logging.log4j.core.impl.ThrowableProxy;
-import org.apache.logging.log4j.core.layout.AbstractStringLayout;
 import org.apache.logging.log4j.core.lookup.StrSubstitutor;
 import org.apache.logging.log4j.core.time.Instant;
 import org.apache.logging.log4j.core.util.KeyValuePair;
@@ -43,384 +29,417 @@ import org.apache.logging.log4j.core.util.StringBuilderWriter;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.util.ReadOnlyStringMap;
 
-abstract class AbstractJacksonLayout
-extends AbstractStringLayout {
-    protected static final String DEFAULT_EOL = "\r\n";
-    protected static final String COMPACT_EOL = "";
-    protected final String eol;
-    protected final ObjectWriter objectWriter;
-    protected final boolean compact;
-    protected final boolean complete;
-    protected final boolean includeNullDelimiter;
-    protected final ResolvableKeyValuePair[] additionalFields;
+abstract class AbstractJacksonLayout extends AbstractStringLayout {
+   protected static final String DEFAULT_EOL = "\r\n";
+   protected static final String COMPACT_EOL = "";
+   protected final String eol;
+   protected final ObjectWriter objectWriter;
+   protected final boolean compact;
+   protected final boolean complete;
+   protected final boolean includeNullDelimiter;
+   protected final AbstractJacksonLayout.ResolvableKeyValuePair[] additionalFields;
 
-    @Deprecated
-    protected AbstractJacksonLayout(Configuration config, ObjectWriter objectWriter, Charset charset, boolean compact, boolean complete, boolean eventEol, AbstractStringLayout.Serializer headerSerializer, AbstractStringLayout.Serializer footerSerializer) {
-        this(config, objectWriter, charset, compact, complete, eventEol, headerSerializer, footerSerializer, false);
-    }
+   @Deprecated
+   protected AbstractJacksonLayout(
+      final Configuration config,
+      final ObjectWriter objectWriter,
+      final Charset charset,
+      final boolean compact,
+      final boolean complete,
+      final boolean eventEol,
+      final AbstractStringLayout.Serializer headerSerializer,
+      final AbstractStringLayout.Serializer footerSerializer
+   ) {
+      this(config, objectWriter, charset, compact, complete, eventEol, headerSerializer, footerSerializer, false);
+   }
 
-    @Deprecated
-    protected AbstractJacksonLayout(Configuration config, ObjectWriter objectWriter, Charset charset, boolean compact, boolean complete, boolean eventEol, AbstractStringLayout.Serializer headerSerializer, AbstractStringLayout.Serializer footerSerializer, boolean includeNullDelimiter) {
-        this(config, objectWriter, charset, compact, complete, eventEol, null, headerSerializer, footerSerializer, includeNullDelimiter, null);
-    }
+   @Deprecated
+   protected AbstractJacksonLayout(
+      final Configuration config,
+      final ObjectWriter objectWriter,
+      final Charset charset,
+      final boolean compact,
+      final boolean complete,
+      final boolean eventEol,
+      final AbstractStringLayout.Serializer headerSerializer,
+      final AbstractStringLayout.Serializer footerSerializer,
+      final boolean includeNullDelimiter
+   ) {
+      this(config, objectWriter, charset, compact, complete, eventEol, null, headerSerializer, footerSerializer, includeNullDelimiter, null);
+   }
 
-    protected AbstractJacksonLayout(Configuration config, ObjectWriter objectWriter, Charset charset, boolean compact, boolean complete, boolean eventEol, String endOfLine, AbstractStringLayout.Serializer headerSerializer, AbstractStringLayout.Serializer footerSerializer, boolean includeNullDelimiter, KeyValuePair[] additionalFields) {
-        super(config, charset, headerSerializer, footerSerializer);
-        this.objectWriter = objectWriter;
-        this.compact = compact;
-        this.complete = complete;
-        this.eol = endOfLine != null ? endOfLine : (compact && !eventEol ? COMPACT_EOL : DEFAULT_EOL);
-        this.includeNullDelimiter = includeNullDelimiter;
-        this.additionalFields = AbstractJacksonLayout.prepareAdditionalFields(config, additionalFields);
-    }
+   protected AbstractJacksonLayout(
+      final Configuration config,
+      final ObjectWriter objectWriter,
+      final Charset charset,
+      final boolean compact,
+      final boolean complete,
+      final boolean eventEol,
+      final String endOfLine,
+      final AbstractStringLayout.Serializer headerSerializer,
+      final AbstractStringLayout.Serializer footerSerializer,
+      final boolean includeNullDelimiter,
+      final KeyValuePair[] additionalFields
+   ) {
+      super(config, charset, headerSerializer, footerSerializer);
+      this.objectWriter = objectWriter;
+      this.compact = compact;
+      this.complete = complete;
+      this.eol = endOfLine != null ? endOfLine : (compact && !eventEol ? "" : "\r\n");
+      this.includeNullDelimiter = includeNullDelimiter;
+      this.additionalFields = prepareAdditionalFields(config, additionalFields);
+   }
 
-    protected static boolean valueNeedsLookup(String value) {
-        return value != null && value.contains("${");
-    }
+   protected static boolean valueNeedsLookup(final String value) {
+      return value != null && value.contains("${");
+   }
 
-    private static ResolvableKeyValuePair[] prepareAdditionalFields(Configuration config, KeyValuePair[] additionalFields) {
-        if (additionalFields == null || additionalFields.length == 0) {
-            return ResolvableKeyValuePair.EMPTY_ARRAY;
-        }
-        ResolvableKeyValuePair[] resolvableFields = new ResolvableKeyValuePair[additionalFields.length];
-        for (int i = 0; i < additionalFields.length; ++i) {
-            ResolvableKeyValuePair resolvable = resolvableFields[i] = new ResolvableKeyValuePair(additionalFields[i]);
-            if (config != null || !resolvable.valueNeedsLookup) continue;
-            throw new IllegalArgumentException("configuration needs to be set when there are additional fields with variables");
-        }
-        return resolvableFields;
-    }
+   private static AbstractJacksonLayout.ResolvableKeyValuePair[] prepareAdditionalFields(final Configuration config, final KeyValuePair[] additionalFields) {
+      if (additionalFields != null && additionalFields.length != 0) {
+         AbstractJacksonLayout.ResolvableKeyValuePair[] resolvableFields = new AbstractJacksonLayout.ResolvableKeyValuePair[additionalFields.length];
 
-    @Override
-    public String toSerializable(LogEvent event) {
-        StringBuilderWriter writer = new StringBuilderWriter();
-        try {
-            this.toSerializable(event, writer);
-            return writer.toString();
-        }
-        catch (IOException e) {
-            LOGGER.error(e);
-            return COMPACT_EOL;
-        }
-    }
-
-    private static LogEvent convertMutableToLog4jEvent(LogEvent event) {
-        return event instanceof Log4jLogEvent ? event : Log4jLogEvent.createMemento(event);
-    }
-
-    protected Object wrapLogEvent(LogEvent event) {
-        if (this.additionalFields.length > 0) {
-            Map<String, String> additionalFieldsMap = this.resolveAdditionalFields(event);
-            return new LogEventWithAdditionalFields(event, additionalFieldsMap);
-        }
-        if (event instanceof Message) {
-            return new ReadOnlyLogEventWrapper(event);
-        }
-        return event;
-    }
-
-    private Map<String, String> resolveAdditionalFields(LogEvent logEvent) {
-        LinkedHashMap<String, String> additionalFieldsMap = new LinkedHashMap<String, String>(this.additionalFields.length);
-        StrSubstitutor strSubstitutor = this.configuration.getStrSubstitutor();
-        for (ResolvableKeyValuePair pair : this.additionalFields) {
-            if (pair.valueNeedsLookup) {
-                additionalFieldsMap.put(pair.key, strSubstitutor.replace(logEvent, pair.value));
-                continue;
+         for (int i = 0; i < additionalFields.length; i++) {
+            AbstractJacksonLayout.ResolvableKeyValuePair resolvable = resolvableFields[i] = new AbstractJacksonLayout.ResolvableKeyValuePair(
+               additionalFields[i]
+            );
+            if (config == null && resolvable.valueNeedsLookup) {
+               throw new IllegalArgumentException("configuration needs to be set when there are additional fields with variables");
             }
+         }
+
+         return resolvableFields;
+      } else {
+         return AbstractJacksonLayout.ResolvableKeyValuePair.EMPTY_ARRAY;
+      }
+   }
+
+   public String toSerializable(final LogEvent event) {
+      StringBuilderWriter writer = new StringBuilderWriter();
+
+      try {
+         this.toSerializable(event, writer);
+         return writer.toString();
+      } catch (IOException var4) {
+         LOGGER.error(var4);
+         return "";
+      }
+   }
+
+   private static LogEvent convertMutableToLog4jEvent(final LogEvent event) {
+      return event instanceof Log4jLogEvent ? event : Log4jLogEvent.createMemento(event);
+   }
+
+   protected Object wrapLogEvent(final LogEvent event) {
+      if (this.additionalFields.length > 0) {
+         Map<String, String> additionalFieldsMap = this.resolveAdditionalFields(event);
+         return new AbstractJacksonLayout.LogEventWithAdditionalFields(event, additionalFieldsMap);
+      } else {
+         return event instanceof Message ? new AbstractJacksonLayout.ReadOnlyLogEventWrapper(event) : event;
+      }
+   }
+
+   private Map<String, String> resolveAdditionalFields(final LogEvent logEvent) {
+      Map<String, String> additionalFieldsMap = new LinkedHashMap<>(this.additionalFields.length);
+      StrSubstitutor strSubstitutor = this.configuration.getStrSubstitutor();
+
+      for (AbstractJacksonLayout.ResolvableKeyValuePair pair : this.additionalFields) {
+         if (pair.valueNeedsLookup) {
+            additionalFieldsMap.put(pair.key, strSubstitutor.replace(logEvent, pair.value));
+         } else {
             additionalFieldsMap.put(pair.key, pair.value);
-        }
-        return additionalFieldsMap;
-    }
+         }
+      }
 
-    public void toSerializable(LogEvent event, Writer writer) throws JsonGenerationException, JsonMappingException, IOException {
-        this.objectWriter.writeValue(writer, this.wrapLogEvent(AbstractJacksonLayout.convertMutableToLog4jEvent(event)));
-        writer.write(this.eol);
-        if (this.includeNullDelimiter) {
-            writer.write(0);
-        }
-        this.markEvent();
-    }
+      return additionalFieldsMap;
+   }
 
-    private static class ReadOnlyLogEventWrapper
-    implements LogEvent {
-        @JsonIgnore
-        private final LogEvent event;
+   public void toSerializable(final LogEvent event, final Writer writer) throws JsonGenerationException, JsonMappingException, IOException {
+      this.objectWriter.writeValue(writer, this.wrapLogEvent(convertMutableToLog4jEvent(event)));
+      writer.write(this.eol);
+      if (this.includeNullDelimiter) {
+         writer.write(0);
+      }
 
-        public ReadOnlyLogEventWrapper(LogEvent event) {
-            this.event = event;
-        }
+      this.markEvent();
+   }
 
-        @Override
-        public LogEvent toImmutable() {
-            return this.event.toImmutable();
-        }
+   public abstract static class Builder<B extends AbstractJacksonLayout.Builder<B>> extends AbstractStringLayout.Builder<B> {
+      @PluginBuilderAttribute
+      private boolean eventEol;
+      @PluginBuilderAttribute
+      private String endOfLine;
+      @PluginBuilderAttribute
+      private boolean compact;
+      @PluginBuilderAttribute
+      private boolean complete;
+      @PluginBuilderAttribute
+      private boolean locationInfo;
+      @PluginBuilderAttribute
+      private boolean properties;
+      @PluginBuilderAttribute
+      private boolean includeStacktrace = true;
+      @PluginBuilderAttribute
+      private boolean stacktraceAsString = false;
+      @PluginBuilderAttribute
+      private boolean includeNullDelimiter = false;
+      @PluginBuilderAttribute
+      private boolean includeTimeMillis = false;
+      @PluginElement("AdditionalField")
+      private KeyValuePair[] additionalFields;
 
-        @Override
-        public Map<String, String> getContextMap() {
-            return this.event.getContextMap();
-        }
+      protected String toStringOrNull(final byte[] header) {
+         return header == null ? null : new String(header, Charset.defaultCharset());
+      }
 
-        @Override
-        public ReadOnlyStringMap getContextData() {
-            return this.event.getContextData();
-        }
+      public boolean getEventEol() {
+         return this.eventEol;
+      }
 
-        @Override
-        public ThreadContext.ContextStack getContextStack() {
-            return this.event.getContextStack();
-        }
+      public String getEndOfLine() {
+         return this.endOfLine;
+      }
 
-        @Override
-        public String getLoggerFqcn() {
-            return this.event.getLoggerFqcn();
-        }
+      public boolean isCompact() {
+         return this.compact;
+      }
 
-        @Override
-        public Level getLevel() {
-            return this.event.getLevel();
-        }
+      public boolean isComplete() {
+         return this.complete;
+      }
 
-        @Override
-        public String getLoggerName() {
-            return this.event.getLoggerName();
-        }
+      public boolean isLocationInfo() {
+         return this.locationInfo;
+      }
 
-        @Override
-        public Marker getMarker() {
-            return this.event.getMarker();
-        }
+      public boolean isProperties() {
+         return this.properties;
+      }
 
-        @Override
-        public Message getMessage() {
-            return this.event.getMessage();
-        }
+      public boolean isIncludeStacktrace() {
+         return this.includeStacktrace;
+      }
 
-        @Override
-        public long getTimeMillis() {
-            return this.event.getTimeMillis();
-        }
+      public boolean isStacktraceAsString() {
+         return this.stacktraceAsString;
+      }
 
-        @Override
-        public Instant getInstant() {
-            return this.event.getInstant();
-        }
+      public boolean isIncludeNullDelimiter() {
+         return this.includeNullDelimiter;
+      }
 
-        @Override
-        public StackTraceElement getSource() {
-            return this.event.getSource();
-        }
+      public boolean isIncludeTimeMillis() {
+         return this.includeTimeMillis;
+      }
 
-        @Override
-        public String getThreadName() {
-            return this.event.getThreadName();
-        }
+      public KeyValuePair[] getAdditionalFields() {
+         return this.additionalFields;
+      }
 
-        @Override
-        public long getThreadId() {
-            return this.event.getThreadId();
-        }
+      public B setEventEol(final boolean eventEol) {
+         this.eventEol = eventEol;
+         return this.asBuilder();
+      }
 
-        @Override
-        public int getThreadPriority() {
-            return this.event.getThreadPriority();
-        }
+      public B setEndOfLine(final String endOfLine) {
+         this.endOfLine = endOfLine;
+         return this.asBuilder();
+      }
 
-        @Override
-        public Throwable getThrown() {
-            return this.event.getThrown();
-        }
+      public B setCompact(final boolean compact) {
+         this.compact = compact;
+         return this.asBuilder();
+      }
 
-        @Override
-        public ThrowableProxy getThrownProxy() {
-            return this.event.getThrownProxy();
-        }
+      public B setComplete(final boolean complete) {
+         this.complete = complete;
+         return this.asBuilder();
+      }
 
-        @Override
-        public boolean isEndOfBatch() {
-            return this.event.isEndOfBatch();
-        }
+      public B setLocationInfo(final boolean locationInfo) {
+         this.locationInfo = locationInfo;
+         return this.asBuilder();
+      }
 
-        @Override
-        public boolean isIncludeLocation() {
-            return this.event.isIncludeLocation();
-        }
+      public B setProperties(final boolean properties) {
+         this.properties = properties;
+         return this.asBuilder();
+      }
 
-        @Override
-        public void setEndOfBatch(boolean endOfBatch) {
-        }
+      public B setIncludeStacktrace(final boolean includeStacktrace) {
+         this.includeStacktrace = includeStacktrace;
+         return this.asBuilder();
+      }
 
-        @Override
-        public void setIncludeLocation(boolean locationRequired) {
-        }
+      public B setStacktraceAsString(final boolean stacktraceAsString) {
+         this.stacktraceAsString = stacktraceAsString;
+         return this.asBuilder();
+      }
 
-        @Override
-        public long getNanoTime() {
-            return this.event.getNanoTime();
-        }
-    }
+      public B setIncludeNullDelimiter(final boolean includeNullDelimiter) {
+         this.includeNullDelimiter = includeNullDelimiter;
+         return this.asBuilder();
+      }
 
-    protected static class ResolvableKeyValuePair {
-        static final ResolvableKeyValuePair[] EMPTY_ARRAY = new ResolvableKeyValuePair[0];
-        final String key;
-        final String value;
-        final boolean valueNeedsLookup;
+      public B setIncludeTimeMillis(final boolean includeTimeMillis) {
+         this.includeTimeMillis = includeTimeMillis;
+         return this.asBuilder();
+      }
 
-        ResolvableKeyValuePair(KeyValuePair pair) {
-            this.key = pair.getKey();
-            this.value = pair.getValue();
-            this.valueNeedsLookup = AbstractJacksonLayout.valueNeedsLookup(this.value);
-        }
-    }
+      public B setAdditionalFields(final KeyValuePair[] additionalFields) {
+         this.additionalFields = additionalFields;
+         return this.asBuilder();
+      }
+   }
 
-    @JsonRootName(value="Event")
-    @JacksonXmlRootElement(namespace="http://logging.apache.org/log4j/2.0/events", localName="Event")
-    public static class LogEventWithAdditionalFields {
-        private final Object logEvent;
-        private final Map<String, String> additionalFields;
+   @JsonRootName("Event")
+   @JacksonXmlRootElement(namespace = "http://logging.apache.org/log4j/2.0/events", localName = "Event")
+   public static class LogEventWithAdditionalFields {
+      private final Object logEvent;
+      private final Map<String, String> additionalFields;
 
-        public LogEventWithAdditionalFields(Object logEvent, Map<String, String> additionalFields) {
-            this.logEvent = logEvent;
-            this.additionalFields = additionalFields;
-        }
+      public LogEventWithAdditionalFields(final Object logEvent, final Map<String, String> additionalFields) {
+         this.logEvent = logEvent;
+         this.additionalFields = additionalFields;
+      }
 
-        @JsonUnwrapped
-        public Object getLogEvent() {
-            return this.logEvent;
-        }
+      @JsonUnwrapped
+      public Object getLogEvent() {
+         return this.logEvent;
+      }
 
-        @JsonAnyGetter
-        public Map<String, String> getAdditionalFields() {
-            return this.additionalFields;
-        }
-    }
+      @JsonAnyGetter
+      public Map<String, String> getAdditionalFields() {
+         return this.additionalFields;
+      }
+   }
 
-    public static abstract class Builder<B extends Builder<B>>
-    extends AbstractStringLayout.Builder<B> {
-        @PluginBuilderAttribute
-        private boolean eventEol;
-        @PluginBuilderAttribute
-        private String endOfLine;
-        @PluginBuilderAttribute
-        private boolean compact;
-        @PluginBuilderAttribute
-        private boolean complete;
-        @PluginBuilderAttribute
-        private boolean locationInfo;
-        @PluginBuilderAttribute
-        private boolean properties;
-        @PluginBuilderAttribute
-        private boolean includeStacktrace = true;
-        @PluginBuilderAttribute
-        private boolean stacktraceAsString = false;
-        @PluginBuilderAttribute
-        private boolean includeNullDelimiter = false;
-        @PluginBuilderAttribute
-        private boolean includeTimeMillis = false;
-        @PluginElement(value="AdditionalField")
-        private KeyValuePair[] additionalFields;
+   private static class ReadOnlyLogEventWrapper implements LogEvent {
+      @JsonIgnore
+      private final LogEvent event;
 
-        protected String toStringOrNull(byte[] header) {
-            return header == null ? null : new String(header, Charset.defaultCharset());
-        }
+      public ReadOnlyLogEventWrapper(LogEvent event) {
+         this.event = event;
+      }
 
-        public boolean getEventEol() {
-            return this.eventEol;
-        }
+      @Override
+      public LogEvent toImmutable() {
+         return this.event.toImmutable();
+      }
 
-        public String getEndOfLine() {
-            return this.endOfLine;
-        }
+      @Override
+      public Map<String, String> getContextMap() {
+         return this.event.getContextMap();
+      }
 
-        public boolean isCompact() {
-            return this.compact;
-        }
+      @Override
+      public ReadOnlyStringMap getContextData() {
+         return this.event.getContextData();
+      }
 
-        public boolean isComplete() {
-            return this.complete;
-        }
+      @Override
+      public ThreadContext.ContextStack getContextStack() {
+         return this.event.getContextStack();
+      }
 
-        public boolean isLocationInfo() {
-            return this.locationInfo;
-        }
+      @Override
+      public String getLoggerFqcn() {
+         return this.event.getLoggerFqcn();
+      }
 
-        public boolean isProperties() {
-            return this.properties;
-        }
+      @Override
+      public Level getLevel() {
+         return this.event.getLevel();
+      }
 
-        public boolean isIncludeStacktrace() {
-            return this.includeStacktrace;
-        }
+      @Override
+      public String getLoggerName() {
+         return this.event.getLoggerName();
+      }
 
-        public boolean isStacktraceAsString() {
-            return this.stacktraceAsString;
-        }
+      @Override
+      public Marker getMarker() {
+         return this.event.getMarker();
+      }
 
-        public boolean isIncludeNullDelimiter() {
-            return this.includeNullDelimiter;
-        }
+      @Override
+      public Message getMessage() {
+         return this.event.getMessage();
+      }
 
-        public boolean isIncludeTimeMillis() {
-            return this.includeTimeMillis;
-        }
+      @Override
+      public long getTimeMillis() {
+         return this.event.getTimeMillis();
+      }
 
-        public KeyValuePair[] getAdditionalFields() {
-            return this.additionalFields;
-        }
+      @Override
+      public Instant getInstant() {
+         return this.event.getInstant();
+      }
 
-        public B setEventEol(boolean eventEol) {
-            this.eventEol = eventEol;
-            return (B)((Builder)this.asBuilder());
-        }
+      @Override
+      public StackTraceElement getSource() {
+         return this.event.getSource();
+      }
 
-        public B setEndOfLine(String endOfLine) {
-            this.endOfLine = endOfLine;
-            return (B)((Builder)this.asBuilder());
-        }
+      @Override
+      public String getThreadName() {
+         return this.event.getThreadName();
+      }
 
-        public B setCompact(boolean compact) {
-            this.compact = compact;
-            return (B)((Builder)this.asBuilder());
-        }
+      @Override
+      public long getThreadId() {
+         return this.event.getThreadId();
+      }
 
-        public B setComplete(boolean complete) {
-            this.complete = complete;
-            return (B)((Builder)this.asBuilder());
-        }
+      @Override
+      public int getThreadPriority() {
+         return this.event.getThreadPriority();
+      }
 
-        public B setLocationInfo(boolean locationInfo) {
-            this.locationInfo = locationInfo;
-            return (B)((Builder)this.asBuilder());
-        }
+      @Override
+      public Throwable getThrown() {
+         return this.event.getThrown();
+      }
 
-        public B setProperties(boolean properties) {
-            this.properties = properties;
-            return (B)((Builder)this.asBuilder());
-        }
+      @Override
+      public ThrowableProxy getThrownProxy() {
+         return this.event.getThrownProxy();
+      }
 
-        public B setIncludeStacktrace(boolean includeStacktrace) {
-            this.includeStacktrace = includeStacktrace;
-            return (B)((Builder)this.asBuilder());
-        }
+      @Override
+      public boolean isEndOfBatch() {
+         return this.event.isEndOfBatch();
+      }
 
-        public B setStacktraceAsString(boolean stacktraceAsString) {
-            this.stacktraceAsString = stacktraceAsString;
-            return (B)((Builder)this.asBuilder());
-        }
+      @Override
+      public boolean isIncludeLocation() {
+         return this.event.isIncludeLocation();
+      }
 
-        public B setIncludeNullDelimiter(boolean includeNullDelimiter) {
-            this.includeNullDelimiter = includeNullDelimiter;
-            return (B)((Builder)this.asBuilder());
-        }
+      @Override
+      public void setEndOfBatch(boolean endOfBatch) {
+      }
 
-        public B setIncludeTimeMillis(boolean includeTimeMillis) {
-            this.includeTimeMillis = includeTimeMillis;
-            return (B)((Builder)this.asBuilder());
-        }
+      @Override
+      public void setIncludeLocation(boolean locationRequired) {
+      }
 
-        public B setAdditionalFields(KeyValuePair[] additionalFields) {
-            this.additionalFields = additionalFields;
-            return (B)((Builder)this.asBuilder());
-        }
-    }
+      @Override
+      public long getNanoTime() {
+         return this.event.getNanoTime();
+      }
+   }
+
+   protected static class ResolvableKeyValuePair {
+      static final AbstractJacksonLayout.ResolvableKeyValuePair[] EMPTY_ARRAY = new AbstractJacksonLayout.ResolvableKeyValuePair[0];
+      final String key;
+      final String value;
+      final boolean valueNeedsLookup;
+
+      ResolvableKeyValuePair(final KeyValuePair pair) {
+         this.key = pair.getKey();
+         this.value = pair.getValue();
+         this.valueNeedsLookup = AbstractJacksonLayout.valueNeedsLookup(this.value);
+      }
+   }
 }
-

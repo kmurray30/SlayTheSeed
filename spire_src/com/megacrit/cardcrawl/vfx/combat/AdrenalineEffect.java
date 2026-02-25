@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.combat;
 
 import com.badlogic.gdx.Gdx;
@@ -17,70 +14,114 @@ import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import com.megacrit.cardcrawl.vfx.BorderFlashEffect;
 import java.util.ArrayList;
 
-public class AdrenalineEffect
-extends AbstractGameEffect {
-    private Vector2 position;
-    private Vector2 velocity;
-    private TextureAtlas.AtlasRegion img = null;
-    private ArrayList<Vector2> prevPositions = new ArrayList();
-    private static boolean flipper = true;
+public class AdrenalineEffect extends AbstractGameEffect {
+   private Vector2 position;
+   private Vector2 velocity;
+   private TextureAtlas.AtlasRegion img = null;
+   private ArrayList<Vector2> prevPositions = new ArrayList<>();
+   private static boolean flipper = true;
 
-    public AdrenalineEffect() {
-        this.img = ImageMaster.GLOW_SPARK_2;
-        this.duration = 1.5f;
-        this.position = flipper ? new Vector2(-100.0f * Settings.scale - (float)this.img.packedWidth / 2.0f, (float)Settings.HEIGHT / 2.0f - (float)this.img.packedHeight / 2.0f) : new Vector2(-50.0f * Settings.scale - (float)this.img.packedWidth / 2.0f, (float)Settings.HEIGHT / 2.0f - (float)this.img.packedHeight / 2.0f);
-        flipper = !flipper;
-        this.velocity = new Vector2(3000.0f * Settings.scale, 0.0f);
-        this.color = new Color(1.0f, 1.0f, 0.2f, 1.0f);
-        this.scale = 3.0f * Settings.scale;
-    }
+   public AdrenalineEffect() {
+      this.img = ImageMaster.GLOW_SPARK_2;
+      this.duration = 1.5F;
+      if (flipper) {
+         this.position = new Vector2(-100.0F * Settings.scale - this.img.packedWidth / 2.0F, Settings.HEIGHT / 2.0F - this.img.packedHeight / 2.0F);
+      } else {
+         this.position = new Vector2(-50.0F * Settings.scale - this.img.packedWidth / 2.0F, Settings.HEIGHT / 2.0F - this.img.packedHeight / 2.0F);
+      }
 
-    @Override
-    public void update() {
-        if (this.duration == 1.5f) {
-            CardCrawlGame.sound.playA("ATTACK_WHIFF_1", -0.6f);
-            CardCrawlGame.sound.playA("ORB_LIGHTNING_CHANNEL", 0.6f);
-            AbstractDungeon.effectsQueue.add(new BorderFlashEffect(Color.BLUE.cpy(), true));
-        }
-        if (this.position.x > (float)Settings.WIDTH * 0.55f && this.position.y > (float)Settings.HEIGHT / 2.0f - (float)this.img.packedHeight / 2.0f) {
-            this.velocity.y = 0.0f;
-            this.position.y = (float)Settings.HEIGHT / 2.0f - (float)this.img.packedHeight / 2.0f;
-            this.velocity.x = 3000.0f * Settings.scale;
-        } else if (this.position.x > (float)Settings.WIDTH * 0.5f) {
-            this.velocity.y = 6000.0f * Settings.scale;
-        } else if (this.position.x > (float)Settings.WIDTH * 0.4f) {
-            this.velocity.y = -6000.0f * Settings.scale;
-        } else if (this.position.x > (float)Settings.WIDTH * 0.35f) {
-            this.velocity.y = 6000.0f * Settings.scale;
-            this.velocity.x = 2000.0f * Settings.scale;
-        }
-        this.prevPositions.add(this.position.cpy());
-        this.position.mulAdd(this.velocity, Gdx.graphics.getDeltaTime());
-        if (this.prevPositions.size() > 30) {
-            this.prevPositions.remove(0);
-        }
-        this.duration -= Gdx.graphics.getDeltaTime();
-        if (this.duration < 0.0f) {
-            this.isDone = true;
-        }
-    }
+      flipper = !flipper;
+      this.velocity = new Vector2(3000.0F * Settings.scale, 0.0F);
+      this.color = new Color(1.0F, 1.0F, 0.2F, 1.0F);
+      this.scale = 3.0F * Settings.scale;
+   }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        sb.setBlendFunction(770, 1);
-        for (int i = 0; i < this.prevPositions.size(); ++i) {
-            sb.setColor(new Color(1.0f, 0.9f, 0.3f, 1.0f));
-            sb.draw(this.img, this.prevPositions.get((int)i).x, this.prevPositions.get((int)i).y, (float)this.img.packedWidth / 2.0f, (float)this.img.packedHeight / 2.0f, this.img.packedWidth, this.img.packedHeight, this.scale / 8.0f * ((float)i * 0.05f + 1.0f) * MathUtils.random(1.5f, 3.0f), this.scale / 8.0f * ((float)i * 0.05f + 1.0f) * MathUtils.random(0.5f, 2.0f), 0.0f);
-        }
-        sb.setColor(Color.RED);
-        sb.draw(this.img, this.position.x, this.position.y, (float)this.img.packedWidth / 2.0f, (float)this.img.packedHeight / 2.0f, this.img.packedWidth, this.img.packedHeight, this.scale * 2.5f, this.scale * 2.5f, 0.0f);
-        sb.setBlendFunction(770, 771);
-        sb.setColor(Color.YELLOW);
-        sb.draw(this.img, this.position.x, this.position.y, (float)this.img.packedWidth / 2.0f, (float)this.img.packedHeight / 2.0f, this.img.packedWidth, this.img.packedHeight, this.scale, this.scale, 0.0f);
-    }
+   @Override
+   public void update() {
+      if (this.duration == 1.5F) {
+         CardCrawlGame.sound.playA("ATTACK_WHIFF_1", -0.6F);
+         CardCrawlGame.sound.playA("ORB_LIGHTNING_CHANNEL", 0.6F);
+         AbstractDungeon.effectsQueue.add(new BorderFlashEffect(Color.BLUE.cpy(), true));
+      }
 
-    @Override
-    public void dispose() {
-    }
+      if (this.position.x > Settings.WIDTH * 0.55F && this.position.y > Settings.HEIGHT / 2.0F - this.img.packedHeight / 2.0F) {
+         this.velocity.y = 0.0F;
+         this.position.y = Settings.HEIGHT / 2.0F - this.img.packedHeight / 2.0F;
+         this.velocity.x = 3000.0F * Settings.scale;
+      } else if (this.position.x > Settings.WIDTH * 0.5F) {
+         this.velocity.y = 6000.0F * Settings.scale;
+      } else if (this.position.x > Settings.WIDTH * 0.4F) {
+         this.velocity.y = -6000.0F * Settings.scale;
+      } else if (this.position.x > Settings.WIDTH * 0.35F) {
+         this.velocity.y = 6000.0F * Settings.scale;
+         this.velocity.x = 2000.0F * Settings.scale;
+      }
+
+      this.prevPositions.add(this.position.cpy());
+      this.position.mulAdd(this.velocity, Gdx.graphics.getDeltaTime());
+      if (this.prevPositions.size() > 30) {
+         this.prevPositions.remove(0);
+      }
+
+      this.duration = this.duration - Gdx.graphics.getDeltaTime();
+      if (this.duration < 0.0F) {
+         this.isDone = true;
+      }
+   }
+
+   @Override
+   public void render(SpriteBatch sb) {
+      sb.setBlendFunction(770, 1);
+
+      for (int i = 0; i < this.prevPositions.size(); i++) {
+         sb.setColor(new Color(1.0F, 0.9F, 0.3F, 1.0F));
+         float var10004 = this.img.packedWidth / 2.0F;
+         float var10005 = this.img.packedHeight / 2.0F;
+         float var10006 = this.img.packedWidth;
+         sb.draw(
+            this.img,
+            this.prevPositions.get(i).x,
+            this.prevPositions.get(i).y,
+            var10004,
+            var10005,
+            var10006,
+            this.img.packedHeight,
+            this.scale / 8.0F * (i * 0.05F + 1.0F) * MathUtils.random(1.5F, 3.0F),
+            this.scale / 8.0F * (i * 0.05F + 1.0F) * MathUtils.random(0.5F, 2.0F),
+            0.0F
+         );
+      }
+
+      sb.setColor(Color.RED);
+      sb.draw(
+         this.img,
+         this.position.x,
+         this.position.y,
+         this.img.packedWidth / 2.0F,
+         this.img.packedHeight / 2.0F,
+         this.img.packedWidth,
+         this.img.packedHeight,
+         this.scale * 2.5F,
+         this.scale * 2.5F,
+         0.0F
+      );
+      sb.setBlendFunction(770, 771);
+      sb.setColor(Color.YELLOW);
+      sb.draw(
+         this.img,
+         this.position.x,
+         this.position.y,
+         this.img.packedWidth / 2.0F,
+         this.img.packedHeight / 2.0F,
+         this.img.packedWidth,
+         this.img.packedHeight,
+         this.scale,
+         this.scale,
+         0.0F
+      );
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

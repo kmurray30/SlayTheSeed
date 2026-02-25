@@ -1,15 +1,9 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.message;
 
-import org.apache.logging.log4j.message.Message;
-
 public interface MessageFactory {
-    public Message newMessage(Object var1);
+   Message newMessage(Object message);
 
-    public Message newMessage(String var1);
+   Message newMessage(String message);
 
-    public Message newMessage(String var1, Object ... var2);
+   Message newMessage(String message, Object... params);
 }
-

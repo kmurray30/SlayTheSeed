@@ -1,11 +1,5 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogBuilder;
-import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.message.EntryMessage;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.MessageFactory;
@@ -13,791 +7,792 @@ import org.apache.logging.log4j.util.MessageSupplier;
 import org.apache.logging.log4j.util.Supplier;
 
 public interface Logger {
-    public void catching(Level var1, Throwable var2);
+   void catching(Level level, Throwable throwable);
 
-    public void catching(Throwable var1);
+   void catching(Throwable throwable);
 
-    public void debug(Marker var1, Message var2);
+   void debug(Marker marker, Message message);
 
-    public void debug(Marker var1, Message var2, Throwable var3);
+   void debug(Marker marker, Message message, Throwable throwable);
 
-    public void debug(Marker var1, MessageSupplier var2);
+   void debug(Marker marker, MessageSupplier messageSupplier);
 
-    public void debug(Marker var1, MessageSupplier var2, Throwable var3);
+   void debug(Marker marker, MessageSupplier messageSupplier, Throwable throwable);
 
-    public void debug(Marker var1, CharSequence var2);
+   void debug(Marker marker, CharSequence message);
 
-    public void debug(Marker var1, CharSequence var2, Throwable var3);
+   void debug(Marker marker, CharSequence message, Throwable throwable);
 
-    public void debug(Marker var1, Object var2);
+   void debug(Marker marker, Object message);
 
-    public void debug(Marker var1, Object var2, Throwable var3);
+   void debug(Marker marker, Object message, Throwable throwable);
 
-    public void debug(Marker var1, String var2);
+   void debug(Marker marker, String message);
 
-    public void debug(Marker var1, String var2, Object ... var3);
+   void debug(Marker marker, String message, Object... params);
 
-    public void debug(Marker var1, String var2, Supplier<?> ... var3);
+   void debug(Marker marker, String message, Supplier<?>... paramSuppliers);
 
-    public void debug(Marker var1, String var2, Throwable var3);
+   void debug(Marker marker, String message, Throwable throwable);
 
-    public void debug(Marker var1, Supplier<?> var2);
+   void debug(Marker marker, Supplier<?> messageSupplier);
 
-    public void debug(Marker var1, Supplier<?> var2, Throwable var3);
+   void debug(Marker marker, Supplier<?> messageSupplier, Throwable throwable);
 
-    public void debug(Message var1);
+   void debug(Message message);
 
-    public void debug(Message var1, Throwable var2);
+   void debug(Message message, Throwable throwable);
 
-    public void debug(MessageSupplier var1);
+   void debug(MessageSupplier messageSupplier);
 
-    public void debug(MessageSupplier var1, Throwable var2);
+   void debug(MessageSupplier messageSupplier, Throwable throwable);
 
-    public void debug(CharSequence var1);
+   void debug(CharSequence message);
 
-    public void debug(CharSequence var1, Throwable var2);
+   void debug(CharSequence message, Throwable throwable);
 
-    public void debug(Object var1);
+   void debug(Object message);
 
-    public void debug(Object var1, Throwable var2);
+   void debug(Object message, Throwable throwable);
 
-    public void debug(String var1);
+   void debug(String message);
 
-    public void debug(String var1, Object ... var2);
+   void debug(String message, Object... params);
 
-    public void debug(String var1, Supplier<?> ... var2);
+   void debug(String message, Supplier<?>... paramSuppliers);
 
-    public void debug(String var1, Throwable var2);
+   void debug(String message, Throwable throwable);
 
-    public void debug(Supplier<?> var1);
+   void debug(Supplier<?> messageSupplier);
 
-    public void debug(Supplier<?> var1, Throwable var2);
+   void debug(Supplier<?> messageSupplier, Throwable throwable);
 
-    public void debug(Marker var1, String var2, Object var3);
+   void debug(Marker marker, String message, Object p0);
 
-    public void debug(Marker var1, String var2, Object var3, Object var4);
+   void debug(Marker marker, String message, Object p0, Object p1);
 
-    public void debug(Marker var1, String var2, Object var3, Object var4, Object var5);
+   void debug(Marker marker, String message, Object p0, Object p1, Object p2);
 
-    public void debug(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6);
+   void debug(Marker marker, String message, Object p0, Object p1, Object p2, Object p3);
 
-    public void debug(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7);
+   void debug(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public void debug(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8);
+   void debug(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public void debug(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   void debug(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public void debug(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   void debug(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7);
 
-    public void debug(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   void debug(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8);
 
-    public void debug(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12);
+   void debug(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9);
 
-    public void debug(String var1, Object var2);
+   void debug(String message, Object p0);
 
-    public void debug(String var1, Object var2, Object var3);
+   void debug(String message, Object p0, Object p1);
 
-    public void debug(String var1, Object var2, Object var3, Object var4);
+   void debug(String message, Object p0, Object p1, Object p2);
 
-    public void debug(String var1, Object var2, Object var3, Object var4, Object var5);
+   void debug(String message, Object p0, Object p1, Object p2, Object p3);
 
-    public void debug(String var1, Object var2, Object var3, Object var4, Object var5, Object var6);
+   void debug(String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public void debug(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7);
+   void debug(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public void debug(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8);
+   void debug(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public void debug(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   void debug(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7);
 
-    public void debug(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   void debug(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8);
 
-    public void debug(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   void debug(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9);
 
-    @Deprecated
-    public void entry();
+   @Deprecated
+   void entry();
 
-    @Deprecated
-    public void entry(Object ... var1);
+   @Deprecated
+   void entry(Object... params);
 
-    public void error(Marker var1, Message var2);
+   void error(Marker marker, Message message);
 
-    public void error(Marker var1, Message var2, Throwable var3);
+   void error(Marker marker, Message message, Throwable throwable);
 
-    public void error(Marker var1, MessageSupplier var2);
+   void error(Marker marker, MessageSupplier messageSupplier);
 
-    public void error(Marker var1, MessageSupplier var2, Throwable var3);
+   void error(Marker marker, MessageSupplier messageSupplier, Throwable throwable);
 
-    public void error(Marker var1, CharSequence var2);
+   void error(Marker marker, CharSequence message);
 
-    public void error(Marker var1, CharSequence var2, Throwable var3);
+   void error(Marker marker, CharSequence message, Throwable throwable);
 
-    public void error(Marker var1, Object var2);
+   void error(Marker marker, Object message);
 
-    public void error(Marker var1, Object var2, Throwable var3);
+   void error(Marker marker, Object message, Throwable throwable);
 
-    public void error(Marker var1, String var2);
+   void error(Marker marker, String message);
 
-    public void error(Marker var1, String var2, Object ... var3);
+   void error(Marker marker, String message, Object... params);
 
-    public void error(Marker var1, String var2, Supplier<?> ... var3);
+   void error(Marker marker, String message, Supplier<?>... paramSuppliers);
 
-    public void error(Marker var1, String var2, Throwable var3);
+   void error(Marker marker, String message, Throwable throwable);
 
-    public void error(Marker var1, Supplier<?> var2);
+   void error(Marker marker, Supplier<?> messageSupplier);
 
-    public void error(Marker var1, Supplier<?> var2, Throwable var3);
+   void error(Marker marker, Supplier<?> messageSupplier, Throwable throwable);
 
-    public void error(Message var1);
+   void error(Message message);
 
-    public void error(Message var1, Throwable var2);
+   void error(Message message, Throwable throwable);
 
-    public void error(MessageSupplier var1);
+   void error(MessageSupplier messageSupplier);
 
-    public void error(MessageSupplier var1, Throwable var2);
+   void error(MessageSupplier messageSupplier, Throwable throwable);
 
-    public void error(CharSequence var1);
+   void error(CharSequence message);
 
-    public void error(CharSequence var1, Throwable var2);
+   void error(CharSequence message, Throwable throwable);
 
-    public void error(Object var1);
+   void error(Object message);
 
-    public void error(Object var1, Throwable var2);
+   void error(Object message, Throwable throwable);
 
-    public void error(String var1);
+   void error(String message);
 
-    public void error(String var1, Object ... var2);
+   void error(String message, Object... params);
 
-    public void error(String var1, Supplier<?> ... var2);
+   void error(String message, Supplier<?>... paramSuppliers);
 
-    public void error(String var1, Throwable var2);
+   void error(String message, Throwable throwable);
 
-    public void error(Supplier<?> var1);
+   void error(Supplier<?> messageSupplier);
 
-    public void error(Supplier<?> var1, Throwable var2);
+   void error(Supplier<?> messageSupplier, Throwable throwable);
 
-    public void error(Marker var1, String var2, Object var3);
+   void error(Marker marker, String message, Object p0);
 
-    public void error(Marker var1, String var2, Object var3, Object var4);
+   void error(Marker marker, String message, Object p0, Object p1);
 
-    public void error(Marker var1, String var2, Object var3, Object var4, Object var5);
+   void error(Marker marker, String message, Object p0, Object p1, Object p2);
 
-    public void error(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6);
+   void error(Marker marker, String message, Object p0, Object p1, Object p2, Object p3);
 
-    public void error(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7);
+   void error(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public void error(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8);
+   void error(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public void error(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   void error(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public void error(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   void error(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7);
 
-    public void error(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   void error(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8);
 
-    public void error(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12);
+   void error(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9);
 
-    public void error(String var1, Object var2);
+   void error(String message, Object p0);
 
-    public void error(String var1, Object var2, Object var3);
+   void error(String message, Object p0, Object p1);
 
-    public void error(String var1, Object var2, Object var3, Object var4);
+   void error(String message, Object p0, Object p1, Object p2);
 
-    public void error(String var1, Object var2, Object var3, Object var4, Object var5);
+   void error(String message, Object p0, Object p1, Object p2, Object p3);
 
-    public void error(String var1, Object var2, Object var3, Object var4, Object var5, Object var6);
+   void error(String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public void error(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7);
+   void error(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public void error(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8);
+   void error(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public void error(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   void error(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7);
 
-    public void error(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   void error(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8);
 
-    public void error(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   void error(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9);
 
-    @Deprecated
-    public void exit();
+   @Deprecated
+   void exit();
 
-    @Deprecated
-    public <R> R exit(R var1);
+   @Deprecated
+   <R> R exit(R result);
 
-    public void fatal(Marker var1, Message var2);
+   void fatal(Marker marker, Message message);
 
-    public void fatal(Marker var1, Message var2, Throwable var3);
+   void fatal(Marker marker, Message message, Throwable throwable);
 
-    public void fatal(Marker var1, MessageSupplier var2);
+   void fatal(Marker marker, MessageSupplier messageSupplier);
 
-    public void fatal(Marker var1, MessageSupplier var2, Throwable var3);
+   void fatal(Marker marker, MessageSupplier messageSupplier, Throwable throwable);
 
-    public void fatal(Marker var1, CharSequence var2);
+   void fatal(Marker marker, CharSequence message);
 
-    public void fatal(Marker var1, CharSequence var2, Throwable var3);
+   void fatal(Marker marker, CharSequence message, Throwable throwable);
 
-    public void fatal(Marker var1, Object var2);
+   void fatal(Marker marker, Object message);
 
-    public void fatal(Marker var1, Object var2, Throwable var3);
+   void fatal(Marker marker, Object message, Throwable throwable);
 
-    public void fatal(Marker var1, String var2);
+   void fatal(Marker marker, String message);
 
-    public void fatal(Marker var1, String var2, Object ... var3);
+   void fatal(Marker marker, String message, Object... params);
 
-    public void fatal(Marker var1, String var2, Supplier<?> ... var3);
+   void fatal(Marker marker, String message, Supplier<?>... paramSuppliers);
 
-    public void fatal(Marker var1, String var2, Throwable var3);
+   void fatal(Marker marker, String message, Throwable throwable);
 
-    public void fatal(Marker var1, Supplier<?> var2);
+   void fatal(Marker marker, Supplier<?> messageSupplier);
 
-    public void fatal(Marker var1, Supplier<?> var2, Throwable var3);
+   void fatal(Marker marker, Supplier<?> messageSupplier, Throwable throwable);
 
-    public void fatal(Message var1);
+   void fatal(Message message);
 
-    public void fatal(Message var1, Throwable var2);
+   void fatal(Message message, Throwable throwable);
 
-    public void fatal(MessageSupplier var1);
+   void fatal(MessageSupplier messageSupplier);
 
-    public void fatal(MessageSupplier var1, Throwable var2);
+   void fatal(MessageSupplier messageSupplier, Throwable throwable);
 
-    public void fatal(CharSequence var1);
+   void fatal(CharSequence message);
 
-    public void fatal(CharSequence var1, Throwable var2);
+   void fatal(CharSequence message, Throwable throwable);
 
-    public void fatal(Object var1);
+   void fatal(Object message);
 
-    public void fatal(Object var1, Throwable var2);
+   void fatal(Object message, Throwable throwable);
 
-    public void fatal(String var1);
+   void fatal(String message);
 
-    public void fatal(String var1, Object ... var2);
+   void fatal(String message, Object... params);
 
-    public void fatal(String var1, Supplier<?> ... var2);
+   void fatal(String message, Supplier<?>... paramSuppliers);
 
-    public void fatal(String var1, Throwable var2);
+   void fatal(String message, Throwable throwable);
 
-    public void fatal(Supplier<?> var1);
+   void fatal(Supplier<?> messageSupplier);
 
-    public void fatal(Supplier<?> var1, Throwable var2);
+   void fatal(Supplier<?> messageSupplier, Throwable throwable);
 
-    public void fatal(Marker var1, String var2, Object var3);
+   void fatal(Marker marker, String message, Object p0);
 
-    public void fatal(Marker var1, String var2, Object var3, Object var4);
+   void fatal(Marker marker, String message, Object p0, Object p1);
 
-    public void fatal(Marker var1, String var2, Object var3, Object var4, Object var5);
+   void fatal(Marker marker, String message, Object p0, Object p1, Object p2);
 
-    public void fatal(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6);
+   void fatal(Marker marker, String message, Object p0, Object p1, Object p2, Object p3);
 
-    public void fatal(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7);
+   void fatal(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public void fatal(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8);
+   void fatal(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public void fatal(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   void fatal(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public void fatal(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   void fatal(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7);
 
-    public void fatal(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   void fatal(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8);
 
-    public void fatal(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12);
+   void fatal(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9);
 
-    public void fatal(String var1, Object var2);
+   void fatal(String message, Object p0);
 
-    public void fatal(String var1, Object var2, Object var3);
+   void fatal(String message, Object p0, Object p1);
 
-    public void fatal(String var1, Object var2, Object var3, Object var4);
+   void fatal(String message, Object p0, Object p1, Object p2);
 
-    public void fatal(String var1, Object var2, Object var3, Object var4, Object var5);
+   void fatal(String message, Object p0, Object p1, Object p2, Object p3);
 
-    public void fatal(String var1, Object var2, Object var3, Object var4, Object var5, Object var6);
+   void fatal(String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public void fatal(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7);
+   void fatal(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public void fatal(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8);
+   void fatal(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public void fatal(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   void fatal(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7);
 
-    public void fatal(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   void fatal(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8);
 
-    public void fatal(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   void fatal(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9);
 
-    public Level getLevel();
+   Level getLevel();
 
-    public <MF extends MessageFactory> MF getMessageFactory();
+   <MF extends MessageFactory> MF getMessageFactory();
 
-    public String getName();
+   String getName();
 
-    public void info(Marker var1, Message var2);
+   void info(Marker marker, Message message);
 
-    public void info(Marker var1, Message var2, Throwable var3);
+   void info(Marker marker, Message message, Throwable throwable);
 
-    public void info(Marker var1, MessageSupplier var2);
+   void info(Marker marker, MessageSupplier messageSupplier);
 
-    public void info(Marker var1, MessageSupplier var2, Throwable var3);
+   void info(Marker marker, MessageSupplier messageSupplier, Throwable throwable);
 
-    public void info(Marker var1, CharSequence var2);
+   void info(Marker marker, CharSequence message);
 
-    public void info(Marker var1, CharSequence var2, Throwable var3);
+   void info(Marker marker, CharSequence message, Throwable throwable);
 
-    public void info(Marker var1, Object var2);
+   void info(Marker marker, Object message);
 
-    public void info(Marker var1, Object var2, Throwable var3);
+   void info(Marker marker, Object message, Throwable throwable);
 
-    public void info(Marker var1, String var2);
+   void info(Marker marker, String message);
 
-    public void info(Marker var1, String var2, Object ... var3);
+   void info(Marker marker, String message, Object... params);
 
-    public void info(Marker var1, String var2, Supplier<?> ... var3);
+   void info(Marker marker, String message, Supplier<?>... paramSuppliers);
 
-    public void info(Marker var1, String var2, Throwable var3);
+   void info(Marker marker, String message, Throwable throwable);
 
-    public void info(Marker var1, Supplier<?> var2);
+   void info(Marker marker, Supplier<?> messageSupplier);
 
-    public void info(Marker var1, Supplier<?> var2, Throwable var3);
+   void info(Marker marker, Supplier<?> messageSupplier, Throwable throwable);
 
-    public void info(Message var1);
+   void info(Message message);
 
-    public void info(Message var1, Throwable var2);
+   void info(Message message, Throwable throwable);
 
-    public void info(MessageSupplier var1);
+   void info(MessageSupplier messageSupplier);
 
-    public void info(MessageSupplier var1, Throwable var2);
+   void info(MessageSupplier messageSupplier, Throwable throwable);
 
-    public void info(CharSequence var1);
+   void info(CharSequence message);
 
-    public void info(CharSequence var1, Throwable var2);
+   void info(CharSequence message, Throwable throwable);
 
-    public void info(Object var1);
+   void info(Object message);
 
-    public void info(Object var1, Throwable var2);
+   void info(Object message, Throwable throwable);
 
-    public void info(String var1);
+   void info(String message);
 
-    public void info(String var1, Object ... var2);
+   void info(String message, Object... params);
 
-    public void info(String var1, Supplier<?> ... var2);
+   void info(String message, Supplier<?>... paramSuppliers);
 
-    public void info(String var1, Throwable var2);
+   void info(String message, Throwable throwable);
 
-    public void info(Supplier<?> var1);
+   void info(Supplier<?> messageSupplier);
 
-    public void info(Supplier<?> var1, Throwable var2);
+   void info(Supplier<?> messageSupplier, Throwable throwable);
 
-    public void info(Marker var1, String var2, Object var3);
+   void info(Marker marker, String message, Object p0);
 
-    public void info(Marker var1, String var2, Object var3, Object var4);
+   void info(Marker marker, String message, Object p0, Object p1);
 
-    public void info(Marker var1, String var2, Object var3, Object var4, Object var5);
+   void info(Marker marker, String message, Object p0, Object p1, Object p2);
 
-    public void info(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6);
+   void info(Marker marker, String message, Object p0, Object p1, Object p2, Object p3);
 
-    public void info(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7);
+   void info(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public void info(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8);
+   void info(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public void info(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   void info(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public void info(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   void info(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7);
 
-    public void info(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   void info(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8);
 
-    public void info(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12);
+   void info(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9);
 
-    public void info(String var1, Object var2);
+   void info(String message, Object p0);
 
-    public void info(String var1, Object var2, Object var3);
+   void info(String message, Object p0, Object p1);
 
-    public void info(String var1, Object var2, Object var3, Object var4);
+   void info(String message, Object p0, Object p1, Object p2);
 
-    public void info(String var1, Object var2, Object var3, Object var4, Object var5);
+   void info(String message, Object p0, Object p1, Object p2, Object p3);
 
-    public void info(String var1, Object var2, Object var3, Object var4, Object var5, Object var6);
+   void info(String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public void info(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7);
+   void info(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public void info(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8);
+   void info(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public void info(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   void info(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7);
 
-    public void info(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   void info(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8);
 
-    public void info(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   void info(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9);
 
-    public boolean isDebugEnabled();
+   boolean isDebugEnabled();
 
-    public boolean isDebugEnabled(Marker var1);
+   boolean isDebugEnabled(Marker marker);
 
-    public boolean isEnabled(Level var1);
+   boolean isEnabled(Level level);
 
-    public boolean isEnabled(Level var1, Marker var2);
+   boolean isEnabled(Level level, Marker marker);
 
-    public boolean isErrorEnabled();
+   boolean isErrorEnabled();
 
-    public boolean isErrorEnabled(Marker var1);
+   boolean isErrorEnabled(Marker marker);
 
-    public boolean isFatalEnabled();
+   boolean isFatalEnabled();
 
-    public boolean isFatalEnabled(Marker var1);
+   boolean isFatalEnabled(Marker marker);
 
-    public boolean isInfoEnabled();
+   boolean isInfoEnabled();
 
-    public boolean isInfoEnabled(Marker var1);
+   boolean isInfoEnabled(Marker marker);
 
-    public boolean isTraceEnabled();
+   boolean isTraceEnabled();
 
-    public boolean isTraceEnabled(Marker var1);
+   boolean isTraceEnabled(Marker marker);
 
-    public boolean isWarnEnabled();
+   boolean isWarnEnabled();
 
-    public boolean isWarnEnabled(Marker var1);
+   boolean isWarnEnabled(Marker marker);
 
-    public void log(Level var1, Marker var2, Message var3);
+   void log(Level level, Marker marker, Message message);
 
-    public void log(Level var1, Marker var2, Message var3, Throwable var4);
+   void log(Level level, Marker marker, Message message, Throwable throwable);
 
-    public void log(Level var1, Marker var2, MessageSupplier var3);
+   void log(Level level, Marker marker, MessageSupplier messageSupplier);
 
-    public void log(Level var1, Marker var2, MessageSupplier var3, Throwable var4);
+   void log(Level level, Marker marker, MessageSupplier messageSupplier, Throwable throwable);
 
-    public void log(Level var1, Marker var2, CharSequence var3);
+   void log(Level level, Marker marker, CharSequence message);
 
-    public void log(Level var1, Marker var2, CharSequence var3, Throwable var4);
+   void log(Level level, Marker marker, CharSequence message, Throwable throwable);
 
-    public void log(Level var1, Marker var2, Object var3);
+   void log(Level level, Marker marker, Object message);
 
-    public void log(Level var1, Marker var2, Object var3, Throwable var4);
+   void log(Level level, Marker marker, Object message, Throwable throwable);
 
-    public void log(Level var1, Marker var2, String var3);
+   void log(Level level, Marker marker, String message);
 
-    public void log(Level var1, Marker var2, String var3, Object ... var4);
+   void log(Level level, Marker marker, String message, Object... params);
 
-    public void log(Level var1, Marker var2, String var3, Supplier<?> ... var4);
+   void log(Level level, Marker marker, String message, Supplier<?>... paramSuppliers);
 
-    public void log(Level var1, Marker var2, String var3, Throwable var4);
+   void log(Level level, Marker marker, String message, Throwable throwable);
 
-    public void log(Level var1, Marker var2, Supplier<?> var3);
+   void log(Level level, Marker marker, Supplier<?> messageSupplier);
 
-    public void log(Level var1, Marker var2, Supplier<?> var3, Throwable var4);
+   void log(Level level, Marker marker, Supplier<?> messageSupplier, Throwable throwable);
 
-    public void log(Level var1, Message var2);
+   void log(Level level, Message message);
 
-    public void log(Level var1, Message var2, Throwable var3);
+   void log(Level level, Message message, Throwable throwable);
 
-    public void log(Level var1, MessageSupplier var2);
+   void log(Level level, MessageSupplier messageSupplier);
 
-    public void log(Level var1, MessageSupplier var2, Throwable var3);
+   void log(Level level, MessageSupplier messageSupplier, Throwable throwable);
 
-    public void log(Level var1, CharSequence var2);
+   void log(Level level, CharSequence message);
 
-    public void log(Level var1, CharSequence var2, Throwable var3);
+   void log(Level level, CharSequence message, Throwable throwable);
 
-    public void log(Level var1, Object var2);
+   void log(Level level, Object message);
 
-    public void log(Level var1, Object var2, Throwable var3);
+   void log(Level level, Object message, Throwable throwable);
 
-    public void log(Level var1, String var2);
+   void log(Level level, String message);
 
-    public void log(Level var1, String var2, Object ... var3);
+   void log(Level level, String message, Object... params);
 
-    public void log(Level var1, String var2, Supplier<?> ... var3);
+   void log(Level level, String message, Supplier<?>... paramSuppliers);
 
-    public void log(Level var1, String var2, Throwable var3);
+   void log(Level level, String message, Throwable throwable);
 
-    public void log(Level var1, Supplier<?> var2);
+   void log(Level level, Supplier<?> messageSupplier);
 
-    public void log(Level var1, Supplier<?> var2, Throwable var3);
+   void log(Level level, Supplier<?> messageSupplier, Throwable throwable);
 
-    public void log(Level var1, Marker var2, String var3, Object var4);
+   void log(Level level, Marker marker, String message, Object p0);
 
-    public void log(Level var1, Marker var2, String var3, Object var4, Object var5);
+   void log(Level level, Marker marker, String message, Object p0, Object p1);
 
-    public void log(Level var1, Marker var2, String var3, Object var4, Object var5, Object var6);
+   void log(Level level, Marker marker, String message, Object p0, Object p1, Object p2);
 
-    public void log(Level var1, Marker var2, String var3, Object var4, Object var5, Object var6, Object var7);
+   void log(Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3);
 
-    public void log(Level var1, Marker var2, String var3, Object var4, Object var5, Object var6, Object var7, Object var8);
+   void log(Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public void log(Level var1, Marker var2, String var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   void log(Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public void log(Level var1, Marker var2, String var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   void log(Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public void log(Level var1, Marker var2, String var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   void log(Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7);
 
-    public void log(Level var1, Marker var2, String var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12);
+   void log(Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8);
 
-    public void log(Level var1, Marker var2, String var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12, Object var13);
+   void log(
+      Level level, Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9
+   );
 
-    public void log(Level var1, String var2, Object var3);
+   void log(Level level, String message, Object p0);
 
-    public void log(Level var1, String var2, Object var3, Object var4);
+   void log(Level level, String message, Object p0, Object p1);
 
-    public void log(Level var1, String var2, Object var3, Object var4, Object var5);
+   void log(Level level, String message, Object p0, Object p1, Object p2);
 
-    public void log(Level var1, String var2, Object var3, Object var4, Object var5, Object var6);
+   void log(Level level, String message, Object p0, Object p1, Object p2, Object p3);
 
-    public void log(Level var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7);
+   void log(Level level, String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public void log(Level var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8);
+   void log(Level level, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public void log(Level var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   void log(Level level, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public void log(Level var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   void log(Level level, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7);
 
-    public void log(Level var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   void log(Level level, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8);
 
-    public void log(Level var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12);
+   void log(Level level, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9);
 
-    public void printf(Level var1, Marker var2, String var3, Object ... var4);
+   void printf(Level level, Marker marker, String format, Object... params);
 
-    public void printf(Level var1, String var2, Object ... var3);
+   void printf(Level level, String format, Object... params);
 
-    public <T extends Throwable> T throwing(Level var1, T var2);
+   <T extends Throwable> T throwing(Level level, T throwable);
 
-    public <T extends Throwable> T throwing(T var1);
+   <T extends Throwable> T throwing(T throwable);
 
-    public void trace(Marker var1, Message var2);
+   void trace(Marker marker, Message message);
 
-    public void trace(Marker var1, Message var2, Throwable var3);
+   void trace(Marker marker, Message message, Throwable throwable);
 
-    public void trace(Marker var1, MessageSupplier var2);
+   void trace(Marker marker, MessageSupplier messageSupplier);
 
-    public void trace(Marker var1, MessageSupplier var2, Throwable var3);
+   void trace(Marker marker, MessageSupplier messageSupplier, Throwable throwable);
 
-    public void trace(Marker var1, CharSequence var2);
+   void trace(Marker marker, CharSequence message);
 
-    public void trace(Marker var1, CharSequence var2, Throwable var3);
+   void trace(Marker marker, CharSequence message, Throwable throwable);
 
-    public void trace(Marker var1, Object var2);
+   void trace(Marker marker, Object message);
 
-    public void trace(Marker var1, Object var2, Throwable var3);
+   void trace(Marker marker, Object message, Throwable throwable);
 
-    public void trace(Marker var1, String var2);
+   void trace(Marker marker, String message);
 
-    public void trace(Marker var1, String var2, Object ... var3);
+   void trace(Marker marker, String message, Object... params);
 
-    public void trace(Marker var1, String var2, Supplier<?> ... var3);
+   void trace(Marker marker, String message, Supplier<?>... paramSuppliers);
 
-    public void trace(Marker var1, String var2, Throwable var3);
+   void trace(Marker marker, String message, Throwable throwable);
 
-    public void trace(Marker var1, Supplier<?> var2);
+   void trace(Marker marker, Supplier<?> messageSupplier);
 
-    public void trace(Marker var1, Supplier<?> var2, Throwable var3);
+   void trace(Marker marker, Supplier<?> messageSupplier, Throwable throwable);
 
-    public void trace(Message var1);
+   void trace(Message message);
 
-    public void trace(Message var1, Throwable var2);
+   void trace(Message message, Throwable throwable);
 
-    public void trace(MessageSupplier var1);
+   void trace(MessageSupplier messageSupplier);
 
-    public void trace(MessageSupplier var1, Throwable var2);
+   void trace(MessageSupplier messageSupplier, Throwable throwable);
 
-    public void trace(CharSequence var1);
+   void trace(CharSequence message);
 
-    public void trace(CharSequence var1, Throwable var2);
+   void trace(CharSequence message, Throwable throwable);
 
-    public void trace(Object var1);
+   void trace(Object message);
 
-    public void trace(Object var1, Throwable var2);
+   void trace(Object message, Throwable throwable);
 
-    public void trace(String var1);
+   void trace(String message);
 
-    public void trace(String var1, Object ... var2);
+   void trace(String message, Object... params);
 
-    public void trace(String var1, Supplier<?> ... var2);
+   void trace(String message, Supplier<?>... paramSuppliers);
 
-    public void trace(String var1, Throwable var2);
+   void trace(String message, Throwable throwable);
 
-    public void trace(Supplier<?> var1);
+   void trace(Supplier<?> messageSupplier);
 
-    public void trace(Supplier<?> var1, Throwable var2);
+   void trace(Supplier<?> messageSupplier, Throwable throwable);
 
-    public void trace(Marker var1, String var2, Object var3);
+   void trace(Marker marker, String message, Object p0);
 
-    public void trace(Marker var1, String var2, Object var3, Object var4);
+   void trace(Marker marker, String message, Object p0, Object p1);
 
-    public void trace(Marker var1, String var2, Object var3, Object var4, Object var5);
+   void trace(Marker marker, String message, Object p0, Object p1, Object p2);
 
-    public void trace(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6);
+   void trace(Marker marker, String message, Object p0, Object p1, Object p2, Object p3);
 
-    public void trace(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7);
+   void trace(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public void trace(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8);
+   void trace(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public void trace(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   void trace(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public void trace(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   void trace(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7);
 
-    public void trace(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   void trace(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8);
 
-    public void trace(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12);
+   void trace(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9);
 
-    public void trace(String var1, Object var2);
+   void trace(String message, Object p0);
 
-    public void trace(String var1, Object var2, Object var3);
+   void trace(String message, Object p0, Object p1);
 
-    public void trace(String var1, Object var2, Object var3, Object var4);
+   void trace(String message, Object p0, Object p1, Object p2);
 
-    public void trace(String var1, Object var2, Object var3, Object var4, Object var5);
+   void trace(String message, Object p0, Object p1, Object p2, Object p3);
 
-    public void trace(String var1, Object var2, Object var3, Object var4, Object var5, Object var6);
+   void trace(String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public void trace(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7);
+   void trace(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public void trace(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8);
+   void trace(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public void trace(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   void trace(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7);
 
-    public void trace(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   void trace(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8);
 
-    public void trace(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   void trace(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9);
 
-    public EntryMessage traceEntry();
+   EntryMessage traceEntry();
 
-    public EntryMessage traceEntry(String var1, Object ... var2);
+   EntryMessage traceEntry(String format, Object... params);
 
-    public EntryMessage traceEntry(Supplier<?> ... var1);
+   EntryMessage traceEntry(Supplier<?>... paramSuppliers);
 
-    public EntryMessage traceEntry(String var1, Supplier<?> ... var2);
+   EntryMessage traceEntry(String format, Supplier<?>... paramSuppliers);
 
-    public EntryMessage traceEntry(Message var1);
+   EntryMessage traceEntry(Message message);
 
-    public void traceExit();
+   void traceExit();
 
-    public <R> R traceExit(R var1);
+   <R> R traceExit(R result);
 
-    public <R> R traceExit(String var1, R var2);
+   <R> R traceExit(String format, R result);
 
-    public void traceExit(EntryMessage var1);
+   void traceExit(EntryMessage message);
 
-    public <R> R traceExit(EntryMessage var1, R var2);
+   <R> R traceExit(EntryMessage message, R result);
 
-    public <R> R traceExit(Message var1, R var2);
+   <R> R traceExit(Message message, R result);
 
-    public void warn(Marker var1, Message var2);
+   void warn(Marker marker, Message message);
 
-    public void warn(Marker var1, Message var2, Throwable var3);
+   void warn(Marker marker, Message message, Throwable throwable);
 
-    public void warn(Marker var1, MessageSupplier var2);
+   void warn(Marker marker, MessageSupplier messageSupplier);
 
-    public void warn(Marker var1, MessageSupplier var2, Throwable var3);
+   void warn(Marker marker, MessageSupplier messageSupplier, Throwable throwable);
 
-    public void warn(Marker var1, CharSequence var2);
+   void warn(Marker marker, CharSequence message);
 
-    public void warn(Marker var1, CharSequence var2, Throwable var3);
+   void warn(Marker marker, CharSequence message, Throwable throwable);
 
-    public void warn(Marker var1, Object var2);
+   void warn(Marker marker, Object message);
 
-    public void warn(Marker var1, Object var2, Throwable var3);
+   void warn(Marker marker, Object message, Throwable throwable);
 
-    public void warn(Marker var1, String var2);
+   void warn(Marker marker, String message);
 
-    public void warn(Marker var1, String var2, Object ... var3);
+   void warn(Marker marker, String message, Object... params);
 
-    public void warn(Marker var1, String var2, Supplier<?> ... var3);
+   void warn(Marker marker, String message, Supplier<?>... paramSuppliers);
 
-    public void warn(Marker var1, String var2, Throwable var3);
+   void warn(Marker marker, String message, Throwable throwable);
 
-    public void warn(Marker var1, Supplier<?> var2);
+   void warn(Marker marker, Supplier<?> messageSupplier);
 
-    public void warn(Marker var1, Supplier<?> var2, Throwable var3);
+   void warn(Marker marker, Supplier<?> messageSupplier, Throwable throwable);
 
-    public void warn(Message var1);
+   void warn(Message message);
 
-    public void warn(Message var1, Throwable var2);
+   void warn(Message message, Throwable throwable);
 
-    public void warn(MessageSupplier var1);
+   void warn(MessageSupplier messageSupplier);
 
-    public void warn(MessageSupplier var1, Throwable var2);
+   void warn(MessageSupplier messageSupplier, Throwable throwable);
 
-    public void warn(CharSequence var1);
+   void warn(CharSequence message);
 
-    public void warn(CharSequence var1, Throwable var2);
+   void warn(CharSequence message, Throwable throwable);
 
-    public void warn(Object var1);
+   void warn(Object message);
 
-    public void warn(Object var1, Throwable var2);
+   void warn(Object message, Throwable throwable);
 
-    public void warn(String var1);
+   void warn(String message);
 
-    public void warn(String var1, Object ... var2);
+   void warn(String message, Object... params);
 
-    public void warn(String var1, Supplier<?> ... var2);
+   void warn(String message, Supplier<?>... paramSuppliers);
 
-    public void warn(String var1, Throwable var2);
+   void warn(String message, Throwable throwable);
 
-    public void warn(Supplier<?> var1);
+   void warn(Supplier<?> messageSupplier);
 
-    public void warn(Supplier<?> var1, Throwable var2);
+   void warn(Supplier<?> messageSupplier, Throwable throwable);
 
-    public void warn(Marker var1, String var2, Object var3);
+   void warn(Marker marker, String message, Object p0);
 
-    public void warn(Marker var1, String var2, Object var3, Object var4);
+   void warn(Marker marker, String message, Object p0, Object p1);
 
-    public void warn(Marker var1, String var2, Object var3, Object var4, Object var5);
+   void warn(Marker marker, String message, Object p0, Object p1, Object p2);
 
-    public void warn(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6);
+   void warn(Marker marker, String message, Object p0, Object p1, Object p2, Object p3);
 
-    public void warn(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7);
+   void warn(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public void warn(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8);
+   void warn(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public void warn(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   void warn(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public void warn(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   void warn(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7);
 
-    public void warn(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   void warn(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8);
 
-    public void warn(Marker var1, String var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11, Object var12);
+   void warn(Marker marker, String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9);
 
-    public void warn(String var1, Object var2);
+   void warn(String message, Object p0);
 
-    public void warn(String var1, Object var2, Object var3);
+   void warn(String message, Object p0, Object p1);
 
-    public void warn(String var1, Object var2, Object var3, Object var4);
+   void warn(String message, Object p0, Object p1, Object p2);
 
-    public void warn(String var1, Object var2, Object var3, Object var4, Object var5);
+   void warn(String message, Object p0, Object p1, Object p2, Object p3);
 
-    public void warn(String var1, Object var2, Object var3, Object var4, Object var5, Object var6);
+   void warn(String message, Object p0, Object p1, Object p2, Object p3, Object p4);
 
-    public void warn(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7);
+   void warn(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5);
 
-    public void warn(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8);
+   void warn(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6);
 
-    public void warn(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9);
+   void warn(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7);
 
-    public void warn(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10);
+   void warn(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8);
 
-    public void warn(String var1, Object var2, Object var3, Object var4, Object var5, Object var6, Object var7, Object var8, Object var9, Object var10, Object var11);
+   void warn(String message, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9);
 
-    default public void logMessage(Level level, Marker marker, String fqcn, StackTraceElement location, Message message, Throwable throwable) {
-    }
+   default void logMessage(Level level, Marker marker, String fqcn, StackTraceElement location, Message message, Throwable throwable) {
+   }
 
-    default public LogBuilder atTrace() {
-        return LogBuilder.NOOP;
-    }
+   default LogBuilder atTrace() {
+      return LogBuilder.NOOP;
+   }
 
-    default public LogBuilder atDebug() {
-        return LogBuilder.NOOP;
-    }
+   default LogBuilder atDebug() {
+      return LogBuilder.NOOP;
+   }
 
-    default public LogBuilder atInfo() {
-        return LogBuilder.NOOP;
-    }
+   default LogBuilder atInfo() {
+      return LogBuilder.NOOP;
+   }
 
-    default public LogBuilder atWarn() {
-        return LogBuilder.NOOP;
-    }
+   default LogBuilder atWarn() {
+      return LogBuilder.NOOP;
+   }
 
-    default public LogBuilder atError() {
-        return LogBuilder.NOOP;
-    }
+   default LogBuilder atError() {
+      return LogBuilder.NOOP;
+   }
 
-    default public LogBuilder atFatal() {
-        return LogBuilder.NOOP;
-    }
+   default LogBuilder atFatal() {
+      return LogBuilder.NOOP;
+   }
 
-    default public LogBuilder always() {
-        return LogBuilder.NOOP;
-    }
+   default LogBuilder always() {
+      return LogBuilder.NOOP;
+   }
 
-    default public LogBuilder atLevel(Level level) {
-        return LogBuilder.NOOP;
-    }
+   default LogBuilder atLevel(Level level) {
+      return LogBuilder.NOOP;
+   }
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.combat;
 
 import com.badlogic.gdx.Gdx;
@@ -11,48 +8,47 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import com.megacrit.cardcrawl.vfx.FastSmokeParticle;
 
-public class SmokingEmberEffect
-extends AbstractGameEffect {
-    private float x;
-    private float vX;
-    private float y;
-    private float vY;
-    private float gravity;
-    private static final float INTERVAL = 0.01f;
-    private float smokeTimer = 0.0f;
+public class SmokingEmberEffect extends AbstractGameEffect {
+   private float x;
+   private float vX;
+   private float y;
+   private float vY;
+   private float gravity;
+   private static final float INTERVAL = 0.01F;
+   private float smokeTimer = 0.0F;
 
-    public SmokingEmberEffect(float x, float y) {
-        this.x = x;
-        this.y = y;
-        this.vX = MathUtils.random(-600.0f, 600.0f) * Settings.scale;
-        this.vY = MathUtils.random(-200.0f, 600.0f) * Settings.scale;
-        this.gravity = 800.0f * Settings.scale;
-        this.scale = MathUtils.random(0.2f, 0.4f) * Settings.scale;
-        this.duration = MathUtils.random(0.3f, 0.6f);
-    }
+   public SmokingEmberEffect(float x, float y) {
+      this.x = x;
+      this.y = y;
+      this.vX = MathUtils.random(-600.0F, 600.0F) * Settings.scale;
+      this.vY = MathUtils.random(-200.0F, 600.0F) * Settings.scale;
+      this.gravity = 800.0F * Settings.scale;
+      this.scale = MathUtils.random(0.2F, 0.4F) * Settings.scale;
+      this.duration = MathUtils.random(0.3F, 0.6F);
+   }
 
-    @Override
-    public void update() {
-        this.x += this.vX * Gdx.graphics.getDeltaTime();
-        this.y += this.vY * Gdx.graphics.getDeltaTime();
-        this.vY -= this.gravity * Gdx.graphics.getDeltaTime();
-        this.smokeTimer -= Gdx.graphics.getDeltaTime();
-        if (this.smokeTimer < 0.0f) {
-            this.smokeTimer = 0.01f;
-            AbstractDungeon.effectsQueue.add(new FastSmokeParticle(this.x, this.y));
-        }
-        this.duration -= Gdx.graphics.getDeltaTime();
-        if (this.duration < 0.0f) {
-            this.isDone = true;
-        }
-    }
+   @Override
+   public void update() {
+      this.x = this.x + this.vX * Gdx.graphics.getDeltaTime();
+      this.y = this.y + this.vY * Gdx.graphics.getDeltaTime();
+      this.vY = this.vY - this.gravity * Gdx.graphics.getDeltaTime();
+      this.smokeTimer = this.smokeTimer - Gdx.graphics.getDeltaTime();
+      if (this.smokeTimer < 0.0F) {
+         this.smokeTimer = 0.01F;
+         AbstractDungeon.effectsQueue.add(new FastSmokeParticle(this.x, this.y));
+      }
 
-    @Override
-    public void render(SpriteBatch sb) {
-    }
+      this.duration = this.duration - Gdx.graphics.getDeltaTime();
+      if (this.duration < 0.0F) {
+         this.isDone = true;
+      }
+   }
 
-    @Override
-    public void dispose() {
-    }
+   @Override
+   public void render(SpriteBatch sb) {
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

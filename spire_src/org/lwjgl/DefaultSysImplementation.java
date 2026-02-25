@@ -1,33 +1,31 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl;
 
-import org.lwjgl.SysImplementation;
+abstract class DefaultSysImplementation implements SysImplementation {
+   @Override
+   public native int getJNIVersion();
 
-abstract class DefaultSysImplementation
-implements SysImplementation {
-    DefaultSysImplementation() {
-    }
+   @Override
+   public native int getPointerSize();
 
-    public native int getJNIVersion();
+   @Override
+   public native void setDebug(boolean var1);
 
-    public native int getPointerSize();
+   @Override
+   public long getTimerResolution() {
+      return 1000L;
+   }
 
-    public native void setDebug(boolean var1);
+   @Override
+   public boolean has64Bit() {
+      return false;
+   }
 
-    public long getTimerResolution() {
-        return 1000L;
-    }
+   @Override
+   public abstract long getTime();
 
-    public boolean has64Bit() {
-        return false;
-    }
+   @Override
+   public abstract void alert(String var1, String var2);
 
-    public abstract long getTime();
-
-    public abstract void alert(String var1, String var2);
-
-    public abstract String getClipboard();
+   @Override
+   public abstract String getClipboard();
 }
-

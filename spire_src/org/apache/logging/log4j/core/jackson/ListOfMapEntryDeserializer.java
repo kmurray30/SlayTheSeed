@@ -1,13 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.fasterxml.jackson.core.JsonParser
- *  com.fasterxml.jackson.core.JsonProcessingException
- *  com.fasterxml.jackson.core.type.TypeReference
- *  com.fasterxml.jackson.databind.DeserializationContext
- *  com.fasterxml.jackson.databind.deser.std.StdDeserializer
- */
 package org.apache.logging.log4j.core.jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -19,23 +9,22 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.logging.log4j.core.jackson.MapEntry;
 
-public class ListOfMapEntryDeserializer
-extends StdDeserializer<Map<String, String>> {
-    private static final long serialVersionUID = 1L;
+public class ListOfMapEntryDeserializer extends StdDeserializer<Map<String, String>> {
+   private static final long serialVersionUID = 1L;
 
-    ListOfMapEntryDeserializer() {
-        super(Map.class);
-    }
+   ListOfMapEntryDeserializer() {
+      super(Map.class);
+   }
 
-    public Map<String, String> deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        List list = (List)jp.readValueAs((TypeReference)new TypeReference<List<MapEntry>>(){});
-        HashMap<String, String> map = new HashMap<String, String>(list.size());
-        for (MapEntry mapEntry : list) {
-            map.put(mapEntry.getKey(), mapEntry.getValue());
-        }
-        return map;
-    }
+   public Map<String, String> deserialize(final JsonParser jp, final DeserializationContext ctxt) throws IOException, JsonProcessingException {
+      List<MapEntry> list = (List<MapEntry>)jp.readValueAs(new TypeReference<List<MapEntry>>() {});
+      HashMap<String, String> map = new HashMap<>(list.size());
+
+      for (MapEntry mapEntry : list) {
+         map.put(mapEntry.getKey(), mapEntry.getValue());
+      }
+
+      return map;
+   }
 }
-

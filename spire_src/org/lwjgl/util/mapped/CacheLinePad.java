@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl.util.mapped;
 
 import java.lang.annotation.ElementType;
@@ -8,11 +5,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Retention(value=RetentionPolicy.RUNTIME)
-@Target(value={ElementType.FIELD})
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
 public @interface CacheLinePad {
-    public boolean before() default false;
+   boolean before() default false;
 
-    public boolean after() default true;
+   boolean after() default true;
 }
-

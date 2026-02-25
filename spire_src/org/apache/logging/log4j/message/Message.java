@@ -1,18 +1,13 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.message;
 
 import java.io.Serializable;
 
-public interface Message
-extends Serializable {
-    public String getFormattedMessage();
+public interface Message extends Serializable {
+   String getFormattedMessage();
 
-    public String getFormat();
+   String getFormat();
 
-    public Object[] getParameters();
+   Object[] getParameters();
 
-    public Throwable getThrowable();
+   Throwable getThrowable();
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.config.plugins.processor;
 
 import java.io.IOException;
@@ -18,128 +15,130 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementVisitor;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.SimpleElementVisitor7;
-import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
+import javax.tools.Diagnostic.Kind;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginAliases;
-import org.apache.logging.log4j.core.config.plugins.processor.PluginCache;
-import org.apache.logging.log4j.core.config.plugins.processor.PluginEntry;
 
-@SupportedAnnotationTypes(value={"org.apache.logging.log4j.core.config.plugins.*"})
-public class PluginProcessor
-extends AbstractProcessor {
-    public static final String PLUGIN_CACHE_FILE = "META-INF/org/apache/logging/log4j/core/config/plugins/Log4j2Plugins.dat";
-    private final PluginCache pluginCache = new PluginCache();
+@SupportedAnnotationTypes("org.apache.logging.log4j.core.config.plugins.*")
+public class PluginProcessor extends AbstractProcessor {
+   public static final String PLUGIN_CACHE_FILE = "META-INF/org/apache/logging/log4j/core/config/plugins/Log4j2Plugins.dat";
+   private final PluginCache pluginCache = new PluginCache();
 
-    @Override
-    public SourceVersion getSupportedSourceVersion() {
-        return SourceVersion.latest();
-    }
+   @Override
+   public SourceVersion getSupportedSourceVersion() {
+      return SourceVersion.latest();
+   }
 
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        Messager messager = this.processingEnv.getMessager();
-        messager.printMessage(Diagnostic.Kind.NOTE, "Processing Log4j annotations");
-        try {
-            Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Plugin.class);
-            if (elements.isEmpty()) {
-                messager.printMessage(Diagnostic.Kind.NOTE, "No elements to process");
-                return false;
-            }
+   @Override
+   public boolean process(final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnv) {
+      Messager messager = this.processingEnv.getMessager();
+      messager.printMessage(Kind.NOTE, "Processing Log4j annotations");
+
+      try {
+         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Plugin.class);
+         if (elements.isEmpty()) {
+            messager.printMessage(Kind.NOTE, "No elements to process");
+            return false;
+         } else {
             this.collectPlugins(elements);
             this.writeCacheFile(elements.toArray(new Element[elements.size()]));
-            messager.printMessage(Diagnostic.Kind.NOTE, "Annotations processed");
+            messager.printMessage(Kind.NOTE, "Annotations processed");
             return true;
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-            this.error(ex.getMessage());
-            return false;
-        }
-    }
+         }
+      } catch (Exception var5) {
+         var5.printStackTrace();
+         this.error(var5.getMessage());
+         return false;
+      }
+   }
 
-    private void error(CharSequence message) {
-        this.processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, message);
-    }
+   private void error(final CharSequence message) {
+      this.processingEnv.getMessager().printMessage(Kind.ERROR, message);
+   }
 
-    private void collectPlugins(Iterable<? extends Element> elements) {
-        Elements elementUtils = this.processingEnv.getElementUtils();
-        PluginElementVisitor pluginVisitor = new PluginElementVisitor(elementUtils);
-        PluginAliasesElementVisitor pluginAliasesVisitor = new PluginAliasesElementVisitor(elementUtils);
-        for (Element element : elements) {
-            Plugin plugin = element.getAnnotation(Plugin.class);
-            if (plugin == null) continue;
+   private void collectPlugins(final Iterable<? extends Element> elements) {
+      Elements elementUtils = this.processingEnv.getElementUtils();
+      ElementVisitor<PluginEntry, Plugin> pluginVisitor = new PluginProcessor.PluginElementVisitor(elementUtils);
+      ElementVisitor<Collection<PluginEntry>, Plugin> pluginAliasesVisitor = new PluginProcessor.PluginAliasesElementVisitor(elementUtils);
+
+      for (Element element : elements) {
+         Plugin plugin = element.getAnnotation(Plugin.class);
+         if (plugin != null) {
             PluginEntry entry = element.accept(pluginVisitor, plugin);
             Map<String, PluginEntry> category = this.pluginCache.getCategory(entry.getCategory());
             category.put(entry.getKey(), entry);
-            Collection<PluginEntry> entries = element.accept(pluginAliasesVisitor, plugin);
-            for (PluginEntry pluginEntry : entries) {
-                category.put(pluginEntry.getKey(), pluginEntry);
+
+            for (PluginEntry pluginEntry : element.accept(pluginAliasesVisitor, plugin)) {
+               category.put(pluginEntry.getKey(), pluginEntry);
             }
-        }
-    }
+         }
+      }
+   }
 
-    private void writeCacheFile(Element ... elements) throws IOException {
-        FileObject fileObject = this.processingEnv.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", PLUGIN_CACHE_FILE, elements);
-        try (OutputStream out = fileObject.openOutputStream();){
-            this.pluginCache.writeCache(out);
-        }
-    }
+   private void writeCacheFile(final Element... elements) throws IOException {
+      FileObject fileObject = this.processingEnv
+         .getFiler()
+         .createResource(StandardLocation.CLASS_OUTPUT, "", "META-INF/org/apache/logging/log4j/core/config/plugins/Log4j2Plugins.dat", elements);
 
-    private static class PluginAliasesElementVisitor
-    extends SimpleElementVisitor7<Collection<PluginEntry>, Plugin> {
-        private final Elements elements;
+      try (OutputStream out = fileObject.openOutputStream()) {
+         this.pluginCache.writeCache(out);
+      }
+   }
 
-        private PluginAliasesElementVisitor(Elements elements) {
-            super(Collections.emptyList());
-            this.elements = elements;
-        }
+   private static class PluginAliasesElementVisitor extends SimpleElementVisitor7<Collection<PluginEntry>, Plugin> {
+      private final Elements elements;
 
-        @Override
-        public Collection<PluginEntry> visitType(TypeElement e, Plugin plugin) {
-            PluginAliases aliases = e.getAnnotation(PluginAliases.class);
-            if (aliases == null) {
-                return (Collection)this.DEFAULT_VALUE;
-            }
-            ArrayList<PluginEntry> entries = new ArrayList<PluginEntry>(aliases.value().length);
+      private PluginAliasesElementVisitor(final Elements elements) {
+         super(Collections.emptyList());
+         this.elements = elements;
+      }
+
+      public Collection<PluginEntry> visitType(final TypeElement e, final Plugin plugin) {
+         PluginAliases aliases = e.getAnnotation(PluginAliases.class);
+         if (aliases == null) {
+            return this.DEFAULT_VALUE;
+         } else {
+            Collection<PluginEntry> entries = new ArrayList<>(aliases.value().length);
+
             for (String alias : aliases.value()) {
-                PluginEntry entry = new PluginEntry();
-                entry.setKey(alias.toLowerCase(Locale.US));
-                entry.setClassName(this.elements.getBinaryName(e).toString());
-                entry.setName("".equals(plugin.elementType()) ? alias : plugin.elementType());
-                entry.setPrintable(plugin.printObject());
-                entry.setDefer(plugin.deferChildren());
-                entry.setCategory(plugin.category());
-                entries.add(entry);
+               PluginEntry entry = new PluginEntry();
+               entry.setKey(alias.toLowerCase(Locale.US));
+               entry.setClassName(this.elements.getBinaryName(e).toString());
+               entry.setName("".equals(plugin.elementType()) ? alias : plugin.elementType());
+               entry.setPrintable(plugin.printObject());
+               entry.setDefer(plugin.deferChildren());
+               entry.setCategory(plugin.category());
+               entries.add(entry);
             }
+
             return entries;
-        }
-    }
+         }
+      }
+   }
 
-    private static class PluginElementVisitor
-    extends SimpleElementVisitor7<PluginEntry, Plugin> {
-        private final Elements elements;
+   private static class PluginElementVisitor extends SimpleElementVisitor7<PluginEntry, Plugin> {
+      private final Elements elements;
 
-        private PluginElementVisitor(Elements elements) {
-            this.elements = elements;
-        }
+      private PluginElementVisitor(final Elements elements) {
+         this.elements = elements;
+      }
 
-        @Override
-        public PluginEntry visitType(TypeElement e, Plugin plugin) {
-            Objects.requireNonNull(plugin, "Plugin annotation is null.");
-            PluginEntry entry = new PluginEntry();
-            entry.setKey(plugin.name().toLowerCase(Locale.US));
-            entry.setClassName(this.elements.getBinaryName(e).toString());
-            entry.setName("".equals(plugin.elementType()) ? plugin.name() : plugin.elementType());
-            entry.setPrintable(plugin.printObject());
-            entry.setDefer(plugin.deferChildren());
-            entry.setCategory(plugin.category());
-            return entry;
-        }
-    }
+      public PluginEntry visitType(final TypeElement e, final Plugin plugin) {
+         Objects.requireNonNull(plugin, "Plugin annotation is null.");
+         PluginEntry entry = new PluginEntry();
+         entry.setKey(plugin.name().toLowerCase(Locale.US));
+         entry.setClassName(this.elements.getBinaryName(e).toString());
+         entry.setName("".equals(plugin.elementType()) ? plugin.name() : plugin.elementType());
+         entry.setPrintable(plugin.printObject());
+         entry.setDefer(plugin.deferChildren());
+         entry.setCategory(plugin.category());
+         return entry;
+      }
+   }
 }
-

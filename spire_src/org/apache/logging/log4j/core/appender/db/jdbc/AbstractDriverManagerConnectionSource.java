@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.appender.db.jdbc;
 
 import java.sql.Connection;
@@ -8,172 +5,189 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.appender.db.jdbc.AbstractConnectionSource;
 import org.apache.logging.log4j.core.config.Property;
 import org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.validation.constraints.Required;
 import org.apache.logging.log4j.status.StatusLogger;
 
-public class AbstractDriverManagerConnectionSource
-extends AbstractConnectionSource {
-    private static final Logger LOGGER = StatusLogger.getLogger();
-    private final String actualConnectionString;
-    private final String connectionString;
-    private final String driverClassName;
-    private final char[] password;
-    private final Property[] properties;
-    private final char[] userName;
+public class AbstractDriverManagerConnectionSource extends AbstractConnectionSource {
+   private static final Logger LOGGER = StatusLogger.getLogger();
+   private final String actualConnectionString;
+   private final String connectionString;
+   private final String driverClassName;
+   private final char[] password;
+   private final Property[] properties;
+   private final char[] userName;
 
-    public static Logger getLogger() {
-        return LOGGER;
-    }
+   public static Logger getLogger() {
+      return LOGGER;
+   }
 
-    public AbstractDriverManagerConnectionSource(String driverClassName, String connectionString, String actualConnectionString, char[] userName, char[] password, Property[] properties) {
-        this.driverClassName = driverClassName;
-        this.connectionString = connectionString;
-        this.actualConnectionString = actualConnectionString;
-        this.userName = userName;
-        this.password = password;
-        this.properties = properties;
-    }
+   public AbstractDriverManagerConnectionSource(
+      final String driverClassName,
+      final String connectionString,
+      final String actualConnectionString,
+      final char[] userName,
+      final char[] password,
+      final Property[] properties
+   ) {
+      this.driverClassName = driverClassName;
+      this.connectionString = connectionString;
+      this.actualConnectionString = actualConnectionString;
+      this.userName = userName;
+      this.password = password;
+      this.properties = properties;
+   }
 
-    public String getActualConnectionString() {
-        return this.actualConnectionString;
-    }
+   public String getActualConnectionString() {
+      return this.actualConnectionString;
+   }
 
-    @Override
-    public Connection getConnection() throws SQLException {
-        Connection connection;
-        this.loadDriver();
-        String actualConnectionString = this.getActualConnectionString();
-        LOGGER.debug("{} getting connection for '{}'", (Object)this.getClass().getSimpleName(), (Object)actualConnectionString);
-        if (this.properties != null && this.properties.length > 0) {
-            if (this.userName != null || this.password != null) {
-                throw new SQLException("Either set the userName and password, or set the Properties, but not both.");
-            }
-            connection = DriverManager.getConnection(actualConnectionString, this.toProperties(this.properties));
-        } else {
-            connection = DriverManager.getConnection(actualConnectionString, this.toString(this.userName), this.toString(this.password));
-        }
-        LOGGER.debug("{} acquired connection for '{}': {} ({}@{})", (Object)this.getClass().getSimpleName(), (Object)actualConnectionString, (Object)connection, (Object)connection.getClass().getName(), (Object)Integer.toHexString(connection.hashCode()));
-        return connection;
-    }
+   @Override
+   public Connection getConnection() throws SQLException {
+      this.loadDriver();
+      String actualConnectionString = this.getActualConnectionString();
+      LOGGER.debug("{} getting connection for '{}'", this.getClass().getSimpleName(), actualConnectionString);
+      Connection connection;
+      if (this.properties != null && this.properties.length > 0) {
+         if (this.userName != null || this.password != null) {
+            throw new SQLException("Either set the userName and password, or set the Properties, but not both.");
+         }
 
-    public String getConnectionString() {
-        return this.connectionString;
-    }
+         connection = DriverManager.getConnection(actualConnectionString, this.toProperties(this.properties));
+      } else {
+         connection = DriverManager.getConnection(actualConnectionString, this.toString(this.userName), this.toString(this.password));
+      }
 
-    public String getDriverClassName() {
-        return this.driverClassName;
-    }
+      LOGGER.debug(
+         "{} acquired connection for '{}': {} ({}@{})",
+         this.getClass().getSimpleName(),
+         actualConnectionString,
+         connection,
+         connection.getClass().getName(),
+         Integer.toHexString(connection.hashCode())
+      );
+      return connection;
+   }
 
-    public char[] getPassword() {
-        return this.password;
-    }
+   public String getConnectionString() {
+      return this.connectionString;
+   }
 
-    public Property[] getProperties() {
-        return this.properties;
-    }
+   public String getDriverClassName() {
+      return this.driverClassName;
+   }
 
-    public char[] getUserName() {
-        return this.userName;
-    }
+   public char[] getPassword() {
+      return this.password;
+   }
 
-    protected void loadDriver() throws SQLException {
-        this.loadDriver(this.driverClassName);
-    }
+   public Property[] getProperties() {
+      return this.properties;
+   }
 
-    protected void loadDriver(String className) throws SQLException {
-        if (className != null) {
-            LOGGER.debug("Loading driver class {}", (Object)className);
-            try {
-                Class.forName(className);
-            }
-            catch (Exception e) {
-                throw new SQLException(String.format("The %s could not load the JDBC driver %s: %s", this.getClass().getSimpleName(), className, e.toString()), e);
-            }
-        }
-    }
+   public char[] getUserName() {
+      return this.userName;
+   }
 
-    protected Properties toProperties(Property[] properties) {
-        Properties props = new Properties();
-        for (Property property : properties) {
-            props.setProperty(property.getName(), property.getValue());
-        }
-        return props;
-    }
+   protected void loadDriver() throws SQLException {
+      this.loadDriver(this.driverClassName);
+   }
 
-    @Override
-    public String toString() {
-        return this.connectionString;
-    }
+   protected void loadDriver(final String className) throws SQLException {
+      if (className != null) {
+         LOGGER.debug("Loading driver class {}", className);
 
-    protected String toString(char[] value) {
-        return value == null ? null : String.valueOf(value);
-    }
+         try {
+            Class.forName(className);
+         } catch (Exception var3) {
+            throw new SQLException(
+               String.format("The %s could not load the JDBC driver %s: %s", this.getClass().getSimpleName(), className, var3.toString()), var3
+            );
+         }
+      }
+   }
 
-    public static class Builder<B extends Builder<B>> {
-        @PluginBuilderAttribute
-        @Required
-        protected String connectionString;
-        @PluginBuilderAttribute
-        protected String driverClassName;
-        @PluginBuilderAttribute
-        protected char[] password;
-        @PluginElement(value="Properties")
-        protected Property[] properties;
-        @PluginBuilderAttribute
-        protected char[] userName;
+   protected Properties toProperties(final Property[] properties) {
+      Properties props = new Properties();
 
-        protected B asBuilder() {
-            return (B)this;
-        }
+      for (Property property : properties) {
+         props.setProperty(property.getName(), property.getValue());
+      }
 
-        public String getConnectionString() {
-            return this.connectionString;
-        }
+      return props;
+   }
 
-        public String getDriverClassName() {
-            return this.driverClassName;
-        }
+   @Override
+   public String toString() {
+      return this.connectionString;
+   }
 
-        public char[] getPassword() {
-            return this.password;
-        }
+   protected String toString(final char[] value) {
+      return value == null ? null : String.valueOf(value);
+   }
 
-        public Property[] getProperties() {
-            return this.properties;
-        }
+   public static class Builder<B extends AbstractDriverManagerConnectionSource.Builder<B>> {
+      @PluginBuilderAttribute
+      @Required
+      protected String connectionString;
+      @PluginBuilderAttribute
+      protected String driverClassName;
+      @PluginBuilderAttribute
+      protected char[] password;
+      @PluginElement("Properties")
+      protected Property[] properties;
+      @PluginBuilderAttribute
+      protected char[] userName;
 
-        public char[] getUserName() {
-            return this.userName;
-        }
+      protected B asBuilder() {
+         return (B)this;
+      }
 
-        public B setConnectionString(String connectionString) {
-            this.connectionString = connectionString;
-            return this.asBuilder();
-        }
+      public String getConnectionString() {
+         return this.connectionString;
+      }
 
-        public B setDriverClassName(String driverClassName) {
-            this.driverClassName = driverClassName;
-            return this.asBuilder();
-        }
+      public String getDriverClassName() {
+         return this.driverClassName;
+      }
 
-        public B setPassword(char[] password) {
-            this.password = password;
-            return this.asBuilder();
-        }
+      public char[] getPassword() {
+         return this.password;
+      }
 
-        public B setProperties(Property[] properties) {
-            this.properties = properties;
-            return this.asBuilder();
-        }
+      public Property[] getProperties() {
+         return this.properties;
+      }
 
-        public B setUserName(char[] userName) {
-            this.userName = userName;
-            return this.asBuilder();
-        }
-    }
+      public char[] getUserName() {
+         return this.userName;
+      }
+
+      public B setConnectionString(final String connectionString) {
+         this.connectionString = connectionString;
+         return this.asBuilder();
+      }
+
+      public B setDriverClassName(final String driverClassName) {
+         this.driverClassName = driverClassName;
+         return this.asBuilder();
+      }
+
+      public B setPassword(final char[] password) {
+         this.password = password;
+         return this.asBuilder();
+      }
+
+      public B setProperties(final Property[] properties) {
+         this.properties = properties;
+         return this.asBuilder();
+      }
+
+      public B setUserName(final char[] userName) {
+         this.userName = userName;
+         return this.asBuilder();
+      }
+   }
 }
-

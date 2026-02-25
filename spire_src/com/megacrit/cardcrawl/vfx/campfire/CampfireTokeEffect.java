@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.campfire;
 
 import com.badlogic.gdx.Gdx;
@@ -20,63 +17,73 @@ import com.megacrit.cardcrawl.rooms.RestRoom;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.PurgeCardEffect;
 
-public class CampfireTokeEffect
-extends AbstractGameEffect {
-    private static final UIStrings uiStrings = CardCrawlGame.languagePack.getUIString("CampfireTokeEffect");
-    public static final String[] TEXT = CampfireTokeEffect.uiStrings.TEXT;
-    private static final float DUR = 1.5f;
-    private boolean openedScreen = false;
-    private Color screenColor = AbstractDungeon.fadeColor.cpy();
+public class CampfireTokeEffect extends AbstractGameEffect {
+   private static final UIStrings uiStrings = CardCrawlGame.languagePack.getUIString("CampfireTokeEffect");
+   public static final String[] TEXT;
+   private static final float DUR = 1.5F;
+   private boolean openedScreen = false;
+   private Color screenColor = AbstractDungeon.fadeColor.cpy();
 
-    public CampfireTokeEffect() {
-        this.duration = 1.5f;
-        this.screenColor.a = 0.0f;
-        AbstractDungeon.overlayMenu.proceedButton.hide();
-    }
+   public CampfireTokeEffect() {
+      this.duration = 1.5F;
+      this.screenColor.a = 0.0F;
+      AbstractDungeon.overlayMenu.proceedButton.hide();
+   }
 
-    @Override
-    public void update() {
-        if (!AbstractDungeon.isScreenUp) {
-            this.duration -= Gdx.graphics.getDeltaTime();
-            this.updateBlackScreenColor();
-        }
-        if (!AbstractDungeon.isScreenUp && !AbstractDungeon.gridSelectScreen.selectedCards.isEmpty() && AbstractDungeon.gridSelectScreen.forPurge) {
-            AbstractCard card = AbstractDungeon.gridSelectScreen.selectedCards.get(0);
-            CardCrawlGame.metricData.addCampfireChoiceData("PURGE", card.getMetricID());
-            CardCrawlGame.sound.play("CARD_EXHAUST");
-            AbstractDungeon.topLevelEffects.add(new PurgeCardEffect(card, Settings.WIDTH / 2, Settings.HEIGHT / 2));
-            AbstractDungeon.player.masterDeck.removeCard(card);
-            AbstractDungeon.gridSelectScreen.selectedCards.clear();
-        }
-        if (this.duration < 1.0f && !this.openedScreen) {
-            this.openedScreen = true;
-            AbstractDungeon.gridSelectScreen.open(CardGroup.getGroupWithoutBottledCards(AbstractDungeon.player.masterDeck.getPurgeableCards()), 1, TEXT[0], false, false, true, true);
-        }
-        if (this.duration < 0.0f) {
-            this.isDone = true;
-            if (CampfireUI.hidden) {
-                AbstractRoom.waitTimer = 0.0f;
-                AbstractDungeon.getCurrRoom().phase = AbstractRoom.RoomPhase.COMPLETE;
-                ((RestRoom)AbstractDungeon.getCurrRoom()).cutFireSound();
-            }
-        }
-    }
+   @Override
+   public void update() {
+      if (!AbstractDungeon.isScreenUp) {
+         this.duration = this.duration - Gdx.graphics.getDeltaTime();
+         this.updateBlackScreenColor();
+      }
 
-    private void updateBlackScreenColor() {
-        this.screenColor.a = this.duration > 1.0f ? Interpolation.fade.apply(1.0f, 0.0f, (this.duration - 1.0f) * 2.0f) : Interpolation.fade.apply(0.0f, 1.0f, this.duration / 1.5f);
-    }
+      if (!AbstractDungeon.isScreenUp && !AbstractDungeon.gridSelectScreen.selectedCards.isEmpty() && AbstractDungeon.gridSelectScreen.forPurge) {
+         AbstractCard card = AbstractDungeon.gridSelectScreen.selectedCards.get(0);
+         CardCrawlGame.metricData.addCampfireChoiceData("PURGE", card.getMetricID());
+         CardCrawlGame.sound.play("CARD_EXHAUST");
+         AbstractDungeon.topLevelEffects.add(new PurgeCardEffect(card, Settings.WIDTH / 2, Settings.HEIGHT / 2));
+         AbstractDungeon.player.masterDeck.removeCard(card);
+         AbstractDungeon.gridSelectScreen.selectedCards.clear();
+      }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        sb.setColor(this.screenColor);
-        sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0.0f, 0.0f, (float)Settings.WIDTH, (float)Settings.HEIGHT);
-        if (AbstractDungeon.screen == AbstractDungeon.CurrentScreen.GRID) {
-            AbstractDungeon.gridSelectScreen.render(sb);
-        }
-    }
+      if (this.duration < 1.0F && !this.openedScreen) {
+         this.openedScreen = true;
+         AbstractDungeon.gridSelectScreen
+            .open(CardGroup.getGroupWithoutBottledCards(AbstractDungeon.player.masterDeck.getPurgeableCards()), 1, TEXT[0], false, false, true, true);
+      }
 
-    @Override
-    public void dispose() {
-    }
+      if (this.duration < 0.0F) {
+         this.isDone = true;
+         if (CampfireUI.hidden) {
+            AbstractRoom.waitTimer = 0.0F;
+            AbstractDungeon.getCurrRoom().phase = AbstractRoom.RoomPhase.COMPLETE;
+            ((RestRoom)AbstractDungeon.getCurrRoom()).cutFireSound();
+         }
+      }
+   }
+
+   private void updateBlackScreenColor() {
+      if (this.duration > 1.0F) {
+         this.screenColor.a = Interpolation.fade.apply(1.0F, 0.0F, (this.duration - 1.0F) * 2.0F);
+      } else {
+         this.screenColor.a = Interpolation.fade.apply(0.0F, 1.0F, this.duration / 1.5F);
+      }
+   }
+
+   @Override
+   public void render(SpriteBatch sb) {
+      sb.setColor(this.screenColor);
+      sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0.0F, 0.0F, (float)Settings.WIDTH, (float)Settings.HEIGHT);
+      if (AbstractDungeon.screen == AbstractDungeon.CurrentScreen.GRID) {
+         AbstractDungeon.gridSelectScreen.render(sb);
+      }
+   }
+
+   @Override
+   public void dispose() {
+   }
+
+   static {
+      TEXT = uiStrings.TEXT;
+   }
 }
-

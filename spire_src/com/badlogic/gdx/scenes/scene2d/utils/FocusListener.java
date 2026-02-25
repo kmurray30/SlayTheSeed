@@ -1,79 +1,72 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.scenes.scene2d.utils;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 
-public abstract class FocusListener
-implements EventListener {
-    @Override
-    public boolean handle(Event event) {
-        if (!(event instanceof FocusEvent)) {
-            return false;
-        }
-        FocusEvent focusEvent = (FocusEvent)event;
-        switch (focusEvent.getType()) {
-            case keyboard: {
-                this.keyboardFocusChanged(focusEvent, event.getTarget(), focusEvent.isFocused());
-                break;
-            }
-            case scroll: {
-                this.scrollFocusChanged(focusEvent, event.getTarget(), focusEvent.isFocused());
-            }
-        }
-        return false;
-    }
+public abstract class FocusListener implements EventListener {
+   @Override
+   public boolean handle(Event event) {
+      if (!(event instanceof FocusListener.FocusEvent)) {
+         return false;
+      } else {
+         FocusListener.FocusEvent focusEvent = (FocusListener.FocusEvent)event;
+         switch (focusEvent.getType()) {
+            case keyboard:
+               this.keyboardFocusChanged(focusEvent, event.getTarget(), focusEvent.isFocused());
+               break;
+            case scroll:
+               this.scrollFocusChanged(focusEvent, event.getTarget(), focusEvent.isFocused());
+         }
 
-    public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
-    }
+         return false;
+      }
+   }
 
-    public void scrollFocusChanged(FocusEvent event, Actor actor, boolean focused) {
-    }
+   public void keyboardFocusChanged(FocusListener.FocusEvent event, Actor actor, boolean focused) {
+   }
 
-    public static class FocusEvent
-    extends Event {
-        private boolean focused;
-        private Type type;
-        private Actor relatedActor;
+   public void scrollFocusChanged(FocusListener.FocusEvent event, Actor actor, boolean focused) {
+   }
 
-        @Override
-        public void reset() {
-            super.reset();
-            this.relatedActor = null;
-        }
+   public static class FocusEvent extends Event {
+      private boolean focused;
+      private FocusListener.FocusEvent.Type type;
+      private Actor relatedActor;
 
-        public boolean isFocused() {
-            return this.focused;
-        }
+      @Override
+      public void reset() {
+         super.reset();
+         this.relatedActor = null;
+      }
 
-        public void setFocused(boolean focused) {
-            this.focused = focused;
-        }
+      public boolean isFocused() {
+         return this.focused;
+      }
 
-        public Type getType() {
-            return this.type;
-        }
+      public void setFocused(boolean focused) {
+         this.focused = focused;
+      }
 
-        public void setType(Type focusType) {
-            this.type = focusType;
-        }
+      public FocusListener.FocusEvent.Type getType() {
+         return this.type;
+      }
 
-        public Actor getRelatedActor() {
-            return this.relatedActor;
-        }
+      public void setType(FocusListener.FocusEvent.Type focusType) {
+         this.type = focusType;
+      }
 
-        public void setRelatedActor(Actor relatedActor) {
-            this.relatedActor = relatedActor;
-        }
+      public Actor getRelatedActor() {
+         return this.relatedActor;
+      }
 
-        public static enum Type {
-            keyboard,
-            scroll;
+      public void setRelatedActor(Actor relatedActor) {
+         this.relatedActor = relatedActor;
+      }
 
-        }
-    }
+      public static enum Type {
+         keyboard,
+         scroll;
+      }
+   }
 }
-

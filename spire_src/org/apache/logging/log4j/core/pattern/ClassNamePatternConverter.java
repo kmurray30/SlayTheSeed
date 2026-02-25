@@ -1,42 +1,34 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.pattern;
 
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.impl.LocationAware;
-import org.apache.logging.log4j.core.pattern.ConverterKeys;
-import org.apache.logging.log4j.core.pattern.NamePatternConverter;
 
-@Plugin(name="ClassNamePatternConverter", category="Converter")
-@ConverterKeys(value={"C", "class"})
-public final class ClassNamePatternConverter
-extends NamePatternConverter
-implements LocationAware {
-    private static final String NA = "?";
+@Plugin(name = "ClassNamePatternConverter", category = "Converter")
+@ConverterKeys({"C", "class"})
+public final class ClassNamePatternConverter extends NamePatternConverter implements LocationAware {
+   private static final String NA = "?";
 
-    private ClassNamePatternConverter(String[] options) {
-        super("Class Name", "class name", options);
-    }
+   private ClassNamePatternConverter(final String[] options) {
+      super("Class Name", "class name", options);
+   }
 
-    public static ClassNamePatternConverter newInstance(String[] options) {
-        return new ClassNamePatternConverter(options);
-    }
+   public static ClassNamePatternConverter newInstance(final String[] options) {
+      return new ClassNamePatternConverter(options);
+   }
 
-    @Override
-    public void format(LogEvent event, StringBuilder toAppendTo) {
-        StackTraceElement element = event.getSource();
-        if (element == null) {
-            toAppendTo.append(NA);
-        } else {
-            this.abbreviate(element.getClassName(), toAppendTo);
-        }
-    }
+   @Override
+   public void format(final LogEvent event, final StringBuilder toAppendTo) {
+      StackTraceElement element = event.getSource();
+      if (element == null) {
+         toAppendTo.append("?");
+      } else {
+         this.abbreviate(element.getClassName(), toAppendTo);
+      }
+   }
 
-    @Override
-    public boolean requiresLocation() {
-        return true;
-    }
+   @Override
+   public boolean requiresLocation() {
+      return true;
+   }
 }
-

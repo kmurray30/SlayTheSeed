@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.scene;
 
 import com.badlogic.gdx.Gdx;
@@ -14,81 +11,92 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.rewards.chests.AbstractChest;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
-public class SpookierChestEffect
-extends AbstractGameEffect {
-    private float x;
-    private float y;
-    private float vX;
-    private float vY;
-    private float aV;
-    private boolean flipX = MathUtils.randomBoolean();
-    private boolean flipY = MathUtils.randomBoolean();
-    private TextureAtlas.AtlasRegion img;
+public class SpookierChestEffect extends AbstractGameEffect {
+   private float x;
+   private float y;
+   private float vX;
+   private float vY;
+   private float aV;
+   private boolean flipX = MathUtils.randomBoolean();
+   private boolean flipY = MathUtils.randomBoolean();
+   private TextureAtlas.AtlasRegion img;
 
-    public SpookierChestEffect() {
-        this.startingDuration = this.duration = 3.0f;
-        switch (MathUtils.random(2)) {
-            case 0: {
-                this.img = ImageMaster.SMOKE_1;
-                break;
-            }
-            case 1: {
-                this.img = ImageMaster.SMOKE_2;
-                break;
-            }
-            default: {
-                this.img = ImageMaster.SMOKE_3;
-            }
-        }
-        this.x = AbstractChest.CHEST_LOC_X + MathUtils.random(-30.0f, 30.0f) * Settings.scale - (float)this.img.packedWidth / 2.0f;
-        this.y = AbstractChest.CHEST_LOC_Y - MathUtils.random(120.0f, 190.0f) * Settings.scale - (float)this.img.packedHeight / 2.0f;
-        this.vX = MathUtils.random(-120.0f, 120.0f) * Settings.scale;
-        this.vY = MathUtils.random(-50.0f, 100.0f) * Settings.scale;
-        this.aV = MathUtils.random(-150.0f, 150.0f);
-        float tmp = MathUtils.random(0.3f, 0.9f);
-        this.color = new Color();
-        this.color.r = tmp * MathUtils.random(0.7f, 1.0f);
-        this.color.g = tmp * MathUtils.random(0.5f, 0.9f);
-        this.color.b = tmp;
-        this.renderBehind = true;
-        this.scale = MathUtils.random(0.5f, 3.0f) * Settings.scale;
-    }
+   public SpookierChestEffect() {
+      this.duration = 3.0F;
+      this.startingDuration = this.duration;
+      switch (MathUtils.random(2)) {
+         case 0:
+            this.img = ImageMaster.SMOKE_1;
+            break;
+         case 1:
+            this.img = ImageMaster.SMOKE_2;
+            break;
+         default:
+            this.img = ImageMaster.SMOKE_3;
+      }
 
-    @Override
-    public void update() {
-        this.x += this.vX * Gdx.graphics.getDeltaTime();
-        this.y += this.vY * Gdx.graphics.getDeltaTime();
-        this.rotation += this.aV * Gdx.graphics.getDeltaTime();
-        if (this.startingDuration - this.duration < 1.0f) {
-            this.color.a = Interpolation.fade.apply(0.0f, 0.3f, (this.startingDuration - this.duration) / 1.0f);
-        } else if (this.duration < 2.0f) {
-            this.color.a = Interpolation.fade.apply(0.3f, 0.0f, 1.0f - this.duration / 2.0f);
-        }
-        this.duration -= Gdx.graphics.getDeltaTime();
-        this.scale += Gdx.graphics.getDeltaTime();
-        if (this.duration < 0.0f) {
-            this.isDone = true;
-        }
-    }
+      this.x = AbstractChest.CHEST_LOC_X + MathUtils.random(-30.0F, 30.0F) * Settings.scale - this.img.packedWidth / 2.0F;
+      this.y = AbstractChest.CHEST_LOC_Y - MathUtils.random(120.0F, 190.0F) * Settings.scale - this.img.packedHeight / 2.0F;
+      this.vX = MathUtils.random(-120.0F, 120.0F) * Settings.scale;
+      this.vY = MathUtils.random(-50.0F, 100.0F) * Settings.scale;
+      this.aV = MathUtils.random(-150.0F, 150.0F);
+      float tmp = MathUtils.random(0.3F, 0.9F);
+      this.color = new Color();
+      this.color.r = tmp * MathUtils.random(0.7F, 1.0F);
+      this.color.g = tmp * MathUtils.random(0.5F, 0.9F);
+      this.color.b = tmp;
+      this.renderBehind = true;
+      this.scale = MathUtils.random(0.5F, 3.0F) * Settings.scale;
+   }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        sb.setColor(this.color);
-        if (this.flipX && !this.img.isFlipX()) {
-            this.img.flip(true, false);
-        } else if (!this.flipX && this.img.isFlipX()) {
-            this.img.flip(true, false);
-        }
-        if (this.flipY && !this.img.isFlipY()) {
-            this.img.flip(false, true);
-        } else if (!this.flipY && this.img.isFlipY()) {
-            this.img.flip(false, true);
-        }
-        sb.draw(this.img, this.x, this.y, (float)this.img.packedWidth / 2.0f, (float)this.img.packedHeight / 2.0f, this.img.packedWidth, this.img.packedHeight, this.scale, this.scale, this.rotation);
-    }
+   @Override
+   public void update() {
+      this.x = this.x + this.vX * Gdx.graphics.getDeltaTime();
+      this.y = this.y + this.vY * Gdx.graphics.getDeltaTime();
+      this.rotation = this.rotation + this.aV * Gdx.graphics.getDeltaTime();
+      if (this.startingDuration - this.duration < 1.0F) {
+         this.color.a = Interpolation.fade.apply(0.0F, 0.3F, (this.startingDuration - this.duration) / 1.0F);
+      } else if (this.duration < 2.0F) {
+         this.color.a = Interpolation.fade.apply(0.3F, 0.0F, 1.0F - this.duration / 2.0F);
+      }
 
-    @Override
-    public void dispose() {
-    }
+      this.duration = this.duration - Gdx.graphics.getDeltaTime();
+      this.scale = this.scale + Gdx.graphics.getDeltaTime();
+      if (this.duration < 0.0F) {
+         this.isDone = true;
+      }
+   }
+
+   @Override
+   public void render(SpriteBatch sb) {
+      sb.setColor(this.color);
+      if (this.flipX && !this.img.isFlipX()) {
+         this.img.flip(true, false);
+      } else if (!this.flipX && this.img.isFlipX()) {
+         this.img.flip(true, false);
+      }
+
+      if (this.flipY && !this.img.isFlipY()) {
+         this.img.flip(false, true);
+      } else if (!this.flipY && this.img.isFlipY()) {
+         this.img.flip(false, true);
+      }
+
+      sb.draw(
+         this.img,
+         this.x,
+         this.y,
+         this.img.packedWidth / 2.0F,
+         this.img.packedHeight / 2.0F,
+         this.img.packedWidth,
+         this.img.packedHeight,
+         this.scale,
+         this.scale,
+         this.rotation
+      );
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

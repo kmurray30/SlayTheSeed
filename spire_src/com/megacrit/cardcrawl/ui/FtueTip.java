@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.ui;
 
 import com.badlogic.gdx.graphics.Color;
@@ -19,142 +16,170 @@ import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.ui.buttons.GotItButton;
 
 public class FtueTip {
-    private static final TutorialStrings tutorialStrings = CardCrawlGame.languagePack.getTutorialString("FTUE Tips");
-    public static final String[] LABEL = FtueTip.tutorialStrings.LABEL;
-    private GotItButton button;
-    private float x;
-    private float y;
-    private static final int W = 622;
-    private static final int H = 284;
-    private String header;
-    private String body;
-    private AbstractCard c;
-    private AbstractCreature m;
-    private AbstractPotion p;
-    public TipType type = null;
+   private static final TutorialStrings tutorialStrings = CardCrawlGame.languagePack.getTutorialString("FTUE Tips");
+   public static final String[] LABEL;
+   private GotItButton button;
+   private float x;
+   private float y;
+   private static final int W = 622;
+   private static final int H = 284;
+   private String header;
+   private String body;
+   private AbstractCard c;
+   private AbstractCreature m;
+   private AbstractPotion p;
+   public FtueTip.TipType type = null;
 
-    public FtueTip() {
-    }
+   public FtueTip() {
+   }
 
-    public FtueTip(String header, String body, float x, float y, AbstractPotion potion) {
-        this.openScreen(header, body, x, y);
-        this.type = TipType.POTION;
-        this.p = potion;
-    }
+   public FtueTip(String header, String body, float x, float y, AbstractPotion potion) {
+      this.openScreen(header, body, x, y);
+      this.type = FtueTip.TipType.POTION;
+      this.p = potion;
+   }
 
-    public FtueTip(String header, String body, float x, float y, TipType type) {
-        this.openScreen(header, body, x, y);
-        this.type = type;
-    }
+   public FtueTip(String header, String body, float x, float y, FtueTip.TipType type) {
+      this.openScreen(header, body, x, y);
+      this.type = type;
+   }
 
-    public FtueTip(String header, String body, float x, float y, AbstractCard c) {
-        this.openScreen(header, body, x, y);
-        this.c = c;
-        this.type = TipType.CARD;
-    }
+   public FtueTip(String header, String body, float x, float y, AbstractCard c) {
+      this.openScreen(header, body, x, y);
+      this.c = c;
+      this.type = FtueTip.TipType.CARD;
+   }
 
-    public void openScreen(String header, String body, float x, float y) {
-        this.header = header;
-        this.body = body;
-        this.x = x;
-        this.y = y;
-        this.c = null;
-        this.m = null;
-        this.p = null;
-        this.button = new GotItButton(x, y);
-        AbstractDungeon.player.releaseCard();
-        if (AbstractDungeon.isScreenUp) {
-            AbstractDungeon.dynamicBanner.hide();
-            AbstractDungeon.previousScreen = AbstractDungeon.screen;
-        }
-        AbstractDungeon.isScreenUp = true;
-        AbstractDungeon.screen = AbstractDungeon.CurrentScreen.FTUE;
-        AbstractDungeon.overlayMenu.showBlackScreen();
-    }
+   public void openScreen(String header, String body, float x, float y) {
+      this.header = header;
+      this.body = body;
+      this.x = x;
+      this.y = y;
+      this.c = null;
+      this.m = null;
+      this.p = null;
+      this.button = new GotItButton(x, y);
+      AbstractDungeon.player.releaseCard();
+      if (AbstractDungeon.isScreenUp) {
+         AbstractDungeon.dynamicBanner.hide();
+         AbstractDungeon.previousScreen = AbstractDungeon.screen;
+      }
 
-    public void update() {
-        this.button.update();
-        if (this.button.hb.clicked || CInputActionSet.proceed.isJustPressed()) {
-            CInputActionSet.proceed.unpress();
-            CardCrawlGame.sound.play("DECK_OPEN");
-            if (this.type == TipType.POWER) {
-                AbstractDungeon.cardRewardScreen.reopen();
+      AbstractDungeon.isScreenUp = true;
+      AbstractDungeon.screen = AbstractDungeon.CurrentScreen.FTUE;
+      AbstractDungeon.overlayMenu.showBlackScreen();
+   }
+
+   public void update() {
+      this.button.update();
+      if (this.button.hb.clicked || CInputActionSet.proceed.isJustPressed()) {
+         CInputActionSet.proceed.unpress();
+         CardCrawlGame.sound.play("DECK_OPEN");
+         if (this.type == FtueTip.TipType.POWER) {
+            AbstractDungeon.cardRewardScreen.reopen();
+         } else {
+            AbstractDungeon.closeCurrentScreen();
+         }
+      }
+   }
+
+   public void render(SpriteBatch sb) {
+      sb.setColor(Color.WHITE);
+      sb.draw(
+         ImageMaster.FTUE, this.x - 311.0F, this.y - 142.0F, 311.0F, 142.0F, 622.0F, 284.0F, Settings.scale, Settings.scale, 0.0F, 0, 0, 622, 284, false, false
+      );
+      sb.setColor(new Color(1.0F, 1.0F, 1.0F, 0.7F + (MathUtils.cosDeg((float)(System.currentTimeMillis() / 2L % 360L)) + 1.25F) / 5.0F));
+      this.button.render(sb);
+      FontHelper.renderFontLeftTopAligned(
+         sb, FontHelper.topPanelInfoFont, LABEL[0] + this.header, this.x - 190.0F * Settings.scale, this.y + 80.0F * Settings.scale, Settings.GOLD_COLOR
+      );
+      FontHelper.renderSmartText(
+         sb,
+         FontHelper.tipBodyFont,
+         this.body,
+         this.x - 250.0F * Settings.scale,
+         this.y + 20.0F * Settings.scale,
+         450.0F * Settings.scale,
+         26.0F * Settings.scale,
+         Settings.CREAM_COLOR
+      );
+      FontHelper.renderFontRightTopAligned(
+         sb, FontHelper.topPanelInfoFont, LABEL[1], this.x + 194.0F * Settings.scale, this.y - 150.0F * Settings.scale, Settings.GOLD_COLOR
+      );
+      switch (this.type) {
+         case CARD:
+            this.c.render(sb);
+            break;
+         case POWER:
+            float pScale = this.c.drawScale;
+            this.c.drawScale = 1.0F;
+            this.c.render(sb);
+            this.c.drawScale = pScale;
+         case CARD_REWARD:
+         case COMBAT:
+         default:
+            break;
+         case CREATURE:
+            if (this.m.isPlayer) {
+               this.m.render(sb);
             } else {
-                AbstractDungeon.closeCurrentScreen();
+               this.m.render(sb);
             }
-        }
-    }
 
-    public void render(SpriteBatch sb) {
-        sb.setColor(Color.WHITE);
-        sb.draw(ImageMaster.FTUE, this.x - 311.0f, this.y - 142.0f, 311.0f, 142.0f, 622.0f, 284.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 622, 284, false, false);
-        sb.setColor(new Color(1.0f, 1.0f, 1.0f, 0.7f + (MathUtils.cosDeg(System.currentTimeMillis() / 2L % 360L) + 1.25f) / 5.0f));
-        this.button.render(sb);
-        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, LABEL[0] + this.header, this.x - 190.0f * Settings.scale, this.y + 80.0f * Settings.scale, Settings.GOLD_COLOR);
-        FontHelper.renderSmartText(sb, FontHelper.tipBodyFont, this.body, this.x - 250.0f * Settings.scale, this.y + 20.0f * Settings.scale, 450.0f * Settings.scale, 26.0f * Settings.scale, Settings.CREAM_COLOR);
-        FontHelper.renderFontRightTopAligned(sb, FontHelper.topPanelInfoFont, LABEL[1], this.x + 194.0f * Settings.scale, this.y - 150.0f * Settings.scale, Settings.GOLD_COLOR);
-        switch (this.type) {
-            case CARD: {
-                this.c.render(sb);
-                break;
+            if (this.m.hb.hovered) {
+               this.m.renderPowerTips(sb);
             }
-            case POWER: {
-                float pScale = this.c.drawScale;
-                this.c.drawScale = 1.0f;
-                this.c.render(sb);
-                this.c.drawScale = pScale;
-                break;
-            }
-            case CARD_REWARD: {
-                break;
-            }
-            case CREATURE: {
-                if (this.m.isPlayer) {
-                    this.m.render(sb);
-                } else {
-                    this.m.render(sb);
-                }
-                if (!this.m.hb.hovered) break;
-                this.m.renderPowerTips(sb);
-                break;
-            }
-            case ENERGY: {
-                AbstractDungeon.overlayMenu.energyPanel.render(sb);
-                break;
-            }
-            case POTION: {
-                this.p.render(sb);
-                break;
-            }
-            case COMBAT: {
-                break;
-            }
-            case SHUFFLE: {
-                AbstractDungeon.overlayMenu.combatDeckPanel.render(sb);
-                AbstractDungeon.overlayMenu.discardPilePanel.render(sb);
-                break;
-            }
-        }
-        if (Settings.isControllerMode) {
-            sb.setColor(Color.WHITE);
-            sb.draw(CInputActionSet.proceed.getKeyImg(), this.button.hb.cX - 32.0f + 130.0f * Settings.scale, this.button.hb.cY - 32.0f + 2.0f * Settings.scale, 32.0f, 32.0f, 64.0f, 64.0f, Settings.scale, Settings.scale, 0.0f, 0, 0, 64, 64, false, false);
-        }
-    }
+            break;
+         case ENERGY:
+            AbstractDungeon.overlayMenu.energyPanel.render(sb);
+            break;
+         case POTION:
+            this.p.render(sb);
+            break;
+         case SHUFFLE:
+            AbstractDungeon.overlayMenu.combatDeckPanel.render(sb);
+            AbstractDungeon.overlayMenu.discardPilePanel.render(sb);
+      }
 
-    public static enum TipType {
-        ENERGY,
-        CREATURE,
-        CARD,
-        POTION,
-        CARD_REWARD,
-        INTENT,
-        SHUFFLE,
-        NO_FTUE,
-        COMBAT,
-        RELIC,
-        MULTI,
-        POWER;
+      if (Settings.isControllerMode) {
+         sb.setColor(Color.WHITE);
+         sb.draw(
+            CInputActionSet.proceed.getKeyImg(),
+            this.button.hb.cX - 32.0F + 130.0F * Settings.scale,
+            this.button.hb.cY - 32.0F + 2.0F * Settings.scale,
+            32.0F,
+            32.0F,
+            64.0F,
+            64.0F,
+            Settings.scale,
+            Settings.scale,
+            0.0F,
+            0,
+            0,
+            64,
+            64,
+            false,
+            false
+         );
+      }
+   }
 
-    }
+   static {
+      LABEL = tutorialStrings.LABEL;
+   }
+
+   public static enum TipType {
+      ENERGY,
+      CREATURE,
+      CARD,
+      POTION,
+      CARD_REWARD,
+      INTENT,
+      SHUFFLE,
+      NO_FTUE,
+      COMBAT,
+      RELIC,
+      MULTI,
+      POWER;
+   }
 }
-

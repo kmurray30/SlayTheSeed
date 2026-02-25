@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.config.builder.api;
 
 import java.io.IOException;
@@ -11,142 +8,128 @@ import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
-import org.apache.logging.log4j.core.config.builder.api.AppenderComponentBuilder;
-import org.apache.logging.log4j.core.config.builder.api.AppenderRefComponentBuilder;
-import org.apache.logging.log4j.core.config.builder.api.ComponentBuilder;
-import org.apache.logging.log4j.core.config.builder.api.CustomLevelComponentBuilder;
-import org.apache.logging.log4j.core.config.builder.api.FilterComponentBuilder;
-import org.apache.logging.log4j.core.config.builder.api.KeyValuePairComponentBuilder;
-import org.apache.logging.log4j.core.config.builder.api.LayoutComponentBuilder;
-import org.apache.logging.log4j.core.config.builder.api.LoggerComponentBuilder;
-import org.apache.logging.log4j.core.config.builder.api.PropertyComponentBuilder;
-import org.apache.logging.log4j.core.config.builder.api.RootLoggerComponentBuilder;
-import org.apache.logging.log4j.core.config.builder.api.ScriptComponentBuilder;
-import org.apache.logging.log4j.core.config.builder.api.ScriptFileComponentBuilder;
 import org.apache.logging.log4j.core.util.Builder;
 
-public interface ConfigurationBuilder<T extends Configuration>
-extends Builder<T> {
-    public ConfigurationBuilder<T> add(ScriptComponentBuilder var1);
+public interface ConfigurationBuilder<T extends Configuration> extends Builder<T> {
+   ConfigurationBuilder<T> add(ScriptComponentBuilder builder);
 
-    public ConfigurationBuilder<T> add(ScriptFileComponentBuilder var1);
+   ConfigurationBuilder<T> add(ScriptFileComponentBuilder builder);
 
-    public ConfigurationBuilder<T> add(AppenderComponentBuilder var1);
+   ConfigurationBuilder<T> add(AppenderComponentBuilder builder);
 
-    public ConfigurationBuilder<T> add(CustomLevelComponentBuilder var1);
+   ConfigurationBuilder<T> add(CustomLevelComponentBuilder builder);
 
-    public ConfigurationBuilder<T> add(FilterComponentBuilder var1);
+   ConfigurationBuilder<T> add(FilterComponentBuilder builder);
 
-    public ConfigurationBuilder<T> add(LoggerComponentBuilder var1);
+   ConfigurationBuilder<T> add(LoggerComponentBuilder builder);
 
-    public ConfigurationBuilder<T> add(RootLoggerComponentBuilder var1);
+   ConfigurationBuilder<T> add(RootLoggerComponentBuilder builder);
 
-    public ConfigurationBuilder<T> addProperty(String var1, String var2);
+   ConfigurationBuilder<T> addProperty(String key, String value);
 
-    public ScriptComponentBuilder newScript(String var1, String var2, String var3);
+   ScriptComponentBuilder newScript(String name, String language, String text);
 
-    public ScriptFileComponentBuilder newScriptFile(String var1);
+   ScriptFileComponentBuilder newScriptFile(String path);
 
-    public ScriptFileComponentBuilder newScriptFile(String var1, String var2);
+   ScriptFileComponentBuilder newScriptFile(String name, String path);
 
-    public AppenderComponentBuilder newAppender(String var1, String var2);
+   AppenderComponentBuilder newAppender(String name, String pluginName);
 
-    public AppenderRefComponentBuilder newAppenderRef(String var1);
+   AppenderRefComponentBuilder newAppenderRef(String ref);
 
-    public LoggerComponentBuilder newAsyncLogger(String var1);
+   LoggerComponentBuilder newAsyncLogger(String name);
 
-    public LoggerComponentBuilder newAsyncLogger(String var1, boolean var2);
+   LoggerComponentBuilder newAsyncLogger(String name, boolean includeLocation);
 
-    public LoggerComponentBuilder newAsyncLogger(String var1, Level var2);
+   LoggerComponentBuilder newAsyncLogger(String name, Level level);
 
-    public LoggerComponentBuilder newAsyncLogger(String var1, Level var2, boolean var3);
+   LoggerComponentBuilder newAsyncLogger(String name, Level level, boolean includeLocation);
 
-    public LoggerComponentBuilder newAsyncLogger(String var1, String var2);
+   LoggerComponentBuilder newAsyncLogger(String name, String level);
 
-    public LoggerComponentBuilder newAsyncLogger(String var1, String var2, boolean var3);
+   LoggerComponentBuilder newAsyncLogger(String name, String level, boolean includeLocation);
 
-    public RootLoggerComponentBuilder newAsyncRootLogger();
+   RootLoggerComponentBuilder newAsyncRootLogger();
 
-    public RootLoggerComponentBuilder newAsyncRootLogger(boolean var1);
+   RootLoggerComponentBuilder newAsyncRootLogger(boolean includeLocation);
 
-    public RootLoggerComponentBuilder newAsyncRootLogger(Level var1);
+   RootLoggerComponentBuilder newAsyncRootLogger(Level level);
 
-    public RootLoggerComponentBuilder newAsyncRootLogger(Level var1, boolean var2);
+   RootLoggerComponentBuilder newAsyncRootLogger(Level level, boolean includeLocation);
 
-    public RootLoggerComponentBuilder newAsyncRootLogger(String var1);
+   RootLoggerComponentBuilder newAsyncRootLogger(String level);
 
-    public RootLoggerComponentBuilder newAsyncRootLogger(String var1, boolean var2);
+   RootLoggerComponentBuilder newAsyncRootLogger(String level, boolean includeLocation);
 
-    public <B extends ComponentBuilder<B>> ComponentBuilder<B> newComponent(String var1);
+   <B extends ComponentBuilder<B>> ComponentBuilder<B> newComponent(String pluginName);
 
-    public <B extends ComponentBuilder<B>> ComponentBuilder<B> newComponent(String var1, String var2);
+   <B extends ComponentBuilder<B>> ComponentBuilder<B> newComponent(String name, String pluginName);
 
-    public <B extends ComponentBuilder<B>> ComponentBuilder<B> newComponent(String var1, String var2, String var3);
+   <B extends ComponentBuilder<B>> ComponentBuilder<B> newComponent(String name, String pluginName, String value);
 
-    public PropertyComponentBuilder newProperty(String var1, String var2);
+   PropertyComponentBuilder newProperty(String name, String value);
 
-    public KeyValuePairComponentBuilder newKeyValuePair(String var1, String var2);
+   KeyValuePairComponentBuilder newKeyValuePair(String key, String value);
 
-    public CustomLevelComponentBuilder newCustomLevel(String var1, int var2);
+   CustomLevelComponentBuilder newCustomLevel(String name, int level);
 
-    public FilterComponentBuilder newFilter(String var1, Filter.Result var2, Filter.Result var3);
+   FilterComponentBuilder newFilter(String pluginName, Filter.Result onMatch, Filter.Result onMismatch);
 
-    public FilterComponentBuilder newFilter(String var1, String var2, String var3);
+   FilterComponentBuilder newFilter(String pluginName, String onMatch, String onMismatch);
 
-    public LayoutComponentBuilder newLayout(String var1);
+   LayoutComponentBuilder newLayout(String pluginName);
 
-    public LoggerComponentBuilder newLogger(String var1);
+   LoggerComponentBuilder newLogger(String name);
 
-    public LoggerComponentBuilder newLogger(String var1, boolean var2);
+   LoggerComponentBuilder newLogger(String name, boolean includeLocation);
 
-    public LoggerComponentBuilder newLogger(String var1, Level var2);
+   LoggerComponentBuilder newLogger(String name, Level level);
 
-    public LoggerComponentBuilder newLogger(String var1, Level var2, boolean var3);
+   LoggerComponentBuilder newLogger(String name, Level level, boolean includeLocation);
 
-    public LoggerComponentBuilder newLogger(String var1, String var2);
+   LoggerComponentBuilder newLogger(String name, String level);
 
-    public LoggerComponentBuilder newLogger(String var1, String var2, boolean var3);
+   LoggerComponentBuilder newLogger(String name, String level, boolean includeLocation);
 
-    public RootLoggerComponentBuilder newRootLogger();
+   RootLoggerComponentBuilder newRootLogger();
 
-    public RootLoggerComponentBuilder newRootLogger(boolean var1);
+   RootLoggerComponentBuilder newRootLogger(boolean includeLocation);
 
-    public RootLoggerComponentBuilder newRootLogger(Level var1);
+   RootLoggerComponentBuilder newRootLogger(Level level);
 
-    public RootLoggerComponentBuilder newRootLogger(Level var1, boolean var2);
+   RootLoggerComponentBuilder newRootLogger(Level level, boolean includeLocation);
 
-    public RootLoggerComponentBuilder newRootLogger(String var1);
+   RootLoggerComponentBuilder newRootLogger(String level);
 
-    public RootLoggerComponentBuilder newRootLogger(String var1, boolean var2);
+   RootLoggerComponentBuilder newRootLogger(String level, boolean includeLocation);
 
-    public ConfigurationBuilder<T> setAdvertiser(String var1);
+   ConfigurationBuilder<T> setAdvertiser(String advertiser);
 
-    public ConfigurationBuilder<T> setConfigurationName(String var1);
+   ConfigurationBuilder<T> setConfigurationName(String name);
 
-    public ConfigurationBuilder<T> setConfigurationSource(ConfigurationSource var1);
+   ConfigurationBuilder<T> setConfigurationSource(ConfigurationSource configurationSource);
 
-    public ConfigurationBuilder<T> setMonitorInterval(String var1);
+   ConfigurationBuilder<T> setMonitorInterval(String intervalSeconds);
 
-    public ConfigurationBuilder<T> setPackages(String var1);
+   ConfigurationBuilder<T> setPackages(String packages);
 
-    public ConfigurationBuilder<T> setShutdownHook(String var1);
+   ConfigurationBuilder<T> setShutdownHook(String flag);
 
-    public ConfigurationBuilder<T> setShutdownTimeout(long var1, TimeUnit var3);
+   ConfigurationBuilder<T> setShutdownTimeout(long timeout, TimeUnit timeUnit);
 
-    public ConfigurationBuilder<T> setStatusLevel(Level var1);
+   ConfigurationBuilder<T> setStatusLevel(Level level);
 
-    public ConfigurationBuilder<T> setVerbosity(String var1);
+   ConfigurationBuilder<T> setVerbosity(String verbosity);
 
-    public ConfigurationBuilder<T> setDestination(String var1);
+   ConfigurationBuilder<T> setDestination(String destination);
 
-    public void setLoggerContext(LoggerContext var1);
+   void setLoggerContext(LoggerContext loggerContext);
 
-    public ConfigurationBuilder<T> addRootProperty(String var1, String var2);
+   ConfigurationBuilder<T> addRootProperty(String key, String value);
 
-    public T build(boolean var1);
+   T build(boolean initialize);
 
-    public void writeXmlConfiguration(OutputStream var1) throws IOException;
+   void writeXmlConfiguration(OutputStream output) throws IOException;
 
-    public String toXmlConfiguration();
+   String toXmlConfiguration();
 }
-

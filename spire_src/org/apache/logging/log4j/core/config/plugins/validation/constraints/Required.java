@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.config.plugins.validation.constraints;
 
 import java.lang.annotation.Documented;
@@ -12,10 +9,9 @@ import org.apache.logging.log4j.core.config.plugins.validation.Constraint;
 import org.apache.logging.log4j.core.config.plugins.validation.validators.RequiredValidator;
 
 @Documented
-@Retention(value=RetentionPolicy.RUNTIME)
-@Target(value={ElementType.FIELD, ElementType.PARAMETER})
-@Constraint(value=RequiredValidator.class)
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD, ElementType.PARAMETER})
+@Constraint(RequiredValidator.class)
 public @interface Required {
-    public String message() default "The parameter is null";
+   String message() default "The parameter is null";
 }
-

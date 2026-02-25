@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.appender.db;
 
 import java.io.Serializable;
@@ -13,102 +10,108 @@ import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
-import org.apache.logging.log4j.core.appender.AbstractManager;
 import org.apache.logging.log4j.core.appender.AppenderLoggingException;
-import org.apache.logging.log4j.core.appender.db.AbstractDatabaseManager;
 import org.apache.logging.log4j.core.config.Property;
 
-public abstract class AbstractDatabaseAppender<T extends AbstractDatabaseManager>
-extends AbstractAppender {
-    public static final int DEFAULT_RECONNECT_INTERVAL_MILLIS = 5000;
-    private final ReadWriteLock lock = new ReentrantReadWriteLock();
-    private final Lock readLock = this.lock.readLock();
-    private final Lock writeLock = this.lock.writeLock();
-    private T manager;
+public abstract class AbstractDatabaseAppender<T extends AbstractDatabaseManager> extends AbstractAppender {
+   public static final int DEFAULT_RECONNECT_INTERVAL_MILLIS = 5000;
+   private final ReadWriteLock lock = new ReentrantReadWriteLock();
+   private final Lock readLock = this.lock.readLock();
+   private final Lock writeLock = this.lock.writeLock();
+   private T manager;
 
-    @Deprecated
-    protected AbstractDatabaseAppender(String name, Filter filter, boolean ignoreExceptions, T manager) {
-        super(name, filter, null, ignoreExceptions, Property.EMPTY_ARRAY);
-        this.manager = manager;
-    }
+   @Deprecated
+   protected AbstractDatabaseAppender(final String name, final Filter filter, final boolean ignoreExceptions, final T manager) {
+      super(name, filter, null, ignoreExceptions, Property.EMPTY_ARRAY);
+      this.manager = manager;
+   }
 
-    protected AbstractDatabaseAppender(String name, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions, Property[] properties, T manager) {
-        super(name, filter, layout, ignoreExceptions, properties);
-        this.manager = manager;
-    }
+   protected AbstractDatabaseAppender(
+      final String name,
+      final Filter filter,
+      final Layout<? extends Serializable> layout,
+      final boolean ignoreExceptions,
+      final Property[] properties,
+      final T manager
+   ) {
+      super(name, filter, layout, ignoreExceptions, properties);
+      this.manager = manager;
+   }
 
-    @Deprecated
-    protected AbstractDatabaseAppender(String name, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions, T manager) {
-        super(name, filter, layout, ignoreExceptions, Property.EMPTY_ARRAY);
-        this.manager = manager;
-    }
+   @Deprecated
+   protected AbstractDatabaseAppender(
+      final String name, final Filter filter, final Layout<? extends Serializable> layout, final boolean ignoreExceptions, final T manager
+   ) {
+      super(name, filter, layout, ignoreExceptions, Property.EMPTY_ARRAY);
+      this.manager = manager;
+   }
 
-    @Override
-    public final void append(LogEvent event) {
-        this.readLock.lock();
-        try {
-            ((AbstractDatabaseManager)this.getManager()).write(event, this.toSerializable(event));
-        }
-        catch (LoggingException e) {
-            LOGGER.error("Unable to write to database [{}] for appender [{}].", (Object)((AbstractManager)this.getManager()).getName(), (Object)this.getName(), (Object)e);
-            throw e;
-        }
-        catch (Exception e) {
-            LOGGER.error("Unable to write to database [{}] for appender [{}].", (Object)((AbstractManager)this.getManager()).getName(), (Object)this.getName(), (Object)e);
-            throw new AppenderLoggingException("Unable to write to database in appender: " + e.getMessage(), e);
-        }
-        finally {
-            this.readLock.unlock();
-        }
-    }
+   @Override
+   public final void append(final LogEvent event) {
+      this.readLock.lock();
 
-    public final Layout<LogEvent> getLayout() {
-        return null;
-    }
+      try {
+         this.getManager().write(event, this.toSerializable(event));
+      } catch (LoggingException var7) {
+         LOGGER.error("Unable to write to database [{}] for appender [{}].", this.getManager().getName(), this.getName(), var7);
+         throw var7;
+      } catch (Exception var8) {
+         LOGGER.error("Unable to write to database [{}] for appender [{}].", this.getManager().getName(), this.getName(), var8);
+         throw new AppenderLoggingException("Unable to write to database in appender: " + var8.getMessage(), var8);
+      } finally {
+         this.readLock.unlock();
+      }
+   }
 
-    public final T getManager() {
-        return this.manager;
-    }
+   @Override
+   public final Layout<LogEvent> getLayout() {
+      return null;
+   }
 
-    protected final void replaceManager(T manager) {
-        this.writeLock.lock();
-        try {
-            T old = this.getManager();
-            if (!((AbstractDatabaseManager)manager).isRunning()) {
-                ((AbstractDatabaseManager)manager).startup();
-            }
-            this.manager = manager;
-            ((AbstractManager)old).close();
-        }
-        finally {
-            this.writeLock.unlock();
-        }
-    }
+   public final T getManager() {
+      return this.manager;
+   }
 
-    @Override
-    public final void start() {
-        if (this.getManager() == null) {
-            LOGGER.error("No AbstractDatabaseManager set for the appender named [{}].", (Object)this.getName());
-        }
-        super.start();
-        if (this.getManager() != null) {
-            ((AbstractDatabaseManager)this.getManager()).startup();
-        }
-    }
+   protected final void replaceManager(final T manager) {
+      this.writeLock.lock();
 
-    @Override
-    public boolean stop(long timeout, TimeUnit timeUnit) {
-        this.setStopping();
-        boolean stopped = super.stop(timeout, timeUnit, false);
-        if (this.getManager() != null) {
-            stopped &= ((AbstractManager)this.getManager()).stop(timeout, timeUnit);
-        }
-        this.setStopped();
-        return stopped;
-    }
+      try {
+         T old = this.getManager();
+         if (!manager.isRunning()) {
+            manager.startup();
+         }
 
-    public static class Builder<B extends Builder<B>>
-    extends AbstractAppender.Builder<B> {
-    }
+         this.manager = manager;
+         old.close();
+      } finally {
+         this.writeLock.unlock();
+      }
+   }
+
+   @Override
+   public final void start() {
+      if (this.getManager() == null) {
+         LOGGER.error("No AbstractDatabaseManager set for the appender named [{}].", this.getName());
+      }
+
+      super.start();
+      if (this.getManager() != null) {
+         this.getManager().startup();
+      }
+   }
+
+   @Override
+   public boolean stop(final long timeout, final TimeUnit timeUnit) {
+      this.setStopping();
+      boolean stopped = super.stop(timeout, timeUnit, false);
+      if (this.getManager() != null) {
+         stopped &= this.getManager().stop(timeout, timeUnit);
+      }
+
+      this.setStopped();
+      return stopped;
+   }
+
+   public static class Builder<B extends AbstractDatabaseAppender.Builder<B>> extends AbstractAppender.Builder<B> {
+   }
 }
-

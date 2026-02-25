@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.google.gson.annotations;
 
 import java.lang.annotation.ElementType;
@@ -8,11 +5,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Retention(value=RetentionPolicy.RUNTIME)
-@Target(value={ElementType.FIELD, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD, ElementType.METHOD})
 public @interface SerializedName {
-    public String value();
+   String value();
 
-    public String[] alternate() default {};
+   String[] alternate() default {};
 }
-

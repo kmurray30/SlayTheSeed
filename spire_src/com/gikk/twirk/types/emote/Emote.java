@@ -1,32 +1,29 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.gikk.twirk.types.emote;
 
 import com.gikk.twirk.enums.EMOTE_SIZE;
 import java.util.LinkedList;
 
 public interface Emote {
-    public int getEmoteID();
+   int getEmoteID();
 
-    public LinkedList<EmoteIndices> getIndices();
+   LinkedList<Emote.EmoteIndices> getIndices();
 
-    public String getPattern();
+   String getPattern();
 
-    public String getEmoteImageUrl(EMOTE_SIZE var1);
+   String getEmoteImageUrl(EMOTE_SIZE var1);
 
-    public static class EmoteIndices {
-        public final int beingIndex;
-        public final int endIndex;
+   public static class EmoteIndices {
+      public final int beingIndex;
+      public final int endIndex;
 
-        public EmoteIndices(int begin, int end) {
-            this.beingIndex = begin;
-            this.endIndex = end;
-        }
+      public EmoteIndices(int begin, int end) {
+         this.beingIndex = begin;
+         this.endIndex = end;
+      }
 
-        public String toString() {
-            return "(" + this.beingIndex + "," + this.endIndex + ")";
-        }
-    }
+      @Override
+      public String toString() {
+         return "(" + this.beingIndex + "," + this.endIndex + ")";
+      }
+   }
 }
-

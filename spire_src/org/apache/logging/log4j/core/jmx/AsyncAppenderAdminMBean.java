@@ -1,31 +1,27 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.jmx;
 
 public interface AsyncAppenderAdminMBean {
-    public static final String PATTERN = "org.apache.logging.log4j2:type=%s,component=AsyncAppenders,name=%s";
+   String PATTERN = "org.apache.logging.log4j2:type=%s,component=AsyncAppenders,name=%s";
 
-    public String getName();
+   String getName();
 
-    public String getLayout();
+   String getLayout();
 
-    public boolean isIgnoreExceptions();
+   boolean isIgnoreExceptions();
 
-    public String getErrorHandler();
+   String getErrorHandler();
 
-    public String getFilter();
+   String getFilter();
 
-    public String[] getAppenderRefs();
+   String[] getAppenderRefs();
 
-    public boolean isIncludeLocation();
+   boolean isIncludeLocation();
 
-    public boolean isBlocking();
+   boolean isBlocking();
 
-    public String getErrorRef();
+   String getErrorRef();
 
-    public int getQueueCapacity();
+   int getQueueCapacity();
 
-    public int getQueueRemainingCapacity();
+   int getQueueRemainingCapacity();
 }
-

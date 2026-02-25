@@ -1,16 +1,6 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.fasterxml.jackson.core.JsonFactory
- *  com.fasterxml.jackson.core.JsonParser$Feature
- *  com.fasterxml.jackson.databind.ObjectMapper
- *  com.fasterxml.jackson.dataformat.yaml.YAMLFactory
- */
 package org.apache.logging.log4j.core.config.yaml;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.IOException;
@@ -19,30 +9,24 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.apache.logging.log4j.core.config.json.JsonConfiguration;
 
-public class YamlConfiguration
-extends JsonConfiguration {
-    public YamlConfiguration(LoggerContext loggerContext, ConfigurationSource configSource) {
-        super(loggerContext, configSource);
-    }
+public class YamlConfiguration extends JsonConfiguration {
+   public YamlConfiguration(final LoggerContext loggerContext, final ConfigurationSource configSource) {
+      super(loggerContext, configSource);
+   }
 
-    @Override
-    protected ObjectMapper getObjectMapper() {
-        return new ObjectMapper((JsonFactory)new YAMLFactory()).configure(JsonParser.Feature.ALLOW_COMMENTS, true);
-    }
+   @Override
+   protected ObjectMapper getObjectMapper() {
+      return new ObjectMapper(new YAMLFactory()).configure(Feature.ALLOW_COMMENTS, true);
+   }
 
-    @Override
-    public Configuration reconfigure() {
-        try {
-            ConfigurationSource source = this.getConfigurationSource().resetInputStream();
-            if (source == null) {
-                return null;
-            }
-            return new YamlConfiguration(this.getLoggerContext(), source);
-        }
-        catch (IOException ex) {
-            LOGGER.error("Cannot locate file {}", (Object)this.getConfigurationSource(), (Object)ex);
-            return null;
-        }
-    }
+   @Override
+   public Configuration reconfigure() {
+      try {
+         ConfigurationSource source = this.getConfigurationSource().resetInputStream();
+         return source == null ? null : new YamlConfiguration(this.getLoggerContext(), source);
+      } catch (IOException var2) {
+         LOGGER.error("Cannot locate file {}", this.getConfigurationSource(), var2);
+         return null;
+      }
+   }
 }
-

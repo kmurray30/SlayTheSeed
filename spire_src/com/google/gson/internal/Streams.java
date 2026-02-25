@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.google.gson.internal;
 
 import com.google.gson.JsonElement;
@@ -17,85 +14,84 @@ import java.io.IOException;
 import java.io.Writer;
 
 public final class Streams {
-    private Streams() {
-        throw new UnsupportedOperationException();
-    }
+   private Streams() {
+      throw new UnsupportedOperationException();
+   }
 
-    public static JsonElement parse(JsonReader reader) throws JsonParseException {
-        boolean isEmpty = true;
-        try {
-            reader.peek();
-            isEmpty = false;
-            return TypeAdapters.JSON_ELEMENT.read(reader);
-        }
-        catch (EOFException e) {
-            if (isEmpty) {
-                return JsonNull.INSTANCE;
-            }
-            throw new JsonSyntaxException(e);
-        }
-        catch (MalformedJsonException e) {
-            throw new JsonSyntaxException(e);
-        }
-        catch (IOException e) {
-            throw new JsonIOException(e);
-        }
-        catch (NumberFormatException e) {
-            throw new JsonSyntaxException(e);
-        }
-    }
+   public static JsonElement parse(JsonReader reader) throws JsonParseException {
+      boolean isEmpty = true;
 
-    public static void write(JsonElement element, JsonWriter writer) throws IOException {
-        TypeAdapters.JSON_ELEMENT.write(writer, element);
-    }
+      try {
+         reader.peek();
+         isEmpty = false;
+         return TypeAdapters.JSON_ELEMENT.read(reader);
+      } catch (EOFException var3) {
+         if (isEmpty) {
+            return JsonNull.INSTANCE;
+         } else {
+            throw new JsonSyntaxException(var3);
+         }
+      } catch (MalformedJsonException var4) {
+         throw new JsonSyntaxException(var4);
+      } catch (IOException var5) {
+         throw new JsonIOException(var5);
+      } catch (NumberFormatException var6) {
+         throw new JsonSyntaxException(var6);
+      }
+   }
 
-    public static Writer writerForAppendable(Appendable appendable) {
-        return appendable instanceof Writer ? (Writer)appendable : new AppendableWriter(appendable);
-    }
+   public static void write(JsonElement element, JsonWriter writer) throws IOException {
+      TypeAdapters.JSON_ELEMENT.write(writer, element);
+   }
 
-    private static final class AppendableWriter
-    extends Writer {
-        private final Appendable appendable;
-        private final CurrentWrite currentWrite = new CurrentWrite();
+   public static Writer writerForAppendable(Appendable appendable) {
+      return (Writer)(appendable instanceof Writer ? (Writer)appendable : new Streams.AppendableWriter(appendable));
+   }
 
-        private AppendableWriter(Appendable appendable) {
-            this.appendable = appendable;
-        }
+   private static final class AppendableWriter extends Writer {
+      private final Appendable appendable;
+      private final Streams.AppendableWriter.CurrentWrite currentWrite = new Streams.AppendableWriter.CurrentWrite();
 
-        public void write(char[] chars, int offset, int length) throws IOException {
-            this.currentWrite.chars = chars;
-            this.appendable.append(this.currentWrite, offset, offset + length);
-        }
+      private AppendableWriter(Appendable appendable) {
+         this.appendable = appendable;
+      }
 
-        public void write(int i) throws IOException {
-            this.appendable.append((char)i);
-        }
+      @Override
+      public void write(char[] chars, int offset, int length) throws IOException {
+         this.currentWrite.chars = chars;
+         this.appendable.append(this.currentWrite, offset, offset + length);
+      }
 
-        public void flush() {
-        }
+      @Override
+      public void write(int i) throws IOException {
+         this.appendable.append((char)i);
+      }
 
-        public void close() {
-        }
+      @Override
+      public void flush() {
+      }
 
-        static class CurrentWrite
-        implements CharSequence {
-            char[] chars;
+      @Override
+      public void close() {
+      }
 
-            CurrentWrite() {
-            }
+      static class CurrentWrite implements CharSequence {
+         char[] chars;
 
-            public int length() {
-                return this.chars.length;
-            }
+         @Override
+         public int length() {
+            return this.chars.length;
+         }
 
-            public char charAt(int i) {
-                return this.chars[i];
-            }
+         @Override
+         public char charAt(int i) {
+            return this.chars[i];
+         }
 
-            public CharSequence subSequence(int start, int end) {
-                return new String(this.chars, start, end - start);
-            }
-        }
-    }
+         @Override
+         public CharSequence subSequence(int start, int end) {
+            return new String(this.chars, start, end - start);
+         }
+      }
+   }
 }
-

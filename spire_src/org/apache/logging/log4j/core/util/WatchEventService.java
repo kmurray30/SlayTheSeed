@@ -1,13 +1,7 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.util;
 
-import org.apache.logging.log4j.core.util.WatchManager;
-
 public interface WatchEventService {
-    public void subscribe(WatchManager var1);
+   void subscribe(WatchManager manager);
 
-    public void unsubscribe(WatchManager var1);
+   void unsubscribe(WatchManager manager);
 }
-

@@ -1,13 +1,9 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.config.plugins.validation;
 
 import java.lang.annotation.Annotation;
 
 public interface ConstraintValidator<A extends Annotation> {
-    public void initialize(A var1);
+   void initialize(A annotation);
 
-    public boolean isValid(String var1, Object var2);
+   boolean isValid(String name, Object value);
 }
-

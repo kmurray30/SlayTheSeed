@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl.opengl;
 
 import java.awt.Canvas;
@@ -14,508 +11,564 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
 import org.lwjgl.MemoryUtil;
-import org.lwjgl.opengl.AWTUtil;
-import org.lwjgl.opengl.ContextAttribs;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayImplementation;
-import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.DrawableGL;
-import org.lwjgl.opengl.DrawableLWJGL;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.KeyboardEventQueue;
-import org.lwjgl.opengl.MacOSXCanvasPeerInfo;
-import org.lwjgl.opengl.MacOSXDisplayPeerInfo;
-import org.lwjgl.opengl.MacOSXMouseEventQueue;
-import org.lwjgl.opengl.MacOSXNativeKeyboard;
-import org.lwjgl.opengl.MacOSXNativeMouse;
-import org.lwjgl.opengl.MacOSXPbufferPeerInfo;
-import org.lwjgl.opengl.PeerInfo;
-import org.lwjgl.opengl.PixelFormat;
 
-final class MacOSXDisplay
-implements DisplayImplementation {
-    private static final int PBUFFER_HANDLE_SIZE = 24;
-    private static final int GAMMA_LENGTH = 256;
-    private Canvas canvas;
-    private Robot robot;
-    private MacOSXMouseEventQueue mouse_queue;
-    private KeyboardEventQueue keyboard_queue;
-    private DisplayMode requested_mode;
-    private MacOSXNativeMouse mouse;
-    private MacOSXNativeKeyboard keyboard;
-    private ByteBuffer window;
-    private ByteBuffer context;
-    private boolean skipViewportValue = false;
-    private static final IntBuffer current_viewport = BufferUtils.createIntBuffer(16);
-    private boolean mouseInsideWindow;
-    private boolean close_requested;
-    private boolean native_mode = true;
-    private boolean updateNativeCursor = false;
-    private long currentNativeCursor = 0L;
-    private boolean enableHighDPI = false;
-    private float scaleFactor = 1.0f;
+final class MacOSXDisplay implements DisplayImplementation {
+   private static final int PBUFFER_HANDLE_SIZE = 24;
+   private static final int GAMMA_LENGTH = 256;
+   private Canvas canvas;
+   private Robot robot;
+   private MacOSXMouseEventQueue mouse_queue;
+   private KeyboardEventQueue keyboard_queue;
+   private DisplayMode requested_mode;
+   private MacOSXNativeMouse mouse;
+   private MacOSXNativeKeyboard keyboard;
+   private ByteBuffer window;
+   private ByteBuffer context;
+   private boolean skipViewportValue = false;
+   private static final IntBuffer current_viewport = BufferUtils.createIntBuffer(16);
+   private boolean mouseInsideWindow;
+   private boolean close_requested;
+   private boolean native_mode = true;
+   private boolean updateNativeCursor = false;
+   private long currentNativeCursor = 0L;
+   private boolean enableHighDPI = false;
+   private float scaleFactor = 1.0F;
 
-    MacOSXDisplay() {
-    }
+   private native ByteBuffer nCreateWindow(
+      int var1,
+      int var2,
+      int var3,
+      int var4,
+      boolean var5,
+      boolean var6,
+      boolean var7,
+      boolean var8,
+      boolean var9,
+      boolean var10,
+      ByteBuffer var11,
+      ByteBuffer var12
+   ) throws LWJGLException;
 
-    private native ByteBuffer nCreateWindow(int var1, int var2, int var3, int var4, boolean var5, boolean var6, boolean var7, boolean var8, boolean var9, boolean var10, ByteBuffer var11, ByteBuffer var12) throws LWJGLException;
+   private native Object nGetCurrentDisplayMode();
 
-    private native Object nGetCurrentDisplayMode();
+   private native void nGetDisplayModes(Object var1);
 
-    private native void nGetDisplayModes(Object var1);
+   private native boolean nIsMiniaturized(ByteBuffer var1);
 
-    private native boolean nIsMiniaturized(ByteBuffer var1);
+   private native boolean nIsFocused(ByteBuffer var1);
 
-    private native boolean nIsFocused(ByteBuffer var1);
+   private native void nSetResizable(ByteBuffer var1, boolean var2);
 
-    private native void nSetResizable(ByteBuffer var1, boolean var2);
+   private native void nResizeWindow(ByteBuffer var1, int var2, int var3, int var4, int var5);
 
-    private native void nResizeWindow(ByteBuffer var1, int var2, int var3, int var4, int var5);
+   private native boolean nWasResized(ByteBuffer var1);
 
-    private native boolean nWasResized(ByteBuffer var1);
+   private native int nGetX(ByteBuffer var1);
 
-    private native int nGetX(ByteBuffer var1);
+   private native int nGetY(ByteBuffer var1);
 
-    private native int nGetY(ByteBuffer var1);
+   private native int nGetWidth(ByteBuffer var1);
 
-    private native int nGetWidth(ByteBuffer var1);
+   private native int nGetHeight(ByteBuffer var1);
 
-    private native int nGetHeight(ByteBuffer var1);
+   private native boolean nIsNativeMode(ByteBuffer var1);
 
-    private native boolean nIsNativeMode(ByteBuffer var1);
+   private static boolean isUndecorated() {
+      return Display.getPrivilegedBoolean("org.lwjgl.opengl.Window.undecorated");
+   }
 
-    private static boolean isUndecorated() {
-        return Display.getPrivilegedBoolean("org.lwjgl.opengl.Window.undecorated");
-    }
+   @Override
+   public void createWindow(DrawableLWJGL drawable, DisplayMode mode, Canvas parent, int x, int y) throws LWJGLException {
+      boolean fullscreen = Display.isFullscreen();
+      boolean resizable = Display.isResizable();
+      boolean parented = parent != null && !fullscreen;
+      boolean enableFullscreenModeAPI = LWJGLUtil.isMacOSXEqualsOrBetterThan(10, 7)
+         && parent == null
+         && !Display.getPrivilegedBoolean("org.lwjgl.opengl.Display.disableOSXFullscreenModeAPI");
+      this.enableHighDPI = LWJGLUtil.isMacOSXEqualsOrBetterThan(10, 7)
+         && parent == null
+         && (Display.getPrivilegedBoolean("org.lwjgl.opengl.Display.enableHighDPI") || fullscreen);
+      if (parented) {
+         this.canvas = parent;
+      } else {
+         this.canvas = null;
+      }
 
-    public void createWindow(DrawableLWJGL drawable, DisplayMode mode, Canvas parent, int x, int y) throws LWJGLException {
-        boolean fullscreen = Display.isFullscreen();
-        boolean resizable = Display.isResizable();
-        boolean parented = parent != null && !fullscreen;
-        boolean enableFullscreenModeAPI = LWJGLUtil.isMacOSXEqualsOrBetterThan(10, 7) && parent == null && !Display.getPrivilegedBoolean("org.lwjgl.opengl.Display.disableOSXFullscreenModeAPI");
-        this.enableHighDPI = LWJGLUtil.isMacOSXEqualsOrBetterThan(10, 7) && parent == null && (Display.getPrivilegedBoolean("org.lwjgl.opengl.Display.enableHighDPI") || fullscreen);
-        this.canvas = parented ? parent : null;
-        this.close_requested = false;
-        DrawableGL gl_drawable = (DrawableGL)Display.getDrawable();
-        PeerInfo peer_info = gl_drawable.peer_info;
-        ByteBuffer peer_handle = peer_info.lockAndGetHandle();
-        ByteBuffer window_handle = parented ? ((MacOSXCanvasPeerInfo)peer_info).window_handle : this.window;
-        try {
-            this.window = this.nCreateWindow(x, y, mode.getWidth(), mode.getHeight(), fullscreen, MacOSXDisplay.isUndecorated(), resizable, parented, enableFullscreenModeAPI, this.enableHighDPI, peer_handle, window_handle);
-            if (fullscreen) {
-                this.skipViewportValue = true;
-                current_viewport.put(2, mode.getWidth());
-                current_viewport.put(3, mode.getHeight());
-            }
-            this.native_mode = this.nIsNativeMode(peer_handle);
-            if (!this.native_mode) {
-                this.robot = AWTUtil.createRobot(this.canvas);
-            }
-        }
-        catch (LWJGLException e) {
-            this.destroyWindow();
-            throw e;
-        }
-        finally {
-            peer_info.unlock();
-        }
-    }
+      this.close_requested = false;
+      DrawableGL gl_drawable = (DrawableGL)Display.getDrawable();
+      PeerInfo peer_info = gl_drawable.peer_info;
+      ByteBuffer peer_handle = peer_info.lockAndGetHandle();
+      ByteBuffer window_handle = parented ? ((MacOSXCanvasPeerInfo)peer_info).window_handle : this.window;
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    public void doHandleQuit() {
-        MacOSXDisplay macOSXDisplay = this;
-        synchronized (macOSXDisplay) {
-            this.close_requested = true;
-        }
-    }
+      try {
+         this.window = this.nCreateWindow(
+            x,
+            y,
+            mode.getWidth(),
+            mode.getHeight(),
+            fullscreen,
+            isUndecorated(),
+            resizable,
+            parented,
+            enableFullscreenModeAPI,
+            this.enableHighDPI,
+            peer_handle,
+            window_handle
+         );
+         if (fullscreen) {
+            this.skipViewportValue = true;
+            current_viewport.put(2, mode.getWidth());
+            current_viewport.put(3, mode.getHeight());
+         }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    public void mouseInsideWindow(boolean inside) {
-        MacOSXDisplay macOSXDisplay = this;
-        synchronized (macOSXDisplay) {
-            this.mouseInsideWindow = inside;
-        }
-        this.updateNativeCursor = true;
-    }
+         this.native_mode = this.nIsNativeMode(peer_handle);
+         if (!this.native_mode) {
+            this.robot = AWTUtil.createRobot(this.canvas);
+         }
+      } catch (LWJGLException var18) {
+         this.destroyWindow();
+         throw var18;
+      } finally {
+         peer_info.unlock();
+      }
+   }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    public void setScaleFactor(float scale) {
-        MacOSXDisplay macOSXDisplay = this;
-        synchronized (macOSXDisplay) {
-            this.scaleFactor = scale;
-        }
-    }
+   public void doHandleQuit() {
+      synchronized (this) {
+         this.close_requested = true;
+      }
+   }
 
-    public native void nDestroyCALayer(ByteBuffer var1);
+   public void mouseInsideWindow(boolean inside) {
+      synchronized (this) {
+         this.mouseInsideWindow = inside;
+      }
 
-    public native void nDestroyWindow(ByteBuffer var1);
+      this.updateNativeCursor = true;
+   }
 
-    public void destroyWindow() {
-        if (!this.native_mode) {
-            DrawableGL gl_drawable = (DrawableGL)Display.getDrawable();
-            PeerInfo peer_info = gl_drawable.peer_info;
-            if (peer_info != null) {
-                ByteBuffer peer_handle = peer_info.getHandle();
-                this.nDestroyCALayer(peer_handle);
-            }
-            this.robot = null;
-        }
-        this.nDestroyWindow(this.window);
-    }
+   public void setScaleFactor(float scale) {
+      synchronized (this) {
+         this.scaleFactor = scale;
+      }
+   }
 
-    public int getGammaRampLength() {
-        return 256;
-    }
+   public native void nDestroyCALayer(ByteBuffer var1);
 
-    public native void setGammaRamp(FloatBuffer var1) throws LWJGLException;
+   public native void nDestroyWindow(ByteBuffer var1);
 
-    public String getAdapter() {
-        return null;
-    }
+   @Override
+   public void destroyWindow() {
+      if (!this.native_mode) {
+         DrawableGL gl_drawable = (DrawableGL)Display.getDrawable();
+         PeerInfo peer_info = gl_drawable.peer_info;
+         if (peer_info != null) {
+            ByteBuffer peer_handle = peer_info.getHandle();
+            this.nDestroyCALayer(peer_handle);
+         }
 
-    public String getVersion() {
-        return null;
-    }
+         this.robot = null;
+      }
 
-    private static boolean equals(DisplayMode mode1, DisplayMode mode2) {
-        return mode1.getWidth() == mode2.getWidth() && mode1.getHeight() == mode2.getHeight() && mode1.getBitsPerPixel() == mode2.getBitsPerPixel() && mode1.getFrequency() == mode2.getFrequency();
-    }
+      this.nDestroyWindow(this.window);
+   }
 
-    public void switchDisplayMode(DisplayMode mode) throws LWJGLException {
-        DisplayMode[] modes;
-        for (DisplayMode available_mode : modes = this.getAvailableDisplayModes()) {
-            if (!MacOSXDisplay.equals(available_mode, mode)) continue;
+   @Override
+   public int getGammaRampLength() {
+      return 256;
+   }
+
+   @Override
+   public native void setGammaRamp(FloatBuffer var1) throws LWJGLException;
+
+   @Override
+   public String getAdapter() {
+      return null;
+   }
+
+   @Override
+   public String getVersion() {
+      return null;
+   }
+
+   private static boolean equals(DisplayMode mode1, DisplayMode mode2) {
+      return mode1.getWidth() == mode2.getWidth()
+         && mode1.getHeight() == mode2.getHeight()
+         && mode1.getBitsPerPixel() == mode2.getBitsPerPixel()
+         && mode1.getFrequency() == mode2.getFrequency();
+   }
+
+   @Override
+   public void switchDisplayMode(DisplayMode mode) throws LWJGLException {
+      DisplayMode[] modes = this.getAvailableDisplayModes();
+
+      for (DisplayMode available_mode : modes) {
+         if (equals(available_mode, mode)) {
             this.requested_mode = available_mode;
             return;
-        }
-        throw new LWJGLException(mode + " is not supported");
-    }
+         }
+      }
 
-    public void resetDisplayMode() {
-        this.requested_mode = null;
-        this.restoreGamma();
-    }
+      throw new LWJGLException(mode + " is not supported");
+   }
 
-    private native void restoreGamma();
+   @Override
+   public void resetDisplayMode() {
+      this.requested_mode = null;
+      this.restoreGamma();
+   }
 
-    public Object createDisplayMode(int width, int height, int bitsPerPixel, int refreshRate) {
-        return new DisplayMode(width, height, bitsPerPixel, refreshRate);
-    }
+   private native void restoreGamma();
 
-    public DisplayMode init() throws LWJGLException {
-        return (DisplayMode)this.nGetCurrentDisplayMode();
-    }
+   public Object createDisplayMode(int width, int height, int bitsPerPixel, int refreshRate) {
+      return new DisplayMode(width, height, bitsPerPixel, refreshRate);
+   }
 
-    public void addDisplayMode(Object modesList, int width, int height, int bitsPerPixel, int refreshRate) {
-        List modes = (List)modesList;
-        DisplayMode displayMode = new DisplayMode(width, height, bitsPerPixel, refreshRate);
-        modes.add(displayMode);
-    }
+   @Override
+   public DisplayMode init() throws LWJGLException {
+      return (DisplayMode)this.nGetCurrentDisplayMode();
+   }
 
-    public DisplayMode[] getAvailableDisplayModes() throws LWJGLException {
-        ArrayList<DisplayMode> modes = new ArrayList<DisplayMode>();
-        this.nGetDisplayModes(modes);
-        modes.add(Display.getDesktopDisplayMode());
-        return modes.toArray(new DisplayMode[modes.size()]);
-    }
+   public void addDisplayMode(Object modesList, int width, int height, int bitsPerPixel, int refreshRate) {
+      List<DisplayMode> modes = (List<DisplayMode>)modesList;
+      DisplayMode displayMode = new DisplayMode(width, height, bitsPerPixel, refreshRate);
+      modes.add(displayMode);
+   }
 
-    private native void nSetTitle(ByteBuffer var1, ByteBuffer var2);
+   @Override
+   public DisplayMode[] getAvailableDisplayModes() throws LWJGLException {
+      List<DisplayMode> modes = new ArrayList<>();
+      this.nGetDisplayModes(modes);
+      modes.add(Display.getDesktopDisplayMode());
+      return modes.toArray(new DisplayMode[modes.size()]);
+   }
 
-    public void setTitle(String title) {
-        ByteBuffer buffer = MemoryUtil.encodeUTF8(title);
-        this.nSetTitle(this.window, buffer);
-    }
+   private native void nSetTitle(ByteBuffer var1, ByteBuffer var2);
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    public boolean isCloseRequested() {
-        boolean result;
-        MacOSXDisplay macOSXDisplay = this;
-        synchronized (macOSXDisplay) {
-            result = this.close_requested;
-            this.close_requested = false;
-        }
-        return result;
-    }
+   @Override
+   public void setTitle(String title) {
+      ByteBuffer buffer = MemoryUtil.encodeUTF8(title);
+      this.nSetTitle(this.window, buffer);
+   }
 
-    public boolean isVisible() {
-        return true;
-    }
+   @Override
+   public boolean isCloseRequested() {
+      synchronized (this) {
+         boolean result = this.close_requested;
+         this.close_requested = false;
+         return result;
+      }
+   }
 
-    public boolean isActive() {
-        if (this.native_mode) {
-            return this.nIsFocused(this.window);
-        }
-        return Display.getParent().hasFocus();
-    }
+   @Override
+   public boolean isVisible() {
+      return true;
+   }
 
-    public Canvas getCanvas() {
-        return this.canvas;
-    }
+   @Override
+   public boolean isActive() {
+      return this.native_mode ? this.nIsFocused(this.window) : Display.getParent().hasFocus();
+   }
 
-    public boolean isDirty() {
-        return false;
-    }
+   public Canvas getCanvas() {
+      return this.canvas;
+   }
 
-    public PeerInfo createPeerInfo(PixelFormat pixel_format, ContextAttribs attribs) throws LWJGLException {
-        try {
-            return new MacOSXDisplayPeerInfo(pixel_format, attribs, true);
-        }
-        catch (LWJGLException e) {
-            return new MacOSXDisplayPeerInfo(pixel_format, attribs, false);
-        }
-    }
+   @Override
+   public boolean isDirty() {
+      return false;
+   }
 
-    public void update() {
-        boolean should_update = true;
-        DrawableGL drawable = (DrawableGL)Display.getDrawable();
-        if (should_update) {
-            if (this.skipViewportValue) {
-                this.skipViewportValue = false;
+   @Override
+   public PeerInfo createPeerInfo(PixelFormat pixel_format, ContextAttribs attribs) throws LWJGLException {
+      try {
+         return new MacOSXDisplayPeerInfo(pixel_format, attribs, true);
+      } catch (LWJGLException var4) {
+         return new MacOSXDisplayPeerInfo(pixel_format, attribs, false);
+      }
+   }
+
+   @Override
+   public void update() {
+      boolean should_update = true;
+      DrawableGL drawable = (DrawableGL)Display.getDrawable();
+      if (should_update) {
+         if (this.skipViewportValue) {
+            this.skipViewportValue = false;
+         } else {
+            GL11.glGetInteger(2978, current_viewport);
+         }
+
+         drawable.context.update();
+         GL11.glViewport(current_viewport.get(0), current_viewport.get(1), current_viewport.get(2), current_viewport.get(3));
+      }
+
+      if (this.native_mode && this.updateNativeCursor) {
+         this.updateNativeCursor = false;
+
+         try {
+            this.setNativeCursor(this.currentNativeCursor);
+         } catch (LWJGLException var4) {
+            var4.printStackTrace();
+         }
+      }
+   }
+
+   @Override
+   public void reshape(int x, int y, int width, int height) {
+   }
+
+   @Override
+   public boolean hasWheel() {
+      return AWTUtil.hasWheel();
+   }
+
+   @Override
+   public int getButtonCount() {
+      return AWTUtil.getButtonCount();
+   }
+
+   @Override
+   public void createMouse() throws LWJGLException {
+      if (this.native_mode) {
+         this.mouse = new MacOSXNativeMouse(this, this.window);
+         this.mouse.register();
+      } else {
+         this.mouse_queue = new MacOSXMouseEventQueue(this.canvas);
+         this.mouse_queue.register();
+      }
+   }
+
+   @Override
+   public void destroyMouse() {
+      if (this.native_mode) {
+         try {
+            MacOSXNativeMouse.setCursor(0L);
+         } catch (LWJGLException var2) {
+         }
+
+         this.grabMouse(false);
+         if (this.mouse != null) {
+            this.mouse.unregister();
+         }
+
+         this.mouse = null;
+      } else {
+         if (this.mouse_queue != null) {
+            MacOSXMouseEventQueue.nGrabMouse(false);
+            this.mouse_queue.unregister();
+         }
+
+         this.mouse_queue = null;
+      }
+   }
+
+   @Override
+   public void pollMouse(IntBuffer coord_buffer, ByteBuffer buttons_buffer) {
+      if (this.native_mode) {
+         this.mouse.poll(coord_buffer, buttons_buffer);
+      } else {
+         this.mouse_queue.poll(coord_buffer, buttons_buffer);
+      }
+   }
+
+   @Override
+   public void readMouse(ByteBuffer buffer) {
+      if (this.native_mode) {
+         this.mouse.copyEvents(buffer);
+      } else {
+         this.mouse_queue.copyEvents(buffer);
+      }
+   }
+
+   @Override
+   public void grabMouse(boolean grab) {
+      if (this.native_mode) {
+         this.mouse.setGrabbed(grab);
+      } else {
+         this.mouse_queue.setGrabbed(grab);
+      }
+   }
+
+   @Override
+   public int getNativeCursorCapabilities() {
+      return this.native_mode ? 7 : AWTUtil.getNativeCursorCapabilities();
+   }
+
+   @Override
+   public void setCursorPosition(int x, int y) {
+      if (this.native_mode && this.mouse != null) {
+         this.mouse.setCursorPosition(x, y);
+      }
+   }
+
+   @Override
+   public void setNativeCursor(Object handle) throws LWJGLException {
+      if (this.native_mode) {
+         this.currentNativeCursor = getCursorHandle(handle);
+         if (Display.isCreated()) {
+            if (this.mouseInsideWindow) {
+               MacOSXNativeMouse.setCursor(this.currentNativeCursor);
             } else {
-                GL11.glGetInteger(2978, current_viewport);
+               MacOSXNativeMouse.setCursor(0L);
             }
-            drawable.context.update();
-            GL11.glViewport(current_viewport.get(0), current_viewport.get(1), current_viewport.get(2), current_viewport.get(3));
-        }
-        if (this.native_mode && this.updateNativeCursor) {
-            this.updateNativeCursor = false;
-            try {
-                this.setNativeCursor(this.currentNativeCursor);
-            }
-            catch (LWJGLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+         }
+      }
+   }
 
-    public void reshape(int x, int y, int width, int height) {
-    }
+   @Override
+   public int getMinCursorSize() {
+      return 1;
+   }
 
-    public boolean hasWheel() {
-        return AWTUtil.hasWheel();
-    }
+   @Override
+   public int getMaxCursorSize() {
+      DisplayMode dm = Display.getDesktopDisplayMode();
+      return Math.min(dm.getWidth(), dm.getHeight()) / 2;
+   }
 
-    public int getButtonCount() {
-        return AWTUtil.getButtonCount();
-    }
+   @Override
+   public void createKeyboard() throws LWJGLException {
+      if (this.native_mode) {
+         this.keyboard = new MacOSXNativeKeyboard(this.window);
+         this.keyboard.register();
+      } else {
+         this.keyboard_queue = new KeyboardEventQueue(this.canvas);
+         this.keyboard_queue.register();
+      }
+   }
 
-    public void createMouse() throws LWJGLException {
-        if (this.native_mode) {
-            this.mouse = new MacOSXNativeMouse(this, this.window);
-            this.mouse.register();
-        } else {
-            this.mouse_queue = new MacOSXMouseEventQueue(this.canvas);
-            this.mouse_queue.register();
-        }
-    }
+   @Override
+   public void destroyKeyboard() {
+      if (this.native_mode) {
+         if (this.keyboard != null) {
+            this.keyboard.unregister();
+         }
 
-    public void destroyMouse() {
-        if (this.native_mode) {
-            try {
-                MacOSXNativeMouse.setCursor(0L);
-            }
-            catch (LWJGLException lWJGLException) {
-                // empty catch block
-            }
-            this.grabMouse(false);
-            if (this.mouse != null) {
-                this.mouse.unregister();
-            }
-            this.mouse = null;
-        } else {
-            if (this.mouse_queue != null) {
-                MacOSXMouseEventQueue.nGrabMouse(false);
-                this.mouse_queue.unregister();
-            }
-            this.mouse_queue = null;
-        }
-    }
+         this.keyboard = null;
+      } else {
+         if (this.keyboard_queue != null) {
+            this.keyboard_queue.unregister();
+         }
 
-    public void pollMouse(IntBuffer coord_buffer, ByteBuffer buttons_buffer) {
-        if (this.native_mode) {
-            this.mouse.poll(coord_buffer, buttons_buffer);
-        } else {
-            this.mouse_queue.poll(coord_buffer, buttons_buffer);
-        }
-    }
+         this.keyboard_queue = null;
+      }
+   }
 
-    public void readMouse(ByteBuffer buffer) {
-        if (this.native_mode) {
-            this.mouse.copyEvents(buffer);
-        } else {
-            this.mouse_queue.copyEvents(buffer);
-        }
-    }
+   @Override
+   public void pollKeyboard(ByteBuffer keyDownBuffer) {
+      if (this.native_mode) {
+         this.keyboard.poll(keyDownBuffer);
+      } else {
+         this.keyboard_queue.poll(keyDownBuffer);
+      }
+   }
 
-    public void grabMouse(boolean grab) {
-        if (this.native_mode) {
-            this.mouse.setGrabbed(grab);
-        } else {
-            this.mouse_queue.setGrabbed(grab);
-        }
-    }
+   @Override
+   public void readKeyboard(ByteBuffer buffer) {
+      if (this.native_mode) {
+         this.keyboard.copyEvents(buffer);
+      } else {
+         this.keyboard_queue.copyEvents(buffer);
+      }
+   }
 
-    public int getNativeCursorCapabilities() {
-        if (this.native_mode) {
-            return 7;
-        }
-        return AWTUtil.getNativeCursorCapabilities();
-    }
+   @Override
+   public Object createCursor(int width, int height, int xHotspot, int yHotspot, int numImages, IntBuffer images, IntBuffer delays) throws LWJGLException {
+      if (this.native_mode) {
+         long cursor = MacOSXNativeMouse.createCursor(width, height, xHotspot, yHotspot, numImages, images, delays);
+         return cursor;
+      } else {
+         return AWTUtil.createCursor(width, height, xHotspot, yHotspot, numImages, images, delays);
+      }
+   }
 
-    public void setCursorPosition(int x, int y) {
-        if (this.native_mode && this.mouse != null) {
-            this.mouse.setCursorPosition(x, y);
-        }
-    }
+   @Override
+   public void destroyCursor(Object cursor_handle) {
+      long handle = getCursorHandle(cursor_handle);
+      if (this.currentNativeCursor == handle) {
+         this.currentNativeCursor = 0L;
+      }
 
-    public void setNativeCursor(Object handle) throws LWJGLException {
-        if (this.native_mode) {
-            this.currentNativeCursor = MacOSXDisplay.getCursorHandle(handle);
-            if (Display.isCreated()) {
-                if (this.mouseInsideWindow) {
-                    MacOSXNativeMouse.setCursor(this.currentNativeCursor);
-                } else {
-                    MacOSXNativeMouse.setCursor(0L);
-                }
-            }
-        }
-    }
+      MacOSXNativeMouse.destroyCursor(handle);
+   }
 
-    public int getMinCursorSize() {
-        return 1;
-    }
+   private static long getCursorHandle(Object cursor_handle) {
+      return cursor_handle != null ? (Long)cursor_handle : 0L;
+   }
 
-    public int getMaxCursorSize() {
-        DisplayMode dm = Display.getDesktopDisplayMode();
-        return Math.min(dm.getWidth(), dm.getHeight()) / 2;
-    }
+   @Override
+   public int getPbufferCapabilities() {
+      return 1;
+   }
 
-    public void createKeyboard() throws LWJGLException {
-        if (this.native_mode) {
-            this.keyboard = new MacOSXNativeKeyboard(this.window);
-            this.keyboard.register();
-        } else {
-            this.keyboard_queue = new KeyboardEventQueue(this.canvas);
-            this.keyboard_queue.register();
-        }
-    }
+   @Override
+   public boolean isBufferLost(PeerInfo handle) {
+      return false;
+   }
 
-    public void destroyKeyboard() {
-        if (this.native_mode) {
-            if (this.keyboard != null) {
-                this.keyboard.unregister();
-            }
-            this.keyboard = null;
-        } else {
-            if (this.keyboard_queue != null) {
-                this.keyboard_queue.unregister();
-            }
-            this.keyboard_queue = null;
-        }
-    }
+   @Override
+   public PeerInfo createPbuffer(int width, int height, PixelFormat pixel_format, ContextAttribs attribs, IntBuffer pixelFormatCaps, IntBuffer pBufferAttribs) throws LWJGLException {
+      return new MacOSXPbufferPeerInfo(width, height, pixel_format, attribs);
+   }
 
-    public void pollKeyboard(ByteBuffer keyDownBuffer) {
-        if (this.native_mode) {
-            this.keyboard.poll(keyDownBuffer);
-        } else {
-            this.keyboard_queue.poll(keyDownBuffer);
-        }
-    }
+   @Override
+   public void setPbufferAttrib(PeerInfo handle, int attrib, int value) {
+      throw new UnsupportedOperationException();
+   }
 
-    public void readKeyboard(ByteBuffer buffer) {
-        if (this.native_mode) {
-            this.keyboard.copyEvents(buffer);
-        } else {
-            this.keyboard_queue.copyEvents(buffer);
-        }
-    }
+   @Override
+   public void bindTexImageToPbuffer(PeerInfo handle, int buffer) {
+      throw new UnsupportedOperationException();
+   }
 
-    public Object createCursor(int width, int height, int xHotspot, int yHotspot, int numImages, IntBuffer images, IntBuffer delays) throws LWJGLException {
-        if (this.native_mode) {
-            long cursor = MacOSXNativeMouse.createCursor(width, height, xHotspot, yHotspot, numImages, images, delays);
-            return cursor;
-        }
-        return AWTUtil.createCursor(width, height, xHotspot, yHotspot, numImages, images, delays);
-    }
+   @Override
+   public void releaseTexImageFromPbuffer(PeerInfo handle, int buffer) {
+      throw new UnsupportedOperationException();
+   }
 
-    public void destroyCursor(Object cursor_handle) {
-        long handle = MacOSXDisplay.getCursorHandle(cursor_handle);
-        if (this.currentNativeCursor == handle) {
-            this.currentNativeCursor = 0L;
-        }
-        MacOSXNativeMouse.destroyCursor(handle);
-    }
+   @Override
+   public int setIcon(ByteBuffer[] icons) {
+      return 0;
+   }
 
-    private static long getCursorHandle(Object cursor_handle) {
-        return cursor_handle != null ? (Long)cursor_handle : 0L;
-    }
+   @Override
+   public int getX() {
+      return this.nGetX(this.window);
+   }
 
-    public int getPbufferCapabilities() {
-        return 1;
-    }
+   @Override
+   public int getY() {
+      return this.nGetY(this.window);
+   }
 
-    public boolean isBufferLost(PeerInfo handle) {
-        return false;
-    }
+   @Override
+   public int getWidth() {
+      return this.nGetWidth(this.window);
+   }
 
-    public PeerInfo createPbuffer(int width, int height, PixelFormat pixel_format, ContextAttribs attribs, IntBuffer pixelFormatCaps, IntBuffer pBufferAttribs) throws LWJGLException {
-        return new MacOSXPbufferPeerInfo(width, height, pixel_format, attribs);
-    }
+   @Override
+   public int getHeight() {
+      return this.nGetHeight(this.window);
+   }
 
-    public void setPbufferAttrib(PeerInfo handle, int attrib, int value) {
-        throw new UnsupportedOperationException();
-    }
+   @Override
+   public boolean isInsideWindow() {
+      return this.mouseInsideWindow;
+   }
 
-    public void bindTexImageToPbuffer(PeerInfo handle, int buffer) {
-        throw new UnsupportedOperationException();
-    }
+   @Override
+   public void setResizable(boolean resizable) {
+      this.nSetResizable(this.window, resizable);
+   }
 
-    public void releaseTexImageFromPbuffer(PeerInfo handle, int buffer) {
-        throw new UnsupportedOperationException();
-    }
+   @Override
+   public boolean wasResized() {
+      return this.nWasResized(this.window);
+   }
 
-    public int setIcon(ByteBuffer[] icons) {
-        return 0;
-    }
-
-    public int getX() {
-        return this.nGetX(this.window);
-    }
-
-    public int getY() {
-        return this.nGetY(this.window);
-    }
-
-    public int getWidth() {
-        return this.nGetWidth(this.window);
-    }
-
-    public int getHeight() {
-        return this.nGetHeight(this.window);
-    }
-
-    public boolean isInsideWindow() {
-        return this.mouseInsideWindow;
-    }
-
-    public void setResizable(boolean resizable) {
-        this.nSetResizable(this.window, resizable);
-    }
-
-    public boolean wasResized() {
-        return this.nWasResized(this.window);
-    }
-
-    public float getPixelScaleFactor() {
-        return this.enableHighDPI && !Display.isFullscreen() ? this.scaleFactor : 1.0f;
-    }
+   @Override
+   public float getPixelScaleFactor() {
+      return this.enableHighDPI && !Display.isFullscreen() ? this.scaleFactor : 1.0F;
+   }
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.cards.deprecated;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -9,31 +6,39 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-public class DEPRECATEDContemplate
-extends AbstractCard {
-    public static final String ID = "Contemplate";
-    private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("Contemplate");
+public class DEPRECATEDContemplate extends AbstractCard {
+   public static final String ID = "Contemplate";
+   private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("Contemplate");
 
-    public DEPRECATEDContemplate() {
-        super(ID, DEPRECATEDContemplate.cardStrings.NAME, null, 0, DEPRECATEDContemplate.cardStrings.DESCRIPTION, AbstractCard.CardType.SKILL, AbstractCard.CardColor.PURPLE, AbstractCard.CardRarity.COMMON, AbstractCard.CardTarget.SELF);
-    }
+   public DEPRECATEDContemplate() {
+      super(
+         "Contemplate",
+         cardStrings.NAME,
+         null,
+         0,
+         cardStrings.DESCRIPTION,
+         AbstractCard.CardType.SKILL,
+         AbstractCard.CardColor.PURPLE,
+         AbstractCard.CardRarity.COMMON,
+         AbstractCard.CardTarget.SELF
+      );
+   }
 
-    @Override
-    public void use(AbstractPlayer p, AbstractMonster m) {
-    }
+   @Override
+   public void use(AbstractPlayer p, AbstractMonster m) {
+   }
 
-    @Override
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.rawDescription = DEPRECATEDContemplate.cardStrings.UPGRADE_DESCRIPTION;
-            this.initializeDescription();
-        }
-    }
+   @Override
+   public void upgrade() {
+      if (!this.upgraded) {
+         this.upgradeName();
+         this.rawDescription = cardStrings.UPGRADE_DESCRIPTION;
+         this.initializeDescription();
+      }
+   }
 
-    @Override
-    public AbstractCard makeCopy() {
-        return new DEPRECATEDContemplate();
-    }
+   @Override
+   public AbstractCard makeCopy() {
+      return new DEPRECATEDContemplate();
+   }
 }
-

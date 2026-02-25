@@ -1,12 +1,5 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.appender.rolling;
 
-import org.apache.logging.log4j.core.appender.rolling.RollingFileManager;
-import org.apache.logging.log4j.core.appender.rolling.RolloverDescription;
-
 public interface RolloverStrategy {
-    public RolloverDescription rollover(RollingFileManager var1) throws SecurityException;
+   RolloverDescription rollover(final RollingFileManager manager) throws SecurityException;
 }
-

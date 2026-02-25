@@ -1,30 +1,21 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.google.gson;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-
-/*
- * This class specifies class file version 49.0 but uses Java 6 signatures.  Assumed Java 6.
- */
 public enum LongSerializationPolicy {
-    DEFAULT{
+   DEFAULT {
+      @Override
+      public JsonElement serialize(Long value) {
+         return new JsonPrimitive((Number)value);
+      }
+   },
+   STRING {
+      @Override
+      public JsonElement serialize(Long value) {
+         return new JsonPrimitive(String.valueOf(value));
+      }
+   };
 
-        public JsonElement serialize(Long value) {
-            return new JsonPrimitive(value);
-        }
-    }
-    ,
-    STRING{
+   private LongSerializationPolicy() {
+   }
 
-        public JsonElement serialize(Long value) {
-            return new JsonPrimitive(String.valueOf(value));
-        }
-    };
-
-
-    public abstract JsonElement serialize(Long var1);
+   public abstract JsonElement serialize(Long var1);
 }
-

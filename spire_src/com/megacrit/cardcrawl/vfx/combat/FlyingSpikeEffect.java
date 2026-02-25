@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.combat;
 
 import com.badlogic.gdx.Gdx;
@@ -12,50 +9,64 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
-public class FlyingSpikeEffect
-extends AbstractGameEffect {
-    private static final float DURATION = 0.75f;
-    private float x;
-    private float y;
-    private float vX;
-    private float vY;
-    private TextureAtlas.AtlasRegion img = ImageMaster.THICK_3D_LINE;
+public class FlyingSpikeEffect extends AbstractGameEffect {
+   private static final float DURATION = 0.75F;
+   private float x;
+   private float y;
+   private float vX;
+   private float vY;
+   private TextureAtlas.AtlasRegion img = ImageMaster.THICK_3D_LINE;
 
-    public FlyingSpikeEffect(float x, float y, float startingRotation, float vX, float vY, Color color) {
-        this.duration = 0.75f;
-        this.rotation = startingRotation;
-        this.x = x - (float)this.img.packedWidth / 2.0f;
-        this.y = y - (float)this.img.packedHeight / 2.0f;
-        this.vX = vX;
-        this.vY = vY;
-        this.color = new Color(color.r, color.g, color.b, 0.0f);
-        this.renderBehind = true;
-        this.scale = 0.01f;
-        this.rotation += MathUtils.random(-5.0f, 5.0f);
-    }
+   public FlyingSpikeEffect(float x, float y, float startingRotation, float vX, float vY, Color color) {
+      this.duration = 0.75F;
+      this.rotation = startingRotation;
+      this.x = x - this.img.packedWidth / 2.0F;
+      this.y = y - this.img.packedHeight / 2.0F;
+      this.vX = vX;
+      this.vY = vY;
+      this.color = new Color(color.r, color.g, color.b, 0.0F);
+      this.renderBehind = true;
+      this.scale = 0.01F;
+      this.rotation = this.rotation + MathUtils.random(-5.0F, 5.0F);
+   }
 
-    @Override
-    public void update() {
-        this.scale = this.duration * 2.0f * Settings.scale;
-        this.x += this.vX * Gdx.graphics.getDeltaTime();
-        this.y += this.vY * Gdx.graphics.getDeltaTime();
-        this.duration -= Gdx.graphics.getDeltaTime();
-        this.color.a = this.duration > 0.5f ? (0.75f - this.duration) * 2.0f : this.duration;
-        if (this.duration < 0.0f) {
-            this.isDone = true;
-        }
-    }
+   @Override
+   public void update() {
+      this.scale = this.duration * 2.0F * Settings.scale;
+      this.x = this.x + this.vX * Gdx.graphics.getDeltaTime();
+      this.y = this.y + this.vY * Gdx.graphics.getDeltaTime();
+      this.duration = this.duration - Gdx.graphics.getDeltaTime();
+      if (this.duration > 0.5F) {
+         this.color.a = (0.75F - this.duration) * 2.0F;
+      } else {
+         this.color.a = this.duration;
+      }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        sb.setBlendFunction(770, 1);
-        sb.setColor(this.color);
-        sb.draw(this.img, this.x, this.y, (float)this.img.packedWidth / 2.0f, (float)this.img.packedHeight / 2.0f, this.img.packedWidth, this.img.packedHeight, this.scale, this.scale, this.rotation);
-        sb.setBlendFunction(770, 771);
-    }
+      if (this.duration < 0.0F) {
+         this.isDone = true;
+      }
+   }
 
-    @Override
-    public void dispose() {
-    }
+   @Override
+   public void render(SpriteBatch sb) {
+      sb.setBlendFunction(770, 1);
+      sb.setColor(this.color);
+      sb.draw(
+         this.img,
+         this.x,
+         this.y,
+         this.img.packedWidth / 2.0F,
+         this.img.packedHeight / 2.0F,
+         this.img.packedWidth,
+         this.img.packedHeight,
+         this.scale,
+         this.scale,
+         this.rotation
+      );
+      sb.setBlendFunction(770, 771);
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

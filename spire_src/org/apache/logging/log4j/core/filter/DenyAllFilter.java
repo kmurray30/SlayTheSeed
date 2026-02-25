@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.filter;
 
 import org.apache.logging.log4j.Level;
@@ -10,109 +7,182 @@ import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory;
-import org.apache.logging.log4j.core.filter.AbstractFilter;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.util.PerformanceSensitive;
 
-@Plugin(name="DenyAllFilter", category="Core", elementType="filter", printObject=true)
-@PerformanceSensitive(value={"allocation"})
-public final class DenyAllFilter
-extends AbstractFilter {
-    private DenyAllFilter(Filter.Result onMatch, Filter.Result onMismatch) {
-        super(onMatch, onMismatch);
-    }
+@Plugin(name = "DenyAllFilter", category = "Core", elementType = "filter", printObject = true)
+@PerformanceSensitive("allocation")
+public final class DenyAllFilter extends AbstractFilter {
+   private DenyAllFilter(final Filter.Result onMatch, final Filter.Result onMismatch) {
+      super(onMatch, onMismatch);
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object ... params) {
-        return Filter.Result.DENY;
-    }
+   @Override
+   public Filter.Result filter(final Logger logger, final Level level, final Marker marker, final String msg, final Object... params) {
+      return Filter.Result.DENY;
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, Object msg, Throwable t) {
-        return Filter.Result.DENY;
-    }
+   @Override
+   public Filter.Result filter(final Logger logger, final Level level, final Marker marker, final Object msg, final Throwable t) {
+      return Filter.Result.DENY;
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, Message msg, Throwable t) {
-        return Filter.Result.DENY;
-    }
+   @Override
+   public Filter.Result filter(final Logger logger, final Level level, final Marker marker, final Message msg, final Throwable t) {
+      return Filter.Result.DENY;
+   }
 
-    @Override
-    public Filter.Result filter(LogEvent event) {
-        return Filter.Result.DENY;
-    }
+   @Override
+   public Filter.Result filter(final LogEvent event) {
+      return Filter.Result.DENY;
+   }
 
-    private Filter.Result filter(Marker marker) {
-        return Filter.Result.DENY;
-    }
+   private Filter.Result filter(final Marker marker) {
+      return Filter.Result.DENY;
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0) {
-        return Filter.Result.DENY;
-    }
+   @Override
+   public Filter.Result filter(final Logger logger, final Level level, final Marker marker, final String msg, final Object p0) {
+      return Filter.Result.DENY;
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1) {
-        return Filter.Result.DENY;
-    }
+   @Override
+   public Filter.Result filter(final Logger logger, final Level level, final Marker marker, final String msg, final Object p0, final Object p1) {
+      return Filter.Result.DENY;
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1, Object p2) {
-        return this.filter(marker);
-    }
+   @Override
+   public Filter.Result filter(final Logger logger, final Level level, final Marker marker, final String msg, final Object p0, final Object p1, final Object p2) {
+      return this.filter(marker);
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1, Object p2, Object p3) {
-        return Filter.Result.DENY;
-    }
+   @Override
+   public Filter.Result filter(
+      final Logger logger, final Level level, final Marker marker, final String msg, final Object p0, final Object p1, final Object p2, final Object p3
+   ) {
+      return Filter.Result.DENY;
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1, Object p2, Object p3, Object p4) {
-        return Filter.Result.DENY;
-    }
+   @Override
+   public Filter.Result filter(
+      final Logger logger,
+      final Level level,
+      final Marker marker,
+      final String msg,
+      final Object p0,
+      final Object p1,
+      final Object p2,
+      final Object p3,
+      final Object p4
+   ) {
+      return Filter.Result.DENY;
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5) {
-        return Filter.Result.DENY;
-    }
+   @Override
+   public Filter.Result filter(
+      final Logger logger,
+      final Level level,
+      final Marker marker,
+      final String msg,
+      final Object p0,
+      final Object p1,
+      final Object p2,
+      final Object p3,
+      final Object p4,
+      final Object p5
+   ) {
+      return Filter.Result.DENY;
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6) {
-        return Filter.Result.DENY;
-    }
+   @Override
+   public Filter.Result filter(
+      final Logger logger,
+      final Level level,
+      final Marker marker,
+      final String msg,
+      final Object p0,
+      final Object p1,
+      final Object p2,
+      final Object p3,
+      final Object p4,
+      final Object p5,
+      final Object p6
+   ) {
+      return Filter.Result.DENY;
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7) {
-        return Filter.Result.DENY;
-    }
+   @Override
+   public Filter.Result filter(
+      final Logger logger,
+      final Level level,
+      final Marker marker,
+      final String msg,
+      final Object p0,
+      final Object p1,
+      final Object p2,
+      final Object p3,
+      final Object p4,
+      final Object p5,
+      final Object p6,
+      final Object p7
+   ) {
+      return Filter.Result.DENY;
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8) {
-        return Filter.Result.DENY;
-    }
+   @Override
+   public Filter.Result filter(
+      final Logger logger,
+      final Level level,
+      final Marker marker,
+      final String msg,
+      final Object p0,
+      final Object p1,
+      final Object p2,
+      final Object p3,
+      final Object p4,
+      final Object p5,
+      final Object p6,
+      final Object p7,
+      final Object p8
+   ) {
+      return Filter.Result.DENY;
+   }
 
-    @Override
-    public Filter.Result filter(Logger logger, Level level, Marker marker, String msg, Object p0, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9) {
-        return Filter.Result.DENY;
-    }
+   @Override
+   public Filter.Result filter(
+      final Logger logger,
+      final Level level,
+      final Marker marker,
+      final String msg,
+      final Object p0,
+      final Object p1,
+      final Object p2,
+      final Object p3,
+      final Object p4,
+      final Object p5,
+      final Object p6,
+      final Object p7,
+      final Object p8,
+      final Object p9
+   ) {
+      return Filter.Result.DENY;
+   }
 
-    @Override
-    public String toString() {
-        return "DenyAll";
-    }
+   @Override
+   public String toString() {
+      return "DenyAll";
+   }
 
-    @PluginBuilderFactory
-    public static Builder newBuilder() {
-        return new Builder();
-    }
+   @PluginBuilderFactory
+   public static DenyAllFilter.Builder newBuilder() {
+      return new DenyAllFilter.Builder();
+   }
 
-    public static class Builder
-    extends AbstractFilter.AbstractFilterBuilder<Builder>
-    implements org.apache.logging.log4j.core.util.Builder<DenyAllFilter> {
-        @Override
-        public DenyAllFilter build() {
-            return new DenyAllFilter(this.getOnMatch(), this.getOnMismatch());
-        }
-    }
+   public static class Builder
+      extends AbstractFilter.AbstractFilterBuilder<DenyAllFilter.Builder>
+      implements org.apache.logging.log4j.core.util.Builder<DenyAllFilter> {
+      public DenyAllFilter build() {
+         return new DenyAllFilter(this.getOnMatch(), this.getOnMismatch());
+      }
+   }
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.layout;
 
 import java.nio.charset.Charset;
@@ -13,189 +10,186 @@ import org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.impl.DefaultLogEventFactory;
 import org.apache.logging.log4j.core.impl.LocationAware;
-import org.apache.logging.log4j.core.layout.AbstractLayout;
-import org.apache.logging.log4j.core.layout.Encoder;
-import org.apache.logging.log4j.core.layout.StringBuilderEncoder;
 import org.apache.logging.log4j.core.util.Constants;
 import org.apache.logging.log4j.core.util.StringEncoder;
 import org.apache.logging.log4j.spi.AbstractLogger;
 import org.apache.logging.log4j.util.PropertiesUtil;
 import org.apache.logging.log4j.util.StringBuilders;
 
-public abstract class AbstractStringLayout
-extends AbstractLayout<String>
-implements StringLayout,
-LocationAware {
-    protected static final int DEFAULT_STRING_BUILDER_SIZE = 1024;
-    protected static final int MAX_STRING_BUILDER_SIZE = Math.max(1024, AbstractStringLayout.size("log4j.layoutStringBuilder.maxSize", 2048));
-    private static final ThreadLocal<StringBuilder> threadLocal = new ThreadLocal();
-    private Encoder<StringBuilder> textEncoder;
-    private final Charset charset;
-    private final Serializer footerSerializer;
-    private final Serializer headerSerializer;
+public abstract class AbstractStringLayout extends AbstractLayout<String> implements StringLayout, LocationAware {
+   protected static final int DEFAULT_STRING_BUILDER_SIZE = 1024;
+   protected static final int MAX_STRING_BUILDER_SIZE = Math.max(1024, size("log4j.layoutStringBuilder.maxSize", 2048));
+   private static final ThreadLocal<StringBuilder> threadLocal = new ThreadLocal<>();
+   private Encoder<StringBuilder> textEncoder;
+   private final Charset charset;
+   private final AbstractStringLayout.Serializer footerSerializer;
+   private final AbstractStringLayout.Serializer headerSerializer;
 
-    @Override
-    public boolean requiresLocation() {
-        return false;
-    }
+   @Override
+   public boolean requiresLocation() {
+      return false;
+   }
 
-    protected static StringBuilder getStringBuilder() {
-        if (AbstractLogger.getRecursionDepth() > 1) {
-            return new StringBuilder(1024);
-        }
-        StringBuilder result = threadLocal.get();
-        if (result == null) {
+   protected static StringBuilder getStringBuilder() {
+      if (AbstractLogger.getRecursionDepth() > 1) {
+         return new StringBuilder(1024);
+      } else {
+         StringBuilder result = threadLocal.get();
+         if (result == null) {
             result = new StringBuilder(1024);
             threadLocal.set(result);
-        }
-        AbstractStringLayout.trimToMaxSize(result);
-        result.setLength(0);
-        return result;
-    }
+         }
 
-    private static int size(String property, int defaultValue) {
-        return PropertiesUtil.getProperties().getIntegerProperty(property, defaultValue);
-    }
+         trimToMaxSize(result);
+         result.setLength(0);
+         return result;
+      }
+   }
 
-    protected static void trimToMaxSize(StringBuilder stringBuilder) {
-        StringBuilders.trimToMaxSize(stringBuilder, MAX_STRING_BUILDER_SIZE);
-    }
+   private static int size(final String property, final int defaultValue) {
+      return PropertiesUtil.getProperties().getIntegerProperty(property, defaultValue);
+   }
 
-    protected AbstractStringLayout(Charset charset) {
-        this(charset, (byte[])null, (byte[])null);
-    }
+   protected static void trimToMaxSize(final StringBuilder stringBuilder) {
+      StringBuilders.trimToMaxSize(stringBuilder, MAX_STRING_BUILDER_SIZE);
+   }
 
-    protected AbstractStringLayout(Charset aCharset, byte[] header, byte[] footer) {
-        super(null, header, footer);
-        this.headerSerializer = null;
-        this.footerSerializer = null;
-        this.charset = aCharset == null ? StandardCharsets.UTF_8 : aCharset;
-        this.textEncoder = Constants.ENABLE_DIRECT_ENCODERS ? new StringBuilderEncoder(this.charset) : null;
-    }
+   protected AbstractStringLayout(final Charset charset) {
+      this(charset, (byte[])null, (byte[])null);
+   }
 
-    protected AbstractStringLayout(Configuration config, Charset aCharset, Serializer headerSerializer, Serializer footerSerializer) {
-        super(config, null, null);
-        this.headerSerializer = headerSerializer;
-        this.footerSerializer = footerSerializer;
-        this.charset = aCharset == null ? StandardCharsets.UTF_8 : aCharset;
-        this.textEncoder = Constants.ENABLE_DIRECT_ENCODERS ? new StringBuilderEncoder(this.charset) : null;
-    }
+   protected AbstractStringLayout(final Charset aCharset, final byte[] header, final byte[] footer) {
+      super(null, header, footer);
+      this.headerSerializer = null;
+      this.footerSerializer = null;
+      this.charset = aCharset == null ? StandardCharsets.UTF_8 : aCharset;
+      this.textEncoder = Constants.ENABLE_DIRECT_ENCODERS ? new StringBuilderEncoder(this.charset) : null;
+   }
 
-    protected byte[] getBytes(String s) {
-        return s.getBytes(this.charset);
-    }
+   protected AbstractStringLayout(
+      final Configuration config,
+      final Charset aCharset,
+      final AbstractStringLayout.Serializer headerSerializer,
+      final AbstractStringLayout.Serializer footerSerializer
+   ) {
+      super(config, null, null);
+      this.headerSerializer = headerSerializer;
+      this.footerSerializer = footerSerializer;
+      this.charset = aCharset == null ? StandardCharsets.UTF_8 : aCharset;
+      this.textEncoder = Constants.ENABLE_DIRECT_ENCODERS ? new StringBuilderEncoder(this.charset) : null;
+   }
 
-    @Override
-    public Charset getCharset() {
-        return this.charset;
-    }
+   protected byte[] getBytes(final String s) {
+      return s.getBytes(this.charset);
+   }
 
-    @Override
-    public String getContentType() {
-        return "text/plain";
-    }
+   @Override
+   public Charset getCharset() {
+      return this.charset;
+   }
 
-    @Override
-    public byte[] getFooter() {
-        return this.serializeToBytes(this.footerSerializer, super.getFooter());
-    }
+   @Override
+   public String getContentType() {
+      return "text/plain";
+   }
 
-    public Serializer getFooterSerializer() {
-        return this.footerSerializer;
-    }
+   @Override
+   public byte[] getFooter() {
+      return this.serializeToBytes(this.footerSerializer, super.getFooter());
+   }
 
-    @Override
-    public byte[] getHeader() {
-        return this.serializeToBytes(this.headerSerializer, super.getHeader());
-    }
+   public AbstractStringLayout.Serializer getFooterSerializer() {
+      return this.footerSerializer;
+   }
 
-    public Serializer getHeaderSerializer() {
-        return this.headerSerializer;
-    }
+   @Override
+   public byte[] getHeader() {
+      return this.serializeToBytes(this.headerSerializer, super.getHeader());
+   }
 
-    private DefaultLogEventFactory getLogEventFactory() {
-        return DefaultLogEventFactory.getInstance();
-    }
+   public AbstractStringLayout.Serializer getHeaderSerializer() {
+      return this.headerSerializer;
+   }
 
-    protected Encoder<StringBuilder> getStringBuilderEncoder() {
-        if (this.textEncoder == null) {
-            this.textEncoder = new StringBuilderEncoder(this.getCharset());
-        }
-        return this.textEncoder;
-    }
+   private DefaultLogEventFactory getLogEventFactory() {
+      return DefaultLogEventFactory.getInstance();
+   }
 
-    protected byte[] serializeToBytes(Serializer serializer, byte[] defaultValue) {
-        String serializable = this.serializeToString(serializer);
-        if (serializable == null) {
-            return defaultValue;
-        }
-        return StringEncoder.toBytes(serializable, this.getCharset());
-    }
+   protected Encoder<StringBuilder> getStringBuilderEncoder() {
+      if (this.textEncoder == null) {
+         this.textEncoder = new StringBuilderEncoder(this.getCharset());
+      }
 
-    protected String serializeToString(Serializer serializer) {
-        if (serializer == null) {
-            return null;
-        }
-        LoggerConfig rootLogger = this.getConfiguration().getRootLogger();
-        LogEvent logEvent = this.getLogEventFactory().createEvent(rootLogger.getName(), null, "", rootLogger.getLevel(), null, null, null);
-        return serializer.toSerializable(logEvent);
-    }
+      return this.textEncoder;
+   }
 
-    @Override
-    public byte[] toByteArray(LogEvent event) {
-        return this.getBytes((String)this.toSerializable(event));
-    }
+   protected byte[] serializeToBytes(final AbstractStringLayout.Serializer serializer, final byte[] defaultValue) {
+      String serializable = this.serializeToString(serializer);
+      return serializable == null ? defaultValue : StringEncoder.toBytes(serializable, this.getCharset());
+   }
 
-    public static interface Serializer2 {
-        public StringBuilder toSerializable(LogEvent var1, StringBuilder var2);
-    }
+   protected String serializeToString(final AbstractStringLayout.Serializer serializer) {
+      if (serializer == null) {
+         return null;
+      } else {
+         LoggerConfig rootLogger = this.getConfiguration().getRootLogger();
+         LogEvent logEvent = this.getLogEventFactory().createEvent(rootLogger.getName(), null, "", rootLogger.getLevel(), null, null, null);
+         return serializer.toSerializable(logEvent);
+      }
+   }
 
-    public static interface Serializer
-    extends Serializer2 {
-        public String toSerializable(LogEvent var1);
+   @Override
+   public byte[] toByteArray(final LogEvent event) {
+      return this.getBytes(this.toSerializable(event));
+   }
 
-        @Override
-        default public StringBuilder toSerializable(LogEvent event, StringBuilder builder) {
-            builder.append(this.toSerializable(event));
-            return builder;
-        }
-    }
+   public abstract static class Builder<B extends AbstractStringLayout.Builder<B>> extends AbstractLayout.Builder<B> {
+      @PluginBuilderAttribute("charset")
+      private Charset charset;
+      @PluginElement("footerSerializer")
+      private AbstractStringLayout.Serializer footerSerializer;
+      @PluginElement("headerSerializer")
+      private AbstractStringLayout.Serializer headerSerializer;
 
-    public static abstract class Builder<B extends Builder<B>>
-    extends AbstractLayout.Builder<B> {
-        @PluginBuilderAttribute(value="charset")
-        private Charset charset;
-        @PluginElement(value="footerSerializer")
-        private Serializer footerSerializer;
-        @PluginElement(value="headerSerializer")
-        private Serializer headerSerializer;
+      public Charset getCharset() {
+         return this.charset;
+      }
 
-        public Charset getCharset() {
-            return this.charset;
-        }
+      public AbstractStringLayout.Serializer getFooterSerializer() {
+         return this.footerSerializer;
+      }
 
-        public Serializer getFooterSerializer() {
-            return this.footerSerializer;
-        }
+      public AbstractStringLayout.Serializer getHeaderSerializer() {
+         return this.headerSerializer;
+      }
 
-        public Serializer getHeaderSerializer() {
-            return this.headerSerializer;
-        }
+      public B setCharset(final Charset charset) {
+         this.charset = charset;
+         return this.asBuilder();
+      }
 
-        public B setCharset(Charset charset) {
-            this.charset = charset;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B setFooterSerializer(final AbstractStringLayout.Serializer footerSerializer) {
+         this.footerSerializer = footerSerializer;
+         return this.asBuilder();
+      }
 
-        public B setFooterSerializer(Serializer footerSerializer) {
-            this.footerSerializer = footerSerializer;
-            return (B)((Builder)this.asBuilder());
-        }
+      public B setHeaderSerializer(final AbstractStringLayout.Serializer headerSerializer) {
+         this.headerSerializer = headerSerializer;
+         return this.asBuilder();
+      }
+   }
 
-        public B setHeaderSerializer(Serializer headerSerializer) {
-            this.headerSerializer = headerSerializer;
-            return (B)((Builder)this.asBuilder());
-        }
-    }
+   public interface Serializer extends AbstractStringLayout.Serializer2 {
+      String toSerializable(final LogEvent event);
+
+      @Override
+      default StringBuilder toSerializable(final LogEvent event, final StringBuilder builder) {
+         builder.append(this.toSerializable(event));
+         return builder;
+      }
+   }
+
+   public interface Serializer2 {
+      StringBuilder toSerializable(final LogEvent event, final StringBuilder builder);
+   }
 }
-

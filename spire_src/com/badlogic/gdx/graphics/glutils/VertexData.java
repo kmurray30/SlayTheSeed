@@ -1,38 +1,32 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.graphics.glutils;
 
 import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
 import java.nio.FloatBuffer;
 
-public interface VertexData
-extends Disposable {
-    public int getNumVertices();
+public interface VertexData extends Disposable {
+   int getNumVertices();
 
-    public int getNumMaxVertices();
+   int getNumMaxVertices();
 
-    public VertexAttributes getAttributes();
+   VertexAttributes getAttributes();
 
-    public void setVertices(float[] var1, int var2, int var3);
+   void setVertices(float[] var1, int var2, int var3);
 
-    public void updateVertices(int var1, float[] var2, int var3, int var4);
+   void updateVertices(int var1, float[] var2, int var3, int var4);
 
-    public FloatBuffer getBuffer();
+   FloatBuffer getBuffer();
 
-    public void bind(ShaderProgram var1);
+   void bind(ShaderProgram var1);
 
-    public void bind(ShaderProgram var1, int[] var2);
+   void bind(ShaderProgram var1, int[] var2);
 
-    public void unbind(ShaderProgram var1);
+   void unbind(ShaderProgram var1);
 
-    public void unbind(ShaderProgram var1, int[] var2);
+   void unbind(ShaderProgram var1, int[] var2);
 
-    public void invalidate();
+   void invalidate();
 
-    @Override
-    public void dispose();
+   @Override
+   void dispose();
 }
-

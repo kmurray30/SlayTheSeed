@@ -1,27 +1,21 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.badlogic.gdx.tools.hiero.unicodefont.effects;
 
-import com.badlogic.gdx.tools.hiero.unicodefont.effects.Effect;
 import java.util.List;
 
-public interface ConfigurableEffect
-extends Effect {
-    public List getValues();
+public interface ConfigurableEffect extends Effect {
+   List getValues();
 
-    public void setValues(List var1);
+   void setValues(List var1);
 
-    public static interface Value {
-        public String getName();
+   public interface Value {
+      String getName();
 
-        public void setString(String var1);
+      void setString(String var1);
 
-        public String getString();
+      String getString();
 
-        public Object getObject();
+      Object getObject();
 
-        public void showDialog();
-    }
+      void showDialog();
+   }
 }
-

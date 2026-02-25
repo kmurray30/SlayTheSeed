@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.vfx.combat;
 
 import com.badlogic.gdx.Gdx;
@@ -13,52 +10,71 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
-public class DamageImpactLineEffect
-extends AbstractGameEffect {
-    private static final float EFFECT_DUR = 0.5f;
-    private float x;
-    private float y;
-    private Vector2 speedVector;
-    private float speed;
-    private TextureAtlas.AtlasRegion img = MathUtils.randomBoolean() ? ImageMaster.STRIKE_LINE : ImageMaster.STRIKE_LINE_2;
+public class DamageImpactLineEffect extends AbstractGameEffect {
+   private static final float EFFECT_DUR = 0.5F;
+   private float x;
+   private float y;
+   private Vector2 speedVector;
+   private float speed;
+   private TextureAtlas.AtlasRegion img;
 
-    public DamageImpactLineEffect(float x, float y) {
-        this.duration = 0.5f;
-        this.startingDuration = 0.5f;
-        this.x = x - (float)this.img.packedWidth / 2.0f;
-        this.y = y - (float)this.img.packedHeight / 2.0f;
-        this.speed = MathUtils.random(20.0f * Settings.scale, 40.0f * Settings.scale);
-        this.speedVector = new Vector2(MathUtils.random(-1.0f, 1.0f), MathUtils.random(-1.0f, 1.0f));
-        this.speedVector.nor();
-        this.speedVector.angle();
-        this.rotation = this.speedVector.angle();
-        this.speedVector.x *= this.speed;
-        this.speedVector.y *= this.speed;
-        this.color = MathUtils.randomBoolean() ? Color.RED.cpy() : Color.ORANGE.cpy();
-    }
+   public DamageImpactLineEffect(float x, float y) {
+      if (MathUtils.randomBoolean()) {
+         this.img = ImageMaster.STRIKE_LINE;
+      } else {
+         this.img = ImageMaster.STRIKE_LINE_2;
+      }
 
-    @Override
-    public void update() {
-        this.speed -= Gdx.graphics.getDeltaTime() * 60.0f;
-        this.speedVector.nor();
-        this.speedVector.x *= this.speed * Gdx.graphics.getDeltaTime() * 60.0f;
-        this.speedVector.y *= this.speed * Gdx.graphics.getDeltaTime() * 60.0f;
-        this.x += this.speedVector.x;
-        this.y += this.speedVector.y;
-        this.scale = Settings.scale * this.duration / 0.5f;
-        super.update();
-    }
+      this.duration = 0.5F;
+      this.startingDuration = 0.5F;
+      this.x = x - this.img.packedWidth / 2.0F;
+      this.y = y - this.img.packedHeight / 2.0F;
+      this.speed = MathUtils.random(20.0F * Settings.scale, 40.0F * Settings.scale);
+      this.speedVector = new Vector2(MathUtils.random(-1.0F, 1.0F), MathUtils.random(-1.0F, 1.0F));
+      this.speedVector.nor();
+      this.speedVector.angle();
+      this.rotation = this.speedVector.angle();
+      this.speedVector.x = this.speedVector.x * this.speed;
+      this.speedVector.y = this.speedVector.y * this.speed;
+      if (MathUtils.randomBoolean()) {
+         this.color = Color.RED.cpy();
+      } else {
+         this.color = Color.ORANGE.cpy();
+      }
+   }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        if (!this.isDone) {
-            sb.setColor(this.color);
-            sb.draw(this.img, this.x, this.y, (float)this.img.packedWidth / 2.0f, (float)this.img.packedHeight / 2.0f, this.img.packedWidth, this.img.packedHeight, this.scale, this.scale, this.rotation);
-        }
-    }
+   @Override
+   public void update() {
+      this.speed = this.speed - Gdx.graphics.getDeltaTime() * 60.0F;
+      this.speedVector.nor();
+      this.speedVector.x = this.speedVector.x * (this.speed * Gdx.graphics.getDeltaTime() * 60.0F);
+      this.speedVector.y = this.speedVector.y * (this.speed * Gdx.graphics.getDeltaTime() * 60.0F);
+      this.x = this.x + this.speedVector.x;
+      this.y = this.y + this.speedVector.y;
+      this.scale = Settings.scale * this.duration / 0.5F;
+      super.update();
+   }
 
-    @Override
-    public void dispose() {
-    }
+   @Override
+   public void render(SpriteBatch sb) {
+      if (!this.isDone) {
+         sb.setColor(this.color);
+         sb.draw(
+            this.img,
+            this.x,
+            this.y,
+            this.img.packedWidth / 2.0F,
+            this.img.packedHeight / 2.0F,
+            this.img.packedWidth,
+            this.img.packedHeight,
+            this.scale,
+            this.scale,
+            this.rotation
+         );
+      }
+   }
+
+   @Override
+   public void dispose() {
+   }
 }
-

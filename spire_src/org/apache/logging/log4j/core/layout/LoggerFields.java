@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.layout;
 
 import java.util.Collections;
@@ -13,47 +10,55 @@ import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.core.util.KeyValuePair;
 import org.apache.logging.log4j.message.StructuredDataId;
 
-@Plugin(name="LoggerFields", category="Core", printObject=true)
+@Plugin(name = "LoggerFields", category = "Core", printObject = true)
 public final class LoggerFields {
-    private final Map<String, String> map;
-    private final String sdId;
-    private final String enterpriseId;
-    private final boolean discardIfAllFieldsAreEmpty;
+   private final Map<String, String> map;
+   private final String sdId;
+   private final String enterpriseId;
+   private final boolean discardIfAllFieldsAreEmpty;
 
-    private LoggerFields(Map<String, String> map, String sdId, String enterpriseId, boolean discardIfAllFieldsAreEmpty) {
-        this.sdId = sdId;
-        this.enterpriseId = enterpriseId;
-        this.map = Collections.unmodifiableMap(map);
-        this.discardIfAllFieldsAreEmpty = discardIfAllFieldsAreEmpty;
-    }
+   private LoggerFields(final Map<String, String> map, final String sdId, final String enterpriseId, final boolean discardIfAllFieldsAreEmpty) {
+      this.sdId = sdId;
+      this.enterpriseId = enterpriseId;
+      this.map = Collections.unmodifiableMap(map);
+      this.discardIfAllFieldsAreEmpty = discardIfAllFieldsAreEmpty;
+   }
 
-    public Map<String, String> getMap() {
-        return this.map;
-    }
+   public Map<String, String> getMap() {
+      return this.map;
+   }
 
-    public String toString() {
-        return this.map.toString();
-    }
+   @Override
+   public String toString() {
+      return this.map.toString();
+   }
 
-    @PluginFactory
-    public static LoggerFields createLoggerFields(@PluginElement(value="LoggerFields") KeyValuePair[] keyValuePairs, @PluginAttribute(value="sdId") String sdId, @PluginAttribute(value="enterpriseId") String enterpriseId, @PluginAttribute(value="discardIfAllFieldsAreEmpty") boolean discardIfAllFieldsAreEmpty) {
-        HashMap<String, String> map = new HashMap<String, String>();
-        for (KeyValuePair keyValuePair : keyValuePairs) {
-            map.put(keyValuePair.getKey(), keyValuePair.getValue());
-        }
-        return new LoggerFields(map, sdId, enterpriseId, discardIfAllFieldsAreEmpty);
-    }
+   @PluginFactory
+   public static LoggerFields createLoggerFields(
+      @PluginElement("LoggerFields") final KeyValuePair[] keyValuePairs,
+      @PluginAttribute("sdId") final String sdId,
+      @PluginAttribute("enterpriseId") final String enterpriseId,
+      @PluginAttribute("discardIfAllFieldsAreEmpty") final boolean discardIfAllFieldsAreEmpty
+   ) {
+      Map<String, String> map = new HashMap<>();
 
-    public StructuredDataId getSdId() {
-        if (this.enterpriseId == null || this.sdId == null) {
-            return null;
-        }
-        int eId = Integer.parseInt(this.enterpriseId);
-        return new StructuredDataId(this.sdId, eId, null, null);
-    }
+      for (KeyValuePair keyValuePair : keyValuePairs) {
+         map.put(keyValuePair.getKey(), keyValuePair.getValue());
+      }
 
-    public boolean getDiscardIfAllFieldsAreEmpty() {
-        return this.discardIfAllFieldsAreEmpty;
-    }
+      return new LoggerFields(map, sdId, enterpriseId, discardIfAllFieldsAreEmpty);
+   }
+
+   public StructuredDataId getSdId() {
+      if (this.enterpriseId != null && this.sdId != null) {
+         int eId = Integer.parseInt(this.enterpriseId);
+         return new StructuredDataId(this.sdId, eId, null, null);
+      } else {
+         return null;
+      }
+   }
+
+   public boolean getDiscardIfAllFieldsAreEmpty() {
+      return this.discardIfAllFieldsAreEmpty;
+   }
 }
-

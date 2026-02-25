@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.core.filter;
 
 import java.util.Iterator;
@@ -11,148 +8,146 @@ import org.apache.logging.log4j.core.LifeCycle2;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.Property;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
-import org.apache.logging.log4j.core.filter.CompositeFilter;
-import org.apache.logging.log4j.core.filter.Filterable;
 
-public abstract class AbstractFilterable
-extends AbstractLifeCycle
-implements Filterable {
-    private volatile Filter filter;
-    @PluginElement(value="Properties")
-    private final Property[] propertyArray;
+public abstract class AbstractFilterable extends AbstractLifeCycle implements Filterable {
+   private volatile Filter filter;
+   @PluginElement("Properties")
+   private final Property[] propertyArray;
 
-    protected AbstractFilterable() {
-        this(null, Property.EMPTY_ARRAY);
-    }
+   protected AbstractFilterable() {
+      this(null, Property.EMPTY_ARRAY);
+   }
 
-    protected AbstractFilterable(Filter filter) {
-        this(filter, Property.EMPTY_ARRAY);
-    }
+   protected AbstractFilterable(final Filter filter) {
+      this(filter, Property.EMPTY_ARRAY);
+   }
 
-    protected AbstractFilterable(Filter filter, Property[] propertyArray) {
-        this.filter = filter;
-        this.propertyArray = propertyArray == null ? Property.EMPTY_ARRAY : propertyArray;
-    }
+   protected AbstractFilterable(final Filter filter, final Property[] propertyArray) {
+      this.filter = filter;
+      this.propertyArray = propertyArray == null ? Property.EMPTY_ARRAY : propertyArray;
+   }
 
-    @Override
-    public synchronized void addFilter(Filter filter) {
-        if (filter == null) {
-            return;
-        }
-        if (this.filter == null) {
+   @Override
+   public synchronized void addFilter(final Filter filter) {
+      if (filter != null) {
+         if (this.filter == null) {
             this.filter = filter;
-        } else if (this.filter instanceof CompositeFilter) {
+         } else if (this.filter instanceof CompositeFilter) {
             this.filter = ((CompositeFilter)this.filter).addFilter(filter);
-        } else {
+         } else {
             Filter[] filters = new Filter[]{this.filter, filter};
             this.filter = CompositeFilter.createFilters(filters);
-        }
-    }
+         }
+      }
+   }
 
-    @Override
-    public Filter getFilter() {
-        return this.filter;
-    }
+   @Override
+   public Filter getFilter() {
+      return this.filter;
+   }
 
-    @Override
-    public boolean hasFilter() {
-        return this.filter != null;
-    }
+   @Override
+   public boolean hasFilter() {
+      return this.filter != null;
+   }
 
-    @Override
-    public boolean isFiltered(LogEvent event) {
-        return this.filter != null && this.filter.filter(event) == Filter.Result.DENY;
-    }
+   @Override
+   public boolean isFiltered(final LogEvent event) {
+      return this.filter != null && this.filter.filter(event) == Filter.Result.DENY;
+   }
 
-    @Override
-    public synchronized void removeFilter(Filter filter) {
-        if (this.filter == null || filter == null) {
-            return;
-        }
-        if (this.filter == filter || this.filter.equals(filter)) {
+   @Override
+   public synchronized void removeFilter(final Filter filter) {
+      if (this.filter != null && filter != null) {
+         if (this.filter == filter || this.filter.equals(filter)) {
             this.filter = null;
-        } else if (this.filter instanceof CompositeFilter) {
+         } else if (this.filter instanceof CompositeFilter) {
             CompositeFilter composite = (CompositeFilter)this.filter;
-            if ((composite = composite.removeFilter(filter)).size() > 1) {
-                this.filter = composite;
+            composite = composite.removeFilter(filter);
+            if (composite.size() > 1) {
+               this.filter = composite;
             } else if (composite.size() == 1) {
-                Iterator<Filter> iter = composite.iterator();
-                this.filter = iter.next();
+               Iterator<Filter> iter = composite.iterator();
+               this.filter = iter.next();
             } else {
-                this.filter = null;
+               this.filter = null;
             }
-        }
-    }
+         }
+      }
+   }
 
-    @Override
-    public void start() {
-        this.setStarting();
-        if (this.filter != null) {
-            this.filter.start();
-        }
-        this.setStarted();
-    }
+   @Override
+   public void start() {
+      this.setStarting();
+      if (this.filter != null) {
+         this.filter.start();
+      }
 
-    @Override
-    public boolean stop(long timeout, TimeUnit timeUnit) {
-        return this.stop(timeout, timeUnit, true);
-    }
+      this.setStarted();
+   }
 
-    protected boolean stop(long timeout, TimeUnit timeUnit, boolean changeLifeCycleState) {
-        if (changeLifeCycleState) {
-            this.setStopping();
-        }
-        boolean stopped = true;
-        if (this.filter != null) {
-            if (this.filter instanceof LifeCycle2) {
-                stopped = ((LifeCycle2)((Object)this.filter)).stop(timeout, timeUnit);
-            } else {
-                this.filter.stop();
-                stopped = true;
-            }
-        }
-        if (changeLifeCycleState) {
-            this.setStopped();
-        }
-        return stopped;
-    }
+   @Override
+   public boolean stop(final long timeout, final TimeUnit timeUnit) {
+      return this.stop(timeout, timeUnit, true);
+   }
 
-    public Property[] getPropertyArray() {
-        return this.propertyArray;
-    }
+   protected boolean stop(final long timeout, final TimeUnit timeUnit, final boolean changeLifeCycleState) {
+      if (changeLifeCycleState) {
+         this.setStopping();
+      }
 
-    public static abstract class Builder<B extends Builder<B>> {
-        @PluginElement(value="Filter")
-        private Filter filter;
-        @PluginElement(value="Properties")
-        private Property[] propertyArray;
+      boolean stopped = true;
+      if (this.filter != null) {
+         if (this.filter instanceof LifeCycle2) {
+            stopped = ((LifeCycle2)this.filter).stop(timeout, timeUnit);
+         } else {
+            this.filter.stop();
+            stopped = true;
+         }
+      }
 
-        public B asBuilder() {
-            return (B)this;
-        }
+      if (changeLifeCycleState) {
+         this.setStopped();
+      }
 
-        public Filter getFilter() {
-            return this.filter;
-        }
+      return stopped;
+   }
 
-        public Property[] getPropertyArray() {
-            return this.propertyArray;
-        }
+   public Property[] getPropertyArray() {
+      return this.propertyArray;
+   }
 
-        public B setFilter(Filter filter) {
-            this.filter = filter;
-            return this.asBuilder();
-        }
+   public abstract static class Builder<B extends AbstractFilterable.Builder<B>> {
+      @PluginElement("Filter")
+      private Filter filter;
+      @PluginElement("Properties")
+      private Property[] propertyArray;
 
-        public B setPropertyArray(Property[] properties) {
-            this.propertyArray = properties;
-            return this.asBuilder();
-        }
+      public B asBuilder() {
+         return (B)this;
+      }
 
-        @Deprecated
-        public B withFilter(Filter filter) {
-            return this.setFilter(filter);
-        }
-    }
+      public Filter getFilter() {
+         return this.filter;
+      }
+
+      public Property[] getPropertyArray() {
+         return this.propertyArray;
+      }
+
+      public B setFilter(final Filter filter) {
+         this.filter = filter;
+         return this.asBuilder();
+      }
+
+      public B setPropertyArray(final Property[] properties) {
+         this.propertyArray = properties;
+         return this.asBuilder();
+      }
+
+      @Deprecated
+      public B withFilter(final Filter filter) {
+         return this.setFilter(filter);
+      }
+   }
 }
-

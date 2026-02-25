@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.actions.watcher;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
@@ -10,22 +7,23 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.VulnerablePower;
 
-public class CrushJointsAction
-extends AbstractGameAction {
-    private AbstractMonster m;
-    private int magicNumber;
+public class CrushJointsAction extends AbstractGameAction {
+   private AbstractMonster m;
+   private int magicNumber;
 
-    public CrushJointsAction(AbstractMonster monster, int vulnAmount) {
-        this.m = monster;
-        this.magicNumber = vulnAmount;
-    }
+   public CrushJointsAction(AbstractMonster monster, int vulnAmount) {
+      this.m = monster;
+      this.magicNumber = vulnAmount;
+   }
 
-    @Override
-    public void update() {
-        if (AbstractDungeon.actionManager.cardsPlayedThisCombat.size() >= 2 && AbstractDungeon.actionManager.cardsPlayedThisCombat.get((int)(AbstractDungeon.actionManager.cardsPlayedThisCombat.size() - 2)).type == AbstractCard.CardType.SKILL) {
-            this.addToTop(new ApplyPowerAction(this.m, AbstractDungeon.player, new VulnerablePower(this.m, this.magicNumber, false), this.magicNumber));
-        }
-        this.isDone = true;
-    }
+   @Override
+   public void update() {
+      if (AbstractDungeon.actionManager.cardsPlayedThisCombat.size() >= 2
+         && AbstractDungeon.actionManager.cardsPlayedThisCombat.get(AbstractDungeon.actionManager.cardsPlayedThisCombat.size() - 2).type
+            == AbstractCard.CardType.SKILL) {
+         this.addToTop(new ApplyPowerAction(this.m, AbstractDungeon.player, new VulnerablePower(this.m, this.magicNumber, false), this.magicNumber));
+      }
+
+      this.isDone = true;
+   }
 }
-

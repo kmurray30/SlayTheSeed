@@ -1,14 +1,9 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.spi;
 
 import java.util.List;
-import org.apache.logging.log4j.spi.LoggerContextShutdownAware;
 
 public interface LoggerContextShutdownEnabled {
-    public void addShutdownListener(LoggerContextShutdownAware var1);
+   void addShutdownListener(LoggerContextShutdownAware listener);
 
-    public List<LoggerContextShutdownAware> getListeners();
+   List<LoggerContextShutdownAware> getListeners();
 }
-

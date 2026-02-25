@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.lwjgl.opengl;
 
 import java.awt.Canvas;
@@ -12,53 +9,48 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
 
 final class AWTSurfaceLock {
-    private static final int WAIT_DELAY_MILLIS = 100;
-    private final ByteBuffer lock_buffer = AWTSurfaceLock.createHandle();
-    private boolean firstLockSucceeded;
+   private static final int WAIT_DELAY_MILLIS = 100;
+   private final ByteBuffer lock_buffer = createHandle();
+   private boolean firstLockSucceeded;
 
-    AWTSurfaceLock() {
-    }
+   private static native ByteBuffer createHandle();
 
-    private static native ByteBuffer createHandle();
+   public ByteBuffer lockAndGetHandle(Canvas component) throws LWJGLException {
+      while (!this.privilegedLockAndInitHandle(component)) {
+         LWJGLUtil.log("Could not get drawing surface info, retrying...");
 
-    public ByteBuffer lockAndGetHandle(Canvas component) throws LWJGLException {
-        while (!this.privilegedLockAndInitHandle(component)) {
-            LWJGLUtil.log("Could not get drawing surface info, retrying...");
-            try {
-                Thread.sleep(100L);
-            }
-            catch (InterruptedException e) {
-                LWJGLUtil.log("Interrupted while retrying: " + e);
-            }
-        }
-        return this.lock_buffer;
-    }
+         try {
+            Thread.sleep(100L);
+         } catch (InterruptedException var3) {
+            LWJGLUtil.log("Interrupted while retrying: " + var3);
+         }
+      }
 
-    private boolean privilegedLockAndInitHandle(final Canvas component) throws LWJGLException {
-        if (this.firstLockSucceeded) {
-            return AWTSurfaceLock.lockAndInitHandle(this.lock_buffer, component);
-        }
-        try {
-            this.firstLockSucceeded = AccessController.doPrivileged(new PrivilegedExceptionAction<Boolean>(){
+      return this.lock_buffer;
+   }
 
-                @Override
-                public Boolean run() throws LWJGLException {
-                    return AWTSurfaceLock.lockAndInitHandle(AWTSurfaceLock.this.lock_buffer, component);
-                }
+   private boolean privilegedLockAndInitHandle(final Canvas component) throws LWJGLException {
+      if (this.firstLockSucceeded) {
+         return lockAndInitHandle(this.lock_buffer, component);
+      } else {
+         try {
+            this.firstLockSucceeded = AccessController.doPrivileged(new PrivilegedExceptionAction<Boolean>() {
+               public Boolean run() throws LWJGLException {
+                  return AWTSurfaceLock.lockAndInitHandle(AWTSurfaceLock.this.lock_buffer, component);
+               }
             });
             return this.firstLockSucceeded;
-        }
-        catch (PrivilegedActionException e) {
-            throw (LWJGLException)e.getException();
-        }
-    }
+         } catch (PrivilegedActionException var3) {
+            throw (LWJGLException)var3.getException();
+         }
+      }
+   }
 
-    private static native boolean lockAndInitHandle(ByteBuffer var0, Canvas var1) throws LWJGLException;
+   private static native boolean lockAndInitHandle(ByteBuffer var0, Canvas var1) throws LWJGLException;
 
-    void unlock() throws LWJGLException {
-        AWTSurfaceLock.nUnlock(this.lock_buffer);
-    }
+   void unlock() throws LWJGLException {
+      nUnlock(this.lock_buffer);
+   }
 
-    private static native void nUnlock(ByteBuffer var0) throws LWJGLException;
+   private static native void nUnlock(ByteBuffer var0) throws LWJGLException;
 }
-

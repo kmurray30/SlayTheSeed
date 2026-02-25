@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.cards.blue;
 
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
@@ -11,32 +8,41 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.FocusPower;
 
-public class Defragment
-extends AbstractCard {
-    public static final String ID = "Defragment";
-    private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("Defragment");
+public class Defragment extends AbstractCard {
+   public static final String ID = "Defragment";
+   private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("Defragment");
 
-    public Defragment() {
-        super(ID, Defragment.cardStrings.NAME, "blue/power/defragment", 1, Defragment.cardStrings.DESCRIPTION, AbstractCard.CardType.POWER, AbstractCard.CardColor.BLUE, AbstractCard.CardRarity.UNCOMMON, AbstractCard.CardTarget.SELF);
-        this.magicNumber = this.baseMagicNumber = 1;
-    }
+   public Defragment() {
+      super(
+         "Defragment",
+         cardStrings.NAME,
+         "blue/power/defragment",
+         1,
+         cardStrings.DESCRIPTION,
+         AbstractCard.CardType.POWER,
+         AbstractCard.CardColor.BLUE,
+         AbstractCard.CardRarity.UNCOMMON,
+         AbstractCard.CardTarget.SELF
+      );
+      this.baseMagicNumber = 1;
+      this.magicNumber = this.baseMagicNumber;
+   }
 
-    @Override
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new ApplyPowerAction(p, p, new FocusPower(p, this.magicNumber), this.magicNumber));
-    }
+   @Override
+   public void use(AbstractPlayer p, AbstractMonster m) {
+      this.addToBot(new ApplyPowerAction(p, p, new FocusPower(p, this.magicNumber), this.magicNumber));
+   }
 
-    @Override
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeMagicNumber(1);
-        }
-    }
+   @Override
+   public void upgrade() {
+      if (!this.upgraded) {
+         this.upgradeName();
+         this.upgradeMagicNumber(1);
+      }
+   }
 
-    @Override
-    public AbstractCard makeCopy() {
-        return new Defragment();
-    }
+   @Override
+   public AbstractCard makeCopy() {
+      return new Defragment();
+   }
 }
-

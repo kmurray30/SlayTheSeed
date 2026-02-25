@@ -1,17 +1,13 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.gikk.twirk.enums;
 
 public enum EMOTE_SIZE {
-    SMALL("/1.0"),
-    MEDIUM("/2.0"),
-    LARGE("/3.0");
+   SMALL("/1.0"),
+   MEDIUM("/2.0"),
+   LARGE("/3.0");
 
-    public final String value;
+   public final String value;
 
-    private EMOTE_SIZE(String val) {
-        this.value = val;
-    }
+   private EMOTE_SIZE(String val) {
+      this.value = val;
+   }
 }
-

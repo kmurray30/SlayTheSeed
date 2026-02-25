@@ -1,85 +1,70 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  org.lwjgl.opengles.GLContext
- */
 package org.lwjgl.opengl;
 
 import java.nio.ByteBuffer;
 import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.LinuxDisplay;
-import org.lwjgl.opengl.LinuxPeerInfo;
-import org.lwjgl.opengl.PixelFormat;
-import org.lwjgl.opengles.GLContext;
 
-final class LinuxDisplayPeerInfo
-extends LinuxPeerInfo {
-    final boolean egl;
+final class LinuxDisplayPeerInfo extends LinuxPeerInfo {
+   final boolean egl;
 
-    LinuxDisplayPeerInfo() throws LWJGLException {
-        this.egl = true;
-        GLContext.loadOpenGLLibrary();
-    }
+   LinuxDisplayPeerInfo() throws LWJGLException {
+      this.egl = true;
+      org.lwjgl.opengles.GLContext.loadOpenGLLibrary();
+   }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    LinuxDisplayPeerInfo(PixelFormat pixel_format) throws LWJGLException {
-        this.egl = false;
-        LinuxDisplay.lockAWT();
-        try {
-            org.lwjgl.opengl.GLContext.loadOpenGLLibrary();
+   LinuxDisplayPeerInfo(PixelFormat pixel_format) throws LWJGLException {
+      this.egl = false;
+      LinuxDisplay.lockAWT();
+
+      try {
+         GLContext.loadOpenGLLibrary();
+
+         try {
+            LinuxDisplay.incDisplay();
+
             try {
-                LinuxDisplay.incDisplay();
-                try {
-                    LinuxDisplayPeerInfo.initDefaultPeerInfo(LinuxDisplay.getDisplay(), LinuxDisplay.getDefaultScreen(), this.getHandle(), pixel_format);
-                }
-                catch (LWJGLException e) {
-                    LinuxDisplay.decDisplay();
-                    throw e;
-                }
+               initDefaultPeerInfo(LinuxDisplay.getDisplay(), LinuxDisplay.getDefaultScreen(), this.getHandle(), pixel_format);
+            } catch (LWJGLException var7) {
+               LinuxDisplay.decDisplay();
+               throw var7;
             }
-            catch (LWJGLException e) {
-                org.lwjgl.opengl.GLContext.unloadOpenGLLibrary();
-                throw e;
-            }
-        }
-        finally {
-            LinuxDisplay.unlockAWT();
-        }
-    }
-
-    private static native void initDefaultPeerInfo(long var0, int var2, ByteBuffer var3, PixelFormat var4) throws LWJGLException;
-
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    protected void doLockAndInitHandle() throws LWJGLException {
-        LinuxDisplay.lockAWT();
-        try {
-            LinuxDisplayPeerInfo.initDrawable(LinuxDisplay.getWindow(), this.getHandle());
-        }
-        finally {
-            LinuxDisplay.unlockAWT();
-        }
-    }
-
-    private static native void initDrawable(long var0, ByteBuffer var2);
-
-    protected void doUnlock() throws LWJGLException {
-    }
-
-    public void destroy() {
-        super.destroy();
-        if (this.egl) {
+         } catch (LWJGLException var8) {
             GLContext.unloadOpenGLLibrary();
-        } else {
-            LinuxDisplay.lockAWT();
-            LinuxDisplay.decDisplay();
-            org.lwjgl.opengl.GLContext.unloadOpenGLLibrary();
-            LinuxDisplay.unlockAWT();
-        }
-    }
-}
+            throw var8;
+         }
+      } finally {
+         LinuxDisplay.unlockAWT();
+      }
+   }
 
+   private static native void initDefaultPeerInfo(long var0, int var2, ByteBuffer var3, PixelFormat var4) throws LWJGLException;
+
+   @Override
+   protected void doLockAndInitHandle() throws LWJGLException {
+      LinuxDisplay.lockAWT();
+
+      try {
+         initDrawable(LinuxDisplay.getWindow(), this.getHandle());
+      } finally {
+         LinuxDisplay.unlockAWT();
+      }
+   }
+
+   private static native void initDrawable(long var0, ByteBuffer var2);
+
+   @Override
+   protected void doUnlock() throws LWJGLException {
+   }
+
+   @Override
+   public void destroy() {
+      super.destroy();
+      if (this.egl) {
+         org.lwjgl.opengles.GLContext.unloadOpenGLLibrary();
+      } else {
+         LinuxDisplay.lockAWT();
+         LinuxDisplay.decDisplay();
+         GLContext.unloadOpenGLLibrary();
+         LinuxDisplay.unlockAWT();
+      }
+   }
+}

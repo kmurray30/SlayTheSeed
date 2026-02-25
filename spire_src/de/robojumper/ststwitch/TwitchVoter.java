@@ -1,167 +1,170 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package de.robojumper.ststwitch;
 
 import com.badlogic.gdx.Gdx;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.random.Random;
-import de.robojumper.ststwitch.TwitchConfig;
-import de.robojumper.ststwitch.TwitchConnection;
-import de.robojumper.ststwitch.TwitchMessageListener;
-import de.robojumper.ststwitch.TwitchPanel;
-import de.robojumper.ststwitch.TwitchVoteListener;
-import de.robojumper.ststwitch.TwitchVoteOption;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class TwitchVoter
-implements TwitchMessageListener {
-    private static List<TwitchVoteListener> listeners = new LinkedList<TwitchVoteListener>();
-    private static final UIStrings uiStrings = CardCrawlGame.languagePack.getUIString("TwitchVoter");
-    public static final String[] TEXT = TwitchVoter.uiStrings.TEXT;
-    private static boolean wasConnected = false;
-    private boolean isVoting;
-    private Consumer<Integer> voteCb;
-    private float timer;
-    private boolean triggered = false;
-    private TwitchVoteOption[] options;
-    private Set<String> votedUsernames = new HashSet<String>();
-    private TwitchConfig twitchConfig;
+public class TwitchVoter implements TwitchMessageListener {
+   private static List<TwitchVoteListener> listeners = new LinkedList<>();
+   private static final UIStrings uiStrings = CardCrawlGame.languagePack.getUIString("TwitchVoter");
+   public static final String[] TEXT;
+   private static boolean wasConnected = false;
+   private boolean isVoting;
+   private Consumer<Integer> voteCb;
+   private float timer;
+   private boolean triggered = false;
+   private TwitchVoteOption[] options;
+   private Set<String> votedUsernames = new HashSet<>();
+   private TwitchConfig twitchConfig;
 
-    TwitchVoter(TwitchConfig twitchConfig) {
-        this.twitchConfig = twitchConfig;
-        this.isVoting = false;
-        TwitchPanel.getTwitch().registerMessageListener(this);
-    }
+   TwitchVoter(TwitchConfig twitchConfig) {
+      this.twitchConfig = twitchConfig;
+      this.isVoting = false;
+      TwitchPanel.getTwitch().registerMessageListener(this);
+   }
 
-    public void update() {
-        boolean newStatus;
-        if (this.isCurrentlyVoting()) {
-            this.timer -= Gdx.graphics.getDeltaTime();
-            if (this.timer <= 0.0f && !this.triggered) {
-                this.completeVoting();
-            }
-        }
-        boolean bl = newStatus = TwitchPanel.getTwitch().getConnectionStatus() == TwitchConnection.ConnectionStatus.CONNECTED;
-        if (wasConnected != newStatus) {
-            if (newStatus) {
-                this.notifyListenersConnected();
-            } else {
-                this.notifyListenersDisconnected();
-            }
-        }
-        wasConnected = newStatus;
-    }
+   public void update() {
+      if (this.isCurrentlyVoting()) {
+         this.timer = this.timer - Gdx.graphics.getDeltaTime();
+         if (this.timer <= 0.0F && !this.triggered) {
+            this.completeVoting();
+         }
+      }
 
-    private void notifyComplete() {
-        int maxIdx = 0;
-        for (int i = 1; i < this.options.length; ++i) {
-            if (this.options[i].voteCount != 0 && this.options[i].voteCount == this.options[maxIdx].voteCount) {
-                if (!new Random().randomBoolean()) continue;
-                maxIdx = i;
-                continue;
+      boolean newStatus = TwitchPanel.getTwitch().getConnectionStatus() == TwitchConnection.ConnectionStatus.CONNECTED;
+      if (wasConnected != newStatus) {
+         if (newStatus) {
+            this.notifyListenersConnected();
+         } else {
+            this.notifyListenersDisconnected();
+         }
+      }
+
+      wasConnected = newStatus;
+   }
+
+   private void notifyComplete() {
+      int maxIdx = 0;
+
+      for (int i = 1; i < this.options.length; i++) {
+         if (this.options[i].voteCount != 0 && this.options[i].voteCount == this.options[maxIdx].voteCount) {
+            if (new Random().randomBoolean()) {
+               maxIdx = i;
             }
-            if (this.options[i].voteCount <= this.options[maxIdx].voteCount) continue;
+         } else if (this.options[i].voteCount > this.options[maxIdx].voteCount) {
             maxIdx = i;
-        }
-        this.voteCb.accept(maxIdx);
-    }
+         }
+      }
 
-    private void notifyListenersConnected() {
-        for (TwitchVoteListener l : listeners) {
-            l.onTwitchAvailable();
-        }
-    }
+      this.voteCb.accept(maxIdx);
+   }
 
-    private void notifyListenersDisconnected() {
-        for (TwitchVoteListener l : listeners) {
-            l.onTwitchUnavailable();
-        }
-    }
+   private void notifyListenersConnected() {
+      for (TwitchVoteListener l : listeners) {
+         l.onTwitchAvailable();
+      }
+   }
 
-    public static void registerListener(TwitchVoteListener L) {
-        listeners.add(L);
-    }
+   private void notifyListenersDisconnected() {
+      for (TwitchVoteListener l : listeners) {
+         l.onTwitchUnavailable();
+      }
+   }
 
-    private boolean isCurrentlyVoting() {
-        return this.isVoting;
-    }
+   public static void registerListener(TwitchVoteListener L) {
+      listeners.add(L);
+   }
 
-    private boolean isVotingAvailable() {
-        return !this.isVoting && TwitchPanel.getTwitch().getConnectionStatus() == TwitchConnection.ConnectionStatus.CONNECTED;
-    }
+   private boolean isCurrentlyVoting() {
+      return this.isVoting;
+   }
 
-    public boolean isVotingConnected() {
-        return TwitchPanel.getTwitch().getConnectionStatus() == TwitchConnection.ConnectionStatus.CONNECTED;
-    }
+   private boolean isVotingAvailable() {
+      return !this.isVoting && TwitchPanel.getTwitch().getConnectionStatus() == TwitchConnection.ConnectionStatus.CONNECTED;
+   }
 
-    public TwitchVoteOption[] getOptions() {
-        return this.options;
-    }
+   public boolean isVotingConnected() {
+      return TwitchPanel.getTwitch().getConnectionStatus() == TwitchConnection.ConnectionStatus.CONNECTED;
+   }
 
-    public boolean initiateSimpleNumberVote(String[] strOptions, Consumer<Integer> voteCb) {
-        TwitchVoteOption[] options = new TwitchVoteOption[strOptions.length];
-        for (int i = 0; i < strOptions.length; ++i) {
-            options[i] = new TwitchVoteOption(strOptions[i], "#" + i, "^#" + i + ".*$");
-        }
-        return this.initiateVote(options, voteCb);
-    }
+   public TwitchVoteOption[] getOptions() {
+      return this.options;
+   }
 
-    private boolean initiateVote(TwitchVoteOption[] options, Consumer<Integer> voteCb) {
-        if (this.isVotingAvailable()) {
-            this.timer = this.twitchConfig.getTimer();
-            this.triggered = false;
-            this.isVoting = true;
-            this.voteCb = voteCb;
-            this.options = TwitchVoteOption.cloneArrayOfOptions(options);
-            this.votedUsernames.clear();
-            this.publishOptions();
-            return true;
-        }
-        return false;
-    }
+   public boolean initiateSimpleNumberVote(String[] strOptions, Consumer<Integer> voteCb) {
+      TwitchVoteOption[] options = new TwitchVoteOption[strOptions.length];
 
-    private void publishOptions() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(TEXT[0]);
-        for (int i = 0; i < this.options.length; ++i) {
-            sb.append(this.options[i].commandHint);
-            sb.append(": ");
-            sb.append(this.options[i].displayName);
-            if (i == this.options.length - 1) continue;
+      for (int i = 0; i < strOptions.length; i++) {
+         options[i] = new TwitchVoteOption(strOptions[i], "#" + i, "^#" + i + ".*$");
+      }
+
+      return this.initiateVote(options, voteCb);
+   }
+
+   private boolean initiateVote(TwitchVoteOption[] options, Consumer<Integer> voteCb) {
+      if (this.isVotingAvailable()) {
+         this.timer = this.twitchConfig.getTimer();
+         this.triggered = false;
+         this.isVoting = true;
+         this.voteCb = voteCb;
+         this.options = TwitchVoteOption.cloneArrayOfOptions(options);
+         this.votedUsernames.clear();
+         this.publishOptions();
+         return true;
+      } else {
+         return false;
+      }
+   }
+
+   private void publishOptions() {
+      StringBuilder sb = new StringBuilder();
+      sb.append(TEXT[0]);
+
+      for (int i = 0; i < this.options.length; i++) {
+         sb.append(this.options[i].commandHint);
+         sb.append(": ");
+         sb.append(this.options[i].displayName);
+         if (i != this.options.length - 1) {
             sb.append("; ");
-        }
-        TwitchPanel.getTwitch().sendMessage(sb.toString());
-    }
+         }
+      }
 
-    @Override
-    public void onMessage(String msg, String user) {
-        for (TwitchVoteOption option : this.options) {
-            if (!option.matchPattern.matcher(msg).matches() || this.votedUsernames.contains(user)) continue;
-            ++option.voteCount;
+      TwitchPanel.getTwitch().sendMessage(sb.toString());
+   }
+
+   @Override
+   public void onMessage(String msg, String user) {
+      for (TwitchVoteOption option : this.options) {
+         if (option.matchPattern.matcher(msg).matches() && !this.votedUsernames.contains(user)) {
+            option.voteCount++;
             this.votedUsernames.add(user);
-        }
-    }
+         }
+      }
+   }
 
-    public int getSecondsRemaining() {
-        return (int)this.timer;
-    }
+   public int getSecondsRemaining() {
+      return (int)this.timer;
+   }
 
-    public void endVoting(boolean canceled) {
-        if (this.isCurrentlyVoting()) {
-            this.isVoting = false;
-        }
-    }
+   public void endVoting(boolean canceled) {
+      if (this.isCurrentlyVoting()) {
+         this.isVoting = false;
+      }
+   }
 
-    private void completeVoting() {
-        this.notifyComplete();
-        this.endVoting(false);
-        this.triggered = true;
-    }
+   private void completeVoting() {
+      this.notifyComplete();
+      this.endVoting(false);
+      this.triggered = true;
+   }
+
+   static {
+      TEXT = uiStrings.TEXT;
+   }
 }
-

@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package com.megacrit.cardcrawl.cards.optionCards;
 
 import com.badlogic.gdx.graphics.Color;
@@ -16,40 +13,49 @@ import com.megacrit.cardcrawl.powers.StrengthPower;
 import com.megacrit.cardcrawl.vfx.BorderLongFlashEffect;
 import com.megacrit.cardcrawl.vfx.combat.InflameEffect;
 
-public class BecomeAlmighty
-extends AbstractCard {
-    public static final String ID = "BecomeAlmighty";
-    private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("BecomeAlmighty");
+public class BecomeAlmighty extends AbstractCard {
+   public static final String ID = "BecomeAlmighty";
+   private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings("BecomeAlmighty");
 
-    public BecomeAlmighty() {
-        super(ID, BecomeAlmighty.cardStrings.NAME, "colorless/power/become_almighty", -2, BecomeAlmighty.cardStrings.DESCRIPTION, AbstractCard.CardType.POWER, AbstractCard.CardColor.COLORLESS, AbstractCard.CardRarity.SPECIAL, AbstractCard.CardTarget.NONE);
-        this.magicNumber = this.baseMagicNumber = 3;
-    }
+   public BecomeAlmighty() {
+      super(
+         "BecomeAlmighty",
+         cardStrings.NAME,
+         "colorless/power/become_almighty",
+         -2,
+         cardStrings.DESCRIPTION,
+         AbstractCard.CardType.POWER,
+         AbstractCard.CardColor.COLORLESS,
+         AbstractCard.CardRarity.SPECIAL,
+         AbstractCard.CardTarget.NONE
+      );
+      this.baseMagicNumber = 3;
+      this.magicNumber = this.baseMagicNumber;
+   }
 
-    @Override
-    public void use(AbstractPlayer p, AbstractMonster m) {
-        this.onChoseThisOption();
-    }
+   @Override
+   public void use(AbstractPlayer p, AbstractMonster m) {
+      this.onChoseThisOption();
+   }
 
-    @Override
-    public void onChoseThisOption() {
-        AbstractPlayer p = AbstractDungeon.player;
-        this.addToBot(new VFXAction(new BorderLongFlashEffect(Color.FIREBRICK, true)));
-        this.addToBot(new VFXAction(p, new InflameEffect(p), 1.0f));
-        this.addToBot(new ApplyPowerAction(p, p, new StrengthPower(p, this.magicNumber), this.magicNumber));
-    }
+   @Override
+   public void onChoseThisOption() {
+      AbstractPlayer p = AbstractDungeon.player;
+      this.addToBot(new VFXAction(new BorderLongFlashEffect(Color.FIREBRICK, true)));
+      this.addToBot(new VFXAction(p, new InflameEffect(p), 1.0F));
+      this.addToBot(new ApplyPowerAction(p, p, new StrengthPower(p, this.magicNumber), this.magicNumber));
+   }
 
-    @Override
-    public void upgrade() {
-        if (!this.upgraded) {
-            this.upgradeName();
-            this.upgradeMagicNumber(1);
-        }
-    }
+   @Override
+   public void upgrade() {
+      if (!this.upgraded) {
+         this.upgradeName();
+         this.upgradeMagicNumber(1);
+      }
+   }
 
-    @Override
-    public AbstractCard makeCopy() {
-        return new BecomeAlmighty();
-    }
+   @Override
+   public AbstractCard makeCopy() {
+      return new BecomeAlmighty();
+   }
 }
-

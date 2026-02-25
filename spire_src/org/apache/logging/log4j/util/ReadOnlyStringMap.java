@@ -1,27 +1,20 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.util;
 
 import java.io.Serializable;
 import java.util.Map;
-import org.apache.logging.log4j.util.BiConsumer;
-import org.apache.logging.log4j.util.TriConsumer;
 
-public interface ReadOnlyStringMap
-extends Serializable {
-    public Map<String, String> toMap();
+public interface ReadOnlyStringMap extends Serializable {
+   Map<String, String> toMap();
 
-    public boolean containsKey(String var1);
+   boolean containsKey(String key);
 
-    public <V> void forEach(BiConsumer<String, ? super V> var1);
+   <V> void forEach(final BiConsumer<String, ? super V> action);
 
-    public <V, S> void forEach(TriConsumer<String, ? super V, S> var1, S var2);
+   <V, S> void forEach(final TriConsumer<String, ? super V, S> action, final S state);
 
-    public <V> V getValue(String var1);
+   <V> V getValue(final String key);
 
-    public boolean isEmpty();
+   boolean isEmpty();
 
-    public int size();
+   int size();
 }
-

@@ -1,11 +1,7 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package org.apache.logging.log4j.message;
 
 public interface ThreadInformation {
-    public void printThreadInfo(StringBuilder var1);
+   void printThreadInfo(StringBuilder sb);
 
-    public void printStack(StringBuilder var1, StackTraceElement[] var2);
+   void printStack(StringBuilder sb, StackTraceElement[] trace);
 }
-
