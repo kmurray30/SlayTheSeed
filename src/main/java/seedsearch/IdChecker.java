@@ -8,8 +8,6 @@ import com.megacrit.cardcrawl.events.shrines.*;
 import com.megacrit.cardcrawl.helpers.*;
 import com.megacrit.cardcrawl.localization.PotionStrings;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
-import seedsearch.patches.MonsterHelperPatch;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -111,7 +109,7 @@ public class IdChecker {
 
         encounterMap = new HashMap<>();
         MonsterHelper.uploadEnemyData();
-        for (String encounter : MonsterHelperPatch.ids) {
+        for (String encounter : StandaloneHooks.encounterIds) {
             String encounterName = MonsterHelper.getEncounterName(encounter);
             if (!encounterName.equals("")) {
                 encounterMap.put(encounterName, encounter);

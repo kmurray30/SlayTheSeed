@@ -10,6 +10,8 @@ import org.apache.logging.log4j.util.StringBuilderFormattable;
 import org.apache.logging.log4j.util.StringBuilders;
 
 enum MapMessageJsonFormatter {
+   ;
+
    public static final int MAX_DEPTH = readMaxDepth();
    private static final char DQUOTE = '"';
    private static final char RBRACE = ']';

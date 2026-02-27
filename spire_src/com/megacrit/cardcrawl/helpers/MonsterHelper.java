@@ -760,6 +760,9 @@ public class MonsterHelper {
    }
 
    public static void uploadEnemyData() {
+      if (System.getProperty("seedsearch.standalone") != null) {
+         seedsearch.StandaloneHooks.encounterIds.clear();
+      }
       ArrayList<String> derp = new ArrayList<>();
       ArrayList<EnemyData> data = new ArrayList<>();
       data.add(new EnemyData("Blue Slaver", 1, EnemyData.MonsterType.WEAK));
@@ -830,6 +833,9 @@ public class MonsterHelper {
 
       for (EnemyData d : data) {
          derp.add(d.gameDataUploadData());
+         if (System.getProperty("seedsearch.standalone") != null) {
+            seedsearch.StandaloneHooks.encounterIds.add(d.name);
+         }
       }
 
       BotDataUploader.uploadDataAsync(BotDataUploader.GameDataType.ENEMY_DATA, EnemyData.gameDataUploadHeader(), derp);

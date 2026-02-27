@@ -455,9 +455,9 @@ public class SkeletonBinary {
          case path:
             boolean closed = input.readBoolean();
             boolean constantSpeed = input.readBoolean();
-            int vertexCount = input.readInt(true);
-            SkeletonBinary.Vertices vertices = this.readVertices(input, vertexCount);
-            float[] lengths = new float[vertexCount / 3];
+            int pathVertexCount = input.readInt(true);
+            SkeletonBinary.Vertices pathVertices = this.readVertices(input, pathVertexCount);
+            float[] lengths = new float[pathVertexCount / 3];
             int i = 0;
 
             for (int n = lengths.length; i < n; i++) {
@@ -465,21 +465,21 @@ public class SkeletonBinary {
             }
 
             i = nonessential ? input.readInt() : 0;
-            PathAttachment path = this.attachmentLoader.newPathAttachment(skin, name);
-            if (path == null) {
+            PathAttachment pathAttachment = this.attachmentLoader.newPathAttachment(skin, name);
+            if (pathAttachment == null) {
                return null;
             } else {
-               path.setClosed(closed);
-               path.setConstantSpeed(constantSpeed);
-               path.setWorldVerticesLength(vertexCount << 1);
-               path.setVertices(vertices.vertices);
-               path.setBones(vertices.bones);
-               path.setLengths(lengths);
+               pathAttachment.setClosed(closed);
+               pathAttachment.setConstantSpeed(constantSpeed);
+               pathAttachment.setWorldVerticesLength(pathVertexCount << 1);
+               pathAttachment.setVertices(pathVertices.vertices);
+               pathAttachment.setBones(pathVertices.bones);
+               pathAttachment.setLengths(lengths);
                if (nonessential) {
-                  Color.rgba8888ToColor(path.getColor(), i);
+                  Color.rgba8888ToColor(pathAttachment.getColor(), i);
                }
 
-               return path;
+               return pathAttachment;
             }
          default:
             return null;
@@ -568,20 +568,20 @@ public class SkeletonBinary {
                      duration = Math.max(duration, timeline.getFrames()[frameCount - 1]);
                      break;
                   case 1:
-                     Animation.ColorTimeline timeline = new Animation.ColorTimeline(frameCount);
-                     timeline.slotIndex = slotIndex;
+                     Animation.ColorTimeline colorTimeline = new Animation.ColorTimeline(frameCount);
+                     colorTimeline.slotIndex = slotIndex;
 
                      for (int frameIndex = 0; frameIndex < frameCount; frameIndex++) {
                         float time = input.readFloat();
                         Color.rgba8888ToColor(tempColor, input.readInt());
-                        timeline.setFrame(frameIndex, time, tempColor.r, tempColor.g, tempColor.b, tempColor.a);
+                        colorTimeline.setFrame(frameIndex, time, tempColor.r, tempColor.g, tempColor.b, tempColor.a);
                         if (frameIndex < frameCount - 1) {
-                           this.readCurve(input, frameIndex, timeline);
+                           this.readCurve(input, frameIndex, colorTimeline);
                         }
                      }
 
-                     timelines.add(timeline);
-                     duration = Math.max(duration, timeline.getFrames()[(frameCount - 1) * 5]);
+                     timelines.add(colorTimeline);
+                     duration = Math.max(duration, colorTimeline.getFrames()[(frameCount - 1) * 5]);
                }
             }
          }
@@ -597,45 +597,45 @@ public class SkeletonBinary {
                int frameCount = input.readInt(true);
                switch (timelineType) {
                   case 0:
-                     Animation.RotateTimeline timeline = new Animation.RotateTimeline(frameCount);
-                     timeline.boneIndex = boneIndex;
-                     int frameIndexx = 0;
+                     Animation.RotateTimeline rotateTimeline = new Animation.RotateTimeline(frameCount);
+                     rotateTimeline.boneIndex = boneIndex;
+                     int rotateFrameIndex = 0;
 
-                     for (; frameIndexx < frameCount; frameIndexx++) {
-                        timeline.setFrame(frameIndexx, input.readFloat(), input.readFloat());
-                        if (frameIndexx < frameCount - 1) {
-                           this.readCurve(input, frameIndexx, timeline);
+                     for (; rotateFrameIndex < frameCount; rotateFrameIndex++) {
+                        rotateTimeline.setFrame(rotateFrameIndex, input.readFloat(), input.readFloat());
+                        if (rotateFrameIndex < frameCount - 1) {
+                           this.readCurve(input, rotateFrameIndex, rotateTimeline);
                         }
                      }
 
-                     timelines.add(timeline);
-                     duration = Math.max(duration, timeline.getFrames()[(frameCount - 1) * 2]);
+                     timelines.add(rotateTimeline);
+                     duration = Math.max(duration, rotateTimeline.getFrames()[(frameCount - 1) * 2]);
                      break;
                   case 1:
                   case 2:
                   case 3:
                      float timelineScale = 1.0F;
-                     Animation.TranslateTimeline timeline;
+                     Animation.TranslateTimeline translateTimeline;
                      if (timelineType == 2) {
-                        timeline = new Animation.ScaleTimeline(frameCount);
+                        translateTimeline = new Animation.ScaleTimeline(frameCount);
                      } else if (timelineType == 3) {
-                        timeline = new Animation.ShearTimeline(frameCount);
+                        translateTimeline = new Animation.ShearTimeline(frameCount);
                      } else {
-                        timeline = new Animation.TranslateTimeline(frameCount);
+                        translateTimeline = new Animation.TranslateTimeline(frameCount);
                         timelineScale = scale;
                      }
 
-                     timeline.boneIndex = boneIndex;
+                     translateTimeline.boneIndex = boneIndex;
 
-                     for (int frameIndexx = 0; frameIndexx < frameCount; frameIndexx++) {
-                        timeline.setFrame(frameIndexx, input.readFloat(), input.readFloat() * timelineScale, input.readFloat() * timelineScale);
-                        if (frameIndexx < frameCount - 1) {
-                           this.readCurve(input, frameIndexx, timeline);
+                     for (int translateFrameIndex = 0; translateFrameIndex < frameCount; translateFrameIndex++) {
+                        translateTimeline.setFrame(translateFrameIndex, input.readFloat(), input.readFloat() * timelineScale, input.readFloat() * timelineScale);
+                        if (translateFrameIndex < frameCount - 1) {
+                           this.readCurve(input, translateFrameIndex, translateTimeline);
                         }
                      }
 
-                     timelines.add(timeline);
-                     duration = Math.max(duration, timeline.getFrames()[(frameCount - 1) * 3]);
+                     timelines.add(translateTimeline);
+                     duration = Math.max(duration, translateTimeline.getFrames()[(frameCount - 1) * 3]);
                }
             }
          }
@@ -718,18 +718,18 @@ public class SkeletonBinary {
                      duration = Math.max(duration, timeline.getFrames()[(frameCount - 1) * 2]);
                      break;
                   case 2:
-                     Animation.PathConstraintMixTimeline timeline = new Animation.PathConstraintMixTimeline(frameCount);
-                     timeline.pathConstraintIndex = index;
+                     Animation.PathConstraintMixTimeline pathMixTimeline = new Animation.PathConstraintMixTimeline(frameCount);
+                     pathMixTimeline.pathConstraintIndex = index;
 
                      for (int frameIndexxxxx = 0; frameIndexxxxx < frameCount; frameIndexxxxx++) {
-                        timeline.setFrame(frameIndexxxxx, input.readFloat(), input.readFloat(), input.readFloat());
+                        pathMixTimeline.setFrame(frameIndexxxxx, input.readFloat(), input.readFloat(), input.readFloat());
                         if (frameIndexxxxx < frameCount - 1) {
-                           this.readCurve(input, frameIndexxxxx, timeline);
+                           this.readCurve(input, frameIndexxxxx, pathMixTimeline);
                         }
                      }
 
-                     timelines.add(timeline);
-                     duration = Math.max(duration, timeline.getFrames()[(frameCount - 1) * 3]);
+                     timelines.add(pathMixTimeline);
+                     duration = Math.max(duration, pathMixTimeline.getFrames()[(frameCount - 1) * 3]);
                }
             }
          }

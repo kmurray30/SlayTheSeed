@@ -298,10 +298,10 @@ public final class Twirk {
                   }
                   break;
                case "PART":
-                  String userName = this.parseUsername(message.getPrefix());
+                  String partUserName = this.parseUsername(message.getPrefix());
 
                   for (TwirkListener l : this.listeners) {
-                     l.onPart(userName);
+                     l.onPart(partUserName);
                   }
                   break;
                case "CLEARCHAT":
@@ -312,17 +312,17 @@ public final class Twirk {
                   }
                   break;
                case "PRIVMSG":
-                  TwitchUser user = this.twitchUserBuilder.build(message);
+                  TwitchUser privMsgUser = this.twitchUserBuilder.build(message);
 
                   for (TwirkListener l : this.listeners) {
-                     l.onPrivMsg(user, message);
+                     l.onPrivMsg(privMsgUser, message);
                   }
                   break;
                case "WHISPER":
-                  TwitchUser user = this.twitchUserBuilder.build(message);
+                  TwitchUser whisperUser = this.twitchUserBuilder.build(message);
 
                   for (TwirkListener l : this.listeners) {
-                     l.onWhisper(user, message);
+                     l.onWhisper(whisperUser, message);
                   }
                   break;
                case "NOTICE":
@@ -340,11 +340,11 @@ public final class Twirk {
                   }
                   break;
                case "USERNOTICE":
-                  TwitchUser user = this.twitchUserBuilder.build(message);
+                  TwitchUser usernoticeUser = this.twitchUserBuilder.build(message);
                   Usernotice usernotice = this.usernoticeBuilder.build(message);
 
                   for (TwirkListener l : this.listeners) {
-                     l.onUsernotice(user, usernotice);
+                     l.onUsernotice(usernoticeUser, usernotice);
                   }
                   break;
                case "ROOMSTATE":

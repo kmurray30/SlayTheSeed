@@ -13,24 +13,141 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <SlayTheSpire.version>10-04-2022</SlayTheSpire.version>
-        <ModTheSpire.version>3.30.0</ModTheSpire.version>
+        <gdx.version>1.12.1</gdx.version>
     </properties>
 
     <dependencies>
+        <!-- Exact versions from desktop-1.0.jar META-INF/maven (see LIB_VERSIONS.md) -->
         <dependency>
-            <groupId>com.megacrit.cardcrawl</groupId>
-            <artifactId>slaythespire</artifactId>
-            <version>${SlayTheSpire.version}</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/../lib/desktop-1.0.jar</systemPath>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx</artifactId>
+            <version>${gdx.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.evacipated.cardcrawl</groupId>
-            <artifactId>ModTheSpire</artifactId>
-            <version>${ModTheSpire.version}</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/../lib/ModTheSpire.jar</systemPath>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-backend-headless</artifactId>
+            <version>${gdx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-platform</artifactId>
+            <version>${gdx.version}</version>
+            <classifier>natives-desktop</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-backend-lwjgl</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+        <!-- spine: use decompiled from spire_src (game uses 3.4 API, Maven 3.8 has breaking changes) -->
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-controllers</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-controllers-desktop</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-freetype</artifactId>
+            <version>${gdx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-freetype-platform</artifactId>
+            <version>${gdx.version}</version>
+            <classifier>natives-desktop</classifier>
+        </dependency>
+        <!-- gdx-jnigen removed in libGDX 1.12+; keep 1.9.5 for compatibility -->
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-jnigen</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-tools</artifactId>
+            <version>${gdx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.jlayer</groupId>
+            <artifactId>jlayer</artifactId>
+            <version>1.0.1-gdx</version>
+        </dependency>
+        <dependency>
+            <groupId>com.code-disaster.steamworks4j</groupId>
+            <artifactId>steamworks4j</artifactId>
+            <version>1.9.0</version>
+        </dependency>
+        <!-- twirc: not on Maven Central, use decompiled from spire_src -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.9</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.10</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.5</version>
+        </dependency>
+        <!-- discord-rpc: not on Maven Central, use decompiled from spire_src; needs JNA -->
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>4.5.2</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.jinput</groupId>
+            <artifactId>jinput</artifactId>
+            <version>2.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.jutils</groupId>
+            <artifactId>jutils</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.17.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.17.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jcraft</groupId>
+            <artifactId>jorbis</artifactId>
+            <version>0.0.17</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl.lwjgl</groupId>
+            <artifactId>lwjgl</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lwjgl.lwjgl</groupId>
+            <artifactId>lwjgl_util</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.25</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -44,6 +161,59 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>exclude-decompiled-log4j</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!-- Copy spire_src, exclude ALL third-party (use Maven deps). Keep only com.megacrit game code. -->
+                                <copy todir="${project.build.directory}/spire_src_filtered">
+                                    <fileset dir="${project.basedir}/spire_src" excludes="com/badlogic/**,com/codedisaster/**,com/google/**,com/jcraft/**,com/sun/**,javazoom/**,net/java/**,org/apache/**,org/lwjgl/**,org/slf4j/**,**/CInputHelper.java"/>
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>add-spire-src</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/spire_src_filtered</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/META-INF/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.4.2</version>
                 <executions>
@@ -54,33 +224,34 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>seedsearch.StandaloneMain</mainClass>
+                                </transformer>
+                            </transformers>
                             <filters>
                                 <filter>
-                                    <artifact>seedsearch:SeedSearch</artifact>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
                                 </filter>
                             </filters>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <configuration>
-                            <target>
-                                <copy file="target/SeedSearch.jar" tofile="../_ModTheSpire/mods/SeedSearch.jar"/>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <mainClass>seedsearch.StandaloneMain</mainClass>
+                </configuration>
             </plugin>
         </plugins>
 
@@ -88,22 +259,7 @@
             <resource>
                 <directory>src/main/resources</directory>
             </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>false</filtering>
-                <excludes>
-                    <exclude>ModTheSpire.json</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>ModTheSpire.json</include>
-                </includes>
-            </resource>
         </resources>
-
     </build>
 
 </project>

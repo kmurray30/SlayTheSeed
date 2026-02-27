@@ -34,10 +34,6 @@ import com.megacrit.cardcrawl.shop.Merchant;
 import com.megacrit.cardcrawl.shop.ShopScreen;
 import com.megacrit.cardcrawl.shop.StorePotion;
 import com.megacrit.cardcrawl.shop.StoreRelic;
-import seedsearch.patches.AbstractRoomPatch;
-import seedsearch.patches.CardRewardScreenPatch;
-import seedsearch.patches.EventHelperPatch;
-import seedsearch.patches.ShowCardAndObtainEffectPatch;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -207,18 +203,18 @@ public class SeedRunner {
     private void claimNeowReward(NeowReward neowOption) {
         Reward reward = new Reward(0);
         AbstractDungeon.getCurrMapNode().room = new EmptyRoom();
-        AbstractRoomPatch.obtainedRelic = null;
-        CardRewardScreenPatch.rewardCards = null;
-        ShowCardAndObtainEffectPatch.resetCards();
+        StandaloneHooks.obtainedRelic = null;
+        StandaloneHooks.rewardCards = null;
+        StandaloneHooks.resetObtainedCards();
         neowOption.activate();
-        if (AbstractRoomPatch.obtainedRelic != null) {
-            awardRelic(AbstractRoomPatch.obtainedRelic, reward);
+        if (StandaloneHooks.obtainedRelic != null) {
+            awardRelic(StandaloneHooks.obtainedRelic, reward);
         }
-        if (CardRewardScreenPatch.rewardCards != null) {
-            seedResult.addCardReward(0, CardRewardScreenPatch.rewardCards);
+        if (StandaloneHooks.rewardCards != null) {
+            seedResult.addCardReward(0, StandaloneHooks.rewardCards);
         }
-        if (ShowCardAndObtainEffectPatch.obtainedCards.size() > 0) {
-            for (AbstractCard card : ShowCardAndObtainEffectPatch.obtainedCards) {
+        if (StandaloneHooks.obtainedCards.size() > 0) {
+            for (AbstractCard card : StandaloneHooks.obtainedCards) {
                 addInvoluntaryCardReward(card, reward);
             }
         }
@@ -570,7 +566,7 @@ public class SeedRunner {
                     seedResult.addToTrueMapPath("?");
                     Random eventRngDuplicate = new Random(Settings.seed, AbstractDungeon.eventRng.counter);
                     AbstractEvent event = AbstractDungeon.generateEvent(eventRngDuplicate);
-                    String eventKey = EventHelperPatch.eventName;
+                    String eventKey = EventHelper.getMostRecentEventID();
                     Reward eventReward = getEventReward(event, eventKey, AbstractDungeon.floorNum);
                     seedResult.registerEvent(eventKey);
                     if (!eventReward.isEmpty()) {
@@ -626,14 +622,14 @@ public class SeedRunner {
                 case TREASURE:
                     seedResult.addToTrueMapPath("T");
                     AbstractChest chest = AbstractDungeon.getRandomChest();
-                    ShowCardAndObtainEffectPatch.resetCards();
+                    StandaloneHooks.resetObtainedCards();
                     chest.open(false);
                     addGoldReward(combatGold);
                     Reward treasureRelicReward = new Reward(AbstractDungeon.floorNum);
                     for (AbstractRelic treasureRelic : combatRelics) {
                         awardRelic(treasureRelic, treasureRelicReward);
                     }
-                    for (AbstractCard card : ShowCardAndObtainEffectPatch.obtainedCards) {
+                    for (AbstractCard card : StandaloneHooks.obtainedCards) {
                         addInvoluntaryCardReward(card, treasureRelicReward);
                     }
                     seedResult.addAllCardRewards(combatCardRewards);
@@ -712,7 +708,7 @@ public class SeedRunner {
 
     private Reward getEventReward(AbstractEvent event, String eventKey, int floor) {
         clearCombatRewards();
-        ShowCardAndObtainEffectPatch.resetCards();
+                    StandaloneHooks.resetObtainedCards();
         Random miscRng = AbstractDungeon.miscRng;
         Reward reward = new Reward(floor);
         switch (eventKey) {
@@ -1022,8 +1018,8 @@ public class SeedRunner {
                 reward.addPotions(womanPotions);
                 break;
         }
-        if (ShowCardAndObtainEffectPatch.obtainedCards.size() > 0) {
-            for (AbstractCard card : ShowCardAndObtainEffectPatch.obtainedCards) {
+        if (StandaloneHooks.obtainedCards.size() > 0) {
+            for (AbstractCard card : StandaloneHooks.obtainedCards) {
                 addInvoluntaryCardReward(card, reward);
             }
         }

@@ -31,6 +31,9 @@ public class ShowCardAndObtainEffect extends AbstractGameEffect {
       UnlockTracker.markCardAsSeen(card.cardID);
       CardHelper.obtain(card.cardID, card.rarity, card.color);
       this.card = card;
+      if (System.getProperty("seedsearch.standalone") != null) {
+         seedsearch.StandaloneHooks.obtainedCards.add(card);
+      }
       if (Settings.FAST_MODE) {
          this.duration = 0.5F;
       } else {

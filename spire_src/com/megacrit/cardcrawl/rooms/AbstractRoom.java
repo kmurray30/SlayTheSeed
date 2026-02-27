@@ -183,13 +183,13 @@ public abstract class AbstractRoom implements Disposable {
          }
       }
 
-      i = this.relics.iterator();
+      Iterator<AbstractRelic> relicIterator = this.relics.iterator();
 
-      while (i.hasNext()) {
-         AbstractRelic relic = (AbstractRelic)i.next();
+      while (relicIterator.hasNext()) {
+         AbstractRelic relic = relicIterator.next();
          relic.update();
          if (relic.isDone) {
-            i.remove();
+            relicIterator.remove();
          }
       }
    }
@@ -582,6 +582,9 @@ public abstract class AbstractRoom implements Disposable {
    }
 
    public void spawnRelicAndObtain(float x, float y, AbstractRelic relic) {
+      if (System.getProperty("seedsearch.standalone") != null) {
+         seedsearch.StandaloneHooks.obtainedRelic = relic;
+      }
       if (relic.relicId == "Circlet" && AbstractDungeon.player.hasRelic("Circlet")) {
          AbstractRelic circ = AbstractDungeon.player.getRelic("Circlet");
          circ.counter++;

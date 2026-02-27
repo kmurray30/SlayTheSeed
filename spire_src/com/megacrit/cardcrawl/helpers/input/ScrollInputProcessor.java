@@ -67,7 +67,13 @@ public class ScrollInputProcessor implements InputProcessor {
    }
 
    @Override
-   public boolean scrolled(int amount) {
+   public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+      return false;
+   }
+
+   @Override
+   public boolean scrolled(float amountX, float amountY) {
+      int amount = (int) Math.signum(amountY);
       if (amount == -1) {
          InputHelper.scrolledUp = true;
       } else if (amount == 1) {

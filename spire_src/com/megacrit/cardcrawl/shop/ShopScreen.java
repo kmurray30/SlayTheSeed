@@ -851,8 +851,6 @@ public class ShopScreen {
                            Gdx.input.setCursorPosition((int)this.potions.get(0).potion.hb.cX, Settings.HEIGHT - (int)this.potions.get(0).potion.hb.cY);
                         } else if (this.purgeAvailable) {
                            Gdx.input.setCursorPosition((int)this.purgeCardX, Settings.HEIGHT - (int)this.purgeCardY);
-                        } else {
-                           int var10 = false;
                         }
                      } else {
                         Gdx.input.setCursorPosition((int)this.colorlessCards.get(index).hb.cX, Settings.HEIGHT - (int)this.colorlessCards.get(index).hb.cY);

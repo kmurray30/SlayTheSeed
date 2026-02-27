@@ -1,0 +1,7 @@
+{
+  "playerClass": "THE_SILENT",
+  "startSeed": 1,
+  "endSeed": 2,
+  "verbose": true,
+  "exitAfterSearch": true
+}

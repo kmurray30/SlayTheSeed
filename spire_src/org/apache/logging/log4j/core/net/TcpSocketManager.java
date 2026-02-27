@@ -391,7 +391,6 @@ public class TcpSocketManager extends AbstractSocketManager {
       }
 
       void reconnect() throws IOException {
-         TcpSocketManager.FACTORY;
          List<InetSocketAddress> socketAddresses = TcpSocketManager.TcpSocketManagerFactory.resolver
             .resolveHost(TcpSocketManager.this.host, TcpSocketManager.this.port);
          if (socketAddresses.size() == 1) {

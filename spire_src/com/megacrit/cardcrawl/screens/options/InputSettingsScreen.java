@@ -223,7 +223,7 @@ public class InputSettingsScreen implements RemapInputElementListener, HitboxLis
          }
 
          if (!anyHovered) {
-            int var6 = true;
+            index = 1;
             CInputHelper.setCursor(this.elements.get(1).hb);
          } else {
             switch (type) {

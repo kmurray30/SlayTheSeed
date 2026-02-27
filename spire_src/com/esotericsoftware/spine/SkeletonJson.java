@@ -310,9 +310,9 @@ public class SkeletonJson {
             }
 
             this.readVertices(map, box, map.getInt("vertexCount") << 1);
-            String colorx = map.getString("color", null);
-            if (colorx != null) {
-               box.getColor().set(Color.valueOf(colorx));
+            String boxColor = map.getString("color", null);
+            if (boxColor != null) {
+               box.getColor().set(Color.valueOf(boxColor));
             }
 
             return box;

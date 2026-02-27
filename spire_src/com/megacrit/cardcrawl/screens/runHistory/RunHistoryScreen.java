@@ -960,7 +960,7 @@ public class RunHistoryScreen implements DropdownMenuListener {
                      }
                   } else if (CInputActionSet.right.isJustPressed() || CInputActionSet.altRight.isJustPressed()) {
                      if (++c > TinyCard.desiredColumns - 1) {
-                        int var25 = false;
+                        c = TinyCard.desiredColumns - 1;
                      } else {
                         boolean foundNode = false;
 

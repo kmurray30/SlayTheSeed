@@ -505,6 +505,9 @@ public class CardRewardScreen implements ScrollBarListener {
    }
 
    public void open(ArrayList<AbstractCard> cards, RewardItem rItem, String header) {
+      if (System.getProperty("seedsearch.standalone") != null) {
+         seedsearch.StandaloneHooks.rewardCards = cards;
+      }
       this.peekButton.hideInstantly();
       this.confirmButton.hideInstantly();
       this.touchCard = null;

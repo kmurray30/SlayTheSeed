@@ -184,6 +184,10 @@ public class CardCrawlGame implements ApplicationListener {
 
    @Override
    public void create() {
+      if (System.getProperty("seedsearch.standalone") != null) {
+         seedsearch.StandaloneLauncher.runStandalone(this);
+         return;
+      }
       if (Settings.isAlpha) {
          TRUE_VERSION_NUM = TRUE_VERSION_NUM + " ALPHA";
          VERSION_NUM = VERSION_NUM + " ALPHA";
