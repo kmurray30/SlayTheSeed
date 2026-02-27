@@ -12,6 +12,11 @@ public class SeedSearch {
     public static boolean loadingEnabled = true;
     public static SearchSettings settings;
 
+    private static void log(String message) {
+        System.err.println(message);
+        System.err.flush();
+    }
+
     private static void unlockBosses(String[] bosslist, int unlockLevel) {
         for (int i = 0; i < unlockLevel; i++) {
             if (i >= 3) {
@@ -36,6 +41,7 @@ public class SeedSearch {
 
     public static void search() {
         loadingEnabled = false;
+        log("SeedSearch starting...");
         settings = SearchSettings.loadSettings();
         if (!isPlayerClassValid(settings)) {
             exit(1);
@@ -64,21 +70,32 @@ public class SeedSearch {
         UnlockTracker.refresh();
         SeedRunner runner = new SeedRunner(settings);
         ArrayList<Long> foundSeeds = new ArrayList<>();
+        long seedCount = settings.endSeed - settings.startSeed;
+        log(String.format("Search range: seeds %d to %d (exclusive) = %d seeds", settings.startSeed, settings.endSeed, seedCount));
         for (long seed = settings.startSeed; seed < settings.endSeed; seed++) {
-            if (runner.runSeed(seed)) {
-                foundSeeds.add(seed);
-                if (settings.verbose) {
-                    runner.getSeedResult().printSeedStats(settings);
+            try {
+                log(String.format("Simulating seed %d...", seed));
+                boolean passed = runner.runSeed(seed);
+                if (passed) {
+                    foundSeeds.add(seed);
+                    log(String.format("Seed %d: PASSED", seed));
+                    if (settings.verbose) {
+                        runner.getSeedResult().printSeedStats(settings);
+                    }
+                } else {
+                    log(String.format("Seed %d: FAILED (filter rejection - see above for which filter)", seed));
                 }
+            } catch (Exception exception) {
+                log(String.format("Seed %d: EXCEPTION - %s", seed, exception.getMessage()));
+                exception.printStackTrace();
             }
         }
-        System.out.println(String.format("%d seeds found: ", foundSeeds.size()));
-        System.out.println(foundSeeds);
+        log(String.format("%d seeds found: %s", foundSeeds.size(), foundSeeds));
 
         if (settings.exitAfterSearch) {
             exit(0);
         } else {
-            System.out.println("Search complete. Manually close this program when finished.");
+            log("Search complete. Manually close this program when finished.");
         }
     }
 

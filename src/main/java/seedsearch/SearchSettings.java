@@ -103,9 +103,9 @@ public class SearchSettings {
     public ArrayList<String> requiredEvents = new ArrayList<>();
     public ArrayList<String> requiredCombats = new ArrayList<>();
     public int minimumElites = 0;
-    public int maximumElites = 1;
+    public int maximumElites = 15;  // Broad default: full run can have ~9 elites across acts
     public int minimumCombats = 0;
-    public int maximumCombats = 33;
+    public int maximumCombats = 100;  // Broad default: full run can have 50+ combats
     public int minimumRestSites = 0;
 
     // Output filters

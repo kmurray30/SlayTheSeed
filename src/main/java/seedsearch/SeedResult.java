@@ -13,6 +13,11 @@ import java.util.Collections;
 
 public class SeedResult {
 
+    private static void log(String message) {
+        System.err.println(message);
+        System.err.flush();
+    }
+
     private ArrayList<Reward> miscRewards;
     private ArrayList<Reward> shopRewards;
     private ArrayList<Reward> cardRewards;
@@ -138,27 +143,35 @@ public class SeedResult {
 
     public boolean testFinalFilters(SearchSettings settings) {
         if (numCombats > settings.maximumCombats) {
+            log(String.format("  Filter FAIL: numCombats=%d > maximumCombats=%d", numCombats, settings.maximumCombats));
             return false;
         }
         if (numCombats < settings.minimumCombats) {
+            log(String.format("  Filter FAIL: numCombats=%d < minimumCombats=%d", numCombats, settings.minimumCombats));
             return false;
         }
         if (numElites > settings.maximumElites) {
+            log(String.format("  Filter FAIL: numElites=%d > maximumElites=%d", numElites, settings.maximumElites));
             return false;
         }
         if (numElites < settings.minimumElites) {
+            log(String.format("  Filter FAIL: numElites=%d < minimumElites=%d", numElites, settings.minimumElites));
             return false;
         }
         if (numRestSites < settings.minimumRestSites) {
+            log(String.format("  Filter FAIL: numRestSites=%d < minimumRestSites=%d", numRestSites, settings.minimumRestSites));
             return false;
         }
         if (!events.containsAll(settings.requiredEvents)) {
+            log(String.format("  Filter FAIL: missing requiredEvents. Have: %s, need: %s", events, settings.requiredEvents));
             return false;
         }
         if (!relics.containsAll(settings.requiredRelics)) {
+            log(String.format("  Filter FAIL: missing requiredRelics. Have: %s, need: %s", relics, settings.requiredRelics));
             return false;
         }
         if (!monsters.containsAll(settings.requiredCombats)) {
+            log(String.format("  Filter FAIL: missing requiredCombats. Have: %s, need: %s", monsters, settings.requiredCombats));
             return false;
         }
         ArrayList<String> allPotions = getAllPotionIds();
@@ -166,6 +179,7 @@ public class SeedResult {
             if (allPotions.contains(potion)){
                 allPotions.remove(potion);
             } else{
+                log(String.format("  Filter FAIL: missing requiredPotion '%s'. Have: %s", potion, getAllPotionIds()));
                 return false;
             }
         }
@@ -174,11 +188,13 @@ public class SeedResult {
 
     public boolean testAct1Filters(SearchSettings settings) {
         if (!relics.containsAll(settings.requiredAct1Relics)) {
+            log(String.format("  Act1 filter FAIL: missing requiredAct1Relics. Have: %s, need: %s", relics, settings.requiredAct1Relics));
             return false;
         }
         ArrayList<String> allCards = getAllCardIds();
         for (String card : settings.bannedAct1Cards) {
             if (allCards.contains(card)) {
+                log(String.format("  Act1 filter FAIL: bannedAct1Card '%s' found in deck", card));
                 return false;
             }
         }
@@ -186,6 +202,7 @@ public class SeedResult {
             if (allCards.contains(card)) {
                 allCards.remove(card);
             } else {
+                log(String.format("  Act1 filter FAIL: missing requiredAct1Card '%s'. Have: %s", card, getAllCardIds()));
                 return false;
             }
         }
@@ -194,6 +211,7 @@ public class SeedResult {
             if (allPotions.contains(potion)){
                 allPotions.remove(potion);
             } else{
+                log(String.format("  Act1 filter FAIL: missing requiredAct1Potion '%s'. Have: %s", potion, getAllPotionIds()));
                 return false;
             }
         }
