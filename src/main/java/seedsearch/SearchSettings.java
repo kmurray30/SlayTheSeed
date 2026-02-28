@@ -2,20 +2,24 @@ package seedsearch;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.megacrit.cardcrawl.cards.red.BodySlam;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.relics.Calipers;
-import com.megacrit.cardcrawl.relics.JuzuBracelet;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class SearchSettings {
 
     private static final String configName = "searchConfig.json";
+    private static final String defaultConfigResource = "defaultSearchConfig.json";
 
     // Core search parameters
 
@@ -127,31 +131,55 @@ public class SearchSettings {
     public SearchSettings() {
     }
 
-    private void setDefaults() {
-        relicsToBuy.add(JuzuBracelet.ID);
-        requiredRelics.add(Calipers.ID);
-        requiredAct1Cards.add(BodySlam.ID);
-    }
-
+    /**
+     * Loads default config from resource, then overlays searchConfig.json overrides from the working directory.
+     */
     public static SearchSettings loadSettings() {
+        Gson gson = new Gson();
         try {
-            File file = new File(configName);
-            if (file.exists()) {
-                Gson gson = new Gson();
-                SearchSettings settings = gson.fromJson(new FileReader(file), SearchSettings.class);
-                return settings;
-            } else {
-                SearchSettings settings = new SearchSettings();
-                settings.setDefaults();
-                settings.saveSettings();
-                return settings;
+            // Load defaults from bundled resource
+            JsonObject mergedJson = loadDefaultConfig(gson);
+            if (mergedJson == null) {
+                return new SearchSettings();
             }
+
+            // Overlay user overrides from searchConfig.json if it exists
+            File userConfigFile = new File(configName);
+            if (userConfigFile.exists()) {
+                try (FileReader reader = new FileReader(userConfigFile)) {
+                    JsonObject userJson = gson.fromJson(reader, JsonObject.class);
+                    if (userJson != null) {
+                        for (String key : userJson.keySet()) {
+                            JsonElement value = userJson.get(key);
+                            if (value != null) {
+                                mergedJson.add(key, value.deepCopy());
+                            }
+                        }
+                    }
+                }
+            }
+
+            return gson.fromJson(mergedJson, SearchSettings.class);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println(String.format("Could not load search settings: %s", e.getMessage()));
-            SearchSettings settings = new SearchSettings();
-            settings.setDefaults();
-            return settings;
+            return new SearchSettings();
+        }
+    }
+
+    private static JsonObject loadDefaultConfig(Gson gson) {
+        try (InputStream stream = SearchSettings.class.getResourceAsStream("/" + defaultConfigResource)) {
+            if (stream == null) {
+                System.out.println(String.format("Default config resource not found: %s", defaultConfigResource));
+                return null;
+            }
+            try (Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
+                JsonObject json = gson.fromJson(reader, JsonObject.class);
+                return json != null ? json : new JsonObject();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
