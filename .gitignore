@@ -29,6 +29,9 @@ SeedSearch.iml
 
 # maven
 target/
+
+# Build artifact: default config copied to project root for runtime fallback
+/defaultSearchConfig.json
 dependency-reduced-pom.xml
 
 # MacOS

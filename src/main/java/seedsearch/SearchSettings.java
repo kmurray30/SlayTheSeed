@@ -1,11 +1,5 @@
 package seedsearch;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -15,6 +9,13 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+import com.megacrit.cardcrawl.characters.AbstractPlayer;
 
 public class SearchSettings {
 
@@ -107,7 +108,7 @@ public class SearchSettings {
     public ArrayList<String> requiredEvents = new ArrayList<>();
     public ArrayList<String> requiredCombats = new ArrayList<>();
     public int minimumElites = 0;
-    public int maximumElites = 15;  // Broad default: full run can have ~9 elites across acts
+    public int maximumElites = 0;  // Last-resort fallback only; real default is in defaultSearchConfig.json
     public int minimumCombats = 0;
     public int maximumCombats = 100;  // Broad default: full run can have 50+ combats
     public int minimumRestSites = 0;
@@ -132,55 +133,79 @@ public class SearchSettings {
     }
 
     /**
-     * Loads default config from resource, then overlays searchConfig.json overrides from the working directory.
+     * Load searchConfig.json if it exists, otherwise defaultSearchConfig.json.
+     * searchConfig.json can override any field; missing fields come from defaults.
      */
     public static SearchSettings loadSettings() {
         Gson gson = new Gson();
-        try {
-            // Load defaults from bundled resource
-            JsonObject mergedJson = loadDefaultConfig(gson);
-            if (mergedJson == null) {
-                return new SearchSettings();
-            }
+        
+        // Load defaults first
+        System.err.println("[CONFIG] Loading defaultSearchConfig.json...");
+        JsonObject defaults = loadDefaultConfig(gson);
+        if (defaults == null) {
+            throw new RuntimeException("defaultSearchConfig.json not found on classpath or in src/main/resources/");
+        }
+        System.err.println("[CONFIG] defaultSearchConfig.json loaded with " + defaults.keySet().size() + " keys");
+        System.err.println("[CONFIG] maximumElites from defaults: " + defaults.get("maximumElites"));
 
-            // Overlay user overrides from searchConfig.json if it exists
-            File userConfigFile = new File(configName);
-            if (userConfigFile.exists()) {
-                try (FileReader reader = new FileReader(userConfigFile)) {
-                    JsonObject userJson = gson.fromJson(reader, JsonObject.class);
-                    if (userJson != null) {
-                        for (String key : userJson.keySet()) {
-                            JsonElement value = userJson.get(key);
-                            if (value != null) {
-                                mergedJson.add(key, value.deepCopy());
-                            }
-                        }
-                    }
+        // If searchConfig.json exists, merge it on top of defaults
+        File userConfig = new File(configName);
+        if (userConfig.exists()) {
+            System.err.println("[CONFIG] Found searchConfig.json, loading...");
+            JsonObject userJson = loadJsonFile(gson, userConfig);
+            if (userJson != null) {
+                System.err.println("[CONFIG] searchConfig.json loaded with " + userJson.keySet().size() + " keys");
+                // User values override defaults
+                for (String key : userJson.keySet()) {
+                    JsonElement oldValue = defaults.get(key);
+                    JsonElement newValue = userJson.get(key);
+                    defaults.add(key, newValue);
+                    System.err.println("[CONFIG] Override: " + key + " = " + newValue + " (was: " + oldValue + ")");
                 }
+            } else {
+                System.err.println("[CONFIG] ERROR: searchConfig.json exists but failed to parse (invalid JSON? check for comments)");
             }
+        } else {
+            System.err.println("[CONFIG] No searchConfig.json found, using defaults only");
+        }
 
-            return gson.fromJson(mergedJson, SearchSettings.class);
-        } catch (IOException e) {
+        System.err.println("[CONFIG] Final maximumElites: " + defaults.get("maximumElites"));
+        return gson.fromJson(defaults, SearchSettings.class);
+    }
+
+    private static JsonObject loadJsonFile(Gson gson, File file) {
+        try (FileReader reader = new FileReader(file)) {
+            return gson.fromJson(reader, JsonObject.class);
+        } catch (IOException | JsonSyntaxException e) {
             e.printStackTrace();
-            System.out.println(String.format("Could not load search settings: %s", e.getMessage()));
-            return new SearchSettings();
+            return null;
         }
     }
 
     private static JsonObject loadDefaultConfig(Gson gson) {
-        try (InputStream stream = SearchSettings.class.getResourceAsStream("/" + defaultConfigResource)) {
-            if (stream == null) {
-                System.out.println(String.format("Default config resource not found: %s", defaultConfigResource));
-                return null;
+        // Check disk first so edits take effect without recompiling
+        for (String path : new String[]{ "src/main/resources/" + defaultConfigResource, defaultConfigResource }) {
+            File file = new File(path);
+            if (file.exists()) {
+                JsonObject json = loadJsonFile(gson, file);
+                if (json != null) return json;
             }
-            try (Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
-                JsonObject json = gson.fromJson(reader, JsonObject.class);
-                return json != null ? json : new JsonObject();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
         }
+
+        // Fallback: bundled resource (when no file on disk)
+        InputStream stream = SearchSettings.class.getClassLoader().getResourceAsStream(defaultConfigResource);
+        if (stream == null) {
+            stream = SearchSettings.class.getResourceAsStream("/" + defaultConfigResource);
+        }
+        if (stream != null) {
+            try (Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
+                return gson.fromJson(reader, JsonObject.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
     }
 
     private void saveSettings() {

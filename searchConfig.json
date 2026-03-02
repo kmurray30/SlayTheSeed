@@ -1,7 +1,6 @@
 {
   "playerClass": "THE_SILENT",
   "ascensionLevel": 20,
-  // "maximumElites": 15,
   "ironcladUnlocks": 5,
   "silentUnlocks": 5,
   "defectUnlocks": 5,

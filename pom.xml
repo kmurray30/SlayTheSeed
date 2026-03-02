@@ -179,6 +179,23 @@
                             </target>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>copy-default-config</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <copy file="${project.basedir}/src/main/resources/defaultSearchConfig.json"
+                                      tofile="${project.basedir}/defaultSearchConfig.json"
+                                      failonerror="false"/>
+                                <copy file="${project.basedir}/src/main/resources/defaultSearchConfig.json"
+                                      tofile="${project.build.directory}/defaultSearchConfig.json"
+                                      failonerror="false"/>
+                            </target>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -256,6 +273,21 @@
         </plugins>
 
         <resources>
+            <!-- Game assets (scenes, etc.) for headless standalone runs -->
+            <resource>
+                <directory>spire_src</directory>
+                <targetPath>.</targetPath>
+                <excludes>
+                    <exclude>com/**</exclude>
+                    <exclude>org/**</exclude>
+                    <exclude>darwin/**</exclude>
+                    <exclude>de/**</exclude>
+                    <exclude>*.dll</exclude>
+                    <exclude>*.so</exclude>
+                    <exclude>*.dylib</exclude>
+                    <exclude>*.jnilib</exclude>
+                </excludes>
+            </resource>
             <resource>
                 <directory>src/main/resources</directory>
             </resource>

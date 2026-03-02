@@ -70,7 +70,7 @@
   "requiredEvents": [],
   "requiredCombats": [],
   "minimumElites": 0,
-  "maximumElites": 15,
+  "maximumElites": 20,
   "minimumCombats": 0,
   "maximumCombats": 100,
   "minimumRestSites": 0,
