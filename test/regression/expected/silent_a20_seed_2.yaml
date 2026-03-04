@@ -1,0 +1,426 @@
+---
+SearchConfig:
+  ascensionLevel: 20
+  playerClass: THE_SILENT
+  startSeed: 0
+  endSeed: 10
+  verbose: true
+  exitAfterSearch: true
+  highestFloor: 55
+  ironcladUnlocks: 6
+  silentUnlocks: 6
+  defectUnlocks: 5
+  watcherUnlocks: 6
+  firstBoss: 3
+  secondBoss: 3
+  thirdBoss: 3
+  eliteRoomWeight: 1.2
+  monsterRoomWeight: 1.0
+  restRoomWeight: 0.0
+  shopRoomWeight: 0.9
+  eventRoomWeight: 0.9
+  wingBootsThreshold: 1.0
+  relicsToBuy:
+  potionsToBuy:
+  cardsToBuy:
+  bossRelicsToTake:
+  forceNeowLament: false
+  neowChoice: 0
+  useShovel: false
+  speedrunPace: true
+  act4: false
+  alwaysSpawnBottledTornado: true
+  alwaysSpawnBottledLightning: true
+  alwaysSpawnBottledFlame: true
+  ignorePandoraCards: false
+  takeSerpentGold: false
+  takeWarpedTongs: false
+  takeBigFishRelic: false
+  takeDeadAdventurerFight: false
+  takeMausoleumRelic: false
+  takeScrapOozeRelic: true
+  takeAddictRelic: true
+  takeMysteriousSphereFight: false
+  takeRedMaskAct3: true
+  takeMushroomFight: true
+  takeMaskedBanditFight: true
+  takeGoldenIdolWithoutCurse: true
+  takeGoldenIdolWithCurse: false
+  tradeGoldenIdolForBloody: true
+  takeCursedTome: true
+  tradeFaces: false
+  takeMindBloomGold: false
+  takeMindBloomFight: true
+  takeMindBloomUpgrade: false
+  tradeGoldenIdolForMoney: true
+  takePortal: false
+  numSensoryStoneCards: 1
+  takeWindingHallsCurse: false
+  takeWindingHallsMadness: false
+  takeColosseumFight: false
+  takeDrugDealerRelic: false
+  takeDrugDealerTransform: true
+  takeLibraryCard: false
+  takeWeMeetAgainRelic: true
+  requiredAct1Cards:
+  bannedAct1Cards:
+  requiredAct1Relics:
+  requiredAct1Potions:
+  requiredRelics:
+  requiredPotions:
+  requiredEvents:
+  requiredCombats:
+  minimumElites: 0
+  maximumElites: 20
+  minimumCombats: 0
+  maximumCombats: 100
+  minimumRestSites: 0
+  showNeowOptions: true
+  showCombats: true
+  showBosses: true
+  showBossRelics: true
+  showRelics: true
+  showShopRelics: true
+  showShopCards: true
+  showShopPotions: true
+  showEvents: true
+  showCardChoices: true
+  showPotions: true
+  showOtherCards: true
+  showRawRelicPools: false
+
+Run:
+  Seed: 2 (2)
+Floors:
+  Floor 0:
+    Type: Neow
+    Starting Relic: Ring of the Snake
+    Neow Options:
+      - "Obtain a random rare Card"
+      - Obtain 3 random Potions
+      - Obtain a Curse Max HP +12
+      - Lose your starting Relic Obtain a random boss Relic
+    Neow Choice:
+      - Alchemize
+  Floor 1:
+    Path: 2
+    Type: Monster
+    Name: Cultist
+    Card Rewards:
+      - Choke
+      - Poisoned Stab
+      - Flying Knee
+    Potion:
+      - Dexterity Potion
+  Floor 2:
+    Path: 0
+    Type: Event
+    Instance: WeMeetAgain
+    Relic:
+      - Singing Bowl
+  Floor 3:
+    Path: 1
+    Type: Monster
+    Name: Jaw Worm
+    Card Rewards:
+      - Bane
+      - Concentrate
+      - Finisher
+  Floor 4:
+    Path: 0
+    Type: Event
+    Instance: Liars Game
+  Floor 5:
+    Path: 0
+    Type: Treasure
+    Relic:
+      - Eternal Feather
+  Floor 6:
+    Path: 1
+    Type: Rest
+  Floor 7:
+    Path: 1
+    Type: Monster
+    Name: Small Slimes
+    Card Rewards:
+      - Eviscerate
+      - Caltrops
+      - Outmaneuver
+  Floor 8:
+    Path: 0
+    Type: Rest
+  Floor 9:
+    Path: 0
+    Type: Treasure
+    Relic:
+      - Blood Vial
+  Floor 10:
+    Path: 0
+    Type: Monster
+    Name: Blue Slaver
+    Card Rewards:
+      - Deflect
+      - Dodge and Roll
+      - Distraction
+  Floor 11:
+    Path: 1
+    Type: Rest
+  Floor 12:
+    Path: 0
+    Type: Monster
+    Name: Large Slime
+    Card Rewards:
+      - Cloak and Dagger
+      - Bane
+      - Blade Dance
+    Potion:
+      - Duplication Potion
+  Floor 13:
+    Path: 1
+    Type: Rest
+  Floor 14:
+    Path: 0
+    Type: Treasure
+    Relic:
+      - Paper Krane
+  Floor 15:
+    Path: 0
+    Type: Rest
+  Floor 16:
+    Type: Boss
+    Name: Slime Boss
+    Card Rewards:
+      - Adrenaline
+      - Die Die Die
+      - Doppelganger
+  Floor 17:
+    Type: BossRelic
+    Name: Slime Boss
+    Boss Relic:
+      - Runic Dome
+      - Wrist Blade
+      - Pandora's Box
+  Floor 18:
+    Path: 0
+    Type: Monster
+    Name: Spheric Guardian
+    Card Rewards:
+      - Eviscerate
+      - Backflip
+      - Piercing Wail
+  Floor 19:
+    Path: 0
+    Type: Monster
+    Name: Chosen
+    Card Rewards:
+      - Sneaky Strike
+      - Dodge and Roll
+      - Skewer
+    Potion:
+      - Strength Potion
+  Floor 20:
+    Path: 0
+    Type: Event
+    Instance: Addict
+    Relic:
+      - Nunchaku
+  Floor 21:
+    Path: 0
+    Type: Event
+    Instance: Cursed Tome
+    Relic:
+      - Enchiridion
+  Floor 22:
+    Path: 1
+    Type: Event
+    Instance: Drug Dealer
+    Card Rewards:
+      - Corpse Explosion
+      - Nightmare
+  Floor 23:
+    Path: 1
+    Type: Rest
+  Floor 24:
+    Path: 0
+    Type: Elite
+    Name: Book of Stabbing
+    Card Rewards:
+      - Well-Laid Plans
+      - Distraction
+      - Dodge and Roll+
+    Relic:
+      - Gremlin Horn
+    Potion:
+      - Poison Potion
+  Floor 25:
+    Path: 0
+    Type: Monster
+    Name: Centurion and Healer
+    Card Rewards:
+      - Riddle with Holes
+      - Flechettes+
+      - Dodge and Roll
+  Floor 26:
+    Path: 0
+    Type: Treasure
+    Relic:
+      - Tiny Chest
+  Floor 27:
+    Path: 0
+    Type: Monster
+    Name: Snake Plant
+    Card Rewards:
+      - Backflip
+      - Dagger Spray
+      - Deflect
+    Potion:
+      - Fairy in a Bottle
+  Floor 28:
+    Path: 0
+    Type: Rest
+  Floor 29:
+    Path: 0
+    Type: Monster
+    Name: Shelled Parasite and Fungi
+    Card Rewards:
+      - Poisoned Stab+
+      - Concentrate
+      - Sneaky Strike+
+  Floor 30:
+    Path: 0
+    Type: Rest
+  Floor 31:
+    Path: 0
+    Type: Event
+    Instance: Back to Basics
+  Floor 32:
+    Path: 0
+    Type: Rest
+  Floor 33:
+    Type: Boss
+    Name: Champ
+    Card Rewards:
+      - Grand Finale
+      - Wraith Form
+      - After Image
+  Floor 34:
+    Type: BossRelic
+    Name: Champ
+    Boss Relic:
+      - Sacred Bark
+      - Snecko Eye
+      - Sozu
+  Floor 35:
+    Path: 1
+    Type: Monster
+    Name: 3 Darklings
+    Card Rewards:
+      - Acrobatics
+      - Sneaky Strike+
+      - Prepared+
+  Floor 36:
+    Path: 0
+    Type: Event
+    Instance: SensoryStone
+  Floor 37:
+    Path: 1
+    Type: Shop
+    Cards:
+      - Unload
+      - Bane
+      - Piercing Wail
+      - Prepared
+      - Noxious Fumes
+      - Flash of Steel
+      - The Bomb
+    Relics:
+      - Tough Bandages
+      - Darkstone Periapt
+      - Membership Card
+    Potions:
+      - Entropic Brew
+      - Duplication Potion
+      - Regen Potion
+  Floor 38:
+    Path: 1
+    Type: Monster
+    Name: 3 Shapes
+    Card Rewards:
+      - Finisher
+      - Catalyst
+      - Distraction+
+    Potion:
+      - Entropic Brew
+  Floor 39:
+    Path: 1
+    Type: Event
+    Instance: Bonfire Elementals
+  Floor 40:
+    Path: 0
+    Type: Rest
+  Floor 41:
+    Path: 0
+    Type: Monster
+    Name: 3 Darklings
+    Card Rewards:
+      - Slice+
+      - Blade Dance+
+      - Piercing Wail+
+  Floor 42:
+    Path: 1
+    Type: Rest
+  Floor 43:
+    Path: 0
+    Type: Treasure
+    Relic:
+      - Blue Candle
+  Floor 44:
+    Path: 1
+    Type: Treasure
+    Relic:
+      - Meat on the Bone
+  Floor 45:
+    Path: 0
+    Type: Shop
+    Cards:
+      - Riddle with Holes
+      - Heel Hook
+      - Catalyst
+      - Distraction
+      - Caltrops
+      - Purity
+      - Chrysalis
+    Relics:
+      - Kunai
+      - Dream Catcher
+      - Orange Pellets
+    Potions:
+      - Dexterity Potion
+      - Liquid Bronze
+      - Speed Potion
+  Floor 46:
+    Path: 0
+    Type: Monster
+    Name: Spire Growth
+    Card Rewards:
+      - Dodge and Roll+
+      - Backstab
+      - Quick Slash
+    Potion:
+      - Dexterity Potion
+  Floor 47:
+    Path: 0
+    Type: Rest
+  Floor 48:
+    Path: 0
+    Type: Event
+    Instance: Falling
+  Floor 49:
+    Path: 0
+    Type: Rest
+  Floor 50:
+    Type: Boss
+    Name: Donu and Deca
+  Floor 51:
+    Type: Boss
+    Name: Time Eater

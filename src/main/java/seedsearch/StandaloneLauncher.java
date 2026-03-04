@@ -100,7 +100,11 @@ public class StandaloneLauncher {
 
             CardCrawlGame.characterManager = new com.megacrit.cardcrawl.characters.CharacterManager();
 
-            SeedSearch.search();
+            if ("true".equals(System.getProperty("seedsearch.regression.test"))) {
+                RegressionTest.run();
+            } else {
+                SeedSearch.search();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             Gdx.app.exit();

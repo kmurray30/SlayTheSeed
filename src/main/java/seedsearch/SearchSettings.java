@@ -19,7 +19,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 
 public class SearchSettings {
 
-    private static final String configName = "searchConfig.json";
+    private static final String configName = "target/searchConfig.json";
     private static final String defaultConfigResource = "defaultSearchConfig.json";
 
     // Core search parameters
@@ -184,7 +184,8 @@ public class SearchSettings {
 
     private static JsonObject loadDefaultConfig(Gson gson) {
         // Check disk first so edits take effect without recompiling
-        for (String path : new String[]{ "src/main/resources/" + defaultConfigResource, defaultConfigResource }) {
+        // Order: target/ (build output), src/main/resources/, CWD, then classpath
+        for (String path : new String[]{ "target/" + defaultConfigResource, "src/main/resources/" + defaultConfigResource, defaultConfigResource }) {
             File file = new File(path);
             if (file.exists()) {
                 JsonObject json = loadJsonFile(gson, file);
@@ -211,7 +212,12 @@ public class SearchSettings {
     private void saveSettings() {
         try {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            FileWriter writer = new FileWriter(configName);
+            File configFile = new File(configName);
+            File parentDir = configFile.getParentFile();
+            if (parentDir != null && !parentDir.exists()) {
+                parentDir.mkdirs();
+            }
+            FileWriter writer = new FileWriter(configFile);
             gson.toJson(this, writer);
             writer.flush();
             writer.close();

@@ -3,6 +3,9 @@ package seedsearch;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 
+import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static java.lang.System.exit;
@@ -39,13 +42,25 @@ public class SeedSearch {
         return true;
     }
 
-    public static void search() {
-        loadingEnabled = false;
-        log("SeedSearch starting...");
-        settings = SearchSettings.loadSettings();
+    /**
+     * Sets up UnlockTracker and runs a single seed with the given settings.
+     * Call only after game is initialized (CardLibrary, RelicLibrary, etc.).
+     * Returns SeedResult if the seed passes filters; throws if it fails.
+     */
+    public static SeedResult runWithSettings(SearchSettings settings, long seed) {
         if (!isPlayerClassValid(settings)) {
-            exit(1);
+            throw new IllegalArgumentException("Invalid playerClass in search settings");
         }
+        setupUnlockTracker(settings);
+        SeedRunner runner = new SeedRunner(settings);
+        boolean passed = runner.runSeed(seed);
+        if (!passed) {
+            throw new RuntimeException("Seed " + seed + " failed filter (see stderr for details)");
+        }
+        return runner.getSeedResult();
+    }
+
+    private static void setupUnlockTracker(SearchSettings settings) {
         String[] expectedBaseUnlocks = {"The Silent", "Defect", "Watcher"};
         String[] firstBossUnlocks = {"GUARDIAN", "GHOST", "SLIME"};
         String[] secondBossUnlocks = {"CHAMP", "AUTOMATON", "COLLECTOR"};
@@ -68,10 +83,22 @@ public class SeedSearch {
         UnlockTracker.unlockProgress.putInteger("WATCHERUnlockLevel", settings.watcherUnlocks);
         UnlockTracker.retroactiveUnlock();
         UnlockTracker.refresh();
+    }
+
+    public static void search() {
+        loadingEnabled = false;
+        log("SeedSearch starting...");
+        settings = SearchSettings.loadSettings();
+        if (!isPlayerClassValid(settings)) {
+            exit(1);
+        }
+        setupUnlockTracker(settings);
         SeedRunner runner = new SeedRunner(settings);
         ArrayList<Long> foundSeeds = new ArrayList<>();
         long seedCount = settings.endSeed - settings.startSeed;
         log(String.format("Search range: seeds %d to %d (exclusive) = %d seeds", settings.startSeed, settings.endSeed, seedCount));
+
+        File runFolder = createRunFolder(settings);
         for (long seed = settings.startSeed; seed < settings.endSeed; seed++) {
             try {
                 log(String.format("Simulating seed %d...", seed));
@@ -81,7 +108,7 @@ public class SeedSearch {
                     log(String.format("Seed %d: PASSED", seed));
                     if (settings.verbose) {
                         runner.getSeedResult().printSeedStats(settings);
-                        String yamlPath = runner.getSeedResult().writeFloorYamlToFile(settings, seed);
+                        String yamlPath = runner.getSeedResult().writeFloorYamlToFile(settings, seed, runFolder);
                         log("YAML output: " + yamlPath);
                     }
                 } else {
@@ -99,6 +126,22 @@ public class SeedSearch {
         } else {
             log("Search complete. Manually close this program when finished.");
         }
+    }
+
+    /**
+     * Creates results/&lt;character&gt;_a&lt;ascension&gt;_&lt;timestamp&gt;/ and returns the folder.
+     */
+    private static File createRunFolder(SearchSettings settings) {
+        File resultsDir = new File("results");
+        if (!resultsDir.exists()) {
+            resultsDir.mkdirs();
+        }
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+        String characterName = settings.playerClass != null ? settings.playerClass.name() : "UNKNOWN";
+        String folderName = String.format("%s_a%d_%s", characterName, settings.ascensionLevel, timestamp);
+        File runFolder = new File(resultsDir, folderName);
+        runFolder.mkdirs();
+        return runFolder;
     }
 
 }

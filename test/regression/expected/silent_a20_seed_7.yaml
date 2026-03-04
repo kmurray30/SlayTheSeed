@@ -1,0 +1,477 @@
+---
+SearchConfig:
+  ascensionLevel: 20
+  playerClass: THE_SILENT
+  startSeed: 0
+  endSeed: 10
+  verbose: true
+  exitAfterSearch: true
+  highestFloor: 55
+  ironcladUnlocks: 6
+  silentUnlocks: 6
+  defectUnlocks: 5
+  watcherUnlocks: 6
+  firstBoss: 3
+  secondBoss: 3
+  thirdBoss: 3
+  eliteRoomWeight: 1.2
+  monsterRoomWeight: 1.0
+  restRoomWeight: 0.0
+  shopRoomWeight: 0.9
+  eventRoomWeight: 0.9
+  wingBootsThreshold: 1.0
+  relicsToBuy:
+  potionsToBuy:
+  cardsToBuy:
+  bossRelicsToTake:
+  forceNeowLament: false
+  neowChoice: 0
+  useShovel: false
+  speedrunPace: true
+  act4: false
+  alwaysSpawnBottledTornado: true
+  alwaysSpawnBottledLightning: true
+  alwaysSpawnBottledFlame: true
+  ignorePandoraCards: false
+  takeSerpentGold: false
+  takeWarpedTongs: false
+  takeBigFishRelic: false
+  takeDeadAdventurerFight: false
+  takeMausoleumRelic: false
+  takeScrapOozeRelic: true
+  takeAddictRelic: true
+  takeMysteriousSphereFight: false
+  takeRedMaskAct3: true
+  takeMushroomFight: true
+  takeMaskedBanditFight: true
+  takeGoldenIdolWithoutCurse: true
+  takeGoldenIdolWithCurse: false
+  tradeGoldenIdolForBloody: true
+  takeCursedTome: true
+  tradeFaces: false
+  takeMindBloomGold: false
+  takeMindBloomFight: true
+  takeMindBloomUpgrade: false
+  tradeGoldenIdolForMoney: true
+  takePortal: false
+  numSensoryStoneCards: 1
+  takeWindingHallsCurse: false
+  takeWindingHallsMadness: false
+  takeColosseumFight: false
+  takeDrugDealerRelic: false
+  takeDrugDealerTransform: true
+  takeLibraryCard: false
+  takeWeMeetAgainRelic: true
+  requiredAct1Cards:
+  bannedAct1Cards:
+  requiredAct1Relics:
+  requiredAct1Potions:
+  requiredRelics:
+  requiredPotions:
+  requiredEvents:
+  requiredCombats:
+  minimumElites: 0
+  maximumElites: 20
+  minimumCombats: 0
+  maximumCombats: 100
+  minimumRestSites: 0
+  showNeowOptions: true
+  showCombats: true
+  showBosses: true
+  showBossRelics: true
+  showRelics: true
+  showShopRelics: true
+  showShopCards: true
+  showShopPotions: true
+  showEvents: true
+  showCardChoices: true
+  showPotions: true
+  showOtherCards: true
+  showRawRelicPools: false
+
+Run:
+  Seed: 7 (7)
+Floors:
+  Floor 0:
+    Type: Neow
+    Starting Relic: Ring of the Snake
+    Neow Options:
+      - "Upgrade a Card"
+      - Enemies in your next three combats have 1 HP
+      - Take 15 damage Obtain a random rare Relic
+      - Lose your starting Relic Obtain a random boss Relic
+  Floor 1:
+    Path: 0
+    Type: Monster
+    Name: Cultist
+    Card Rewards:
+      - Dagger Spray
+      - Dagger Throw
+      - Sucker Punch
+  Floor 2:
+    Path: 0
+    Type: Monster
+    Name: Small Slimes
+    Card Rewards:
+      - Masterful Stab
+      - Dagger Spray
+      - Setup
+    Potion:
+      - Cultist Potion
+  Floor 3:
+    Path: 1
+    Type: Event
+    Instance: Match and Keep!
+    Card Rewards:
+      - Normality
+      - Nightmare
+      - Doubt
+      - Acrobatics
+      - Distraction
+      - Neutralize
+  Floor 4:
+    Path: 0
+    Type: Monster
+    Name: 2 Louse
+    Card Rewards:
+      - Bane
+      - Dodge and Roll
+      - Sucker Punch
+    Potion:
+      - Power Potion
+  Floor 5:
+    Path: 1
+    Type: Monster
+    Name: Lots of Slimes
+    Card Rewards:
+      - Blur
+      - Leg Sweep
+      - Prepared
+  Floor 6:
+    Path: 0
+    Type: Rest
+  Floor 7:
+    Path: 0
+    Type: Monster
+    Name: Red Slaver
+    Card Rewards:
+      - Calculated Gamble
+      - Bane
+      - Finisher
+    Potion:
+      - Fear Potion
+  Floor 8:
+    Path: 0
+    Type: Monster
+    Name: Looter
+    Card Rewards:
+      - Dagger Spray
+      - Sneaky Strike
+      - Outmaneuver
+  Floor 9:
+    Path: 0
+    Type: Treasure
+    Relic:
+      - Tiny Chest
+  Floor 10:
+    Path: 0
+    Type: Monster
+    Name: 2 Fungi Beasts
+    Card Rewards:
+      - Storm of Steel
+      - Slice
+      - Deflect
+  Floor 11:
+    Path: 1
+    Type: Rest
+  Floor 12:
+    Path: 0
+    Type: Event
+    Instance: Transmorgrifier
+  Floor 13:
+    Path: 1
+    Type: Rest
+  Floor 14:
+    Path: 0
+    Type: Monster
+    Name: Lots of Slimes
+    Card Rewards:
+      - Sneaky Strike
+      - Poisoned Stab
+      - Bane
+  Floor 15:
+    Path: 0
+    Type: Rest
+  Floor 16:
+    Type: Boss
+    Name: Slime Boss
+    Card Rewards:
+      - After Image
+      - Tools of the Trade
+      - Nightmare
+    Potion:
+      - Ghost in a Jar
+  Floor 17:
+    Type: BossRelic
+    Name: Slime Boss
+    Boss Relic:
+      - Empty Cage
+      - Sozu
+      - Fusion Hammer
+  Floor 18:
+    Path: 0
+    Type: Monster
+    Name: 2 Thieves
+    Card Rewards:
+      - Setup
+      - Quick Slash
+      - Blade Dance
+    Potion:
+      - Fire Potion
+  Floor 19:
+    Path: 0
+    Type: Monster
+    Name: 3 Byrds
+    Card Rewards:
+      - Prepared+
+      - Terror
+      - Leg Sweep+
+  Floor 20:
+    Path: 0
+    Type: Event
+    Instance: Duplicator
+  Floor 21:
+    Path: 1
+    Type: Shop
+    Cards:
+      - Eviscerate
+      - Sucker Punch
+      - Deadly Poison
+      - Outmaneuver
+      - Well-Laid Plans
+      - Swift Strike
+      - Metamorphosis
+    Relics:
+      - Prayer Wheel
+      - Blood Vial
+      - Sling of Courage
+    Potions:
+      - Skill Potion
+      - Attack Potion
+      - Blessing of the Forge
+  Floor 22:
+    Path: 1
+    Type: Treasure
+    Relic:
+      - Dream Catcher
+  Floor 23:
+    Path: 0
+    Type: Rest
+  Floor 24:
+    Path: 0
+    Type: Monster
+    Name: Snake Plant
+    Card Rewards:
+      - Deadly Poison
+      - Slice
+      - Sneaky Strike+
+  Floor 25:
+    Path: 1
+    Type: Event
+    Instance: Back to Basics
+  Floor 26:
+    Path: 0
+    Type: Treasure
+    Relic:
+      - Bottled Tornado
+  Floor 27:
+    Path: 0
+    Type: Rest
+  Floor 28:
+    Path: 0
+    Type: Monster
+    Name: Sentry and Sphere
+    Card Rewards:
+      - Eviscerate
+      - Infinite Blades
+      - Blade Dance
+    Potion:
+      - Distilled Chaos
+  Floor 29:
+    Path: 0
+    Type: Event
+    Instance: Wheel of Change
+  Floor 30:
+    Path: 0
+    Type: Monster
+    Name: Cultist and Chosen
+    Card Rewards:
+      - Blur+
+      - Blade Dance+
+      - Sucker Punch
+  Floor 31:
+    Path: 0
+    Type: Monster
+    Name: Snake Plant
+    Card Rewards:
+      - Terror+
+      - Distraction+
+      - Leg Sweep
+  Floor 32:
+    Path: 0
+    Type: Rest
+  Floor 33:
+    Type: Boss
+    Name: Automaton
+    Card Rewards:
+      - Adrenaline
+      - Storm of Steel
+      - Glass Knife
+  Floor 34:
+    Type: BossRelic
+    Name: Automaton
+    Boss Relic:
+      - Black Star
+      - Velvet Choker
+      - Sacred Bark
+  Floor 35:
+    Path: 1
+    Type: Monster
+    Name: 3 Shapes
+    Card Rewards:
+      - Bane+
+      - Backflip
+      - Sucker Punch
+    Potion:
+      - Ancient Potion
+  Floor 36:
+    Path: 0
+    Type: Monster
+    Name: 3 Darklings
+    Card Rewards:
+      - Phantasmal Killer
+      - Calculated Gamble
+      - Backflip
+  Floor 37:
+    Path: 1
+    Type: Treasure
+    Relic:
+      - Letter Opener
+  Floor 38:
+    Path: 0
+    Type: Shop
+    Cards:
+      - Choke
+      - Dagger Throw
+      - Distraction
+      - Reflex
+      - Footwork
+      - Dramatic Entrance
+      - Sadistic Nature
+    Relics:
+      - Bag of Preparation
+      - Sundial
+      - Medical Kit
+    Potions:
+      - Regen Potion
+      - Essence of Steel
+      - Dexterity Potion
+  Floor 39:
+    Path: 0
+    Type: Monster
+    Name: Maw
+    Card Rewards:
+      - Acrobatics+
+      - Slice
+      - Sneaky Strike
+  Floor 40:
+    Path: 1
+    Type: Rest
+  Floor 41:
+    Path: 0
+    Type: Shop
+    Cards:
+      - Dagger Spray
+      - Quick Slash
+      - Cloak and Dagger
+      - Dodge and Roll
+      - Infinite Blades
+      - Enlightenment
+      - Secret Technique
+    Relics:
+      - Preserved Insect
+      - Centennial Puzzle
+      - Hand Drill
+    Potions:
+      - Skill Potion
+      - Swift Potion
+      - Poison Potion
+  Floor 42:
+    Path: 1
+    Type: Monster
+    Name: Transient
+    Card Rewards:
+      - Flying Knee
+      - Deflect
+      - Reflex
+    Potion:
+      - Cunning Potion
+  Floor 43:
+    Path: 0
+    Type: Treasure
+    Relic:
+      - White Beast Statue
+  Floor 44:
+    Path: 0
+    Type: Rest
+  Floor 45:
+    Path: 0
+    Type: Monster
+    Name: Writhing Mass
+    Card Rewards:
+      - Outmaneuver+
+      - Skewer
+      - Well-Laid Plans+
+    Potion:
+      - Skill Potion
+  Floor 46:
+    Path: 0
+    Type: Rest
+  Floor 47:
+    Path: 0
+    Type: Monster
+    Name: 4 Shapes
+    Card Rewards:
+      - Setup+
+      - Caltrops+
+      - Deadly Poison
+    Potion:
+      - Fruit Juice
+  Floor 48:
+    Path: 1
+    Type: Shop
+    Cards:
+      - All-Out Attack
+      - Sucker Punch
+      - Piercing Wail
+      - Prepared
+      - Infinite Blades
+      - Bandage Up
+      - Thinking Ahead
+    Relics:
+      - Fossilized Helix
+      - Omamori
+      - Dolly's Mirror
+    Potions:
+      - Gambler's Brew
+      - Strength Potion
+      - Blessing of the Forge
+  Floor 49:
+    Path: 0
+    Type: Rest
+  Floor 50:
+    Type: Boss
+    Name: Time Eater
+  Floor 51:
+    Type: Boss
+    Name: Donu and Deca

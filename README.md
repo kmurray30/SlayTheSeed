@@ -12,7 +12,7 @@ Note: Because it runs a headless version of Slay the Spire and has no access to 
 
 To install the mod, download seedsearch.jar from the [Releases](https://github.com/ForgottenArbiter/SeedSearch/releases) page, or compile it yourself. Create a folder named "mods" in your Slay the Spire installation directory if it does not yet exist, and put seedsearch.jar in that folder. When you run the mod launcher, SeedSearch should now show up.
 
-Run the mod once to search the first 100 seeds with some default settings. On the current patch of the game (v2.2), you should find one seed (54). A file called "searchConfig.json" should have been created in your current working directory. Edit that file to control the behavior of future searches. Note that the game will not launch. All output will be printed to the program's stdout.
+Run the mod once to search the first 100 seeds with some default settings. On the current patch of the game (v2.2), you should find one seed (54). A file called "searchConfig.json" should have been created in target/ (relative to your current working directory). Edit that file to control the behavior of future searches. Note that the game will not launch. All output will be printed to the program's stdout.
 
 ## Settings
 
@@ -133,6 +133,29 @@ These options control the information which is shown to the user when the progra
 * **showPotions**: Shows the potions obtained from combats and events
 * **showOtherCards**: Shows cards that the player obtains from events and relics
 * **showRawRelicPools**: Shows the complete list of all relics in the seed in the order they're obtained
+
+## Regression Testing
+
+Regression tests ensure that sim changes do not alter deterministic output. Run them after modifying the simulation logic to catch unintended behavior changes.
+
+**How to run**: From the project root, run `java -jar target/SeedSearch-Regression.jar`.
+
+**Config**: update `regressionTestConfig.json` under test/regression. Required fields include `seedRange`, `playerClass`, `ascensionLevel`, and all non-filter settings (same as searchConfig.json). Example:
+
+```json
+{
+  "seedRange": [1, 2],
+  "playerClass": "THE_SILENT",
+  "ascensionLevel": 20,
+  ...
+}
+```
+
+**Expected files**: Place expected YAML output in the `expected/` folder. Files must be named `<character>_a<ascension>_seed-<seed>.yaml`. For example, `expected/silent_a20_seed-1.yaml` for THE_SILENT, ascension 20, seed 1.
+
+**Generating expected files**: Run SeedSearch with a matching config (same playerClass, ascensionLevel, and non-filter settings). Output the YAML (e.g. via `--output` or the search result), then save it to `expected/<character>_a<ascension>_seed-<seed>.yaml`.
+
+**Pre-flight checks**: Before running any seeds, the regression test validates that (1) each expected file exists for the seed range, (2) `playerClass`, `ascensionLevel`, and seed in the expected file match the config, and (3) non-filter SearchConfig settings in the expected file match the config. On failure, the test prints what is wrong and usage instructions.
 
 ## Caveats
 

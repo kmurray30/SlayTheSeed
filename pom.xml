@@ -154,6 +154,11 @@
             <artifactId>mockito-core</artifactId>
             <version>2.28.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>2.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -188,10 +193,10 @@
                         <configuration>
                             <target>
                                 <copy file="${project.basedir}/src/main/resources/defaultSearchConfig.json"
-                                      tofile="${project.basedir}/defaultSearchConfig.json"
-                                      failonerror="false"/>
-                                <copy file="${project.basedir}/src/main/resources/defaultSearchConfig.json"
                                       tofile="${project.build.directory}/defaultSearchConfig.json"
+                                      failonerror="false"/>
+                                <copy file="${project.basedir}/src/main/resources/regressionTestConfig.json"
+                                      tofile="${project.build.directory}/regressionTestConfig.json"
                                       failonerror="false"/>
                             </target>
                         </configuration>
@@ -215,6 +220,18 @@
                             </sources>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>add-test-src</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/test/regression</source>
+                            </sources>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 
@@ -234,6 +251,32 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.4.2</version>
                 <executions>
+                    <execution>
+                        <id>SeedSearch-Regression</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${project.build.directory}/SeedSearch-Regression.jar</outputFile>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>seedsearch.RegressionTestMain</mainClass>
+                                </transformer>
+                            </transformers>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>SeedSearch</id>
                         <phase>package</phase>

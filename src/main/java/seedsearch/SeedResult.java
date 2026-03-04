@@ -15,9 +15,9 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.text.MessageFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class SeedResult {
@@ -384,31 +384,45 @@ public class SeedResult {
     }
 
     /**
-     * Writes floor-by-floor information to a YAML file in results/ folder.
-     * Returns the absolute path to the file.
+     * Returns the floor-by-floor YAML as a string. Used for regression testing.
      */
-    public String writeFloorYamlToFile(SearchSettings settings, long seedValue) {
-        File resultsDir = new File("results");
-        if (!resultsDir.exists()) {
-            resultsDir.mkdirs();
+    public String toYamlString(SearchSettings settings, long seedValue) {
+        StringWriter writer = new StringWriter();
+        try {
+            writeYamlTo(writer, settings, seedValue);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write YAML: " + e.getMessage());
         }
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-        String characterName = settings.playerClass != null ? settings.playerClass.name() : "UNKNOWN";
-        String filename = String.format("%s_%dasc_%s.yaml", characterName, settings.ascensionLevel, timestamp);
-        File outputFile = new File(resultsDir, filename);
+        return writer.toString();
+    }
+
+    /**
+     * Writes floor-by-floor information to a YAML file in the run folder.
+     * Path: results/&lt;character&gt;_a&lt;ascension&gt;_&lt;timestamp&gt;/seed-&lt;seed&gt;.yaml
+     *
+     * @param runFolder The run folder (e.g. results/THE_SILENT_a20_20260304_002047/)
+     * @return The absolute path to the written file
+     */
+    public String writeFloorYamlToFile(SearchSettings settings, long seedValue, File runFolder) {
+        String filename = String.format("seed-%d.yaml", seedValue);
+        File outputFile = new File(runFolder, filename);
         try (FileWriter writer = new FileWriter(outputFile)) {
-            writer.write("---\n");
-            writer.write("SearchConfig:\n");
-            writer.write(jsonToYaml(new Gson().toJsonTree(settings).getAsJsonObject(), 2));
-            writer.write("\nRun:\n");
-            writer.write("  Seed: " + SeedHelper.getString(seedValue) + " (" + seedValue + ")\n");
-            writer.write("Floors:\n");
-            for (FloorInfo info : floorInfos) {
-                appendFloorInfoYaml(writer, info);
-            }
+            writeYamlTo(writer, settings, seedValue);
             return outputFile.getAbsolutePath();
         } catch (IOException e) {
             throw new RuntimeException("Failed to write YAML file: " + e.getMessage());
+        }
+    }
+
+    private void writeYamlTo(Writer writer, SearchSettings settings, long seedValue) throws IOException {
+        writer.write("---\n");
+        writer.write("SearchConfig:\n");
+        writer.write(jsonToYaml(new Gson().toJsonTree(settings).getAsJsonObject(), 2));
+        writer.write("\nRun:\n");
+        writer.write("  Seed: " + SeedHelper.getString(seedValue) + " (" + seedValue + ")\n");
+        writer.write("Floors:\n");
+        for (FloorInfo info : floorInfos) {
+            appendFloorInfoYaml(writer, info);
         }
     }
 
@@ -445,7 +459,7 @@ public class SeedResult {
         return sb.toString();
     }
 
-    private void appendFloorInfoYaml(FileWriter writer, FloorInfo info) throws IOException {
+    private void appendFloorInfoYaml(Writer writer, FloorInfo info) throws IOException {
         writer.write("  Floor " + info.floor + ":\n");
         if (info.path != null) {
             writer.write("    Path: " + info.path + "\n");
