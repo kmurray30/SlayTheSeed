@@ -288,6 +288,7 @@ public class SeedRunner {
 
     private void doRelicPickupLogic(AbstractRelic relic, Reward reward) {
         this.player.relics.add(relic);
+        relic.onEquip();  // Required for relics like Tiny Chest (counter init) and others with onEquip logic
         String relicKey = relic.relicId;
         switch (relicKey) {
             case TinyHouse.ID:
