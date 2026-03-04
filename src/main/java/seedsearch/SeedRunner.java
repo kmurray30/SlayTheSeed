@@ -16,6 +16,7 @@ import com.megacrit.cardcrawl.events.beyond.*;
 import com.megacrit.cardcrawl.events.city.*;
 import com.megacrit.cardcrawl.events.exordium.*;
 import com.megacrit.cardcrawl.events.shrines.*;
+import com.megacrit.cardcrawl.helpers.CardHelper;
 import com.megacrit.cardcrawl.helpers.EventHelper;
 import com.megacrit.cardcrawl.helpers.PotionHelper;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
@@ -749,8 +750,12 @@ public class SeedRunner {
                 case TREASURE:
                     seedResult.addToTrueMapPath("T");
                     AbstractChest chest = AbstractDungeon.getRandomChest();
+                    ArrayList<AbstractCard> treasureBottleDummies = addBottleDummyCardsForChest();
                     StandaloneHooks.resetObtainedCards();
                     chest.open(false);
+                    for (AbstractCard dummy : treasureBottleDummies) {
+                        player.masterDeck.removeCard(dummy);
+                    }
                     addGoldReward(combatGold);
                     Reward treasureRelicReward = new Reward(AbstractDungeon.floorNum);
                     for (RewardItem rewardItem : AbstractDungeon.getCurrRoom().rewards) {
@@ -778,8 +783,12 @@ public class SeedRunner {
                     FloorInfo restFloorInfo = new FloorInfo(AbstractDungeon.floorNum, getPathIndex(path, actFloor, node), "Rest");
                     if (settings.useShovel && player.hasRelic(Shovel.ID)) {
                         Reward digReward = new Reward(AbstractDungeon.floorNum);
+                        ArrayList<AbstractCard> shovelBottleDummies = addBottleDummyCardsForChest();
                         AbstractRelic.RelicTier digTier = AbstractDungeon.returnRandomRelicTier();
                         AbstractRelic digRelic = AbstractDungeon.returnRandomRelic(digTier);
+                        for (AbstractCard dummy : shovelBottleDummies) {
+                            player.masterDeck.removeCard(dummy);
+                        }
                         awardRelic(digRelic, digReward);
                         restFloorInfo.relics.add(digRelic.relicId);
                     }
@@ -1279,6 +1288,57 @@ public class SeedRunner {
 
     public SeedResult getSeedResult() {
         return seedResult;
+    }
+
+    /**
+     * Temporarily adds class-appropriate dummy cards to the deck so Bottled relics pass canSpawn().
+     * Returns the list of dummy cards to remove after the relic selection (chest open or Shovel dig).
+     */
+    private ArrayList<AbstractCard> addBottleDummyCardsForChest() {
+        ArrayList<AbstractCard> dummies = new ArrayList<>();
+        if (settings.alwaysSpawnBottledLightning) {
+            boolean hasNonBasicSkill = false;
+            for (AbstractCard card : player.masterDeck.group) {
+                if (card.type == AbstractCard.CardType.SKILL && card.rarity != AbstractCard.CardRarity.BASIC) {
+                    hasNonBasicSkill = true;
+                    break;
+                }
+            }
+            if (!hasNonBasicSkill) {
+                AbstractCard dummy = AbstractDungeon.getCardFromPool(AbstractCard.CardRarity.COMMON, AbstractCard.CardType.SKILL, false);
+                if (dummy != null) {
+                    dummy = dummy.makeCopy();
+                    player.masterDeck.addToTop(dummy);
+                    dummies.add(dummy);
+                }
+            }
+        }
+        if (settings.alwaysSpawnBottledTornado && !CardHelper.hasCardType(AbstractCard.CardType.POWER)) {
+            AbstractCard dummy = AbstractDungeon.getCardFromPool(AbstractCard.CardRarity.COMMON, AbstractCard.CardType.POWER, false);
+            if (dummy != null) {
+                dummy = dummy.makeCopy();
+                player.masterDeck.addToTop(dummy);
+                dummies.add(dummy);
+            }
+        }
+        if (settings.alwaysSpawnBottledFlame) {
+            boolean hasNonBasicAttack = false;
+            for (AbstractCard card : player.masterDeck.group) {
+                if (card.type == AbstractCard.CardType.ATTACK && card.rarity != AbstractCard.CardRarity.BASIC) {
+                    hasNonBasicAttack = true;
+                    break;
+                }
+            }
+            if (!hasNonBasicAttack) {
+                AbstractCard dummy = AbstractDungeon.getCardFromPool(AbstractCard.CardRarity.COMMON, AbstractCard.CardType.ATTACK, false);
+                if (dummy != null) {
+                    dummy = dummy.makeCopy();
+                    player.masterDeck.addToTop(dummy);
+                    dummies.add(dummy);
+                }
+            }
+        }
+        return dummies;
     }
 
     private void addInvoluntaryCardReward(AbstractCard card, Reward reward) {
