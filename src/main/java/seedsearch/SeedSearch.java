@@ -81,6 +81,8 @@ public class SeedSearch {
                     log(String.format("Seed %d: PASSED", seed));
                     if (settings.verbose) {
                         runner.getSeedResult().printSeedStats(settings);
+                        String yamlPath = runner.getSeedResult().writeFloorYamlToFile(settings, seed);
+                        log("YAML output: " + yamlPath);
                     }
                 } else {
                     log(String.format("Seed %d: FAILED (filter rejection - see above for which filter)", seed));

@@ -41,3 +41,6 @@ dependency-reduced-pom.xml
 *.dll
 *.so
 *.dylib
+
+# Search result outputs
+results/

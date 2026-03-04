@@ -1,15 +1,24 @@
 package seedsearch;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.helpers.SeedHelper;
 import com.megacrit.cardcrawl.neow.NeowReward;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class SeedResult {
 
@@ -34,6 +43,7 @@ public class SeedResult {
     private ArrayList<String> rawRareRelics;
     private ArrayList<String> rawBossRelics;
     private ArrayList<String> rawShopRelics;
+    private ArrayList<FloorInfo> floorInfos;
     private int numElites;
     private int numCombats;
     private int numRestSites;
@@ -52,6 +62,11 @@ public class SeedResult {
         this.trueMapPath = new ArrayList<>();
         this.bossRelics = new ArrayList<>();
         this.relics = new ArrayList<>();
+        this.floorInfos = new ArrayList<>();
+    }
+
+    public void addFloorInfo(FloorInfo info) {
+        floorInfos.add(info);
     }
 
     public void addCardReward(int floor, ArrayList<AbstractCard> cards) {
@@ -243,9 +258,18 @@ public class SeedResult {
         return allPotions;
     }
 
-    private static String removeTextFormatting(String text) {
+    public static String removeTextFormatting(String text) {
+        if (text == null) return "";
         text = text.replaceAll("~|@(\\S+)~|@", "$1");
-        return text.replaceAll("#.|NL", "");
+        text = text.replaceAll("#.|NL", "");
+        if (text.startsWith("[ ") && text.endsWith(" ]")) {
+            text = text.substring(2, text.length() - 2);
+        }
+        return text.trim();
+    }
+
+    public Reward getLastMiscReward() {
+        return miscRewards.isEmpty() ? null : miscRewards.get(miscRewards.size() - 1);
     }
 
     public void printSeedStats(SearchSettings settings) {
@@ -357,5 +381,172 @@ public class SeedResult {
             System.out.println(rawShopRelics);
         }
         System.out.println("#####################################");
+    }
+
+    /**
+     * Writes floor-by-floor information to a YAML file in results/ folder.
+     * Returns the absolute path to the file.
+     */
+    public String writeFloorYamlToFile(SearchSettings settings, long seedValue) {
+        File resultsDir = new File("results");
+        if (!resultsDir.exists()) {
+            resultsDir.mkdirs();
+        }
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+        String characterName = settings.playerClass != null ? settings.playerClass.name() : "UNKNOWN";
+        String filename = String.format("%s_%dasc_%s.yaml", characterName, settings.ascensionLevel, timestamp);
+        File outputFile = new File(resultsDir, filename);
+        try (FileWriter writer = new FileWriter(outputFile)) {
+            writer.write("---\n");
+            writer.write("SearchConfig:\n");
+            writer.write(jsonToYaml(new Gson().toJsonTree(settings).getAsJsonObject(), 2));
+            writer.write("\nRun:\n");
+            writer.write("  Seed: " + SeedHelper.getString(seedValue) + " (" + seedValue + ")\n");
+            writer.write("Floors:\n");
+            for (FloorInfo info : floorInfos) {
+                appendFloorInfoYaml(writer, info);
+            }
+            return outputFile.getAbsolutePath();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write YAML file: " + e.getMessage());
+        }
+    }
+
+    private static String jsonToYaml(JsonObject json, int indentSpaces) {
+        StringBuilder sb = new StringBuilder();
+        StringBuilder indentBuilder = new StringBuilder();
+        for (int i = 0; i < indentSpaces; i++) indentBuilder.append(" ");
+        String indent = indentBuilder.toString();
+        for (String key : json.keySet()) {
+            JsonElement value = json.get(key);
+            if (value.isJsonNull()) {
+                sb.append(indent).append(key).append(": null\n");
+            } else if (value.isJsonPrimitive()) {
+                JsonPrimitive prim = value.getAsJsonPrimitive();
+                String valStr = prim.isString() ? prim.getAsString()
+                        : prim.isBoolean() ? String.valueOf(prim.getAsBoolean())
+                        : String.valueOf(prim.getAsNumber());
+                sb.append(indent).append(key).append(": ").append(yamlEscape(valStr)).append("\n");
+            } else if (value.isJsonArray()) {
+                sb.append(indent).append(key).append(":\n");
+                for (JsonElement item : value.getAsJsonArray()) {
+                    String itemStr = item.isJsonPrimitive() ? item.getAsString() : item.toString();
+                    if (item.isJsonPrimitive()) {
+                        sb.append(indent).append("  - ").append(yamlEscape(itemStr)).append("\n");
+                    } else {
+                        sb.append(indent).append("  - ").append(itemStr).append("\n");
+                    }
+                }
+            } else if (value.isJsonObject()) {
+                sb.append(indent).append(key).append(":\n");
+                sb.append(jsonToYaml(value.getAsJsonObject(), indentSpaces + 2));
+            }
+        }
+        return sb.toString();
+    }
+
+    private void appendFloorInfoYaml(FileWriter writer, FloorInfo info) throws IOException {
+        writer.write("  Floor " + info.floor + ":\n");
+        if (info.path != null) {
+            writer.write("    Path: " + info.path + "\n");
+        }
+        if (info.type != null) {
+            writer.write("    Type: " + info.type + "\n");
+        }
+        if (info.name != null && !info.name.isEmpty()) {
+            String nameKey = "Name:";
+            if (info.type != null && info.type.equals("Event")) {
+                nameKey = "Instance:";
+            } else if (info.type != null && info.type.equals("Neow")) {
+                nameKey = "Starting Relic:";
+            }
+            writer.write("    " + nameKey + " " + yamlEscape(info.name) + "\n");
+        }
+        if (info.type != null && info.type.equals("Neow")) {
+            if (!info.neowOptions.isEmpty()) {
+                writer.write("    Neow Options:\n");
+                for (int optionIndex = 0; optionIndex < info.neowOptions.size(); optionIndex++) {
+                    String opt = info.neowOptions.get(optionIndex);
+                    if (optionIndex == info.neowChosenIndex) {
+                        writer.write("      - \"" + opt.replace("\\", "\\\\").replace("\"", "\\\"") + "\"\n");
+                    } else {
+                        writer.write("      - " + yamlEscape(opt) + "\n");
+                    }
+                }
+            }
+            if (!info.neowChoice.isEmpty()) {
+                writer.write("    Neow Choice:\n");
+                for (String choice : info.neowChoice) {
+                    writer.write("      - " + yamlEscape(choice) + "\n");
+                }
+            }
+        }
+        if (info.type != null && info.type.equals("Shop")) {
+            if (!info.cardRewards.isEmpty()) {
+                writer.write("    Cards:\n");
+                for (String card : info.cardRewards) {
+                    writer.write("      - " + yamlEscape(card) + "\n");
+                }
+            }
+            if (!info.relics.isEmpty()) {
+                writer.write("    Relics:\n");
+                for (String relicId : info.relics) {
+                    String displayName = getRelicDisplayName(relicId);
+                    writer.write("      - " + yamlEscape(displayName) + "\n");
+                }
+            }
+            if (!info.potions.isEmpty()) {
+                writer.write("    Potions:\n");
+                for (String potion : info.potions) {
+                    writer.write("      - " + yamlEscape(potion) + "\n");
+                }
+            }
+        } else {
+            if (!info.cardRewards.isEmpty()) {
+                String key = info.cardRewards.size() == 1 ? "Card Reward:" : "Card Rewards:";
+                writer.write("    " + key + "\n");
+                for (String card : info.cardRewards) {
+                    writer.write("      - " + yamlEscape(card) + "\n");
+                }
+            }
+            if (!info.relics.isEmpty()) {
+                String key = info.relics.size() == 1 ? "Relic:" : "Relics:";
+                writer.write("    " + key + "\n");
+                for (String relicId : info.relics) {
+                    String displayName = getRelicDisplayName(relicId);
+                    writer.write("      - " + yamlEscape(displayName) + "\n");
+                }
+            }
+            if (!info.potions.isEmpty()) {
+                String key = info.potions.size() == 1 ? "Potion:" : "Potions:";
+                writer.write("    " + key + "\n");
+                for (String potion : info.potions) {
+                    writer.write("      - " + yamlEscape(potion) + "\n");
+                }
+            }
+        }
+        if (!info.bossRelics.isEmpty()) {
+            writer.write("    Boss Relic:\n");
+            for (String relicId : info.bossRelics) {
+                String displayName = getRelicDisplayName(relicId);
+                writer.write("      - " + yamlEscape(displayName) + "\n");
+            }
+        }
+    }
+
+    private String getRelicDisplayName(String relicId) {
+        try {
+            return RelicLibrary.getRelic(relicId).name;
+        } catch (Exception e) {
+            return relicId;
+        }
+    }
+
+    private static String yamlEscape(String s) {
+        if (s == null) return "";
+        if (s.contains(":") || s.contains("#") || s.startsWith(" ") || s.startsWith("-")) {
+            return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
+        }
+        return s;
     }
 }
