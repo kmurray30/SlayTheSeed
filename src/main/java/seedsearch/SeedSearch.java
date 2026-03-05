@@ -51,7 +51,7 @@ public class SeedSearch {
         if (!isPlayerClassValid(settings)) {
             throw new IllegalArgumentException("Invalid playerClass in search settings");
         }
-        setupUnlockTracker(settings);
+        setupUnlockTrackerForRun(settings);
         SeedRunner runner = new SeedRunner(settings);
         boolean passed = runner.runSeed(seed);
         if (!passed) {
@@ -60,7 +60,7 @@ public class SeedSearch {
         return runner.getSeedResult();
     }
 
-    private static void setupUnlockTracker(SearchSettings settings) {
+    public static void setupUnlockTrackerForRun(SearchSettings settings) {
         String[] expectedBaseUnlocks = {"The Silent", "Defect", "Watcher"};
         String[] firstBossUnlocks = {"GUARDIAN", "GHOST", "SLIME"};
         String[] secondBossUnlocks = {"CHAMP", "AUTOMATON", "COLLECTOR"};
@@ -92,7 +92,7 @@ public class SeedSearch {
         if (!isPlayerClassValid(settings)) {
             exit(1);
         }
-        setupUnlockTracker(settings);
+        setupUnlockTrackerForRun(settings);
         SeedRunner runner = new SeedRunner(settings);
         ArrayList<Long> foundSeeds = new ArrayList<>();
         long seedCount = settings.endSeed - settings.startSeed;

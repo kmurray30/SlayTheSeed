@@ -210,8 +210,20 @@ public class SeedRunner {
     }
 
     public boolean runSeed(long seed) {
-        setSeed(seed);
-        return runSeed();
+        seedsearch.engine.RunEngine engine = new seedsearch.engine.RunEngine();
+        engine.init(seed, settings.playerClass, settings.ascensionLevel, settings);
+        seedsearch.engine.ConfigPolicy policy = new seedsearch.engine.ConfigPolicy(settings);
+        while (true) {
+            seedsearch.engine.DecisionPoint dp = engine.run(policy);
+            if (dp == null) break;
+            Object choice = policy.choose(dp);
+            if (choice == null) {
+                throw new RuntimeException("ConfigPolicy must provide choice for " + dp.getType());
+            }
+            engine.applyChoice(choice);
+        }
+        seedResult = engine.getSeedResult();
+        return seedResult.testFinalFilters(settings);
     }
 
     public static void clearCombatRewards() {

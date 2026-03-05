@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Explorer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Seed Explorer</h1>
+        </header>
+
+        <section id="start-section">
+            <h2>Start a Run</h2>
+            <div class="form-group">
+                <label for="seed">Seed:</label>
+                <input type="number" id="seed" value="1" min="0">
+            </div>
+            <div class="form-group">
+                <label for="playerClass">Class:</label>
+                <select id="playerClass">
+                    <option value="IRONCLAD">Ironclad</option>
+                    <option value="THE_SILENT" selected>Silent</option>
+                    <option value="DEFECT">Defect</option>
+                    <option value="WATCHER">Watcher</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="ascension">Ascension:</label>
+                <input type="number" id="ascension" value="20" min="0" max="20">
+            </div>
+            <button id="start-btn">Start Run</button>
+        </section>
+
+        <section id="run-section" class="hidden">
+            <div class="run-layout">
+                <div class="sidebar">
+                    <h3>Run State</h3>
+                    <div id="run-state"></div>
+                </div>
+                <div class="main">
+                    <div id="map-container"></div>
+                    <div id="decision-container"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

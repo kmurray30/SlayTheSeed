@@ -1,0 +1,144 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 1rem;
+    background: #1a1a2e;
+    color: #eee;
+}
+
+header h1 {
+    margin: 0 0 1.5rem;
+    font-size: 1.5rem;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#start-section {
+    max-width: 400px;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: #aaa;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    background: #16213e;
+    border: 1px solid #333;
+    color: #eee;
+    border-radius: 4px;
+}
+
+#start-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background: #e94560;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#start-btn:hover {
+    background: #ff6b6b;
+}
+
+.run-layout {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 1.5rem;
+}
+
+.sidebar {
+    background: #16213e;
+    padding: 1rem;
+    border-radius: 8px;
+    height: fit-content;
+}
+
+.sidebar h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+}
+
+#run-state {
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+#run-state .stat {
+    margin-bottom: 0.25rem;
+}
+
+#map-container {
+    background: #16213e;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    min-height: 200px;
+}
+
+#map-container svg {
+    width: 100%;
+    height: auto;
+}
+
+.map-node {
+    fill: #333;
+    stroke: #555;
+    stroke-width: 1;
+    cursor: default;
+}
+
+.map-node.event { fill: #6c5ce7; }
+.map-node.elite { fill: #e94560; }
+.map-node.monster { fill: #00b894; }
+.map-node.shop { fill: #fdcb6e; }
+.map-node.treasure { fill: #e17055; }
+.map-node.rest { fill: #74b9ff; }
+
+#decision-container {
+    background: #16213e;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.decision-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+}
+
+.choice-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.choice-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    background: #0f3460;
+    border: 1px solid #e94560;
+    color: #eee;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.choice-btn:hover {
+    background: #e94560;
+}
