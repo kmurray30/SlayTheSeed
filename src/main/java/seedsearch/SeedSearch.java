@@ -129,10 +129,10 @@ public class SeedSearch {
     }
 
     /**
-     * Creates results/&lt;character&gt;_a&lt;ascension&gt;_&lt;timestamp&gt;/ and returns the folder.
+     * Creates search_results/&lt;character&gt;_a&lt;ascension&gt;_&lt;timestamp&gt;/ and returns the folder.
      */
     private static File createRunFolder(SearchSettings settings) {
-        File resultsDir = new File("results");
+        File resultsDir = new File("search_results");
         if (!resultsDir.exists()) {
             resultsDir.mkdirs();
         }

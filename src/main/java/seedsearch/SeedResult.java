@@ -398,9 +398,9 @@ public class SeedResult {
 
     /**
      * Writes floor-by-floor information to a YAML file in the run folder.
-     * Path: results/&lt;character&gt;_a&lt;ascension&gt;_&lt;timestamp&gt;/seed-&lt;seed&gt;.yaml
+     * Path: search_results/&lt;character&gt;_a&lt;ascension&gt;_&lt;timestamp&gt;/seed-&lt;seed&gt;.yaml
      *
-     * @param runFolder The run folder (e.g. results/THE_SILENT_a20_20260304_002047/)
+     * @param runFolder The run folder (e.g. search_results/THE_SILENT_a20_20260304_002047/)
      * @return The absolute path to the written file
      */
     public String writeFloorYamlToFile(SearchSettings settings, long seedValue, File runFolder) {

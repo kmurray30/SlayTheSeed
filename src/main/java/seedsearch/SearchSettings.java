@@ -19,7 +19,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 
 public class SearchSettings {
 
-    private static final String configName = "target/searchConfig.json";
+    private static final String configName = "configs/searchConfig.json";
     private static final String defaultConfigResource = "defaultSearchConfig.json";
 
     // Core search parameters
@@ -143,7 +143,7 @@ public class SearchSettings {
         System.err.println("[CONFIG] Loading defaultSearchConfig.json...");
         JsonObject defaults = loadDefaultConfig(gson);
         if (defaults == null) {
-            throw new RuntimeException("defaultSearchConfig.json not found on classpath or in src/main/resources/");
+            throw new RuntimeException("defaultSearchConfig.json not found in configs/ or on classpath");
         }
         System.err.println("[CONFIG] defaultSearchConfig.json loaded with " + defaults.keySet().size() + " keys");
         System.err.println("[CONFIG] maximumElites from defaults: " + defaults.get("maximumElites"));
@@ -184,8 +184,8 @@ public class SearchSettings {
 
     private static JsonObject loadDefaultConfig(Gson gson) {
         // Check disk first so edits take effect without recompiling
-        // Order: target/ (build output), src/main/resources/, CWD, then classpath
-        for (String path : new String[]{ "target/" + defaultConfigResource, "src/main/resources/" + defaultConfigResource, defaultConfigResource }) {
+        // Order: configs/, src/main/resources/, CWD, then classpath
+        for (String path : new String[]{ "configs/" + defaultConfigResource, "src/main/resources/" + defaultConfigResource, defaultConfigResource }) {
             File file = new File(path);
             if (file.exists()) {
                 JsonObject json = loadJsonFile(gson, file);

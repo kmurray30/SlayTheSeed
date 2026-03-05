@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  */
 public class RegressionTest {
 
-    private static final String CONFIG_FILE = "target/regressionTestConfig.json";
+    private static final String CONFIG_FILE = "configs/regressionTestConfig.json";
     private static final String EXPECTED_DIR = "test/regression/expected";
 
     /** Filter fields to ignore when comparing SearchConfig to expected YAML. */
@@ -281,12 +281,12 @@ public class RegressionTest {
 
     private static void printConfigNotFound(File configFile) {
         System.err.println("Regression test config not found: " + configFile.getAbsolutePath());
-        System.err.println("Run 'mvn package' first to create target/regressionTestConfig.json.");
+        System.err.println("Create configs/regressionTestConfig.json (see configs/defaultSearchConfig.json for structure).");
         printUsage();
     }
 
     private static void printUsage() {
-        System.err.println("Usage: Run from project root. Config: target/regressionTestConfig.json (created by mvn package).");
+        System.err.println("Usage: Run from project root. Config: configs/regressionTestConfig.json");
         System.err.println("Expected files: test/regression/expected/<character>_a<ascension>_seed_<seed>.yaml");
         System.err.println("Example: test/regression/expected/silent_a20_seed_1.yaml for THE_SILENT, ascension 20, seed 1");
     }

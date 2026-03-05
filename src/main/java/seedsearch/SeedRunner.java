@@ -223,7 +223,7 @@ public class SeedRunner {
             engine.applyChoice(choice);
         }
         seedResult = engine.getSeedResult();
-        return seedResult.testFinalFilters(settings);
+        return seedResult.testAct1Filters(settings) && seedResult.testFinalFilters(settings);
     }
 
     public static void clearCombatRewards() {

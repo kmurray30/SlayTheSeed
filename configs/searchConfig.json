@@ -1,0 +1,13 @@
+{
+    "playerClass": "WATCHER",
+    "ascensionLevel": 20,
+    "neowChoice": 0,
+    "startSeed": 440,
+    "endSeed": 480,
+    "verbose": true,
+    "exitAfterSearch": true,
+    "requiredAct1Cards": ["Pressure Points", "Pressure Points", "Pressure Points"],
+    "bossRelicsToTake": ["Empty Cage"],
+    "requiredAct1Relics": ["Empty Cage"]
+  }
+  
