@@ -1,4 +1,4 @@
-package seedsearch;
+package seedsearch.seed_explorer.web_app;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
@@ -19,10 +19,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Entry point for regression tests. Sets seedsearch.regression.test=true so StandaloneLauncher
- * dispatches to RegressionTest.run() instead of SeedSearch.search().
+ * Entry point for the step-wise seed explorer web app.
+ * Sets seedsearch.web=true so StandaloneLauncher starts the Javalin server.
  */
-public class RegressionTestMain {
+public class WebAppMain {
 
     private static final int GL_COMPILE_STATUS = 35713;
     private static final int GL_LINK_STATUS = 35714;
@@ -52,7 +52,10 @@ public class RegressionTestMain {
 
     public static void main(String[] args) {
         System.setProperty("seedsearch.standalone", "true");
-        System.setProperty("seedsearch.regression.test", "true");
+        System.setProperty("seedsearch.web", "true");
+        if (args.length > 0) {
+            System.setProperty("seedsearch.web.port", args[0]);
+        }
 
         try {
             Configurator.setRootLevel(Level.OFF);

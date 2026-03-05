@@ -1,4 +1,4 @@
-package seedsearch;
+package seedsearch.core;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;

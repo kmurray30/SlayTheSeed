@@ -213,18 +213,6 @@
                             </sources>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>add-test-src</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.basedir}/test/regression</source>
-                            </sources>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
 
@@ -254,7 +242,7 @@
                             <outputFile>${project.build.directory}/SeedSearch-Regression.jar</outputFile>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>seedsearch.RegressionTestMain</mainClass>
+                                    <mainClass>seedsearch.seed_search.RegressionTestMain</mainClass>
                                 </transformer>
                             </transformers>
                             <filters>
@@ -280,7 +268,7 @@
                             <outputFile>${project.build.directory}/SeedSearch-Web.jar</outputFile>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>seedsearch.web.WebAppMain</mainClass>
+                                    <mainClass>seedsearch.seed_explorer.web_app.WebAppMain</mainClass>
                                 </transformer>
                             </transformers>
                             <filters>
@@ -305,7 +293,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>seedsearch.StandaloneMain</mainClass>
+                                    <mainClass>seedsearch.seed_search.StandaloneMain</mainClass>
                                 </transformer>
                             </transformers>
                             <filters>
@@ -329,7 +317,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>seedsearch.StandaloneMain</mainClass>
+                    <mainClass>seedsearch.seed_search.StandaloneMain</mainClass>
                 </configuration>
             </plugin>
         </plugins>
@@ -354,7 +342,7 @@
                 <directory>src/main/resources</directory>
             </resource>
             <resource>
-                <directory>webapp</directory>
+                <directory>src/main/resources/seed_explorer/web_app</directory>
                 <targetPath>webapp</targetPath>
             </resource>
         </resources>

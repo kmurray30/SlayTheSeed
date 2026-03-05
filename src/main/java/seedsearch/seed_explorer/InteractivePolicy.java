@@ -1,10 +1,10 @@
-package seedsearch.web;
+package seedsearch.seed_explorer;
 
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.map.MapRoomNode;
-import seedsearch.engine.DecisionPoint;
-import seedsearch.engine.RunEngine;
-import seedsearch.engine.RunPolicy;
+import seedsearch.core.engine.DecisionPoint;
+import seedsearch.core.engine.RunEngine;
+import seedsearch.core.engine.RunPolicy;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package seedsearch.engine;
+package seedsearch.core.engine;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
@@ -36,12 +36,12 @@ import com.megacrit.cardcrawl.shop.Merchant;
 import com.megacrit.cardcrawl.shop.ShopScreen;
 import com.megacrit.cardcrawl.shop.StorePotion;
 import com.megacrit.cardcrawl.shop.StoreRelic;
-import seedsearch.FloorInfo;
-import seedsearch.Reward;
-import seedsearch.SeedResult;
-import seedsearch.SearchSettings;
-import seedsearch.SeedRunner;
-import seedsearch.StandaloneHooks;
+import seedsearch.core.CombatRewards;
+import seedsearch.core.FloorInfo;
+import seedsearch.core.Reward;
+import seedsearch.core.SeedResult;
+import seedsearch.core.SearchSettings;
+import seedsearch.core.StandaloneHooks;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -106,7 +106,7 @@ public class RunEngine {
         player = AbstractDungeon.player;
         AbstractDungeon.reset();
         resetCharacter();
-        SeedRunner.clearCombatRewards();
+        CombatRewards.clear();
 
         currentAct = 0;
         actFloor = 0;
@@ -620,7 +620,7 @@ public class RunEngine {
         if (StandaloneHooks.obtainedCards.size() > 0) {
             for (AbstractCard card : StandaloneHooks.obtainedCards) addInvoluntaryCardReward(card, reward);
         }
-        if (SeedRunner.combatPotions.size() > 0) reward.addPotions(SeedRunner.combatPotions);
+        if (CombatRewards.combatPotions.size() > 0) reward.addPotions(CombatRewards.combatPotions);
         if (neowOption.type == NeowReward.NeowRewardType.TRANSFORM_CARD) {
             AbstractCard removedCard = player.masterDeck.group.get(1);
             AbstractDungeon.transformCard(removedCard, false, NeowEvent.rng);
@@ -763,7 +763,7 @@ public class RunEngine {
             if (AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT) {
                 AbstractDungeon.getCurrRoom().phase = AbstractRoom.RoomPhase.COMPLETE;
             }
-            SeedRunner.clearCombatRewards();
+            CombatRewards.clear();
             processFloor(node, result, path);
         }
         seedResult.addToMapPath("BOSS");
@@ -850,7 +850,7 @@ public class RunEngine {
                 StandaloneHooks.resetObtainedCards();
                 chest.open(false);
                 for (AbstractCard dummy : treasureBottleDummies) player.masterDeck.removeCard(dummy);
-                addGoldReward(SeedRunner.combatGold);
+                addGoldReward(CombatRewards.combatGold);
                 Reward treasureRelicReward = new Reward(AbstractDungeon.floorNum);
                 for (RewardItem rewardItem : AbstractDungeon.getCurrRoom().rewards) {
                     if (rewardItem.type == RewardItem.RewardType.RELIC && rewardItem.relic != null) {
@@ -860,7 +860,7 @@ public class RunEngine {
                 for (AbstractCard card : StandaloneHooks.obtainedCards) {
                     addInvoluntaryCardReward(card, treasureRelicReward);
                 }
-                seedResult.addAllCardRewards(SeedRunner.combatCardRewards);
+                seedResult.addAllCardRewards(CombatRewards.combatCardRewards);
                 seedResult.addMiscReward(treasureRelicReward);
                 addTreasureFloorInfo(path, node, treasureRelicReward);
                 break;
@@ -1148,7 +1148,7 @@ public class RunEngine {
     }
 
     private Reward getEventReward(AbstractEvent event, String eventKey, int floor) {
-        SeedRunner.clearCombatRewards();
+        CombatRewards.clear();
         StandaloneHooks.resetObtainedCards();
         Random miscRng = AbstractDungeon.miscRng;
         Reward reward = new Reward(floor);
@@ -1381,7 +1381,7 @@ public class RunEngine {
                     Method resultMethod = GremlinWheelGame.class.getDeclaredMethod("applyResult");
                     resultMethod.setAccessible(true);
                     resultMethod.invoke(event);
-                    for (AbstractRelic r : SeedRunner.combatRelics) awardRelic(r, reward);
+                    for (AbstractRelic r : CombatRewards.combatRelics) awardRelic(r, reward);
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }

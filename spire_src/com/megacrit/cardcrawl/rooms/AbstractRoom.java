@@ -583,7 +583,7 @@ public abstract class AbstractRoom implements Disposable {
 
    public void spawnRelicAndObtain(float x, float y, AbstractRelic relic) {
       if (System.getProperty("seedsearch.standalone") != null) {
-         seedsearch.StandaloneHooks.obtainedRelic = relic;
+         seedsearch.core.StandaloneHooks.obtainedRelic = relic;
       }
       if (relic.relicId == "Circlet" && AbstractDungeon.player.hasRelic("Circlet")) {
          AbstractRelic circ = AbstractDungeon.player.getRelic("Circlet");

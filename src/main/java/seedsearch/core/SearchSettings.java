@@ -1,4 +1,4 @@
-package seedsearch;
+package seedsearch.core;
 
 import java.io.File;
 import java.io.FileReader;
@@ -138,7 +138,7 @@ public class SearchSettings {
      */
     public static SearchSettings loadSettings() {
         Gson gson = new Gson();
-        
+
         // Load defaults first
         System.err.println("[CONFIG] Loading defaultSearchConfig.json...");
         JsonObject defaults = loadDefaultConfig(gson);

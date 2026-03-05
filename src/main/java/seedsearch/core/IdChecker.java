@@ -1,4 +1,4 @@
-package seedsearch;
+package seedsearch.core;
 
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.events.beyond.*;

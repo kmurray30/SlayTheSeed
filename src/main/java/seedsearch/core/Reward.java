@@ -1,4 +1,4 @@
-package seedsearch;
+package seedsearch.core;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.potions.AbstractPotion;

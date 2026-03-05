@@ -1,4 +1,4 @@
-package seedsearch;
+package seedsearch.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,22 +19,22 @@ import com.megacrit.cardcrawl.ui.buttons.CancelButton;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 /**
  * Runs minimal game initialization for standalone seed search. Replicates the
  * essential parts of CardCrawlGame.create() that SeedRunner depends on.
+ * Uses reflection to dispatch to web, regression, or search so core has no compile-time deps on them.
  */
 public class StandaloneLauncher {
 
     public static void runStandalone(CardCrawlGame game) {
-        SeedSearch.loadingEnabled = false;
-
         try {
             Settings.displayOptions = new ArrayList<>();
             Settings.displayOptions.add(new com.megacrit.cardcrawl.screens.DisplayOption(0, 0));
 
-                        // Use EA integration (no-op, no native libs) - Steam/Discord have x86-only natives, fail on arm64 Mac
+            // Use EA integration (no-op, no native libs) - Steam/Discord have x86-only natives, fail on arm64 Mac
             CardCrawlGame.publisherIntegration = DistributorFactory.getEnabledDistributor("ea");
 
             CardCrawlGame.saveSlotPref = SaveHelper.getPrefs("STSSaveSlots");
@@ -101,12 +101,63 @@ public class StandaloneLauncher {
             CardCrawlGame.characterManager = new com.megacrit.cardcrawl.characters.CharacterManager();
 
             if ("true".equals(System.getProperty("seedsearch.web"))) {
-                seedsearch.web.WebAppLauncher.startServer();
+                invokeWebAppLauncher();
             } else if ("true".equals(System.getProperty("seedsearch.regression.test"))) {
-                RegressionTest.run();
+                invokeRegressionTest();
             } else {
-                SeedSearch.search();
+                invokeSeedSearch();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Gdx.app.exit();
+        }
+    }
+
+    /** Dispatch via reflection so core has no compile-time dependency on web_app. */
+    private static void invokeWebAppLauncher() {
+        try {
+            Class<?> launcherClass = Class.forName("seedsearch.seed_explorer.web_app.WebAppLauncher");
+            Method startServer = launcherClass.getMethod("startServer");
+            startServer.invoke(null);
+        } catch (ClassNotFoundException e) {
+            System.err.println("Web app not available. Build with web_app module.");
+            e.printStackTrace();
+            Gdx.app.exit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Gdx.app.exit();
+        }
+    }
+
+    /** Dispatch via reflection so core has no compile-time dependency on seed_search. */
+    private static void invokeRegressionTest() {
+        try {
+            Class<?> testClass = Class.forName("seedsearch.seed_search.RegressionTest");
+            Method run = testClass.getMethod("run");
+            run.invoke(null);
+        } catch (ClassNotFoundException e) {
+            System.err.println("Regression test not available.");
+            e.printStackTrace();
+            Gdx.app.exit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Gdx.app.exit();
+        }
+    }
+
+    /** Dispatch via reflection so core has no compile-time dependency on seed_search. */
+    private static void invokeSeedSearch() {
+        try {
+            Class<?> searchClass = Class.forName("seedsearch.seed_search.SeedSearch");
+            Method search = searchClass.getMethod("search");
+            // Set loadingEnabled = false via reflection before calling search
+            Field loadingEnabled = searchClass.getField("loadingEnabled");
+            loadingEnabled.setBoolean(null, false);
+            search.invoke(null);
+        } catch (ClassNotFoundException e) {
+            System.err.println("Seed search not available.");
+            e.printStackTrace();
+            Gdx.app.exit();
         } catch (Exception e) {
             e.printStackTrace();
             Gdx.app.exit();

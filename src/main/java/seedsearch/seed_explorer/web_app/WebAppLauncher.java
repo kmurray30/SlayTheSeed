@@ -1,4 +1,4 @@
-package seedsearch.web;
+package seedsearch.seed_explorer.web_app;
 
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;

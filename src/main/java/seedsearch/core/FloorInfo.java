@@ -1,4 +1,4 @@
-package seedsearch;
+package seedsearch.core;
 
 import java.util.ArrayList;
 

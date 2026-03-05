@@ -761,7 +761,7 @@ public class MonsterHelper {
 
    public static void uploadEnemyData() {
       if (System.getProperty("seedsearch.standalone") != null) {
-         seedsearch.StandaloneHooks.encounterIds.clear();
+         seedsearch.core.StandaloneHooks.encounterIds.clear();
       }
       ArrayList<String> derp = new ArrayList<>();
       ArrayList<EnemyData> data = new ArrayList<>();
@@ -834,7 +834,7 @@ public class MonsterHelper {
       for (EnemyData d : data) {
          derp.add(d.gameDataUploadData());
          if (System.getProperty("seedsearch.standalone") != null) {
-            seedsearch.StandaloneHooks.encounterIds.add(d.name);
+            seedsearch.core.StandaloneHooks.encounterIds.add(d.name);
          }
       }
 

@@ -32,7 +32,7 @@ public class ShowCardAndObtainEffect extends AbstractGameEffect {
       CardHelper.obtain(card.cardID, card.rarity, card.color);
       this.card = card;
       if (System.getProperty("seedsearch.standalone") != null) {
-         seedsearch.StandaloneHooks.obtainedCards.add(card);
+         seedsearch.core.StandaloneHooks.obtainedCards.add(card);
       }
       if (Settings.FAST_MODE) {
          this.duration = 0.5F;

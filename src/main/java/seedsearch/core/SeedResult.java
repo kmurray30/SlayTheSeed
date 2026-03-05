@@ -1,4 +1,4 @@
-package seedsearch;
+package seedsearch.core;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;

@@ -1,4 +1,4 @@
-package seedsearch;
+package seedsearch.seed_search;
 
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
@@ -7,6 +7,9 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import seedsearch.core.SearchSettings;
+import seedsearch.core.SeedResult;
 
 import static java.lang.System.exit;
 

@@ -1,8 +1,8 @@
-package seedsearch.engine;
+package seedsearch.core.engine;
 
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.map.MapRoomNode;
-import seedsearch.SearchSettings;
+import seedsearch.core.SearchSettings;
 
 import java.util.List;
 

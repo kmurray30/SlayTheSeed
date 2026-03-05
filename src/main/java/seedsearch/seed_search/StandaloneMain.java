@@ -1,4 +1,4 @@
-package seedsearch;
+package seedsearch.seed_search;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;

@@ -1,15 +1,16 @@
-package seedsearch.web;
+package seedsearch.seed_explorer.web_app;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import seedsearch.SearchSettings;
-import seedsearch.engine.ActMapSnapshot;
-import seedsearch.engine.DecisionPoint;
-import seedsearch.engine.RunEngine;
-import seedsearch.engine.RunState;
+import seedsearch.core.SearchSettings;
+import seedsearch.core.engine.ActMapSnapshot;
+import seedsearch.core.engine.DecisionPoint;
+import seedsearch.core.engine.RunEngine;
+import seedsearch.core.engine.RunState;
+import seedsearch.seed_explorer.InteractivePolicy;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,7 +51,7 @@ public class ApiController {
 
         int ascension = req.ascensionLevel != null ? req.ascensionLevel : 20;
         SearchSettings settings = createDefaultSettings(playerClass, ascension);
-        seedsearch.SeedSearch.setupUnlockTrackerForRun(settings);
+        seedsearch.seed_search.SeedSearch.setupUnlockTrackerForRun(settings);
 
         RunEngine engine = new RunEngine();
         engine.init(req.seed, playerClass, ascension, settings);

@@ -1,4 +1,4 @@
-package seedsearch.engine;
+package seedsearch.core.engine;
 
 import com.megacrit.cardcrawl.map.MapRoomNode;
 

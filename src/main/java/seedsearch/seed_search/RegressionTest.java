@@ -1,4 +1,4 @@
-package seedsearch;
+package seedsearch.seed_search;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -54,7 +54,7 @@ public class RegressionTest {
             }
 
             int[] seedRange = parseSeedRange(configJson);
-            SearchSettings settings = gson.fromJson(configJson, SearchSettings.class);
+            seedsearch.core.SearchSettings settings = gson.fromJson(configJson, seedsearch.core.SearchSettings.class);
             applyPermissiveFilters(settings);
 
             int startSeed = seedRange[0];
@@ -75,7 +75,7 @@ public class RegressionTest {
                 settings.startSeed = seed;
                 settings.endSeed = seed + 1;
 
-                SeedResult result = SeedSearch.runWithSettings(settings, seed);
+                seedsearch.core.SeedResult result = SeedSearch.runWithSettings(settings, seed);
 
                 String actualYaml = result.toYamlString(settings, seed);
                 String expectedYaml = new String(Files.readAllBytes(expectedFile.toPath()), StandardCharsets.UTF_8);
@@ -109,7 +109,7 @@ public class RegressionTest {
      * Build expected filename from config: &lt;character&gt;_a&lt;ascension&gt;_seed_&lt;seed&gt;.yaml
      * Example: THE_SILENT, ascension 20, seed 1 → silent_a20_seed_1.yaml
      */
-    private static String buildExpectedFilename(SearchSettings settings, long seed) {
+    private static String buildExpectedFilename(seedsearch.core.SearchSettings settings, long seed) {
         String characterShorthand = settings.playerClass.name().toLowerCase().replace("the_", "");
         return characterShorthand + "_a" + settings.ascensionLevel + "_seed_" + seed + ".yaml";
     }
@@ -118,7 +118,7 @@ public class RegressionTest {
      * Pre-flight validation: before running any seeds, verify expected files exist and match config.
      */
     @SuppressWarnings("unchecked")
-    private static void validateBeforeRun(JsonObject configJson, SearchSettings settings,
+    private static void validateBeforeRun(JsonObject configJson, seedsearch.core.SearchSettings settings,
                                          int startSeed, int endSeed, File expectedDir) {
         Yaml yamlParser = new Yaml();
 
@@ -304,7 +304,7 @@ public class RegressionTest {
         return new int[]{arr.get(0).getAsInt(), arr.get(1).getAsInt()};
     }
 
-    private static void applyPermissiveFilters(SearchSettings settings) {
+    private static void applyPermissiveFilters(seedsearch.core.SearchSettings settings) {
         settings.requiredAct1Cards = new ArrayList<>();
         settings.bannedAct1Cards = new ArrayList<>();
         settings.requiredAct1Relics = new ArrayList<>();

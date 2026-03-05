@@ -1326,7 +1326,7 @@ public class ImageMaster {
 
    public static Texture loadImage(String imgUrl) {
       if (System.getProperty("seedsearch.standalone") != null) {
-         return seedsearch.StandaloneHooks.getPlaceholderTexture();
+         return seedsearch.core.StandaloneHooks.getPlaceholderTexture();
       }
       assert imgUrl != null : "DO NOT CALL LOAD IMAGE WITH NULL";
 
@@ -1342,7 +1342,7 @@ public class ImageMaster {
 
    public static Texture loadImage(String imgUrl, boolean linearFiltering) {
       if (System.getProperty("seedsearch.standalone") != null) {
-         return seedsearch.StandaloneHooks.getPlaceholderTexture();
+         return seedsearch.core.StandaloneHooks.getPlaceholderTexture();
       }
       assert imgUrl != null : "DO NOT CALL LOAD IMAGE WITH NULL";
 
