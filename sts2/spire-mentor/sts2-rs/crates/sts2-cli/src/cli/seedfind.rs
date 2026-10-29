@@ -26,6 +26,17 @@
 //!   surfaced. A miss means "not found on the sampled path(s)", not "impossible
 //!   for this seed" — raise `--paths-per-seed` to widen the sample.
 //!
+//! `--skip-fights` resolves every fight as an instant full-HP win instead of
+//! playing it out with random moves (the old STS1 SeedSearch model). Reward
+//! generation still runs, and the card-reward / shop / transform rolls come
+//! off player streams that fights never advance, so a walked path sees the
+//! offers it would see after played fights. What differs is whatever a fight
+//! itself decides: draws, intents, monster HP, HP and potions spent, gold
+//! gained or stolen mid-fight, and the few pickups that roll the shared
+//! `niche` stream. Random play with an invincible player can take tens of
+//! thousands of actions per fight, so this is several orders of magnitude
+//! faster per driven seed.
+//!
 //! A seed matches iff **every** predicate in the spec holds. Seed-alone
 //! predicates are checked first as a cheap pre-filter; the (expensive) drive
 //! only runs when a seed clears them and the spec actually has driven
@@ -142,6 +153,11 @@ pub struct SeedfindArgs {
     /// Hard cap on actions per driven run.
     #[arg(long, default_value_t = 100_000)]
     pub max_steps: usize,
+
+    /// Resolve each fight on a driven path as an instant full-HP win instead
+    /// of playing it out (see the module docs for what stays exact).
+    #[arg(long, default_value_t = false)]
+    pub skip_fights: bool,
 
     /// Worker threads (0 = all available cores).
     #[arg(long, default_value_t = 0)]
@@ -601,21 +617,24 @@ fn room_token(room: &str) -> char {
 /// visit order) plus every card-reward screen it is asked to resolve. The
 /// route is captured in [`RunPolicy::prepare`] (fires once per driver step)
 /// by watching `total_floor` tick; screens are captured in `choose` at the
-/// `CardReward` phase (each screen resolves with one player action).
+/// `CardReward` phase (each screen resolves with one player action). With
+/// `skip_fights`, `prepare` also resolves a fight the moment it starts.
 struct CollectingPolicy {
     rng: rand_xoshiro::Xoshiro256PlusPlus,
     trace: PathTrace,
     last_floor: i32,
+    skip_fights: bool,
 }
 
 impl CollectingPolicy {
-    fn from_run_seed(run_seed: i32) -> Self {
+    fn from_run_seed(run_seed: i32, skip_fights: bool) -> Self {
         use rand_xoshiro::rand_core::SeedableRng;
         let seed_u64 = u64::from(u32::from_ne_bytes(run_seed.to_ne_bytes()));
         Self {
             rng: rand_xoshiro::Xoshiro256PlusPlus::seed_from_u64(seed_u64 ^ 0x5EED_F1BD_2026_0297),
             trace: PathTrace::default(),
             last_floor: 0,
+            skip_fights,
         }
     }
 }
@@ -638,6 +657,10 @@ impl RunPolicy for CollectingPolicy {
                 });
             }
         }
+        // After the room is recorded, so a skipped fight still shows in the route.
+        if self.skip_fights && rm.phase() == Phase::Combat {
+            let _ = rm.resolve_combat_fast(0.0, true);
+        }
     }
 
     fn choose(&mut self, rm: &RunManager, actions: &[RunAction]) -> Option<usize> {
@@ -659,28 +682,38 @@ impl RunPolicy for CollectingPolicy {
     }
 }
 
-/// Drive `paths` random full runs for one seed and collect each path's trace.
+/// How the driven predicates walk one seed.
+#[derive(Debug, Clone, Copy)]
+struct DriveOpts {
+    /// Random full runs per seed (`--paths-per-seed`).
+    paths: u32,
+    /// Action cap per run (`--max-steps`).
+    max_steps: usize,
+    /// Resolve fights instantly instead of playing them (`--skip-fights`).
+    skip_fights: bool,
+}
+
+/// Drive `drive.paths` random full runs for one seed and collect each path's trace.
 fn collect_driven(
     seed: u64,
     character: CharacterId,
     ascension: u8,
     game_version: GameVersion,
-    paths: u32,
-    max_steps: usize,
+    drive: DriveOpts,
 ) -> DrivenObservations {
     let cfg = FullRunConfig {
-        max_steps,
+        max_steps: drive.max_steps,
         invincible: true,
         record_trace: false,
         ..FullRunConfig::default()
     };
     let mut obs = DrivenObservations::default();
-    for path in 0..paths.max(1) {
+    for path in 0..drive.paths.max(1) {
         // Vary the policy seed per path so distinct paths are sampled, while
         // keeping the run seed (and thus the content) fixed.
         let policy_seed = (seed as i32).wrapping_add(path.wrapping_mul(0x9E37_79B9) as i32);
         let mut rm = ready_run_manager(seed, character, ascension, game_version);
-        let mut policy = CollectingPolicy::from_run_seed(policy_seed);
+        let mut policy = CollectingPolicy::from_run_seed(policy_seed, drive.skip_fights);
         let _ = drive_full_run(&mut rm, &mut policy, &cfg);
         obs.paths.push(policy.trace);
         obs.relics_obtained
@@ -858,8 +891,7 @@ fn evaluate(
     character: CharacterId,
     ascension: u8,
     game_version: GameVersion,
-    paths: u32,
-    max_steps: usize,
+    drive: DriveOpts,
 ) -> Option<Match> {
     let snap = snapshot(cand.numeric, character, ascension, game_version);
     if !snap.matches_seed_alone(spec) {
@@ -868,14 +900,7 @@ fn evaluate(
     let mut card_reward_hits = Vec::new();
     let mut routes = Vec::new();
     if spec.has_driven_predicates() {
-        let obs = collect_driven(
-            cand.numeric,
-            character,
-            ascension,
-            game_version,
-            paths,
-            max_steps,
-        );
+        let obs = collect_driven(cand.numeric, character, ascension, game_version, drive);
         if !obs.matches_driven(spec) {
             return None;
         }
@@ -978,6 +1003,11 @@ pub fn run<W: Write>(args: SeedfindArgs, out: &mut W) -> io::Result<usize> {
         return Ok(0);
     }
 
+    let fights = if args.skip_fights {
+        ", fights skipped"
+    } else {
+        ""
+    };
     writeln!(
         out,
         "seedfind: scanning {} seeds ({:?} mode, start={}) for {:?} A{} — {}",
@@ -987,7 +1017,7 @@ pub fn run<W: Write>(args: SeedfindArgs, out: &mut W) -> io::Result<usize> {
         character,
         ascension,
         if spec.has_driven_predicates() {
-            format!("driven ({} path(s)/seed)", args.paths_per_seed)
+            format!("driven ({} path(s)/seed{fights})", args.paths_per_seed)
         } else {
             "seed-alone".to_string()
         },
@@ -998,8 +1028,11 @@ pub fn run<W: Write>(args: SeedfindArgs, out: &mut W) -> io::Result<usize> {
     let prev_hook = std::panic::take_hook();
     std::panic::set_hook(Box::new(|_| {}));
 
-    let paths = args.paths_per_seed;
-    let max_steps = args.max_steps;
+    let drive = DriveOpts {
+        paths: args.paths_per_seed,
+        max_steps: args.max_steps,
+        skip_fights: args.skip_fights,
+    };
     let spec_ref = &spec;
     let mode = args.mode;
     let limit = args.limit;
@@ -1025,15 +1058,7 @@ pub fn run<W: Write>(args: SeedfindArgs, out: &mut W) -> io::Result<usize> {
                 .filter_map(|idx| {
                     let cand = candidate(mode, idx, game_version);
                     std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-                        evaluate(
-                            &cand,
-                            spec_ref,
-                            character,
-                            ascension,
-                            game_version,
-                            paths,
-                            max_steps,
-                        )
+                        evaluate(&cand, spec_ref, character, ascension, game_version, drive)
                     }))
                     .ok()
                     .flatten()
@@ -1312,5 +1337,37 @@ mod tests {
         {
             assert!(!snap.matches_seed_alone(&bad));
         }
+    }
+
+    #[test]
+    fn skip_fights_walks_all_three_acts_and_still_rolls_rewards() {
+        // A skipped fight must still land in the route and still roll its
+        // card reward, and the walk must carry through every act. 5,000
+        // actions is plenty here; random played fights can spend that on
+        // a single fight.
+        let drive = DriveOpts {
+            paths: 1,
+            max_steps: 5_000,
+            skip_fights: true,
+        };
+        let obs = collect_driven(
+            4242,
+            CharacterId::Ironclad,
+            0,
+            GameVersion::default(),
+            drive,
+        );
+        let path = &obs.paths[0];
+        let last_act = path.route.iter().map(|r| r.act).max().unwrap_or(0);
+        assert_eq!(last_act, 3, "the walk reached act 3");
+        assert!(
+            path.route.iter().any(|r| r.room == "boss"),
+            "skipped boss fights stay in the route"
+        );
+        assert!(
+            path.screens.len() >= 10,
+            "skipped fights still roll card rewards ({} screens)",
+            path.screens.len()
+        );
     }
 }

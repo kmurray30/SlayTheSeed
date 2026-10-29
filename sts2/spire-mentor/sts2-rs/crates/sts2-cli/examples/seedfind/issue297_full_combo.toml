@@ -17,6 +17,11 @@
 
 character = "silent"
 
+# The Courier obtained during the run (shop / reward / event pickup). A
+# driven predicate; it sits up here because a bare key placed after the
+# `[[card_reward]]` header below would parse as a field of that table.
+relic_obtained = ["THE_COURIER"]
+
 # ── seed-alone ──
 [[ancient_offer]]
 act = 2
@@ -31,6 +36,3 @@ id = "ColorfulPhilosophers"
 [[card_reward]]
 id = "NIGHTMARE"
 min_count = 2
-
-# The Courier obtained during the run (shop / reward / event pickup).
-relic_obtained = ["THE_COURIER"]
