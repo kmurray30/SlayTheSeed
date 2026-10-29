@@ -1,0 +1,12 @@
+{
+  "class_name": "PhrogParasiteElite",
+  "title": "Phrog Parasite",
+  "room_type": "Elite",
+  "is_weak": false,
+  "monsters": [
+    "PhrogParasite"
+  ],
+  "total_monsters": 1,
+  "tags": [],
+  "notes": "Elite encounter with 5 monster slots (1 phrog + 4 wrigglers). Initially spawns only the PhrogParasite; Wriggler monsters spawn conditionally during combat through the Infection card mechanic. Has a custom scene."
+}

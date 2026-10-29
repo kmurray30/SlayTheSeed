@@ -1,0 +1,20 @@
+{
+  "class_name": "Dredge",
+  "title": "Dredge",
+  "character": "Necrobinder",
+  "energy_cost": 1,
+  "type": "Skill",
+  "rarity": "Uncommon",
+  "target": "Self",
+  "keywords": ["Exhaust"],
+  "vars": [
+    {
+      "type": "Cards",
+      "base_value": 3
+    }
+  ],
+  "description": "Put 3 cards from your [gold]Discard Pile[/gold] into your [gold]Hand[/gold].",
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "Upgrade adds Retain keyword. Hand size may limit actual number of cards put into hand (capped by available hand slots)."
+}

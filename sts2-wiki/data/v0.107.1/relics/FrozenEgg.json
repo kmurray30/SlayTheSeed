@@ -1,0 +1,9 @@
+{
+  "class_name": "FrozenEgg",
+  "title": "Frozen Egg",
+  "rarity": "Rare",
+  "character": null,
+  "description": "Whenever you add a Power into your [gold]Deck[/gold], [gold]Upgrade[/gold] it.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Available only before Act 3. Upgrades all Power cards when they enter your deck (including card rewards, merchant purchases, and other deck additions). Only applies to upgradable Power-type cards."
+}

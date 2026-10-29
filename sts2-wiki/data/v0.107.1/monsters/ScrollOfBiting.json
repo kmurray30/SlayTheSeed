@@ -1,0 +1,52 @@
+{
+  "class_name": "ScrollOfBiting",
+  "title": "Scroll of Biting",
+  "min_hp": 33,
+  "min_hp_base": 30,
+  "max_hp": 39,
+  "max_hp_base": 37,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "CHOMP",
+      "title": "Chomp",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 16,
+          "damage_base": 14,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 14/16 damage"]
+    },
+    {
+      "id": "CHEW",
+      "title": "Chew",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 6,
+          "damage_base": 5,
+          "hits": 2,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 5/6 damage", "2 hits"]
+    },
+    {
+      "id": "MORE_TEETH",
+      "title": "More Teeth",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Apply 2 Strength"]
+    }
+  ],
+  "move_pattern": "Starter move varies based on spawn (can begin with Chomp, Chew, or More Teeth). Generally cycles: Chomp → More Teeth → Chew → random branch. The random branch picks either Chomp or Chew, with Chew being more likely, then repeats.",
+  "powers_on_spawn": ["Paper Cuts"],
+  "notes": "Applies Paper Cuts power (amount 2) when entering combat. Damage values scale at Ascension 9 (Deadly Enemies), while HP scales at Ascension 8 (Tough Enemies)."
+}

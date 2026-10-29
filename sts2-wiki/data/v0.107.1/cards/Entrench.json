@@ -1,0 +1,14 @@
+{
+  "class_name": "Entrench",
+  "title": "Entrench",
+  "character": "Ironclad",
+  "energy_cost": 2,
+  "type": "Skill",
+  "rarity": "Event",
+  "target": "Self",
+  "keywords": [],
+  "description": "Double your [gold]Block[/gold].",
+  "upgraded_cost": 1,
+  "referenced_powers": [],
+  "notes": "Gains Block equal to the player's current Block value, effectively doubling the player's Block."
+}

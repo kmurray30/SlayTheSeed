@@ -1,0 +1,21 @@
+{
+  "class_name": "Devastate",
+  "title": "Devastate",
+  "character": "Regent",
+  "energy_cost": 1,
+  "type": "Attack",
+  "rarity": "Uncommon",
+  "target": "Single",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 30,
+      "upgraded_value": 40
+    }
+  ],
+  "description": "Deal 30 damage.",
+  "star_cost": 4,
+  "x_cost": false,
+  "referenced_powers": []
+}

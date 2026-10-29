@@ -1,0 +1,9 @@
+{
+  "class_name": "DiamondDiademPower",
+  "title": "Diamond Diadem",
+  "power_type": "Buff",
+  "stack_type": "Single",
+  "description": "Enemies deal [blue]50%[/blue] less damage this turn.",
+  "smart_description": "Enemies deal [blue]50%[/blue] less damage this turn.",
+  "notes": "Reduces all incoming powered-attack damage to 50% of normal. Expires at the end of the enemy's turn."
+}

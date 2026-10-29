@@ -1,0 +1,9 @@
+{
+  "class_name": "GalvanicPower",
+  "title": "Galvanic",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Powers are afflicted with [gold]Galvanized[/gold].",
+  "smart_description": "Powers are afflicted with [gold]Galvanized[/gold].",
+  "notes": "Applies the Galvanized affliction to all player Power cards at combat start and any player Power cards that enter combat afterward. When a Galvanized power is played, triggers a lightning VFX and deals damage equal to the power's stack count."
+}

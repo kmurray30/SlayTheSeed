@@ -1,0 +1,9 @@
+{
+  "class_name": "SoarPower",
+  "title": "Soar",
+  "power_type": "Buff",
+  "stack_type": "Single",
+  "description": "Receives [gold]50%[/gold] less attack damage until it lands.",
+  "smart_description": "Receives [blue]50%[/blue] less attack damage until it lands.",
+  "notes": "Soar is a single-instance buff that reduces all attack damage received by the power's owner by 50%. The effect persists until the enemy lands an attack (presumably the monster lands from flying/hovering). Damage reduction is applied via ModifyDamageMultiplicative with a multiplier of 0.5 for all powered attacks targeting the owner."
+}

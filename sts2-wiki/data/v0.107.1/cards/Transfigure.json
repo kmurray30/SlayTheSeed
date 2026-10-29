@@ -1,0 +1,20 @@
+{
+  "class_name": "Transfigure",
+  "title": "Transfigure",
+  "character": "Necrobinder",
+  "energy_cost": 1,
+  "type": "Skill",
+  "rarity": "Rare",
+  "target": "Self",
+  "keywords": ["Exhaust"],
+  "vars": [
+    {
+      "type": "Energy",
+      "base_value": 1
+    }
+  ],
+  "description": "Add [gold]Replay[/gold] to a card in your [gold]Hand[/gold].\nIt costs an extra 1 Energy.",
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "Selecting a card from your hand adds Replay to it and increases its energy cost by 1 this combat. Only affects cards that don't cost X and have a cost ≥ 0. On upgrade, removes the Exhaust keyword."
+}

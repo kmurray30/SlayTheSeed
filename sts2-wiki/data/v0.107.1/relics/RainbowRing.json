@@ -1,0 +1,8 @@
+{
+  "class_name": "RainbowRing",
+  "title": "Rainbow Ring",
+  "rarity": "Rare",
+  "description": "The first time you play an Attack, Skill, and Power each turn, gain 1 Strength and 1 Dexterity.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "Requires playing at least one Attack, one Skill, and one Power in the same turn to trigger. Only activates once per turn. Both effects (Strength and Dexterity) are granted simultaneously."
+}

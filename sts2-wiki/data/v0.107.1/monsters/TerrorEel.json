@@ -1,0 +1,57 @@
+{
+  "class_name": "TerrorEel",
+  "title": "Terror Eel",
+  "min_hp": 150,
+  "max_hp": 150,
+  "min_hp_base": 140,
+  "max_hp_base": 140,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "CRASH_MOVE",
+      "title": "Crash",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 18,
+          "damage_base": 16,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 16/18 damage"]
+    },
+    {
+      "id": "THRASH_MOVE",
+      "title": "Thrash",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 4,
+          "damage_base": 3,
+          "hits": 3,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Deal 3/4 damage", "3 hits", "Apply 6 Vigor"]
+    },
+    {
+      "id": "TERROR_MOVE",
+      "title": "Terrorize",
+      "intents": [
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": ["Apply 99 Vulnerable"]
+    }
+  ],
+  "move_pattern": "Cycles between Crash and Thrash. Crash deals single-target damage, while Thrash hits 3 times and applies Vigor to the Terror Eel. The hidden Stun move transitions to Terrorize, which applies a large amount of Vulnerable to all targets before returning to the Crash cycle.",
+  "powers_on_spawn": [
+    "Apply 70/75 Shriek"
+  ],
+  "notes": "Terror Eel applies Shriek on spawn, reducing the player's healing received. Terrorize applies a massive 99 Vulnerable to threaten high damage. Thrash's Vigor increases the Terror Eel's damage reduction, making it tankier over time. The hidden Stun move is a transition state rather than an actual attack."
+}

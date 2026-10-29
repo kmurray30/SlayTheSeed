@@ -1,0 +1,9 @@
+{
+  "class_name": "SignalBoostPower",
+  "title": "Signal Boost",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Your next Power is played an extra time.",
+  "smart_description": "Your next [blue]{Amount}[/blue] Powers are played an extra time.",
+  "notes": "This power causes the next Power card(s) played by its owner to be played an additional time. The stack counter decrements by 1 each time a Power is played."
+}

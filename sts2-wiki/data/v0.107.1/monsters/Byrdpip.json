@@ -1,0 +1,18 @@
+{
+  "class_name": "Byrdpip",
+  "title": "Byrdpip",
+  "min_hp": 9999,
+  "max_hp": 9999,
+  "is_companion": true,
+  "moves": [
+    {
+      "id": "NOTHING_MOVE",
+      "title": "Nothing",
+      "intents": [],
+      "effects": ["Does nothing"]
+    }
+  ],
+  "move_pattern": "Uses Nothing (does nothing)",
+  "powers_on_spawn": [],
+  "notes": "Byrdpip is the player's companion pet obtained from the Byrdpip relic. It has a hidden health bar (IsHealthBarVisible = false) and takes no actions in combat, serving as a passive support companion. Its appearance (skin) is determined by the Byrdpip relic equipped by the player."
+}

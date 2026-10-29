@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { cleanDescription } from '../../utils';
+
+export async function getStaticPaths() {
+  const powers = await getCollection('powers');
+  return powers.map(power => ({
+    params: { slug: power.id },
+    props: { power },
+  }));
+}
+
+const { power } = Astro.props;
+const iconName = power.data.class_name.replace(/([A-Z])/g, (m: string, p1: string, offset: number) => (offset > 0 ? '_' : '') + p1).toLowerCase();
+const iconPath = `${import.meta.env.BASE_URL}images/power_atlas/${iconName}.png`;
+---
+
+<BaseLayout title={power.data.title}>
+  <div class="card-detail">
+    <a href={`${import.meta.env.BASE_URL}powers/`} class="back-link">&larr; All Effects</a>
+
+    <div class="card-header">
+      <div class="item-row" style="align-items: center; margin-top: 0.5rem;">
+        <img src={iconPath} alt={power.data.title} class="item-icon-lg" onerror="this.style.display='none'" />
+        <div>
+          <h1>
+            <span class={power.data.power_type === 'Debuff' ? 'desc-red' : ''}>{power.data.title}</span>
+          </h1>
+          <div class="card-meta" style="font-size: 0.9rem;">
+            <span class={power.data.power_type === 'Debuff' ? 'tag-red' : ''} style="display: inline;">
+              {power.data.power_type}
+            </span>
+            · {power.data.stack_type}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-heading">Description</h2>
+    {(power.data.description_html || power.data.description_plain)
+      ? <div class="desc-text" style="font-size: 1.05rem;" set:html={cleanDescription(power.data.description_html || power.data.description_plain)} />
+      : <p class="card-meta">No description available.</p>
+    }
+  </div>
+</BaseLayout>

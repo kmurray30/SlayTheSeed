@@ -1,0 +1,8 @@
+{
+  "class_name": "BackAttackLeftPower",
+  "title": "Back Attack",
+  "power_type": "Buff",
+  "stack_type": "Single",
+  "description": "Deals [blue]50%[/blue] more damage when it is attacking you from behind.",
+  "notes": "This is a marker power for the Surrounded power to check for. It indicates that an enemy is positioned to attack the player from behind."
+}

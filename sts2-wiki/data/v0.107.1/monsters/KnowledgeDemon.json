@@ -1,0 +1,82 @@
+{
+  "class_name": "KnowledgeDemon",
+  "title": "Knowledge Demon",
+  "min_hp": 399,
+  "max_hp": 399,
+  "min_hp_base": 379,
+  "max_hp_base": 379,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "CURSE_OF_KNOWLEDGE_MOVE",
+      "title": "Curse of Knowledge",
+      "intents": [
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": [
+        "Player chooses one status card: Disintegration (6/7/8 damage, escalating) or Mind Rot / Sloth / Waste Away"
+      ]
+    },
+    {
+      "id": "SLAP_MOVE",
+      "title": "Slap",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 18,
+          "damage_base": 17,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 17/18 damage"
+      ]
+    },
+    {
+      "id": "KNOWLEDGE_OVERWHELMING_MOVE",
+      "title": "Knowledge Overwhelming",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 9,
+          "damage_base": 8,
+          "hits": 3,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 8/9 damage",
+        "3 hits"
+      ]
+    },
+    {
+      "id": "PONDER_MOVE",
+      "title": "Ponder",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 13,
+          "damage_base": 11,
+          "ascension": 9
+        },
+        {
+          "type": "heal"
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Deal 11/13 damage",
+        "Heal 30 HP per player",
+        "Apply 2/3 Strength"
+      ]
+    }
+  ],
+  "move_pattern": "Cycles: Curse of Knowledge → Slap → Knowledge Overwhelming → Ponder. After the 3rd use of Curse of Knowledge, the pattern shifts to: Slap → Knowledge Overwhelming → Ponder (repeating, Curse is no longer used).",
+  "powers_on_spawn": [],
+  "notes": "Curse of Knowledge forces a player choice between two status cards each time it is used. The Disintegration card's damage escalates (6 → 7 → 8) with each use of the move. The other option card changes each time (Mind Rot on 1st, Sloth on 2nd, Waste Away on 3rd). Knowledge Demon transitions between normal and burnt states: it enters burnt state after Knowledge Overwhelming and returns to normal after Ponder, affecting its animation set."
+}

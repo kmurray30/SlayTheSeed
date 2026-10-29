@@ -1,0 +1,28 @@
+{
+  "class_name": "GasBomb",
+  "title": "Gas Bomb",
+  "min_hp": 8,
+  "max_hp": 8,
+  "min_hp_base": 7,
+  "max_hp_base": 7,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "EXPLODE_MOVE",
+      "title": "Explode",
+      "intents": [
+        {
+          "type": "death_blow",
+          "damage": 9,
+          "damage_base": 8,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 8/9 damage", "Dies after this attack"]
+    }
+  ],
+  "move_pattern": "Explodes once, dealing 8/9 damage and dying in the process",
+  "powers_on_spawn": ["Minion"],
+  "notes": "Gas Bomb is a minion enemy that explodes on its only action, damaging the player and dying simultaneously. It applies the Minion power on spawn, indicating it is a summoned enemy."
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "DebilitatePower",
+  "title": "Debilitate",
+  "power_type": "Debuff",
+  "stack_type": "Counter",
+  "description": "[gold]Vulnerable[/gold] and [gold]Weak[/gold] are twice as effective for the next [blue]2[/blue] turns.",
+  "smart_description": "[gold]Vulnerable[/gold] and [gold]Weak[/gold] are twice as effective {Amount:plural:this turn|for the next [blue]{}[/blue] turns}.",
+  "notes": "Modifies Vulnerable multiplier for the afflicted creature and Weak multiplier for enemies. Both effects are doubled (e.g., Vulnerable 1.5× becomes 2× damage). The counter decrements at the end of each turn."
+}

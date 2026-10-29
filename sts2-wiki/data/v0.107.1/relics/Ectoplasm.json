@@ -1,0 +1,8 @@
+{
+  "class_name": "Ectoplasm",
+  "title": "Ectoplasm",
+  "rarity": "Ancient",
+  "description": "You can no longer gain Gold. Gain 1 energy at the start of each turn.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "Increases maximum energy by 1. Blocks all gold gain including from cards and relics."
+}

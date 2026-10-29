@@ -1,0 +1,27 @@
+{
+  "class_name": "AssassinRubyRaider",
+  "title": "Assassin Raider",
+  "min_hp": 19,
+  "max_hp": 24,
+  "min_hp_base": 18,
+  "max_hp_base": 23,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "KILLSHOT_MOVE",
+      "title": "Killshot",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 11,
+          "damage_base": 10,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 10/11 damage"]
+    }
+  ],
+  "move_pattern": "Repeats Killshot every turn",
+  "powers_on_spawn": []
+}

@@ -1,0 +1,3950 @@
+{
+ "audioRev": "206a08b7a1aea574",
+ "cardAnims": {
+  "Abrasive": {
+   "kind": "cast"
+  },
+  "Accelerant": {
+   "kind": "cast"
+  },
+  "Accuracy": {
+   "kind": "cast"
+  },
+  "Adaptive Strike": {
+   "kind": "attack"
+  },
+  "Afterimage": {
+   "kind": "cast"
+  },
+  "Afterlife": {
+   "except": "Necrobinder",
+   "kind": "cast"
+  },
+  "Aggression": {
+   "kind": "cast"
+  },
+  "Alchemize": {
+   "kind": "cast"
+  },
+  "Alignment": {
+   "kind": "cast"
+  },
+  "All for One": {
+   "kind": "attack"
+  },
+  "Anger": {
+   "kind": "attack"
+  },
+  "Anticipate": {
+   "kind": "cast"
+  },
+  "Apparition": {
+   "kind": "cast"
+  },
+  "Arsenal": {
+   "kind": "cast"
+  },
+  "Ashen Strike": {
+   "kind": "attack"
+  },
+  "Assassinate": {
+   "kind": "attack"
+  },
+  "Astral Pulse": {
+   "kind": "attack"
+  },
+  "Backstab": {
+   "kind": "attack"
+  },
+  "Ball Lightning": {
+   "kind": "attack"
+  },
+  "Banshee's Cry": {
+   "kind": "attack"
+  },
+  "Barrage": {
+   "kind": "attack"
+  },
+  "Barricade": {
+   "kind": "cast"
+  },
+  "Bash": {
+   "kind": "attack"
+  },
+  "Beacon of Hope": {
+   "kind": "cast"
+  },
+  "Beam Cell": {
+   "kind": "attack"
+  },
+  "Beat into Shape": {
+   "kind": "attack"
+  },
+  "Biased Cognition": {
+   "kind": "cast"
+  },
+  "Big Bang": {
+   "kind": "cast"
+  },
+  "Black Hole": {
+   "kind": "cast"
+  },
+  "Blade Dance": {
+   "kind": "cast"
+  },
+  "Blight Strike": {
+   "kind": "attack"
+  },
+  "Blood Wall": {
+   "kind": "cast"
+  },
+  "Bloodletting": {
+   "kind": "cast"
+  },
+  "Bludgeon": {
+   "except": "Ironclad",
+   "kind": "attack"
+  },
+  "Body Slam": {
+   "kind": "attack"
+  },
+  "Bodyguard": {
+   "except": "Necrobinder",
+   "kind": "cast"
+  },
+  "Bolas": {
+   "kind": "attack"
+  },
+  "Bombardment": {
+   "kind": "attack"
+  },
+  "Borrowed Time": {
+   "kind": "cast"
+  },
+  "Bouncing Flask": {
+   "kind": "cast"
+  },
+  "Brand": {
+   "kind": "cast"
+  },
+  "Break": {
+   "except": "Ironclad",
+   "kind": "attack"
+  },
+  "Breakthrough": {
+   "kind": "attack"
+  },
+  "Bubble Bubble": {
+   "kind": "cast"
+  },
+  "Buffer": {
+   "kind": "cast"
+  },
+  "Bulk Up": {
+   "kind": "cast"
+  },
+  "Bullet Time": {
+   "kind": "cast"
+  },
+  "Bully": {
+   "kind": "attack"
+  },
+  "Bulwark": {
+   "kind": "cast"
+  },
+  "Burning Pact": {
+   "kind": "cast"
+  },
+  "Burst": {
+   "kind": "cast"
+  },
+  "Bury": {
+   "kind": "attack"
+  },
+  "CHARGE!!": {
+   "kind": "cast"
+  },
+  "Calcify": {
+   "kind": "cast"
+  },
+  "Call of the Void": {
+   "kind": "cast"
+  },
+  "Caltrops": {
+   "kind": "cast"
+  },
+  "Capacitor": {
+   "kind": "cast"
+  },
+  "Capture Spirit": {
+   "kind": "cast"
+  },
+  "Celestial Might": {
+   "kind": "attack"
+  },
+  "Chaos": {
+   "kind": "cast"
+  },
+  "Charge Battery": {
+   "kind": "cast"
+  },
+  "Child of the Stars": {
+   "kind": "cast"
+  },
+  "Chill": {
+   "kind": "cast"
+  },
+  "Cinder": {
+   "except": "Ironclad",
+   "kind": "attack"
+  },
+  "Clash": {
+   "kind": "attack"
+  },
+  "Claw": {
+   "kind": "attack"
+  },
+  "Cleanse": {
+   "except": "Necrobinder",
+   "kind": "cast"
+  },
+  "Cold Snap": {
+   "kind": "attack"
+  },
+  "Collision Course": {
+   "kind": "attack"
+  },
+  "Colossus": {
+   "kind": "cast"
+  },
+  "Comet": {
+   "kind": "cast"
+  },
+  "Compact": {
+   "kind": "cast"
+  },
+  "Compile Driver": {
+   "kind": "attack"
+  },
+  "Conflagration": {
+   "kind": "attack"
+  },
+  "Conqueror": {
+   "kind": "cast"
+  },
+  "Consuming Shadow": {
+   "kind": "cast"
+  },
+  "Convergence": {
+   "kind": "cast"
+  },
+  "Coolant": {
+   "kind": "cast"
+  },
+  "Coolheaded": {
+   "kind": "cast"
+  },
+  "Corrosive Wave": {
+   "kind": "cast"
+  },
+  "Corruption": {
+   "kind": "cast"
+  },
+  "Countdown": {
+   "kind": "cast"
+  },
+  "Crash Landing": {
+   "kind": "attack"
+  },
+  "Creative AI": {
+   "kind": "cast"
+  },
+  "Crescent Spear": {
+   "kind": "attack"
+  },
+  "Crimson Mantle": {
+   "kind": "cast"
+  },
+  "Cruelty": {
+   "kind": "cast"
+  },
+  "Crush Under": {
+   "kind": "cast"
+  },
+  "Dagger Spray": {
+   "kind": "attack"
+  },
+  "Dagger Throw": {
+   "kind": "attack"
+  },
+  "Danse Macabre": {
+   "kind": "cast"
+  },
+  "Dark Embrace": {
+   "kind": "cast"
+  },
+  "Dark Shackles": {
+   "kind": "cast"
+  },
+  "Darkness": {
+   "kind": "cast"
+  },
+  "Dash": {
+   "kind": "attack"
+  },
+  "Deadly Poison": {
+   "kind": "cast"
+  },
+  "Death March": {
+   "kind": "attack"
+  },
+  "Death's Door": {
+   "kind": "cast"
+  },
+  "Deathbringer": {
+   "kind": "cast"
+  },
+  "Debilitate": {
+   "kind": "attack"
+  },
+  "Decisions, Decisions": {
+   "kind": "cast"
+  },
+  "Defile": {
+   "kind": "attack"
+  },
+  "Defragment": {
+   "kind": "cast"
+  },
+  "Defy": {
+   "kind": "cast"
+  },
+  "Delay": {
+   "kind": "cast"
+  },
+  "Demesne": {
+   "kind": "cast"
+  },
+  "Demon Form": {
+   "kind": "cast"
+  },
+  "Devastate": {
+   "kind": "attack"
+  },
+  "Devour Life": {
+   "kind": "cast"
+  },
+  "Dirge": {
+   "kind": "cast"
+  },
+  "Dismantle": {
+   "kind": "attack"
+  },
+  "Dominate": {
+   "kind": "cast"
+  },
+  "Double Energy": {
+   "kind": "cast"
+  },
+  "Drain Power": {
+   "kind": "attack"
+  },
+  "Dramatic Entrance": {
+   "kind": "attack"
+  },
+  "Dredge": {
+   "kind": "cast"
+  },
+  "Dualcast": {
+   "kind": "cast"
+  },
+  "Dying Star": {
+   "kind": "attack"
+  },
+  "Echo Form": {
+   "kind": "cast"
+  },
+  "Eidolon": {
+   "kind": "cast"
+  },
+  "End of Days": {
+   "kind": "cast"
+  },
+  "Energy Surge": {
+   "kind": "cast"
+  },
+  "Enfeebling Touch": {
+   "kind": "cast"
+  },
+  "Envenom": {
+   "kind": "cast"
+  },
+  "Eradicate": {
+   "kind": "attack"
+  },
+  "Evil Eye": {
+   "kind": "cast"
+  },
+  "Expect a Fight": {
+   "kind": "cast"
+  },
+  "Expose": {
+   "kind": "cast"
+  },
+  "Exterminate": {
+   "kind": "attack"
+  },
+  "FTL": {
+   "kind": "attack"
+  },
+  "Falling Star": {
+   "kind": "attack"
+  },
+  "Fan of Knives": {
+   "kind": "cast"
+  },
+  "Fear": {
+   "kind": "attack"
+  },
+  "Feed": {
+   "kind": "attack"
+  },
+  "Feeding Frenzy": {
+   "kind": "cast"
+  },
+  "Feral": {
+   "kind": "cast"
+  },
+  "Fiend Fire": {
+   "kind": "attack"
+  },
+  "Fight Me!": {
+   "kind": "attack"
+  },
+  "Finisher": {
+   "kind": "attack"
+  },
+  "Fisticuffs": {
+   "kind": "attack"
+  },
+  "Flak Cannon": {
+   "kind": "attack"
+  },
+  "Flanking": {
+   "kind": "cast"
+  },
+  "Flash of Steel": {
+   "kind": "attack"
+  },
+  "Flechettes": {
+   "kind": "attack"
+  },
+  "Flick-Flack": {
+   "kind": "attack"
+  },
+  "Focused Strike": {
+   "kind": "attack"
+  },
+  "Footwork": {
+   "kind": "cast"
+  },
+  "Forbidden Grimoire": {
+   "kind": "cast"
+  },
+  "Foregone Conclusion": {
+   "kind": "cast"
+  },
+  "Forgotten Ritual": {
+   "kind": "cast"
+  },
+  "Friendship": {
+   "kind": "cast"
+  },
+  "Furnace": {
+   "kind": "cast"
+  },
+  "Fusion": {
+   "kind": "cast"
+  },
+  "GUARDS!!!": {
+   "kind": "cast"
+  },
+  "Gamma Blast": {
+   "kind": "attack"
+  },
+  "Gang Up": {
+   "kind": "attack"
+  },
+  "Genesis": {
+   "kind": "cast"
+  },
+  "Giant Rock": {
+   "kind": "attack"
+  },
+  "Glacier": {
+   "kind": "cast"
+  },
+  "Glasswork": {
+   "kind": "cast"
+  },
+  "Glimpse Beyond": {
+   "kind": "cast"
+  },
+  "Glitterstream": {
+   "kind": "cast"
+  },
+  "Glow": {
+   "kind": "cast"
+  },
+  "Go for the Eyes": {
+   "kind": "attack"
+  },
+  "Gold Axe": {
+   "kind": "attack"
+  },
+  "Grand Finale": {
+   "kind": "attack"
+  },
+  "Grave Warden": {
+   "kind": "cast"
+  },
+  "Graveblast": {
+   "kind": "attack"
+  },
+  "Guiding Star": {
+   "kind": "cast"
+  },
+  "Gunk Up": {
+   "kind": "attack"
+  },
+  "Hailstorm": {
+   "kind": "cast"
+  },
+  "Hammer Time": {
+   "kind": "cast"
+  },
+  "Hand of Greed": {
+   "kind": "attack"
+  },
+  "Hang": {
+   "kind": "attack"
+  },
+  "Haunt": {
+   "kind": "cast"
+  },
+  "Haze": {
+   "kind": "cast"
+  },
+  "Headbutt": {
+   "kind": "attack"
+  },
+  "Heavenly Drill": {
+   "kind": "attack"
+  },
+  "Hegemony": {
+   "kind": "attack"
+  },
+  "Heirloom Hammer": {
+   "kind": "attack"
+  },
+  "Helix Drill": {
+   "kind": "attack"
+  },
+  "Hello World": {
+   "kind": "cast"
+  },
+  "Hellraiser": {
+   "kind": "cast"
+  },
+  "Hemokinesis": {
+   "kind": "attack"
+  },
+  "Hidden Cache": {
+   "kind": "cast"
+  },
+  "Hidden Gem": {
+   "kind": "cast"
+  },
+  "Hotfix": {
+   "kind": "cast"
+  },
+  "Howl from Beyond": {
+   "kind": "cast"
+  },
+  "Hyperbeam": {
+   "kind": "cast"
+  },
+  "Ice Lance": {
+   "kind": "attack"
+  },
+  "Ignition": {
+   "kind": "cast"
+  },
+  "Inferno": {
+   "kind": "cast"
+  },
+  "Infinite Blades": {
+   "kind": "cast"
+  },
+  "Inflame": {
+   "kind": "cast"
+  },
+  "Invoke": {
+   "except": "Necrobinder",
+   "kind": "cast"
+  },
+  "Iron Wave": {
+   "kind": "attack"
+  },
+  "Iteration": {
+   "kind": "cast"
+  },
+  "Jackpot": {
+   "kind": "attack"
+  },
+  "Juggernaut": {
+   "kind": "cast"
+  },
+  "Juggling": {
+   "kind": "cast"
+  },
+  "Kingly Kick": {
+   "kind": "attack"
+  },
+  "Kingly Punch": {
+   "kind": "attack"
+  },
+  "Knockdown": {
+   "kind": "attack"
+  },
+  "Knockout Blow": {
+   "kind": "attack"
+  },
+  "Know Thy Place": {
+   "kind": "cast"
+  },
+  "Largesse": {
+   "kind": "cast"
+  },
+  "Leading Strike": {
+   "kind": "attack"
+  },
+  "Leg Sweep": {
+   "kind": "cast"
+  },
+  "Legion of Bone": {
+   "except": "Necrobinder",
+   "kind": "cast"
+  },
+  "Lethality": {
+   "kind": "cast"
+  },
+  "Lightning Rod": {
+   "kind": "cast"
+  },
+  "Loop": {
+   "kind": "cast"
+  },
+  "Luminesce": {
+   "kind": "cast"
+  },
+  "Lunar Blast": {
+   "kind": "attack"
+  },
+  "Machine Learning": {
+   "kind": "cast"
+  },
+  "Make It So": {
+   "kind": "attack"
+  },
+  "Malaise": {
+   "kind": "cast"
+  },
+  "Mangle": {
+   "except": "Ironclad",
+   "kind": "attack"
+  },
+  "Master Planner": {
+   "kind": "cast"
+  },
+  "Maul": {
+   "kind": "attack"
+  },
+  "Memento Mori": {
+   "kind": "attack"
+  },
+  "Meteor Shower": {
+   "kind": "attack"
+  },
+  "Meteor Strike": {
+   "kind": "attack"
+  },
+  "Mind Blast": {
+   "kind": "attack"
+  },
+  "Minion Dive Bomb": {
+   "kind": "cast"
+  },
+  "Minion Strike": {
+   "kind": "attack"
+  },
+  "Misery": {
+   "kind": "attack"
+  },
+  "Modded": {
+   "kind": "cast"
+  },
+  "Molten Fist": {
+   "kind": "attack"
+  },
+  "Momentum Strike": {
+   "kind": "attack"
+  },
+  "Monarch's Gaze": {
+   "kind": "cast"
+  },
+  "Monologue": {
+   "kind": "cast"
+  },
+  "Multi-Cast": {
+   "kind": "cast"
+  },
+  "Murder": {
+   "kind": "attack"
+  },
+  "Necro Mastery": {
+   "kind": "cast"
+  },
+  "Negative Pulse": {
+   "kind": "cast"
+  },
+  "Neow's Fury": {
+   "kind": "attack"
+  },
+  "Neurosurge": {
+   "kind": "cast"
+  },
+  "Neutralize": {
+   "kind": "attack"
+  },
+  "Nightmare": {
+   "kind": "cast"
+  },
+  "No Escape": {
+   "kind": "cast"
+  },
+  "Not Yet": {
+   "kind": "cast"
+  },
+  "Noxious Fumes": {
+   "kind": "cast"
+  },
+  "Null": {
+   "kind": "attack"
+  },
+  "Oblivion": {
+   "kind": "cast"
+  },
+  "Orbit": {
+   "kind": "cast"
+  },
+  "Outbreak": {
+   "kind": "cast"
+  },
+  "Overclock": {
+   "kind": "cast"
+  },
+  "Pact's End": {
+   "except": "Ironclad",
+   "kind": "attack"
+  },
+  "Pagestorm": {
+   "kind": "cast"
+  },
+  "Pale Blue Dot": {
+   "kind": "cast"
+  },
+  "Parry": {
+   "kind": "cast"
+  },
+  "Patter": {
+   "kind": "cast"
+  },
+  "Peck": {
+   "kind": "attack"
+  },
+  "Perfected Strike": {
+   "kind": "attack"
+  },
+  "Phantom Blades": {
+   "kind": "cast"
+  },
+  "Photon Cut": {
+   "kind": "attack"
+  },
+  "Piercing Wail": {
+   "kind": "cast"
+  },
+  "Pillage": {
+   "kind": "attack"
+  },
+  "Pinpoint": {
+   "kind": "attack"
+  },
+  "Poisoned Stab": {
+   "kind": "attack"
+  },
+  "Pommel Strike": {
+   "kind": "attack"
+  },
+  "Pounce": {
+   "kind": "attack"
+  },
+  "Precise Cut": {
+   "kind": "attack"
+  },
+  "Predator": {
+   "kind": "attack"
+  },
+  "Primal Force": {
+   "kind": "cast"
+  },
+  "Prophesize": {
+   "kind": "cast"
+  },
+  "Pull Aggro": {
+   "except": "Necrobinder",
+   "kind": "cast"
+  },
+  "Pull from Below": {
+   "kind": "attack"
+  },
+  "Putrefy": {
+   "kind": "cast"
+  },
+  "Pyre": {
+   "kind": "cast"
+  },
+  "Quadcast": {
+   "kind": "cast"
+  },
+  "Radiate": {
+   "kind": "attack"
+  },
+  "Rage": {
+   "kind": "cast"
+  },
+  "Rainbow": {
+   "kind": "cast"
+  },
+  "Rampage": {
+   "kind": "attack"
+  },
+  "Reanimate": {
+   "except": "Necrobinder",
+   "kind": "cast"
+  },
+  "Reap": {
+   "kind": "attack"
+  },
+  "Reaper Form": {
+   "kind": "cast"
+  },
+  "Reave": {
+   "kind": "attack"
+  },
+  "Reboot": {
+   "kind": "cast"
+  },
+  "Rebound": {
+   "kind": "attack"
+  },
+  "Refine Blade": {
+   "kind": "cast"
+  },
+  "Reflect": {
+   "kind": "cast"
+  },
+  "Reflex": {
+   "kind": "cast"
+  },
+  "Refract": {
+   "kind": "attack"
+  },
+  "Relax": {
+   "kind": "cast"
+  },
+  "Rend": {
+   "kind": "attack"
+  },
+  "Resonance": {
+   "kind": "cast"
+  },
+  "Ricochet": {
+   "kind": "attack"
+  },
+  "Rip and Tear": {
+   "kind": "attack"
+  },
+  "Rocket Punch": {
+   "kind": "attack"
+  },
+  "Royal Gamble": {
+   "kind": "cast"
+  },
+  "Royalties": {
+   "kind": "cast"
+  },
+  "Sacrifice": {
+   "kind": "cast"
+  },
+  "Salvo": {
+   "kind": "attack"
+  },
+  "Scare": {
+   "kind": "cast"
+  },
+  "Scourge": {
+   "kind": "cast"
+  },
+  "Scrape": {
+   "kind": "attack"
+  },
+  "Sculpting Strike": {
+   "kind": "attack"
+  },
+  "Seance": {
+   "kind": "cast"
+  },
+  "Second Wind": {
+   "kind": "cast"
+  },
+  "Seeker Strike": {
+   "kind": "attack"
+  },
+  "Seeking Edge": {
+   "kind": "cast"
+  },
+  "Sentry Mode": {
+   "kind": "cast"
+  },
+  "Serpent Form": {
+   "kind": "cast"
+  },
+  "Setup Strike": {
+   "kind": "attack"
+  },
+  "Seven Stars": {
+   "kind": "attack"
+  },
+  "Severance": {
+   "kind": "attack"
+  },
+  "Shadow Shield": {
+   "kind": "cast"
+  },
+  "Shadowmeld": {
+   "kind": "cast"
+  },
+  "Shared Fate": {
+   "kind": "cast"
+  },
+  "Shatter": {
+   "kind": "attack"
+  },
+  "Shining Strike": {
+   "kind": "attack"
+  },
+  "Shiv": {
+   "kind": "attack"
+  },
+  "Shockwave": {
+   "kind": "cast"
+  },
+  "Shroud": {
+   "kind": "cast"
+  },
+  "Signal Boost": {
+   "kind": "cast"
+  },
+  "Skewer": {
+   "kind": "attack"
+  },
+  "Sleight of Flesh": {
+   "kind": "cast"
+  },
+  "Slice": {
+   "kind": "attack"
+  },
+  "Smokestack": {
+   "kind": "cast"
+  },
+  "Snakebite": {
+   "kind": "cast"
+  },
+  "Sneaky": {
+   "kind": "cast"
+  },
+  "Solar Strike": {
+   "kind": "attack"
+  },
+  "Soul Storm": {
+   "kind": "attack"
+  },
+  "Sow": {
+   "kind": "attack"
+  },
+  "Spectrum Shift": {
+   "kind": "cast"
+  },
+  "Spinner": {
+   "kind": "cast"
+  },
+  "Spirit of Ash": {
+   "kind": "cast"
+  },
+  "Spite": {
+   "kind": "attack"
+  },
+  "Spur": {
+   "except": "Necrobinder",
+   "kind": "cast"
+  },
+  "Squash": {
+   "kind": "attack"
+  },
+  "Stardust": {
+   "kind": "attack"
+  },
+  "Stoke": {
+   "kind": "cast"
+  },
+  "Stomp": {
+   "kind": "cast"
+  },
+  "Storm": {
+   "kind": "cast"
+  },
+  "Strangle": {
+   "kind": "attack"
+  },
+  "Strike": {
+   "kind": "attack"
+  },
+  "Subroutine": {
+   "kind": "cast"
+  },
+  "Sucker Punch": {
+   "kind": "attack"
+  },
+  "Summon Forth": {
+   "kind": "cast"
+  },
+  "Sunder": {
+   "kind": "attack"
+  },
+  "Supercritical": {
+   "kind": "cast"
+  },
+  "Supermassive": {
+   "kind": "attack"
+  },
+  "Suppress": {
+   "kind": "attack"
+  },
+  "Sweeping Beam": {
+   "kind": "attack"
+  },
+  "Sword Boomerang": {
+   "kind": "attack"
+  },
+  "Sword Sage": {
+   "kind": "cast"
+  },
+  "Synchronize": {
+   "kind": "cast"
+  },
+  "Synthesis": {
+   "kind": "attack"
+  },
+  "Tag Team": {
+   "kind": "attack"
+  },
+  "Tank": {
+   "kind": "cast"
+  },
+  "Taunt": {
+   "kind": "cast"
+  },
+  "Tear Asunder": {
+   "kind": "attack"
+  },
+  "Tempest": {
+   "kind": "cast"
+  },
+  "Tesla Coil": {
+   "kind": "attack"
+  },
+  "The Hunt": {
+   "kind": "attack"
+  },
+  "The Scythe": {
+   "kind": "attack"
+  },
+  "The Sealed Throne": {
+   "kind": "cast"
+  },
+  "The Smith": {
+   "kind": "cast"
+  },
+  "Thrash": {
+   "kind": "attack"
+  },
+  "Thrumming Hatchet": {
+   "kind": "attack"
+  },
+  "Thunder": {
+   "kind": "cast"
+  },
+  "Thunderclap": {
+   "kind": "attack"
+  },
+  "Time's Up": {
+   "kind": "attack"
+  },
+  "Tools of the Trade": {
+   "kind": "cast"
+  },
+  "Tracking": {
+   "kind": "cast"
+  },
+  "Transfigure": {
+   "kind": "cast"
+  },
+  "Trash to Treasure": {
+   "kind": "cast"
+  },
+  "Tremble": {
+   "kind": "cast"
+  },
+  "Twin Strike": {
+   "kind": "attack"
+  },
+  "Tyranny": {
+   "kind": "cast"
+  },
+  "Ultimate Strike": {
+   "kind": "attack"
+  },
+  "Unmovable": {
+   "kind": "cast"
+  },
+  "Unrelenting": {
+   "except": "Ironclad",
+   "kind": "attack"
+  },
+  "Up My Sleeve": {
+   "kind": "cast"
+  },
+  "Uppercut": {
+   "except": "Ironclad",
+   "kind": "attack"
+  },
+  "Uproar": {
+   "kind": "attack"
+  },
+  "Veilpiercer": {
+   "kind": "attack"
+  },
+  "Venerate": {
+   "kind": "cast"
+  },
+  "Vicious": {
+   "kind": "cast"
+  },
+  "Void Form": {
+   "kind": "cast"
+  },
+  "Volley": {
+   "kind": "attack"
+  },
+  "Voltaic": {
+   "kind": "cast"
+  },
+  "Well-Laid Plans": {
+   "kind": "cast"
+  },
+  "Whirlwind": {
+   "kind": "attack"
+  },
+  "Whistle": {
+   "kind": "attack"
+  },
+  "White Noise": {
+   "kind": "cast"
+  },
+  "Wraith Form": {
+   "kind": "cast"
+  },
+  "Wrought in War": {
+   "kind": "attack"
+  },
+  "Zap": {
+   "kind": "cast"
+  }
+ },
+ "cardHits": {
+  "All for One": "res://debug_audio/blunt_attack.mp3",
+  "Ashen Strike": "res://debug_audio/blunt_attack.mp3",
+  "Backstab": "res://debug_audio/blunt_attack.mp3",
+  "Ball Lightning": "res://debug_audio/blunt_attack.mp3",
+  "Bash": "res://debug_audio/blunt_attack.mp3",
+  "Beam Cell": "res://debug_audio/blunt_attack.mp3",
+  "Beat into Shape": "res://debug_audio/blunt_attack.mp3",
+  "Bludgeon": "res://debug_audio/heavy_attack.mp3",
+  "Body Slam": "res://debug_audio/blunt_attack.mp3",
+  "Bolas": "res://debug_audio/blunt_attack.mp3",
+  "Bombardment": "res://debug_audio/blunt_attack.mp3",
+  "Bone Shards": "res://debug_audio/blunt_attack.mp3",
+  "Break": "res://debug_audio/heavy_attack.mp3",
+  "Breakthrough": "res://debug_audio/heavy_attack.mp3",
+  "Bully": "res://debug_audio/blunt_attack.mp3",
+  "Bury": "res://debug_audio/blunt_attack.mp3",
+  "Byrd Swoop": "event:/sfx/byrdpip/byrdpip_attack",
+  "Celestial Might": "res://debug_audio/blunt_attack.mp3",
+  "Collision Course": "res://debug_audio/blunt_attack.mp3",
+  "Compile Driver": "res://debug_audio/blunt_attack.mp3",
+  "Conflagration": "res://debug_audio/heavy_attack.mp3",
+  "Crash Landing": "res://debug_audio/heavy_attack.mp3",
+  "Crush Under": "res://debug_audio/blunt_attack.mp3",
+  "Devastate": "res://debug_audio/blunt_attack.mp3",
+  "Dismantle": "res://debug_audio/heavy_attack.mp3",
+  "Feed": "res://debug_audio/blunt_attack.mp3",
+  "Fetch": "res://debug_audio/blunt_attack.mp3",
+  "Fight Me!": "res://debug_audio/heavy_attack.mp3",
+  "Finisher": "res://debug_audio/blunt_attack.mp3",
+  "Flak Cannon": "res://debug_audio/blunt_attack.mp3",
+  "Flatten": "res://debug_audio/blunt_attack.mp3",
+  "Flechettes": "res://debug_audio/dagger_throw.mp3",
+  "Gang Up": "res://debug_audio/blunt_attack.mp3",
+  "Giant Rock": "res://debug_audio/blunt_attack.mp3",
+  "Go for the Eyes": "res://debug_audio/blunt_attack.mp3",
+  "Gold Axe": "res://debug_audio/blunt_attack.mp3",
+  "Grand Finale": "res://debug_audio/blunt_attack.mp3",
+  "Gunk Up": "res://debug_audio/blunt_attack.mp3",
+  "Hand of Greed": "res://debug_audio/blunt_attack.mp3",
+  "Headbutt": "res://debug_audio/blunt_attack.mp3",
+  "Heavenly Drill": "res://debug_audio/slash_attack.mp3",
+  "Hegemony": "res://debug_audio/blunt_attack.mp3",
+  "Heirloom Hammer": "res://debug_audio/blunt_attack.mp3",
+  "High Five": "res://debug_audio/blunt_attack.mp3",
+  "Howl from Beyond": "res://debug_audio/heavy_attack.mp3",
+  "Kingly Kick": "res://debug_audio/heavy_attack.mp3",
+  "Knockout Blow": "res://debug_audio/blunt_attack.mp3",
+  "Lunar Blast": "res://debug_audio/blunt_attack.mp3",
+  "Mangle": "res://debug_audio/heavy_attack.mp3",
+  "Meteor Shower": "res://debug_audio/blunt_attack.mp3",
+  "Meteor Strike": "res://debug_audio/blunt_attack.mp3",
+  "Molten Fist": "res://debug_audio/blunt_attack.mp3",
+  "Pact's End": "res://debug_audio/heavy_attack.mp3",
+  "Perfected Strike": "res://debug_audio/heavy_attack.mp3",
+  "Photon Cut": "res://debug_audio/dagger_throw.mp3",
+  "Poke": "res://debug_audio/blunt_attack.mp3",
+  "Pommel Strike": "res://debug_audio/blunt_attack.mp3",
+  "Precise Cut": "res://debug_audio/dagger_throw.mp3",
+  "Protector": "res://debug_audio/blunt_attack.mp3",
+  "Radiate": "res://debug_audio/slash_attack.mp3",
+  "Rattle": "res://debug_audio/blunt_attack.mp3",
+  "Rend": "res://debug_audio/blunt_attack.mp3",
+  "Right Hand Hand": "res://debug_audio/blunt_attack.mp3",
+  "Rocket Punch": "res://debug_audio/blunt_attack.mp3",
+  "Seven Stars": "res://debug_audio/slash_attack.mp3",
+  "Sic 'Em": "res://debug_audio/blunt_attack.mp3",
+  "Slice": "res://debug_audio/slash_attack.mp3",
+  "Snap": "res://debug_audio/blunt_attack.mp3",
+  "Sovereign Blade": "res://debug_audio/slash_attack.mp3",
+  "Sow": "res://debug_audio/heavy_attack.mp3",
+  "Squeeze": "res://debug_audio/blunt_attack.mp3",
+  "Stomp": "res://debug_audio/heavy_attack.mp3",
+  "Sucker Punch": "res://debug_audio/blunt_attack.mp3",
+  "Sunder": "res://debug_audio/slash_attack.mp3",
+  "Supermassive": "res://debug_audio/heavy_attack.mp3",
+  "Sweeping Gaze": "res://debug_audio/blunt_attack.mp3",
+  "Thrumming Hatchet": "res://debug_audio/blunt_attack.mp3",
+  "Unleash": "res://debug_audio/blunt_attack.mp3",
+  "Unrelenting": "res://debug_audio/heavy_attack.mp3",
+  "Uppercut": "res://debug_audio/heavy_attack.mp3"
+ },
+ "cards": {
+  "Blood Wall": "event:/sfx/characters/ironclad/ironclad_bloodwall",
+  "Brand": "event:/sfx/characters/attack_fire",
+  "Burn": "event:/sfx/characters/attack_fire",
+  "Byrd Swoop": "event:/sfx/byrdpip/byrdpip_attack",
+  "Dagger Spray": "event:/sfx/characters/silent/silent_dagger_spray",
+  "Fan of Knives": "event:/sfx/characters/silent/silent_fan_of_knives",
+  "Fiend Fire": "event:/sfx/characters/attack_fire",
+  "Guiding Star": "event:/sfx/characters/regent/regent_guiding_star",
+  "Hellraiser": "event:/sfx/characters/ironclad/ironclad_hellraiser",
+  "Hyperbeam": "event:/sfx/characters/defect/defect_hyperbeam",
+  "Sovereign Blade": "event:/sfx/characters/regent/regent_sovereign_blade",
+  "Whirlwind": "event:/sfx/characters/ironclad/ironclad_whirlwind"
+ },
+ "characters": {
+  "Defect": {
+   "attack": "event:/sfx/characters/defect/defect_attack",
+   "cast": "event:/sfx/characters/defect/defect_cast",
+   "die": "event:/sfx/characters/defect/defect_die"
+  },
+  "Ironclad": {
+   "attack": "event:/sfx/characters/ironclad/ironclad_attack",
+   "cast": "event:/sfx/characters/ironclad/ironclad_cast",
+   "die": "event:/sfx/characters/ironclad/ironclad_die"
+  },
+  "Necrobinder": {
+   "attack": "event:/sfx/characters/necrobinder/necrobinder_attack",
+   "cast": "event:/sfx/characters/necrobinder/necrobinder_cast",
+   "die": "event:/sfx/characters/necrobinder/necrobinder_die"
+  },
+  "Regent": {
+   "attack": "event:/sfx/characters/regent/regent_attack",
+   "cast": "event:/sfx/characters/regent/regent_cast",
+   "die": "event:/sfx/characters/regent/regent_die"
+  },
+  "Silent": {
+   "attack": "event:/sfx/characters/silent/silent_attack",
+   "cast": "event:/sfx/characters/silent/silent_cast",
+   "die": "event:/sfx/characters/silent/silent_die"
+  }
+ },
+ "generic": {
+  "battleStart1": "res://debug_audio/battle_start_1.mp3",
+  "battleStart2": "res://debug_audio/battle_start_2.mp3",
+  "blockBreak": "event:/sfx/block_break",
+  "blockGain": "event:/sfx/block_gain",
+  "blockHit": "event:/sfx/block_hit",
+  "buff": "event:/sfx/buff",
+  "cardDeal": "res://debug_audio/card_deal.mp3",
+  "cardExhaust": "res://debug_audio/card_exhaust.mp3",
+  "cardPlay": "event:/sfx/ui/cards/card_movement_B_into_discard",
+  "cardPower": "event:/sfx/ui/cards/card_movement_B_power",
+  "cardSelect": "res://debug_audio/card_select.mp3",
+  "cardSmith": "res://debug_audio/card_smith.mp3",
+  "cardTransform": "event:/sfx/ui/cards/card_transform",
+  "debuff": "event:/sfx/debuff",
+  "defeat": "event:/temp/sfx/game_over",
+  "enchant": "event:/sfx/ui/enchant_shimmer",
+  "enemyFade": "event:/sfx/enemy/enemy_fade",
+  "enemyTurn": "res://debug_audio/enemy_turn.mp3",
+  "energy": "event:/sfx/ui/gain_energy",
+  "gold": "event:/sfx/ui/gold/gold_1",
+  "goldLarge": "event:/sfx/ui/gold/gold_3",
+  "goldMedium": "event:/sfx/ui/gold/gold_2",
+  "goldSmall": "event:/sfx/ui/gold/gold_1",
+  "heal": "event:/sfx/heal",
+  "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+  "mapOpen": "event:/sfx/ui/map/map_open",
+  "mapSelect": "event:/sfx/ui/map/map_select",
+  "merchantThanks": "event:/sfx/npcs/merchant/merchant_thank_yous",
+  "merchantWelcome": "event:/sfx/npcs/merchant/merchant_welcome",
+  "neowWelcome": "event:/sfx/npcs/neow/neow_welcome",
+  "playerTurn": "res://debug_audio/player_turn.mp3",
+  "potionGain": "res://debug_audio/gain_potion.mp3",
+  "potionSlosh1": "res://debug_audio/potion_slosh_1.mp3",
+  "potionSlosh2": "res://debug_audio/potion_slosh_2.mp3",
+  "potionSlosh3": "res://debug_audio/potion_slosh_3.mp3",
+  "relic": "event:/sfx/ui/relic_activate_general",
+  "relicGet": "res://debug_audio/relic_get.mp3",
+  "restBlanket": "res://debug_audio/SOTE_SFX_SleepBlanket_v1.mp3",
+  "restDig": "res://debug_audio/sts_sfx_shovel_v1.mp3",
+  "restSleep1": "res://debug_audio/STS_SleepJingle_1a_NewMix_v1.mp3",
+  "restSleep2": "res://debug_audio/STS_SleepJingle_1b_NewMix_v1.mp3",
+  "restSleep3": "res://debug_audio/STS_SleepJingle_1c_NewMix_v1.mp3",
+  "screenOpen": "res://debug_audio/map_open.mp3",
+  "summon": "event:/sfx/characters/necrobinder/necrobinder_summon",
+  "uiClick": "event:/sfx/ui/clicks/ui_click",
+  "victory": "res://debug_audio/victory.mp3"
+ },
+ "monsters": {
+  "Assassin Raider": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/assassin_ruby_raider/assassin_ruby_raider_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 10,
+     "event": "event:/sfx/enemy/enemy_attacks/assassin_ruby_raider/assassin_ruby_raider_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "KILLSHOT_MOVE"
+    }
+   ]
+  },
+  "Axe Raider": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/axe_ruby_raider/axe_ruby_raider_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 5,
+     "event": "event:/sfx/enemy/enemy_attacks/axe_ruby_raider/axe_ruby_raider_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SWING_1"
+    },
+    {
+     "damage": 5,
+     "event": "event:/sfx/enemy/enemy_attacks/axe_ruby_raider/axe_ruby_raider_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SWING_2"
+    },
+    {
+     "damage": 12,
+     "event": "event:/sfx/enemy/enemy_attacks/axe_ruby_raider/axe_ruby_raider_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "BIG_SWING"
+    }
+   ]
+  },
+  "Axebot": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/axebot/axebot_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/axebot/axebot_buff",
+     "intent": "Defend",
+     "name": "BOOT_UP_MOVE"
+    },
+    {
+     "damage": 9,
+     "event": "event:/sfx/enemy/enemy_attacks/axebot/axebot_attack",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "ONE_TWO_MOVE"
+    },
+    {
+     "damage": 12,
+     "event": "event:/sfx/enemy/enemy_attacks/axebot/axebot_attack_spin",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "HAMMER_UPPERCUT_MOVE"
+    }
+   ]
+  },
+  "Bowlbug (Egg)": {
+   "death": "event:/sfx/enemy/enemy_attacks/workbug_egg/workbug_egg_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/workbug_egg/workbug_egg_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_insect",
+   "moves": [
+    {
+     "damage": 7,
+     "event": "event:/sfx/enemy/enemy_attacks/workbug_egg/workbug_egg_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "BITE_MOVE"
+    }
+   ]
+  },
+  "Bowlbug (Nectar)": {
+   "death": "event:/sfx/enemy/enemy_attacks/workbug_goop/workbug_goop_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/workbug_goop/workbug_goop_spit",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_insect",
+   "moves": [
+    {
+     "damage": 3,
+     "event": "event:/sfx/enemy/enemy_attacks/workbug_goop/workbug_goop_spit",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "THRASH_MOVE"
+    },
+    {
+     "damage": 3,
+     "event": "event:/sfx/enemy/enemy_attacks/workbug_goop/workbug_goop_spit",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "THRASH2_MOVE"
+    }
+   ]
+  },
+  "Bowlbug (Rock)": {
+   "death": "event:/sfx/enemy/enemy_attacks/workbug_rock/workbug_rock_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/workbug_rock/workbug_rock_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_insect",
+   "moves": [
+    {
+     "damage": 15,
+     "event": "event:/sfx/enemy/enemy_attacks/workbug_rock/workbug_rock_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "HEADBUTT_MOVE"
+    }
+   ]
+  },
+  "Bowlbug (Silk)": {
+   "death": "event:/sfx/enemy/enemy_attacks/workbug_silk/workbug_silk_die",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/workbug_silk/workbug_silk_spit",
+     "intent": "Debuff",
+     "name": "TOXIC_SPIT_MOVE"
+    }
+   ]
+  },
+  "Brute Raider": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/brute_ruby_raider/brute_ruby_raider_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 7,
+     "event": "event:/sfx/enemy/enemy_attacks/brute_ruby_raider/brute_ruby_raider_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "BEAT_MOVE"
+    }
+   ]
+  },
+  "Bygone Effigy": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/bygone_effigy/bygone_effigy_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_stone",
+   "moves": [
+    {
+     "damage": 13,
+     "event": "event:/sfx/enemy/enemy_attacks/bygone_effigy/bygone_effigy_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SLASHES_MOVE"
+    }
+   ]
+  },
+  "Byrdonis": {
+   "death": "event:/sfx/enemy/enemy_attacks/byrdonis/byrdonis_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/byrdonis/byrdonis_attack",
+   "impact": "event:/sfx/enemy/enemy_attacks/byrdonis/byrdonis_hurt",
+   "moves": [
+    {
+     "damage": 3,
+     "event": "event:/sfx/enemy/enemy_attacks/byrdonis/byrdonis_attack",
+     "hits": 3,
+     "intent": "Attack",
+     "name": "PECK_MOVE"
+    },
+    {
+     "damage": 17,
+     "event": "event:/sfx/enemy/enemy_attacks/byrdonis/byrdonis_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SWOOP_MOVE"
+    }
+   ]
+  },
+  "Calcified Cultist": {
+   "death": "event:/sfx/enemy/enemy_attacks/cultists/cultists_die_calcified",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/cultists/cultists_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_fur",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/cultists/cultists_buff_calcified",
+     "intent": "Buff",
+     "name": "INCANTATION_MOVE"
+    },
+    {
+     "damage": 9,
+     "event": "event:/sfx/enemy/enemy_attacks/cultists/cultists_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "DARK_STRIKE_MOVE"
+    }
+   ]
+  },
+  "Ceremonial Beast": {
+   "death": "event:/sfx/enemy/enemy_attacks/ceremonial_beast/ceremonial_beast_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/ceremonial_beast/ceremonial_beast_plow",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_fur",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/ceremonial_beast/ceremonial_beast_attack",
+     "intent": "Buff",
+     "name": "STAMP_MOVE"
+    },
+    {
+     "damage": 18,
+     "event": "event:/sfx/enemy/enemy_attacks/ceremonial_beast/ceremonial_beast_plow",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "PLOW_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/ceremonial_beast/ceremonial_beast_shrill",
+     "intent": "Debuff",
+     "name": "BEAST_CRY_MOVE"
+    },
+    {
+     "damage": 15,
+     "event": "event:/sfx/enemy/enemy_attacks/ceremonial_beast/ceremonial_beast_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "STOMP_MOVE"
+    },
+    {
+     "damage": 17,
+     "event": "event:/sfx/enemy/enemy_attacks/ceremonial_beast/ceremonial_beast_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "CRUSH_MOVE"
+    }
+   ]
+  },
+  "Chomper": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/chomper/chomper_attack",
+   "impact": "event:/sfx/enemy/enemy_attacks/chomper/chomper_hurt",
+   "moves": [
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/chomper/chomper_attack",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "CLAMP_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/chomper/chomper_cast",
+     "intent": "StatusCard",
+     "name": "SCREECH_MOVE"
+    }
+   ]
+  },
+  "Corpse Slug": {
+   "death": "event:/sfx/enemy/enemy_attacks/corpse_slugs/corpse_slugs_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/corpse_slugs/corpse_slugs_attack_light",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_slime",
+   "moves": [
+    {
+     "damage": 3,
+     "event": "event:/sfx/enemy/enemy_attacks/corpse_slugs/corpse_slugs_attack_light",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "WHIP_SLAP_MOVE"
+    },
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/corpse_slugs/corpse_slugs_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "GLOMP_MOVE"
+    }
+   ]
+  },
+  "Crossbow Raider": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/crossbow_ruby_raider/crossbow_ruby_raider_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 14,
+     "event": "event:/sfx/enemy/enemy_attacks/crossbow_ruby_raider/crossbow_ruby_raider_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "FIRE_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/crossbow_ruby_raider/crossbow_ruby_raider_reload",
+     "intent": "Defend",
+     "name": "RELOAD_MOVE"
+    }
+   ]
+  },
+  "Crusher": {
+   "death": "event:/sfx/enemy/enemy_attacks/kaiser_crab/kaiser_crab_left_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/kaiser_crab/kaiser_crab_left_attack_scoop",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 12,
+     "event": "event:/sfx/enemy/enemy_attacks/kaiser_crab/kaiser_crab_left_attack_scoop",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "THRASH_MOVE"
+    },
+    {
+     "damage": 4,
+     "event": "event:/sfx/enemy/enemy_attacks/kaiser_crab/kaiser_crab_left_attack_slam",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "ENLARGING_STRIKE_MOVE"
+    },
+    {
+     "damage": 6,
+     "event": "event:/sfx/enemy/enemy_attacks/kaiser_crab/kaiser_crab_left_attack_scissor",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "BUG_STING_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/kaiser_crab/kaiser_crab_left_buff",
+     "intent": "Buff",
+     "name": "ADAPT_MOVE"
+    },
+    {
+     "damage": 12,
+     "event": "event:/sfx/enemy/enemy_attacks/kaiser_crab/kaiser_crab_left_attack_slam",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "GUARDED_STRIKE_MOVE"
+    }
+   ]
+  },
+  "Damp Cultist": {
+   "death": "event:/sfx/enemy/enemy_attacks/cultists/cultists_die_damp",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/cultists/cultists_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_fur",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/cultists/cultists_buff_damp",
+     "intent": "Buff",
+     "name": "INCANTATION_MOVE"
+    },
+    {
+     "damage": 1,
+     "event": "event:/sfx/enemy/enemy_attacks/cultists/cultists_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "DARK_STRIKE_MOVE"
+    }
+   ]
+  },
+  "Decimillipede": {
+   "death": "event:/sfx/enemy/enemy_attacks/decimillipede/decimillipede_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/decimillipede/decimillipede_attack_triple",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 5,
+     "event": "event:/sfx/enemy/enemy_attacks/decimillipede/decimillipede_attack_triple",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "WRITHE_MOVE"
+    },
+    {
+     "damage": 6,
+     "event": "event:/sfx/enemy/enemy_attacks/decimillipede/decimillipede_attack_buff",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "BULK_MOVE"
+    },
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/decimillipede/decimillipede_attack_weaken",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "CONSTRICT_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/decimillipede/decimillipede_heal",
+     "intent": "Heal",
+     "name": "REATTACH_MOVE"
+    }
+   ]
+  },
+  "Devoted Sculptor": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/devoted_sculptor/devoted_sculptor_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_fur",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/devoted_sculptor/devoted_sculptor_cast",
+     "intent": "Buff",
+     "name": "FORBIDDEN_INCANTATION_MOVE"
+    },
+    {
+     "damage": 12,
+     "event": "event:/sfx/enemy/enemy_attacks/devoted_sculptor/devoted_sculptor_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SAVAGE_MOVE"
+    }
+   ]
+  },
+  "Entomancer": {
+   "death": "event:/sfx/enemy/enemy_attacks/entomancer/entomancer_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/entomancer/entomancer_attack_ranged",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/entomancer/entomancer_cast",
+     "intent": "Buff",
+     "name": "PHEROMONE_SPIT_MOVE"
+    },
+    {
+     "damage": 3,
+     "event": "event:/sfx/enemy/enemy_attacks/entomancer/entomancer_attack_ranged",
+     "hits": 7,
+     "intent": "Attack",
+     "name": "BEES_MOVE"
+    },
+    {
+     "damage": 18,
+     "event": "event:/sfx/enemy/enemy_attacks/entomancer/entomancer_attack_ranged",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SPEAR_MOVE"
+    }
+   ]
+  },
+  "Exoskeleton": {
+   "death": "event:/sfx/enemy/enemy_attacks/roaches/roaches_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/roaches/roaches_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_insect",
+   "moves": [
+    {
+     "damage": 1,
+     "event": "event:/sfx/enemy/enemy_attacks/roaches/roaches_attack",
+     "hits": 3,
+     "intent": "Attack",
+     "name": "SKITTER_MOVE"
+    },
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/roaches/roaches_attack_heavy",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "MANDIBLES_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/roaches/roaches_buff",
+     "intent": "Buff",
+     "name": "ENRAGE_MOVE"
+    }
+   ]
+  },
+  "Eye with Teeth": {
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_magic",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/eye_with_teeth/eye_with_teeth_attack",
+     "intent": "StatusCard",
+     "name": "DISTRACT_MOVE"
+    }
+   ]
+  },
+  "Fabricator": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/fabricator/fabricator_attack",
+   "hurt": "event:/sfx/enemy/enemy_attacks/fabricator/fabricator_hurt",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 18,
+     "event": "event:/sfx/enemy/enemy_attacks/fabricator/fabricator_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "FABRICATING_STRIKE_MOVE"
+    },
+    {
+     "damage": 11,
+     "event": "event:/sfx/enemy/enemy_attacks/fabricator/fabricator_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "DISINTEGRATE_MOVE"
+    }
+   ]
+  },
+  "Fat Gremlin": {
+   "death": "event:/sfx/enemy/enemy_attacks/gremlin_merc/fat_gremlin_die",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_insect",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/gremlin_merc/fat_gremlin_escape",
+     "intent": "Escape",
+     "name": "FLEE_MOVE"
+    }
+   ]
+  },
+  "Flail Knight": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/flail_knight/flail_knight_ram",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/flail_knight/flail_knight_war_chant",
+     "intent": "Buff",
+     "name": "WAR_CHANT"
+    },
+    {
+     "damage": 15,
+     "event": "event:/sfx/enemy/enemy_attacks/flail_knight/flail_knight_ram",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "RAM_MOVE"
+    }
+   ]
+  },
+  "Flyconid": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/flyconid/flyconid_cast",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/flyconid/flyconid_cast",
+     "intent": "Debuff",
+     "name": "VULNERABLE_SPORES_MOVE"
+    },
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/flyconid/flyconid_cast",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "FRAIL_SPORES_MOVE"
+    },
+    {
+     "damage": 11,
+     "event": "event:/sfx/enemy/enemy_attacks/flyconid/flyconid_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SMASH_MOVE"
+    }
+   ]
+  },
+  "Fogmog": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/fogmog/fogmog_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_plant",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/fogmog/fogmog_summon",
+     "intent": "Summon",
+     "name": "ILLUSION_MOVE"
+    },
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/fogmog/fogmog_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SWIPE_MOVE"
+    },
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/fogmog/fogmog_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SWIPE_RANDOM_MOVE"
+    },
+    {
+     "damage": 14,
+     "event": "event:/sfx/enemy/enemy_attacks/fogmog/fogmog_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "HEADBUTT_MOVE"
+    }
+   ]
+  },
+  "Fossil Stalker": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/fossil_stalker/fossil_stalker_attack_buff",
+   "hurt": "event:/sfx/enemy/enemy_attacks/fossil_stalker/fossil_stalker_hurt",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_stone",
+   "moves": [
+    {
+     "damage": 9,
+     "event": "event:/sfx/enemy/enemy_attacks/fossil_stalker/fossil_stalker_attack_buff",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "TACKLE_MOVE"
+    },
+    {
+     "damage": 12,
+     "event": "event:/sfx/enemy/enemy_attacks/fossil_stalker/fossil_stalker_attack_single",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "LATCH_MOVE"
+    },
+    {
+     "damage": 3,
+     "event": "event:/sfx/enemy/enemy_attacks/fossil_stalker/fossil_stalker_attack_double",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "LASH_MOVE"
+    }
+   ]
+  },
+  "Frog Knight": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/frog_knight/frog_knight_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/frog_knight/frog_knight_buff",
+     "intent": "Buff",
+     "name": "FOR_THE_QUEEN"
+    },
+    {
+     "damage": 21,
+     "event": "event:/sfx/enemy/enemy_attacks/frog_knight/frog_knight_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "STRIKE_DOWN_EVIL"
+    },
+    {
+     "damage": 13,
+     "event": "event:/sfx/enemy/enemy_attacks/frog_knight/frog_knight_tongue_lash",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "TONGUE_LASH"
+    },
+    {
+     "damage": 35,
+     "event": "event:/sfx/enemy/enemy_attacks/frog_knight/frog_knight_charge",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "BEETLE_CHARGE"
+    }
+   ]
+  },
+  "Fuzzy Wurm Crawler": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/fuzzy_wurm_crawler/fuzzy_wurm_crawler_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 4,
+     "event": "event:/sfx/enemy/enemy_attacks/fuzzy_wurm_crawler/fuzzy_wurm_crawler_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "FIRST_ACID_GOOP"
+    },
+    {
+     "damage": 4,
+     "event": "event:/sfx/enemy/enemy_attacks/fuzzy_wurm_crawler/fuzzy_wurm_crawler_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "ACID_GOOP"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/fuzzy_wurm_crawler/fuzzy_wurm_crawler_cast",
+     "intent": "Buff",
+     "name": "INHALE"
+    }
+   ]
+  },
+  "Gas Bomb": {
+   "death": "event:/sfx/enemy/enemy_attacks/living_fog/living_fog_minion_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/living_fog/living_fog_explode",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_magic",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/living_fog/living_fog_explode",
+     "hits": 1,
+     "intent": "DeathBlow",
+     "name": "EXPLODE_MOVE"
+    }
+   ]
+  },
+  "Globe Head": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/globe_head/globe_head_charge",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 6,
+     "event": "event:/sfx/enemy/enemy_attacks/globe_head/globe_head_charge",
+     "hits": 3,
+     "intent": "Attack",
+     "name": "THUNDER_STRIKE"
+    },
+    {
+     "damage": 13,
+     "event": "event:/sfx/enemy/enemy_attacks/globe_head/globe_head_slap",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SHOCKING_SLAP"
+    }
+   ]
+  },
+  "Gremlin Merc": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/gremlin_merc/gremlin_merc_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_fur",
+   "moves": [
+    {
+     "damage": 7,
+     "event": "event:/sfx/enemy/enemy_attacks/gremlin_merc/gremlin_merc_attack",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "GIMME_MOVE"
+    },
+    {
+     "damage": 6,
+     "event": "event:/sfx/enemy/enemy_attacks/gremlin_merc/gremlin_merc_attack",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "DOUBLE_SMASH_MOVE"
+    },
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/gremlin_merc/gremlin_merc_attack_buff",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "HEHE_MOVE"
+    }
+   ]
+  },
+  "Guardbot": {
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/guardbot/guardbot_cast",
+     "intent": "Defend",
+     "name": "GUARD_MOVE"
+    }
+   ]
+  },
+  "Hatchling": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/tough_egg/tough_egg_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_slime",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/tough_egg/tough_egg_hatch",
+     "intent": "Summon",
+     "name": "HATCH_MOVE"
+    },
+    {
+     "damage": 4,
+     "event": "event:/sfx/enemy/enemy_attacks/tough_egg/tough_egg_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "NIBBLE_MOVE"
+    }
+   ]
+  },
+  "Haunted Ship": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/haunted_ship/haunted_ship_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor_big",
+   "moves": [
+    {
+     "damage": 13,
+     "event": "event:/sfx/enemy/enemy_attacks/haunted_ship/haunted_ship_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SWIPE_MOVE"
+    },
+    {
+     "damage": 4,
+     "event": "event:/sfx/enemy/enemy_attacks/haunted_ship/haunted_ship_attack",
+     "hits": 3,
+     "intent": "Attack",
+     "name": "STOMP_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/haunted_ship/haunted_ship_cast",
+     "intent": "Debuff",
+     "name": "HAUNT_MOVE"
+    }
+   ]
+  },
+  "Hunter Killer": {
+   "death": "event:/sfx/enemy/enemy_attacks/hunter_killer/hunter_killer_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/hunter_killer/hunter_killer_attack",
+   "impact": "event:/sfx/enemy/enemy_attacks/hunter_killer/hunter_killer_hurt",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/hunter_killer/hunter_killer_cast",
+     "intent": "Debuff",
+     "name": "TENDERIZING_GOOP_MOVE"
+    },
+    {
+     "damage": 17,
+     "event": "event:/sfx/enemy/enemy_attacks/hunter_killer/hunter_killer_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "BITE_MOVE"
+    },
+    {
+     "damage": 7,
+     "event": "event:/sfx/enemy/enemy_attacks/hunter_killer/hunter_killer_attack",
+     "hits": 3,
+     "intent": "Attack",
+     "name": "PUNCTURE_MOVE"
+    }
+   ]
+  },
+  "Infested Prism": {
+   "death": "event:/sfx/enemy/enemy_attacks/infested_prisms/infested_prisms_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/infested_prisms/infested_prisms_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_stone",
+   "moves": [
+    {
+     "damage": 15,
+     "event": "event:/sfx/enemy/enemy_attacks/infested_prisms/infested_prisms_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "JAB_MOVE"
+    },
+    {
+     "damage": 11,
+     "event": "event:/sfx/enemy/enemy_attacks/infested_prisms/infested_prisms_attack_defend",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "RADIATE_MOVE"
+    },
+    {
+     "damage": 5,
+     "event": "event:/sfx/enemy/enemy_attacks/infested_prisms/infested_prisms_attack_spin",
+     "hits": 3,
+     "intent": "Attack",
+     "name": "WHIRLWIND_MOVE"
+    },
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/infested_prisms/infested_prisms_attack_defend",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "PULSATE_MOVE"
+    }
+   ]
+  },
+  "Inklet": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/inklet/inklet_attack",
+   "hurt": "event:/sfx/enemy/enemy_attacks/inklet/inklet_hurt",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_magic",
+   "moves": [
+    {
+     "damage": 3,
+     "event": "event:/sfx/enemy/enemy_attacks/inklet/inklet_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "JAB_MOVE"
+    },
+    {
+     "damage": 2,
+     "event": "event:/sfx/enemy/enemy_attacks/inklet/inklet_attack_triple",
+     "hits": 3,
+     "intent": "Attack",
+     "name": "WHIRLWIND_MOVE"
+    },
+    {
+     "damage": 10,
+     "event": "event:/sfx/enemy/enemy_attacks/inklet/inklet_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "PIERCING_GAZE_MOVE"
+    }
+   ]
+  },
+  "Kin Follower": {
+   "death": "event:/sfx/enemy/enemy_attacks/the_kin_minion/the_kin_minion_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/the_kin_minion/the_kin_minion_quick_slash",
+   "hurt": "event:/sfx/enemy/enemy_attacks/the_kin_priest/the_kin_priest_hurt",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_fur",
+   "moves": [
+    {
+     "damage": 5,
+     "event": "event:/sfx/enemy/enemy_attacks/the_kin_minion/the_kin_minion_quick_slash",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "QUICK_SLASH_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/the_kin_minion/the_kin_minion_buff",
+     "intent": "Buff",
+     "name": "POWER_DANCE_MOVE"
+    }
+   ]
+  },
+  "Kin Priest": {
+   "death": "event:/sfx/enemy/enemy_attacks/the_kin_priest/the_kin_priest_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/the_kin_priest/the_kin_priest_soul_grenade",
+   "hurt": "event:/sfx/enemy/enemy_attacks/the_kin_priest/the_kin_priest_hurt",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_fur",
+   "moves": [
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/the_kin_priest/the_kin_priest_soul_grenade",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "ORB_OF_FRAILTY_MOVE"
+    },
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/the_kin_priest/the_kin_priest_soul_grenade",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "ORB_OF_WEAKNESS_MOVE"
+    },
+    {
+     "damage": 3,
+     "event": "event:/sfx/enemy/enemy_attacks/the_kin_priest/the_kin_priest_soul_beam",
+     "hits": 3,
+     "intent": "Attack",
+     "name": "BEAM_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/the_kin_priest/the_kin_priest_rally",
+     "intent": "Buff",
+     "name": "RITUAL_MOVE"
+    }
+   ]
+  },
+  "Knowledge Demon": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/knowledge_demon/knowledge_demon_slap",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 17,
+     "event": "event:/sfx/enemy/enemy_attacks/knowledge_demon/knowledge_demon_slap",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SLAP_MOVE"
+    },
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/knowledge_demon/knowledge_demon_clap",
+     "hits": 3,
+     "intent": "Attack",
+     "name": "KNOWLEDGE_OVERWHELMING_MOVE"
+    }
+   ]
+  },
+  "Lagavulin Matriarch": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/lagavulin_matriarch/lagavulin_matriarch_slam",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor_big",
+   "moves": [
+    {
+     "damage": 19,
+     "event": "event:/sfx/enemy/enemy_attacks/lagavulin_matriarch/lagavulin_matriarch_slam",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SLASH_MOVE"
+    },
+    {
+     "damage": 12,
+     "event": "event:/sfx/enemy/enemy_attacks/lagavulin_matriarch/lagavulin_matriarch_slam",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SLASH2_MOVE"
+    },
+    {
+     "damage": 9,
+     "event": "event:/sfx/enemy/enemy_attacks/lagavulin_matriarch/lagavulin_matriarch_attack_stab",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "DISEMBOWEL_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/lagavulin_matriarch/lagavulin_matriarch_cast",
+     "intent": "Debuff",
+     "name": "SOUL_SIPHON_MOVE"
+    }
+   ]
+  },
+  "Leaf Slime (M)": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/leaf_slime_m/leaf_slime_m_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_slime",
+   "moves": [
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/leaf_slime_m/leaf_slime_m_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "CLUMP_SHOT"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/leaf_slime_m/leaf_slime_m_cast",
+     "intent": "StatusCard",
+     "name": "STICKY_SHOT"
+    }
+   ]
+  },
+  "Leaf Slime (S)": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/leaf_slime_s/leaf_slime_s_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_slime",
+   "moves": [
+    {
+     "damage": 3,
+     "event": "event:/sfx/enemy/enemy_attacks/leaf_slime_s/leaf_slime_s_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "TACKLE_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/leaf_slime_s/leaf_slime_s_attack",
+     "intent": "StatusCard",
+     "name": "GOOP_MOVE"
+    }
+   ]
+  },
+  "Living Fog": {
+   "death": "event:/sfx/enemy/enemy_attacks/living_fog/living_fog_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/living_fog/living_fog_attack_blow",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_magic",
+   "moves": [
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/living_fog/living_fog_attack_blow",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "ADVANCED_GAS_MOVE"
+    },
+    {
+     "damage": 5,
+     "event": "event:/sfx/enemy/enemy_attacks/living_fog/living_fog_summon",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "BLOAT_MOVE"
+    },
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/living_fog/living_fog_attack_blow",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SUPER_GAS_BLAST_MOVE"
+    }
+   ]
+  },
+  "Louse Progenitor": {
+   "death": "event:/sfx/enemy/enemy_attacks/giant_louse/giant_louse_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/giant_louse/giant_louse_uncurl",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_insect",
+   "moves": [
+    {
+     "damage": 9,
+     "event": "event:/sfx/enemy/enemy_attacks/giant_louse/giant_louse_uncurl",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "WEB_CANNON_MOVE"
+    },
+    {
+     "damage": 14,
+     "event": "event:/sfx/enemy/enemy_attacks/giant_louse/giant_louse_uncurl",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "POUNCE_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/giant_louse/giant_louse_curl",
+     "intent": "Defend",
+     "name": "CURL_AND_GROW_MOVE"
+    }
+   ]
+  },
+  "Magi Knight": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/magi_knight/magi_knight_cast_shield",
+   "hurt": "event:/sfx/enemy/enemy_attacks/magi_knight/magi_knight_hurt",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 6,
+     "event": "event:/sfx/enemy/enemy_attacks/magi_knight/magi_knight_cast_shield",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "POWER_SHIELD_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/magi_knight/magi_knight_cast_shield",
+     "intent": "Defend",
+     "name": "PREP_MOVE"
+    },
+    {
+     "damage": 35,
+     "event": "event:/sfx/enemy/enemy_attacks/magi_knight/magi_knight_attack_bomb",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "MAGIC_BOMB"
+    },
+    {
+     "damage": 10,
+     "event": "event:/sfx/enemy/enemy_attacks/magi_knight/magi_knight_attack_ram",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "RAM_MOVE"
+    }
+   ]
+  },
+  "Mawler": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/mawler/mawler_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 14,
+     "event": "event:/sfx/enemy/enemy_attacks/mawler/mawler_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "RIP_AND_TEAR_MOVE"
+    },
+    {
+     "damage": 4,
+     "event": "event:/sfx/enemy/enemy_attacks/mawler/mawler_attack",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "CLAW_MOVE"
+    }
+   ]
+  },
+  "Mecha Knight": {
+   "death": "event:/sfx/enemy/enemy_attacks/mechaknight/mechaknight_die",
+   "hurt": "event:/sfx/enemy/enemy_attacks/mechaknight/mechaknight_hurt",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/mechaknight/mechaknight_flamethrower",
+     "intent": "StatusCard",
+     "name": "FLAMETHROWER_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/mechaknight/mechaknight_buff",
+     "intent": "Defend",
+     "name": "WINDUP_MOVE"
+    }
+   ]
+  },
+  "Myte": {
+   "death": "event:/sfx/enemy/enemy_attacks/mite/mite_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/mite/mite_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/mite/mite_cast",
+     "intent": "StatusCard",
+     "name": "TOXIC_MOVE"
+    },
+    {
+     "damage": 13,
+     "event": "event:/sfx/enemy/enemy_attacks/mite/mite_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "BITE_MOVE"
+    },
+    {
+     "damage": 4,
+     "event": "event:/sfx/enemy/enemy_attacks/mite/mite_suck",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SUCK_MOVE"
+    }
+   ]
+  },
+  "Nibbit": {
+   "death": "event:/sfx/enemy/enemy_attacks/nibbit/nibbit_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/nibbit/nibbit_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_slime",
+   "moves": [
+    {
+     "damage": 12,
+     "event": "event:/sfx/enemy/enemy_attacks/nibbit/nibbit_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "BUTT_MOVE"
+    },
+    {
+     "damage": 6,
+     "event": "event:/sfx/enemy/enemy_attacks/nibbit/nibbit_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SLICE_MOVE"
+    }
+   ]
+  },
+  "Noisebot": {
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/noisebot/noisebot_cast",
+     "intent": "StatusCard",
+     "name": "NOISE_MOVE"
+    }
+   ]
+  },
+  "Osty": {
+   "death": "event:/sfx/characters/osty/osty_die",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": []
+  },
+  "Ovicopter": {
+   "death": "event:/sfx/enemy/enemy_attacks/egg_layer/egg_layer_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/egg_layer/egg_layer_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_slime",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/egg_layer/egg_layer_lay",
+     "intent": "Summon",
+     "name": "LAY_EGGS_MOVE"
+    },
+    {
+     "damage": 16,
+     "event": "event:/sfx/enemy/enemy_attacks/egg_layer/egg_layer_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SMASH_MOVE"
+    },
+    {
+     "damage": 7,
+     "event": "event:/sfx/enemy/enemy_attacks/egg_layer/egg_layer_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "TENDERIZER_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/egg_layer/egg_layer_lay",
+     "intent": "Buff",
+     "name": "NUTRITIONAL_PASTE_MOVE"
+    }
+   ]
+  },
+  "Owl Magistrate": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/owl_magistrate/owl_magistrate_attack_peck",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 16,
+     "event": "event:/sfx/enemy/enemy_attacks/owl_magistrate/owl_magistrate_attack_peck",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "MAGISTRATE_SCRUTINY"
+    },
+    {
+     "damage": 4,
+     "event": "event:/sfx/enemy/enemy_attacks/owl_magistrate/owl_magistrate_attack_peck",
+     "hits": 6,
+     "intent": "Attack",
+     "name": "PECK_ASSAULT"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/owl_magistrate/owl_magistrate_take_off",
+     "intent": "Buff",
+     "name": "JUDICIAL_FLIGHT"
+    }
+   ]
+  },
+  "Parafright": {
+   "death": "event:/sfx/enemy/enemy_attacks/obscura/obscura_hologram_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/obscura/obscura_hologram_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 16,
+     "event": "event:/sfx/enemy/enemy_attacks/obscura/obscura_hologram_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SLAM_MOVE"
+    }
+   ]
+  },
+  "Phantasmal Gardener": {
+   "death": "event:/sfx/enemy/enemy_attacks/phantasmal_gardeners/phantasmal_gardeners_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/phantasmal_gardeners/phantasmal_gardeners_attack_bite",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_magic",
+   "moves": [
+    {
+     "damage": 5,
+     "event": "event:/sfx/enemy/enemy_attacks/phantasmal_gardeners/phantasmal_gardeners_attack_bite",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "BITE_MOVE"
+    },
+    {
+     "damage": 7,
+     "event": "event:/sfx/enemy/enemy_attacks/phantasmal_gardeners/phantasmal_gardeners_attack_bite",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "LASH_MOVE"
+    },
+    {
+     "damage": 1,
+     "event": "event:/sfx/enemy/enemy_attacks/phantasmal_gardeners/phantasmal_gardeners_attack_lick",
+     "hits": 3,
+     "intent": "Attack",
+     "name": "FLAIL_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/phantasmal_gardeners/phantasmal_gardeners_buff",
+     "intent": "Buff",
+     "name": "ENLARGE_MOVE"
+    }
+   ]
+  },
+  "Phrog Parasite": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/phrog_parasite/phrog_parasite_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_plant",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/phrog_parasite/phrog_parasite_cast",
+     "intent": "StatusCard",
+     "name": "INFECT_MOVE"
+    },
+    {
+     "damage": 4,
+     "event": "event:/sfx/enemy/enemy_attacks/phrog_parasite/phrog_parasite_attack",
+     "hits": 4,
+     "intent": "Attack",
+     "name": "LASH_MOVE"
+    }
+   ]
+  },
+  "Punch Construct": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/punch_construct/punch_construct_attack_single",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/punch_construct/punch_construct_buff",
+     "intent": "Defend",
+     "name": "READY_MOVE"
+    },
+    {
+     "damage": 14,
+     "event": "event:/sfx/enemy/enemy_attacks/punch_construct/punch_construct_attack_single",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "STRONG_PUNCH_MOVE"
+    },
+    {
+     "damage": 5,
+     "event": "event:/sfx/enemy/enemy_attacks/punch_construct/punch_construct_attack_double",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "FAST_PUNCH_MOVE"
+    }
+   ]
+  },
+  "Queen": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/queen/queen_arms_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/queen/queen_cast",
+     "intent": "CardDebuff",
+     "name": "PUPPET_STRINGS_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/queen/queen_cast",
+     "intent": "Debuff",
+     "name": "YOU_ARE_MINE_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/queen/queen_cast",
+     "intent": "Buff",
+     "name": "BURN_BRIGHT_FOR_ME_MOVE"
+    },
+    {
+     "damage": 3,
+     "event": "event:/sfx/enemy/enemy_attacks/queen/queen_arms_attack",
+     "hits": 5,
+     "intent": "Attack",
+     "name": "OFF_WITH_YOUR_HEAD_MOVE"
+    },
+    {
+     "damage": 15,
+     "event": "event:/sfx/enemy/enemy_attacks/queen/queen_arms_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "EXECUTION_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/queen/queen_cast",
+     "intent": "Buff",
+     "name": "ENRAGE_MOVE"
+    }
+   ]
+  },
+  "Rocket": {
+   "death": "event:/sfx/enemy/enemy_attacks/kaiser_crab/kaiser_crab_right_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/kaiser_crab/kaiser_crab_right_attack_snap",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 3,
+     "event": "event:/sfx/enemy/enemy_attacks/kaiser_crab/kaiser_crab_right_attack_snap",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "TARGETING_RETICLE_MOVE"
+    },
+    {
+     "damage": 18,
+     "event": "event:/sfx/enemy/enemy_attacks/kaiser_crab/kaiser_crab_right_attack_slam",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "PRECISION_BEAM_MOVE"
+    },
+    {
+     "damage": 31,
+     "event": "event:/sfx/enemy/enemy_attacks/kaiser_crab/kaiser_crab_rocket",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "LASER_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/kaiser_crab/kaiser_crab_right_regrow",
+     "intent": "Sleep",
+     "name": "RECHARGE_MOVE"
+    }
+   ]
+  },
+  "Scroll of Biting": {
+   "death": "event:/sfx/enemy/enemy_attacks/scroll_of_biting/scroll_of_biting_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/scroll_of_biting/scroll_of_biting_bite",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_magic",
+   "moves": [
+    {
+     "damage": 14,
+     "event": "event:/sfx/enemy/enemy_attacks/scroll_of_biting/scroll_of_biting_bite",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "CHOMP"
+    },
+    {
+     "damage": 5,
+     "event": "event:/sfx/enemy/enemy_attacks/scroll_of_biting/scroll_of_biting_bite_double",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "CHEW"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/scroll_of_biting/scroll_of_biting_buff",
+     "intent": "Buff",
+     "name": "MORE_TEETH"
+    }
+   ]
+  },
+  "Seapunk": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/seapunk/seapunk_kick",
+   "hurt": "event:/sfx/enemy/enemy_attacks/seapunk/seapunk_hurt",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_fur",
+   "moves": [
+    {
+     "damage": 11,
+     "event": "event:/sfx/enemy/enemy_attacks/seapunk/seapunk_kick",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SEA_KICK_MOVE"
+    },
+    {
+     "damage": 2,
+     "event": "event:/sfx/enemy/enemy_attacks/seapunk/seapunk_kick_multi",
+     "hits": 4,
+     "intent": "Attack",
+     "name": "SPINNING_KICK_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/seapunk/seapunk_buff",
+     "intent": "Buff",
+     "name": "BUBBLE_BURP_MOVE"
+    }
+   ]
+  },
+  "Sewer Clam": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/sewer_clam/sewer_clam_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_stone",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/sewer_clam/sewer_clam_buff",
+     "intent": "Buff",
+     "name": "PRESSURIZE_MOVE"
+    },
+    {
+     "damage": 10,
+     "event": "event:/sfx/enemy/enemy_attacks/sewer_clam/sewer_clam_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "JET_MOVE"
+    }
+   ]
+  },
+  "Shrinker Beetle": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/shrinker_beetle/shrinker_beetle_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_insect",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/shrinker_beetle/shrinker_beetle_cast",
+     "intent": "Debuff",
+     "name": "SHRINKER_MOVE"
+    },
+    {
+     "damage": 7,
+     "event": "event:/sfx/enemy/enemy_attacks/shrinker_beetle/shrinker_beetle_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "CHOMP_MOVE"
+    },
+    {
+     "damage": 13,
+     "event": "event:/sfx/enemy/enemy_attacks/shrinker_beetle/shrinker_beetle_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "STOMP_MOVE"
+    }
+   ]
+  },
+  "Skulking Colony": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/skulking_colony/skulking_colony_kick",
+   "hurt": "event:/sfx/enemy/enemy_attacks/skulking_colony/skulking_colony_hurt",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_stone",
+   "moves": [
+    {
+     "damage": 14,
+     "event": "event:/sfx/enemy/enemy_attacks/skulking_colony/skulking_colony_kick",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "ZOOM_MOVE"
+    },
+    {
+     "damage": 14,
+     "event": "event:/sfx/enemy/enemy_attacks/skulking_colony/skulking_colony_kick",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "ZOOM_MOVE_2"
+    },
+    {
+     "damage": 9,
+     "event": "event:/sfx/enemy/enemy_attacks/skulking_colony/skulking_colony_thrust",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "INERTIA_MOVE"
+    },
+    {
+     "damage": 7,
+     "event": "event:/sfx/enemy/enemy_attacks/skulking_colony/skulking_colony_spin",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "PIERCING_STABS_MOVE"
+    }
+   ]
+  },
+  "Slimed Berserker": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/slimed_berserker/slimed_berserker_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_slime",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/slimed_berserker/slimed_berserker_slime",
+     "intent": "StatusCard",
+     "name": "VOMIT_ICHOR_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/slimed_berserker/slimed_berserker_buff",
+     "intent": "Debuff",
+     "name": "LEECHING_HUG_MOVE"
+    },
+    {
+     "damage": 30,
+     "event": "event:/sfx/enemy/enemy_attacks/slimed_berserker/slimed_berserker_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SMOTHER_MOVE"
+    },
+    {
+     "damage": 4,
+     "event": "event:/sfx/enemy/enemy_attacks/slimed_berserker/slimed_berserker_attack",
+     "hits": 4,
+     "intent": "Attack",
+     "name": "FURIOUS_PUMMELING_MOVE"
+    }
+   ]
+  },
+  "Slithering Strangler": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/slithering_strangler/slithering_strangler_attack_headbutt",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_plant",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/slithering_strangler/slithering_strangler_cast",
+     "intent": "Debuff",
+     "name": "CONSTRICT"
+    },
+    {
+     "damage": 7,
+     "event": "event:/sfx/enemy/enemy_attacks/slithering_strangler/slithering_strangler_attack_headbutt",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "THWACK"
+    }
+   ]
+  },
+  "Sludge Spinner": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/sludge_spinner/sludge_spinner_attack_spin",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_stone",
+   "moves": [
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/sludge_spinner/sludge_spinner_attack_spin",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "OIL_SPRAY_MOVE"
+    },
+    {
+     "damage": 11,
+     "event": "event:/sfx/enemy/enemy_attacks/sludge_spinner/sludge_spinner_attack_dash",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SLAM_MOVE"
+    },
+    {
+     "damage": 6,
+     "event": "event:/sfx/enemy/enemy_attacks/sludge_spinner/sludge_spinner_attack_dash",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "RAGE_MOVE"
+    }
+   ]
+  },
+  "Slumbering Beetle": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/slumbering_beetle/slumbering_beetle_roll",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 16,
+     "event": "event:/sfx/enemy/enemy_attacks/slumbering_beetle/slumbering_beetle_roll",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "ROLL_OUT_MOVE"
+    }
+   ]
+  },
+  "Sneaky Gremlin": {
+   "death": "event:/sfx/enemy/enemy_attacks/gremlin_merc/sneaky_gremlin_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/gremlin_merc/sneaky_gremlin_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_insect",
+   "moves": [
+    {
+     "damage": 9,
+     "event": "event:/sfx/enemy/enemy_attacks/gremlin_merc/sneaky_gremlin_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "TACKLE_MOVE"
+    }
+   ]
+  },
+  "Soul Fysh": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/soul_fysh/soul_fysh_attack",
+   "hurt": "event:/sfx/enemy/enemy_attacks/soul_fysh/soul_fysh_hurt",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_magic",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/soul_fysh/soul_fysh_beckon",
+     "intent": "StatusCard",
+     "name": "BECKON_MOVE"
+    },
+    {
+     "damage": 16,
+     "event": "event:/sfx/enemy/enemy_attacks/soul_fysh/soul_fysh_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "DE_GAS_MOVE"
+    },
+    {
+     "damage": 7,
+     "event": "event:/sfx/enemy/enemy_attacks/soul_fysh/soul_fysh_beckon",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "GAZE_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/soul_fysh/soul_fysh_intangible",
+     "intent": "Buff",
+     "name": "FADE_MOVE"
+    },
+    {
+     "damage": 13,
+     "event": "event:/sfx/enemy/enemy_attacks/soul_fysh/soul_fysh_wave",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SCREAM_MOVE"
+    }
+   ]
+  },
+  "Soul Nexus": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/soul_nexus/soul_nexus_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_magic",
+   "moves": [
+    {
+     "damage": 29,
+     "event": "event:/sfx/enemy/enemy_attacks/soul_nexus/soul_nexus_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SOUL_BURN_MOVE"
+    },
+    {
+     "damage": 6,
+     "event": "event:/sfx/enemy/enemy_attacks/soul_nexus/soul_nexus_attack",
+     "hits": 4,
+     "intent": "Attack",
+     "name": "MAELSTROM_MOVE"
+    },
+    {
+     "damage": 18,
+     "event": "event:/sfx/enemy/enemy_attacks/soul_nexus/soul_nexus_cast",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "DRAIN_LIFE_MOVE"
+    }
+   ]
+  },
+  "Spectral Knight": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/spectral_knight/spectral_knight_soul_slash",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/spectral_knight/spectral_knight_hex",
+     "intent": "Debuff",
+     "name": "HEX"
+    },
+    {
+     "damage": 15,
+     "event": "event:/sfx/enemy/enemy_attacks/spectral_knight/spectral_knight_soul_slash",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SOUL_SLASH"
+    },
+    {
+     "damage": 3,
+     "event": "event:/sfx/enemy/enemy_attacks/spectral_knight/spectral_knight_soul_flame",
+     "hits": 3,
+     "intent": "Attack",
+     "name": "SOUL_FLAME"
+    }
+   ]
+  },
+  "Spiny Toad": {
+   "death": "event:/sfx/enemy/enemy_attacks/spiny_toad/spiny_toad_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/spiny_toad/spiny_toad_explode",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/spiny_toad/spiny_toad_protrude",
+     "intent": "Buff",
+     "name": "PROTRUDING_SPIKES_MOVE"
+    },
+    {
+     "damage": 23,
+     "event": "event:/sfx/enemy/enemy_attacks/spiny_toad/spiny_toad_explode",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SPIKE_EXPLOSION_MOVE"
+    },
+    {
+     "damage": 17,
+     "event": "event:/sfx/enemy/enemy_attacks/spiny_toad/spiny_toad_lick",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "TONGUE_LASH_MOVE"
+    }
+   ]
+  },
+  "Terror Eel": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/terror_eel/terror_eel_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_slime",
+   "moves": [
+    {
+     "damage": 16,
+     "event": "event:/sfx/enemy/enemy_attacks/terror_eel/terror_eel_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "CRASH_MOVE"
+    },
+    {
+     "damage": 3,
+     "event": "event:/sfx/enemy/enemy_attacks/terror_eel/terror_eel_attack_multi",
+     "hits": 3,
+     "intent": "Attack",
+     "name": "THRASH_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/terror_eel/terror_eel_debuff",
+     "intent": "Debuff",
+     "name": "TERROR_MOVE"
+    }
+   ]
+  },
+  "Test Subject": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/test_subject/test_subject_bite",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 20,
+     "event": "event:/sfx/enemy/enemy_attacks/test_subject/test_subject_bite",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "BITE_MOVE"
+    },
+    {
+     "damage": 14,
+     "event": "event:/sfx/enemy/enemy_attacks/test_subject/test_subject_bite",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SKULL_BASH_MOVE"
+    },
+    {
+     "damage": 10,
+     "event": "event:/sfx/enemy/enemy_attacks/test_subject/test_subject_slash",
+     "intent": "Attack",
+     "name": "MULTI_CLAW_MOVE"
+    },
+    {
+     "damage": 10,
+     "event": "event:/sfx/enemy/enemy_attacks/test_subject/test_subject_slash",
+     "hits": 3,
+     "intent": "Attack",
+     "name": "PHASE3_LACERATE_MOVE"
+    },
+    {
+     "damage": 45,
+     "event": "event:/sfx/enemy/enemy_attacks/test_subject/test_subject_bite",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "BIG_POUNCE"
+    }
+   ]
+  },
+  "The Forgotten": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/the_forgotten/the_forgotten_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_stone",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/the_forgotten/the_forgotten_cast",
+     "intent": "Debuff",
+     "name": "MIASMA"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/the_forgotten/the_forgotten_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "DREAD"
+    }
+   ]
+  },
+  "The Insatiable": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/the_insatiable/the_insatiable_thrash",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_insect",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/the_insatiable/the_insatiable_liquify_ground",
+     "intent": "Buff",
+     "name": "LIQUIFY_GROUND_MOVE"
+    },
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/the_insatiable/the_insatiable_thrash",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "THRASH_MOVE"
+    },
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/the_insatiable/the_insatiable_thrash",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "THRASH_MOVE_2"
+    },
+    {
+     "damage": 28,
+     "event": "event:/sfx/enemy/enemy_attacks/the_insatiable/the_insatiable_lunging_bite",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "LUNGING_BITE_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/the_insatiable/the_insatiable_salivate",
+     "intent": "Buff",
+     "name": "SALIVATE_MOVE"
+    }
+   ]
+  },
+  "The Lost": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/the_lost/the_lost_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_stone",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/the_lost/the_lost_cast",
+     "intent": "Debuff",
+     "name": "DEBILITATING_SMOG"
+    },
+    {
+     "damage": 4,
+     "event": "event:/sfx/enemy/enemy_attacks/the_lost/the_lost_attack",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "EYE_LASERS"
+    }
+   ]
+  },
+  "The Merchant???": {
+   "death": "event:/sfx/npcs/reverse_merchant/reverse_merchant_die",
+   "hurt": "event:/sfx/npcs/reverse_merchant/reverse_merchant_hurt",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_slime",
+   "moves": []
+  },
+  "The Obscura": {
+   "death": "event:/sfx/enemy/enemy_attacks/obscura/obscura_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/obscura/obscura_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/obscura/obscura_summon",
+     "intent": "Summon",
+     "name": "ILLUSION_MOVE"
+    },
+    {
+     "damage": 10,
+     "event": "event:/sfx/enemy/enemy_attacks/obscura/obscura_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "PIERCING_GAZE_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/obscura/obscura_buff",
+     "intent": "Buff",
+     "name": "SAIL_MOVE"
+    },
+    {
+     "damage": 6,
+     "event": "event:/sfx/enemy/enemy_attacks/obscura/obscura_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "HARDENING_STRIKE_MOVE"
+    }
+   ]
+  },
+  "Thieving Hopper": {
+   "death": "event:/sfx/enemy/enemy_attacks/thieving_hopper/thieving_hopper_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/thieving_hopper/thieving_hopper_steal",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_insect",
+   "moves": [
+    {
+     "damage": 17,
+     "event": "event:/sfx/enemy/enemy_attacks/thieving_hopper/thieving_hopper_steal",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "THIEVERY_MOVE"
+    },
+    {
+     "damage": 14,
+     "event": "event:/sfx/enemy/enemy_attacks/thieving_hopper/thieving_hopper_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "NAB_MOVE"
+    },
+    {
+     "damage": 21,
+     "event": "event:/sfx/enemy/enemy_attacks/thieving_hopper/thieving_hopper_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "HAT_TRICK_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/thieving_hopper/thieving_hopper_take_off",
+     "intent": "Buff",
+     "name": "FLUTTER_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/thieving_hopper/thieving_hopper_flee",
+     "intent": "Escape",
+     "name": "ESCAPE_MOVE"
+    }
+   ]
+  },
+  "Toadpole": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/toadpole/toadpole_attack_spin",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_slime",
+   "moves": [
+    {
+     "damage": 3,
+     "event": "event:/sfx/enemy/enemy_attacks/toadpole/toadpole_attack_spin",
+     "hits": 3,
+     "intent": "Attack",
+     "name": "SPIKE_SPIT_MOVE"
+    },
+    {
+     "damage": 7,
+     "event": "event:/sfx/enemy/enemy_attacks/toadpole/toadpole_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "WHIRL_MOVE"
+    }
+   ]
+  },
+  "Torch Head Amalgam": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/torch_head_amalgam/torch_head_amalgam_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 18,
+     "event": "event:/sfx/enemy/enemy_attacks/torch_head_amalgam/torch_head_amalgam_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "TACKLE_MOVE"
+    },
+    {
+     "damage": 18,
+     "event": "event:/sfx/enemy/enemy_attacks/torch_head_amalgam/torch_head_amalgam_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "TACKLE_2_MOVE"
+    },
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/torch_head_amalgam/torch_head_amalgam_beam",
+     "hits": 3,
+     "intent": "Attack",
+     "name": "BEAM_MOVE"
+    },
+    {
+     "damage": 14,
+     "event": "event:/sfx/enemy/enemy_attacks/torch_head_amalgam/torch_head_amalgam_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "TACKLE_3_MOVE"
+    },
+    {
+     "damage": 14,
+     "event": "event:/sfx/enemy/enemy_attacks/torch_head_amalgam/torch_head_amalgam_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "TACKLE_4_MOVE"
+    }
+   ]
+  },
+  "Tough Egg": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/tough_egg/tough_egg_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_slime",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/tough_egg/tough_egg_hatch",
+     "intent": "Summon",
+     "name": "HATCH_MOVE"
+    },
+    {
+     "damage": 4,
+     "event": "event:/sfx/enemy/enemy_attacks/tough_egg/tough_egg_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "NIBBLE_MOVE"
+    }
+   ]
+  },
+  "Tracker Raider": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/tracker_ruby_raider/tracker_ruby_raider_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 1,
+     "event": "event:/sfx/enemy/enemy_attacks/tracker_ruby_raider/tracker_ruby_raider_attack",
+     "hits": 8,
+     "intent": "Attack",
+     "name": "HOUNDS_MOVE"
+    }
+   ]
+  },
+  "Tunneler": {
+   "death": "event:/sfx/enemy/enemy_attacks/burrowing_bug/burrowing_bug_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/burrowing_bug/burrowing_bug_attack",
+   "hurt": "event:/sfx/enemy/enemy_attacks/burrowing_bug/burrowing_bug_hurt",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 13,
+     "event": "event:/sfx/enemy/enemy_attacks/burrowing_bug/burrowing_bug_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "BITE_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/burrowing_bug/burrowing_bug_burrow",
+     "intent": "Buff",
+     "name": "BURROW_MOVE"
+    },
+    {
+     "damage": 23,
+     "event": "event:/sfx/enemy/enemy_attacks/burrowing_bug/burrowing_bug_hidden_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "BELOW_MOVE"
+    }
+   ]
+  },
+  "Turret Operator": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/turret_operator/turret_operator_attack",
+   "hurt": "event:/sfx/enemy/enemy_attacks/turret_operator/turret_operator_hurt",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_fur",
+   "moves": [
+    {
+     "damage": 3,
+     "event": "event:/sfx/enemy/enemy_attacks/turret_operator/turret_operator_attack",
+     "hits": 5,
+     "intent": "Attack",
+     "name": "UNLOAD_MOVE"
+    },
+    {
+     "damage": 3,
+     "event": "event:/sfx/enemy/enemy_attacks/turret_operator/turret_operator_attack",
+     "hits": 5,
+     "intent": "Attack",
+     "name": "UNLOAD_MOVE_2"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/turret_operator/turret_operator_buff",
+     "intent": "Buff",
+     "name": "RELOAD_MOVE"
+    }
+   ]
+  },
+  "Twig Slime (M)": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/twig_slime_m/twig_slime_m_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_slime",
+   "moves": [
+    {
+     "damage": 11,
+     "event": "event:/sfx/enemy/enemy_attacks/twig_slime_m/twig_slime_m_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "POKEY_POUNCE_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/twig_slime_m/twig_slime_m_cast",
+     "intent": "StatusCard",
+     "name": "STICKY_SHOT_MOVE"
+    }
+   ]
+  },
+  "Twig Slime (S)": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/twig_slime_s/twig_slime_s_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_slime",
+   "moves": [
+    {
+     "damage": 4,
+     "event": "event:/sfx/enemy/enemy_attacks/twig_slime_s/twig_slime_s_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "TACKLE_MOVE"
+    }
+   ]
+  },
+  "Two-Tailed Rat": {
+   "death": "event:/sfx/enemy/enemy_attacks/two_tail_rats/two_tail_rats_die",
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/two_tail_rats/two_tail_rats_attack_hands",
+   "hurt": "event:/sfx/enemy/enemy_attacks/two_tail_rats/two_tail_rats_hurt",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_slime",
+   "moves": [
+    {
+     "damage": 8,
+     "event": "event:/sfx/enemy/enemy_attacks/two_tail_rats/two_tail_rats_attack_hands",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "SCRATCH_MOVE"
+    },
+    {
+     "damage": 6,
+     "event": "event:/sfx/enemy/enemy_attacks/two_tail_rats/two_tail_rats_attack_hands",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "DISEASE_BITE_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/two_tail_rats/two_tail_rats_attack_bite",
+     "intent": "Debuff",
+     "name": "SCREECH_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/two_tail_rats/two_tail_rats_summon",
+     "intent": "Summon",
+     "name": "CALL_FOR_BACKUP_MOVE"
+    }
+   ]
+  },
+  "Vantom": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/vantom/vantom_inky_lance",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_magic",
+   "moves": [
+    {
+     "damage": 7,
+     "event": "event:/sfx/enemy/enemy_attacks/vantom/vantom_inky_lance",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "INK_BLOT_MOVE"
+    },
+    {
+     "damage": 6,
+     "event": "event:/sfx/enemy/enemy_attacks/vantom/vantom_inky_lance",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "INKY_LANCE_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/vantom/vantom_buff",
+     "intent": "Buff",
+     "name": "PREPARE_MOVE"
+    }
+   ]
+  },
+  "Vine Shambler": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/vine_shambler/vine_shambler_defensive_swipe",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_armor",
+   "moves": [
+    {
+     "damage": 6,
+     "event": "event:/sfx/enemy/enemy_attacks/vine_shambler/vine_shambler_defensive_swipe",
+     "hits": 2,
+     "intent": "Attack",
+     "name": "SWIPE_MOVE"
+    },
+    {
+     "damage": 16,
+     "event": "event:/sfx/enemy/enemy_attacks/vine_shambler/vine_shambler_chomp",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "CHOMP_MOVE"
+    }
+   ]
+  },
+  "Waterfall Giant": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/waterfall_giant/waterfall_giant_attack_stomp",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_magic",
+   "moves": [
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/waterfall_giant/waterfall_giant_eruption",
+     "intent": "Buff",
+     "name": "PRESSURIZE_MOVE"
+    },
+    {
+     "damage": 15,
+     "event": "event:/sfx/enemy/enemy_attacks/waterfall_giant/waterfall_giant_attack_stomp",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "STOMP_MOVE"
+    },
+    {
+     "damage": 10,
+     "event": "event:/sfx/enemy/enemy_attacks/waterfall_giant/waterfall_giant_attack_kick",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "RAM_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/waterfall_giant/waterfall_giant_eruption",
+     "intent": "Heal",
+     "name": "SIPHON_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/waterfall_giant/waterfall_giant_attack_kick",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "PRESSURE_GUN_MOVE"
+    },
+    {
+     "damage": 13,
+     "event": "event:/sfx/enemy/enemy_attacks/waterfall_giant/waterfall_giant_attack_stomp",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "PRESSURE_UP_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/waterfall_giant/waterfall_giant_knockout",
+     "hits": 1,
+     "intent": "DeathBlow",
+     "name": "EXPLODE_MOVE"
+    }
+   ]
+  },
+  "Wriggler": {
+   "defaultAttack": "event:/sfx/enemy/enemy_attacks/wriggler/wriggler_attack",
+   "impact": "event:/sfx/enemy/enemy_impact_enemy_size/enemy_impact_plant",
+   "moves": [
+    {
+     "damage": 6,
+     "event": "event:/sfx/enemy/enemy_attacks/wriggler/wriggler_attack",
+     "hits": 1,
+     "intent": "Attack",
+     "name": "NASTY_BITE_MOVE"
+    },
+    {
+     "event": "event:/sfx/enemy/enemy_attacks/wriggler/wriggler_attack",
+     "intent": "Buff",
+     "name": "WRIGGLE_MOVE"
+    }
+   ]
+  }
+ },
+ "orbs": {
+  "Dark": {
+   "channel": "event:/sfx/characters/defect/defect_dark_channel",
+   "evoke": "res://debug_audio/dark_orb_evoke.mp3"
+  },
+  "Frost": {
+   "channel": "event:/sfx/characters/defect/defect_frost_channel",
+   "evoke": "res://debug_audio/frost_orb_evoke.mp3",
+   "passive": "res://debug_audio/frost_orb_passive.mp3"
+  },
+  "Glass": {
+   "channel": "event:/sfx/characters/defect/defect_glass_channel",
+   "passive": "res://debug_audio/glass_orb_passive.mp3"
+  },
+  "Lightning": {
+   "channel": "event:/sfx/characters/defect/defect_lightning_channel",
+   "evoke": "event:/sfx/characters/defect/defect_lightning_evoke"
+  },
+  "Plasma": {
+   "channel": "event:/sfx/characters/defect/defect_plasma_channel",
+   "evoke": "res://debug_audio/plasma_orb_evoke.mp3"
+  }
+ },
+ "powers": {
+  "Accelerant": "Buff",
+  "Accuracy": "Buff",
+  "Adaptable": "Buff",
+  "Afterimage": "Buff",
+  "Aggression": "Buff",
+  "Anticipate": "Buff",
+  "Arsenal": "Buff",
+  "Artifact": "Buff",
+  "Asleep": "Buff",
+  "Automation": "Buff",
+  "Back Attack": "Buff",
+  "Barricade": "Buff",
+  "Beacon of Hope": "Buff",
+  "Biased Cognition": "Debuff",
+  "Black Hole": "Buff",
+  "Block Next Turn": "Buff",
+  "Blur": "Buff",
+  "Borrowed Time": "Debuff",
+  "Buffer": "Buff",
+  "Burrowed": "Buff",
+  "Burst": "Buff",
+  "Calamity": "Buff",
+  "Calcify": "Buff",
+  "Call of the Void": "Buff",
+  "Chains of Binding": "Debuff",
+  "Child of the Stars": "Buff",
+  "Clarity": "Buff",
+  "Colossus": "Buff",
+  "Confused": "Debuff",
+  "Conqueror": "Debuff",
+  "Constrict": "Debuff",
+  "Consuming Shadow": "Buff",
+  "Coolant": "Buff",
+  "Coordinate": "Buff",
+  "Corrosive Wave": "Buff",
+  "Corruption": "Buff",
+  "Countdown": "Buff",
+  "Covered": "Buff",
+  "Crab Rage": "Buff",
+  "Creative AI": "Buff",
+  "Crimson Mantle": "Buff",
+  "Cruelty": "Buff",
+  "CrushUnder": "Debuff",
+  "Curious": "Buff",
+  "Curl Up": "Buff",
+  "Dampen": "Debuff",
+  "Danse Macabre": "Buff",
+  "Dark Embrace": "Buff",
+  "DarkShackles": "Debuff",
+  "Debilitate": "Debuff",
+  "Demesne": "Buff",
+  "Demise": "Debuff",
+  "Demon Form": "Buff",
+  "Devour Life": "Buff",
+  "Dexterity": "Buff",
+  "Diamond Diadem": "Buff",
+  "Die for You": "Buff",
+  "Disintegration": "Debuff",
+  "Doom": "Debuff",
+  "Double Damage": "Buff",
+  "Draw Cards Next Turn": "Buff",
+  "Duplication": "Buff",
+  "DyingStar": "Debuff",
+  "Echo Form": "Buff",
+  "Energy Next Turn": "Buff",
+  "EnfeeblingTouch": "Debuff",
+  "Enrage": "Buff",
+  "Entropy": "Buff",
+  "Envenom": "Buff",
+  "Escape Artist": "Buff",
+  "Fan of Knives": "Buff",
+  "Fasten": "Buff",
+  "FeedingFrenzy": "Buff",
+  "Feel No Pain": "Buff",
+  "Feral": "Buff",
+  "Flame Barrier": "Buff",
+  "Flanking": "Debuff",
+  "FlexPotion": "Buff",
+  "Flutter": "Buff",
+  "Focus": "Buff",
+  "FocusedStrike": "Buff",
+  "Forbidden Grimoire": "Buff",
+  "Foregone Conclusion": "Buff",
+  "Frail": "Debuff",
+  "Free Attack": "Buff",
+  "Free Power": "Buff",
+  "Free Skill": "Buff",
+  "Friendship": "Buff",
+  "Furnace": "Buff",
+  "Galvanic": "Buff",
+  "Genesis": "Buff",
+  "Gigantification": "Buff",
+  "Gravity": "Buff",
+  "Guarded": "Buff",
+  "Hailstorm": "Buff",
+  "Hammer Time": "Buff",
+  "Hang": "Debuff",
+  "Hard to Kill": "Buff",
+  "Hardened Shell": "Buff",
+  "Hatch": "Buff",
+  "Haunt": "Buff",
+  "Heist": "Buff",
+  "HelicalDart": "Buff",
+  "Hello World": "Buff",
+  "Hellraiser": "Buff",
+  "Hex": "Debuff",
+  "High Voltage": "Buff",
+  "Hotfix": "Buff",
+  "Illusion": "Buff",
+  "Imbalanced": "Debuff",
+  "Improvement": "Buff",
+  "Inferno": "Buff",
+  "Infested": "Buff",
+  "Infinite Blades": "Buff",
+  "Intangible": "Buff",
+  "Intercept": "Buff",
+  "Iteration": "Buff",
+  "Juggernaut": "Buff",
+  "Juggling": "Buff",
+  "Knockdown": "Debuff",
+  "Leadership": "Buff",
+  "Lethality": "Buff",
+  "Lightning Rod": "Buff",
+  "Loop": "Buff",
+  "Machine Learning": "Buff",
+  "Magic Bomb": "Debuff",
+  "Mangle": "Debuff",
+  "Master Planner": "Buff",
+  "Mayhem": "Buff",
+  "Mind Rot": "Debuff",
+  "Minion": "Buff",
+  "Monarch's Gaze": "Buff",
+  "MonarchsGazeStrengthDown": "Debuff",
+  "Monologue": "Buff",
+  "Necro Mastery": "Buff",
+  "Nemesis": "Buff",
+  "Neurosurge": "Debuff",
+  "Nightmare": "Buff",
+  "No Block": "Debuff",
+  "No Draw": "Debuff",
+  "No Energy Gain": "Debuff",
+  "Nostalgia": "Buff",
+  "Noxious Fumes": "Buff",
+  "Oblivion": "Debuff",
+  "One-Two Punch": "Buff",
+  "Orbit": "Buff",
+  "Outbreak": "Buff",
+  "Pagestorm": "Buff",
+  "Painful Stabs": "Buff",
+  "Pale Blue Dot": "Buff",
+  "Panache": "Buff",
+  "Paper Cuts": "Buff",
+  "Parry": "Buff",
+  "Personal Hive": "Buff",
+  "Phantom Blades": "Buff",
+  "PiercingWail": "Debuff",
+  "Pillar of Creation": "Buff",
+  "Plating": "Buff",
+  "Plow": "Debuff",
+  "Poison": "Debuff",
+  "Possess Speed": "Buff",
+  "Possess Strength": "Buff",
+  "Prep Time": "Buff",
+  "Pyre": "Buff",
+  "Radiance": "Buff",
+  "Rage": "Buff",
+  "Rampart": "Buff",
+  "Ravenous": "Buff",
+  "Reaper Form": "Buff",
+  "Reattach": "Buff",
+  "Rebound": "Buff",
+  "Reflect": "Buff",
+  "Regen": "Buff",
+  "ReptileTrinket": "Buff",
+  "Retain Hand": "Buff",
+  "Ringing": "Debuff",
+  "Ritual": "Buff",
+  "Rolling Boulder": "Buff",
+  "Royalties": "Buff",
+  "Rupture": "Buff",
+  "Sandpit": "Buff",
+  "Seeking Edge": "Buff",
+  "Self-Forming Clay": "Buff",
+  "Sentry Mode": "Buff",
+  "Serpent Form": "Buff",
+  "SetupStrike": "Buff",
+  "ShacklingPotion": "Debuff",
+  "Shadow Step": "Buff",
+  "Shadowmeld": "Buff",
+  "Shriek": "Debuff",
+  "Shrink": "Debuff",
+  "Shroud": "Buff",
+  "Sic 'Em": "Debuff",
+  "Signal Boost": "Buff",
+  "Skittish": "Buff",
+  "Sleight of Flesh": "Buff",
+  "Slippery": "Buff",
+  "Sloth": "Debuff",
+  "Slow": "Debuff",
+  "Slumber": "Buff",
+  "Smoggy": "Debuff",
+  "Smokestack": "Buff",
+  "Sneaky": "Buff",
+  "Soar": "Buff",
+  "Spectrum Shift": "Buff",
+  "SpeedPotion": "Buff",
+  "Speedster": "Buff",
+  "Spinner": "Buff",
+  "Spirit of Ash": "Buff",
+  "Stampede": "Buff",
+  "Star Next Turn": "Buff",
+  "Steam Eruption": "Buff",
+  "Stock": "Buff",
+  "Storm": "Buff",
+  "Strangle": "Debuff",
+  "Stratagem": "Buff",
+  "Strength": "Buff",
+  "Subroutine": "Buff",
+  "Suck": "Buff",
+  "Summon Next Turn": "Buff",
+  "Surprise": "Buff",
+  "Surrounded": "Debuff",
+  "Swipe": "Buff",
+  "Sword Sage": "Buff",
+  "Synchronize": "Buff",
+  "Tag Team": "Debuff",
+  "Tainted": "Debuff",
+  "Tangled": "Debuff",
+  "Tank": "Buff",
+  "Tender": "Debuff",
+  "Territorial": "Buff",
+  "The Bomb": "Buff",
+  "The Gambit": "Debuff",
+  "The Hunt": "Buff",
+  "The Sealed Throne": "Buff",
+  "Thievery": "Buff",
+  "Thorns": "Buff",
+  "Thunder": "Buff",
+  "Time Limit": "Buff",
+  "Tools of the Trade": "Buff",
+  "Toric Toughness": "Buff",
+  "Tracking": "Buff",
+  "Trash to Treasure": "Buff",
+  "Tyranny": "Buff",
+  "Unmovable": "Buff",
+  "Veilpiercer": "Buff",
+  "Vicious": "Buff",
+  "Vigor": "Buff",
+  "Vital Spark": "Buff",
+  "Void Form": "Buff",
+  "Vulnerable": "Debuff",
+  "Waste Away": "Debuff",
+  "Weak": "Debuff",
+  "Well-Laid Plans": "Buff",
+  "Withering Presence": "Buff",
+  "Wraith Form": "Debuff"
+ },
+ "powersAllowNegative": [
+  "Dexterity",
+  "Focus",
+  "Shriek",
+  "Shrink",
+  "Strength"
+ ],
+ "relics": {
+  "Centennial Puzzle": "event:/sfx/ui/relic_activate_draw",
+  "Game Piece": "event:/sfx/ui/relic_activate_draw",
+  "Iron Club": "event:/sfx/ui/relic_activate_draw",
+  "Joss Paper": "event:/sfx/ui/relic_activate_draw",
+  "Pendulum": "event:/sfx/ui/relic_activate_draw",
+  "Unceasing Top": "event:/sfx/ui/relic_activate_draw"
+ },
+ "treasure": {
+  "1": "event:/sfx/ui/treasure/treasure_act1",
+  "2": "event:/sfx/ui/treasure/treasure_act2",
+  "3": "event:/sfx/ui/treasure/treasure_act3"
+ },
+ "version": "v0.107.1"
+}

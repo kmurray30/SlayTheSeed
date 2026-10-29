@@ -1,0 +1,28 @@
+{
+  "class_name": "CrescentSpear",
+  "title": "Crescent Spear",
+  "character": "Colorless",
+  "energy_cost": 1,
+  "type": "Attack",
+  "rarity": "Common",
+  "target": "Single",
+  "star_cost": 1,
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 8,
+      "upgraded_value": 8
+    },
+    {
+      "type": "ExtraDamage",
+      "base_value": 2,
+      "upgraded_value": 3
+    }
+  ],
+  "description": "Deal 8 damage. Deals 2 additional damage for ALL your cards that have a ★ cost.",
+  "upgraded_description": "Deal 8 damage. Deals 3 additional damage for ALL your cards that have a ★ cost.",
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "Damage scales with the number of star-cost cards in your deck. The card itself counts toward this bonus."
+}

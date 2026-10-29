@@ -1,0 +1,253 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Patch v0.103.2">
+  <div class="page-header">
+    <h1>v0.103.2 Balance Patch</h1>
+    <p class="subtitle">Changes from v0.101.0 &rarr; v0.103.2 &mdash; derived from decompiled game data</p>
+  </div>
+
+  <div style="max-width: 900px; margin: 0 auto;">
+
+    <p class="desc-text">
+      v0.103.2 adds three new relics (Neow's Bones, Phial Holster, Winged Boots), introduces a new
+      <a href={`${base}enchantments/inky/`}>Inky</a> enchantment that drives a full Blade of Ink rework,
+      reworks Borrowed Time into an energy-burst card with its own stacking debuff power, and redesigns
+      Grasp to drain Energy on every card played instead of just the first. Doormaker's move-set is
+      substantially rebalanced and a handful of cards get rarity, stat, or behavior tweaks.
+    </p>
+
+    <!-- ═══════════════════════════════ -->
+    <!-- CARDS                           -->
+    <!-- ═══════════════════════════════ -->
+    <h2 class="section-heading" id="cards" style="margin-top: 2rem;">Card Changes</h2>
+
+    <h3 style="margin-top: 1.5rem; color: var(--green);">New Card</h3>
+    <table class="stat-table">
+      <thead><tr><th>Card</th><th>Character</th><th>Details</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href={`${base}cards/not-yet/`}>Not Yet</a></td>
+          <td class="char-ironclad">Ironclad</td>
+          <td>2-cost Rare Skill. <strong>Exhaust</strong>. "Heal 10 HP." Upgrade: heal 13 HP.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top: 1.5rem; color: var(--red-bright);">Removed Card</h3>
+    <table class="stat-table">
+      <thead><tr><th>Card</th><th>Character</th><th>Was</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Grapple</td>
+          <td class="char-ironclad">Ironclad</td>
+          <td>1-cost Uncommon Attack. 7/9 damage plus Grasp.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top: 1.5rem; color: var(--accent);">Major Reworks</h3>
+    <table class="stat-table">
+      <thead><tr><th>Card</th><th>Character</th><th>Before</th><th>After</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href={`${base}cards/blade-of-ink/`}>Blade of Ink</a></td>
+          <td class="char-regent">Regent</td>
+          <td>"This turn, whenever you play an Attack, gain 2 Strength this turn." Upgrade: 3 Strength.</td>
+          <td>"Add 2 <a href={`${base}enchantments/inky/`}>Inky</a> Shivs into your Hand." Upgrade: 3 Shivs.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}cards/borrowed-time/`}>Borrowed Time</a></td>
+          <td class="char-necrobinder">Necrobinder</td>
+          <td>0-cost Skill. "Apply 3 Doom to yourself. Gain 1 Energy." <em>(Upgrade: Gain 2 Energy)</em></td>
+          <td>1-cost Skill. "Gain 4 Energy. Cards cost an additional 1 Energy this turn." <em>(Upgrade: Gain 6 Energy)</em> Applies stacking <a href={`${base}powers/borrowed-time/`}>Borrowed Time</a>.</td>
+        </tr>
+        <tr>
+          <td>Follow Through</td>
+          <td class="char-silent">Silent</td>
+          <td><strong>Uncommon</strong>. AoE: 6/8 damage to all enemies; if the last card was a Skill, apply 1/2 Weak to all enemies.</td>
+          <td><strong>Common</strong>. Single target: 7/9 damage; hits an additional time if you have 5+ other cards in Hand.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top: 1.5rem; color: var(--accent);">Stat &amp; Rarity Changes</h3>
+    <table class="stat-table">
+      <thead><tr><th>Card</th><th>Character</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr><td><a href={`${base}cards/acrobatics/`}>Acrobatics</a></td><td class="char-silent">Silent</td><td>Rarity: Common &rarr; <strong>Uncommon</strong>.</td></tr>
+        <tr><td><a href={`${base}cards/colossus/`}>Colossus</a></td><td class="char-ironclad">Ironclad</td><td>Rarity: Rare &rarr; <strong>Uncommon</strong>.</td></tr>
+        <tr><td><a href={`${base}cards/leading-strike/`}>Leading Strike</a></td><td class="char-silent">Silent</td><td>Damage 7/10 &rarr; <strong>3/6</strong>; Shivs generated 1 &rarr; <strong>2</strong>.</td></tr>
+        <tr><td><a href={`${base}cards/speedster/`}>Speedster</a></td><td class="char-ironclad">Ironclad</td><td>Upgrade now grants <strong>Innate</strong> instead of +1 damage.</td></tr>
+        <tr><td><a href={`${base}cards/untouchable/`}>Untouchable</a></td><td class="char-silent">Silent</td><td>Block 7/9 &rarr; <strong>6/8</strong>.</td></tr>
+      </tbody>
+    </table>
+
+    <p class="desc-text" style="font-size: 0.85rem; margin-top: 0.5rem;">
+      Text and targeting polish (no mechanical impact):
+      <a href={`${base}cards/flak-cannon/`}>Flak Cannon</a>,
+      <a href={`${base}cards/flanking/`}>Flanking</a> (&ldquo;double damage&rdquo; &rarr; &ldquo;double attack damage&rdquo;),
+      <a href={`${base}cards/iteration/`}>Iteration</a>,
+      <a href={`${base}cards/rocket-punch/`}>Rocket Punch</a>,
+      <a href={`${base}cards/shiv/`}>Shiv</a>,
+      <a href={`${base}cards/trash-to-treasure/`}>Trash to Treasure</a>.
+    </p>
+
+    <!-- ═══════════════════════════════ -->
+    <!-- POWERS                          -->
+    <!-- ═══════════════════════════════ -->
+    <h2 class="section-heading" id="powers" style="margin-top: 2rem;">Power Changes</h2>
+
+    <h3 style="margin-top: 1.5rem; color: var(--green);">New Power</h3>
+    <table class="stat-table">
+      <thead><tr><th>Power</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href={`${base}powers/borrowed-time/`}>Borrowed Time</a></td>
+          <td>Cards cost an additional Energy this turn. Stacks.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top: 1.5rem; color: var(--red-bright);">Removed Powers</h3>
+    <table class="stat-table">
+      <thead><tr><th>Power</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>Blade of Ink</td><td>Replaced by the Inky enchantment that reworked Blade of Ink now produces.</td></tr>
+        <tr><td>Grapple</td><td>Removed alongside the Grapple card.</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top: 1.5rem; color: var(--accent);">Reworks</h3>
+    <table class="stat-table">
+      <thead><tr><th>Power</th><th>Before</th><th>After</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Grasp</td>
+          <td>The first card you play each turn costs 1 additional Energy.</td>
+          <td><strong>Whenever you play a card, lose 1 Energy.</strong></td>
+        </tr>
+        <tr>
+          <td><a href={`${base}powers/flanking/`}>Flanking</a></td>
+          <td>Other allies deal 2x more damage to this enemy this turn.</td>
+          <td>Other allies deal 2x more <strong>attack</strong> damage to this enemy this turn.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ═══════════════════════════════ -->
+    <!-- ENCHANTMENTS                    -->
+    <!-- ═══════════════════════════════ -->
+    <h2 class="section-heading" id="enchantments" style="margin-top: 2rem;">Enchantments</h2>
+
+    <h3 style="margin-top: 1.5rem; color: var(--green);">New Enchantment</h3>
+    <table class="stat-table">
+      <thead><tr><th>Enchantment</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href={`${base}enchantments/inky/`}>Inky</a></td>
+          <td>The enchanted card deals 2 additional damage and applies 1 Weak. Produced by the reworked Blade of Ink.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ═══════════════════════════════ -->
+    <!-- RELICS                          -->
+    <!-- ═══════════════════════════════ -->
+    <h2 class="section-heading" id="relics" style="margin-top: 2rem;">Relic Changes</h2>
+
+    <h3 style="margin-top: 1.5rem; color: var(--green);">New Relics</h3>
+    <table class="stat-table">
+      <thead><tr><th>Relic</th><th>Rarity</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href={`${base}relics/neow-s-bones/`}>Neow's Bones</a></td>
+          <td>Event</td>
+          <td>Upon pickup, gain 2 random Neow Relics. Add 1 random Curse to your Deck.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}relics/phial-holster/`}>Phial Holster</a></td>
+          <td>Event</td>
+          <td>Upon pickup, gain 1 potion slot and procure 2 random potions.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}relics/winged-boots/`}>Winged Boots</a></td>
+          <td>Uncommon</td>
+          <td>You may ignore paths when choosing the next rooms to travel to, up to 3 times.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top: 1.5rem; color: var(--accent);">Relic Tweaks</h3>
+    <table class="stat-table">
+      <thead><tr><th>Relic</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href={`${base}relics/fragrant-mushroom/`}>Fragrant Mushroom</a></td>
+          <td>Cards upgraded: 3 &rarr; <strong>2</strong>. HP cost unchanged at 15.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}relics/regalite/`}>Regalite</a></td>
+          <td>"Whenever you create a <strong>Colorless</strong> card" &rarr; "Whenever you create <strong>a</strong> card" — now triggers on any created card.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="desc-text" style="font-size: 0.85rem; margin-top: 0.5rem;">
+      Description-text polish only:
+      <a href={`${base}relics/archaic-tooth/`}>Archaic Tooth</a>,
+      <a href={`${base}relics/galactic-dust/`}>Galactic Dust</a>,
+      <a href={`${base}relics/mini-regent/`}>Mini Regent</a>,
+      <a href={`${base}relics/pael-s-tooth/`}>Pael's Tooth</a>.
+    </p>
+
+    <!-- ═══════════════════════════════ -->
+    <!-- MONSTERS                        -->
+    <!-- ═══════════════════════════════ -->
+    <h2 class="section-heading" id="monsters" style="margin-top: 2rem;">Monster Changes</h2>
+
+    <table class="stat-table">
+      <thead><tr><th>Monster</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Doormaker</td>
+          <td>
+            <strong>Hunger</strong> now deals 35 damage in a single hit (was 13 × 2 hits).
+            <strong>Scrutiny</strong> damage 35 &rarr; 26.
+            <strong>Grasp</strong> now deals 11 × 2 damage in addition to applying 4 Strength (was pure +5 Strength).
+          </td>
+        </tr>
+        <tr>
+          <td><a href={`${base}monsters/living-fog/`}>Living Fog</a></td>
+          <td>Bloat no longer escalates its summon count: now spawns exactly 1 Gas Bomb per use (was up to 5).</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}monsters/skulking-colony/`}>Skulking Colony</a></td>
+          <td>HP 79 &rarr; <strong>75</strong>. Smash damage 11 &rarr; 13. Inertia now deals 11 damage on top of applying 3 Strength.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}monsters/byrdonis/`}>Byrdonis</a></td>
+          <td>HP 99 &rarr; <strong>90</strong>.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}monsters/the-merchant/`}>The Merchant???</a></td>
+          <td>Throw Relic damage 15 &rarr; <strong>10</strong>.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ═══════════════════════════════ -->
+    <!-- POTIONS                         -->
+    <!-- ═══════════════════════════════ -->
+    <h2 class="section-heading" id="potions" style="margin-top: 2rem;">Potions</h2>
+    <p class="desc-text">
+      <a href={`${base}potions/foul-potion/`}>Foul Potion</a>: description wording updated
+      (&ldquo;Deal damage to EVERYONE&rdquo; &rarr; &ldquo;Deal damage to ALL players and enemies&rdquo;).
+      Mechanics unchanged.
+    </p>
+
+  </div>
+</BaseLayout>

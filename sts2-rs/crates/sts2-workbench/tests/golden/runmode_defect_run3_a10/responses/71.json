@@ -1,0 +1,11 @@
+{
+ "agreed": false,
+ "available": true,
+ "band": "differed",
+ "brain": "heuristic",
+ "champion_label": "Take TURBO",
+ "champion_prob": null,
+ "margin": null,
+ "your_label": "Take Double Energy",
+ "your_prob": null
+}

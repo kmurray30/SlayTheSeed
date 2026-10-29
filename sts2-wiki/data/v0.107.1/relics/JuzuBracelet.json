@@ -1,0 +1,8 @@
+{
+  "class_name": "JuzuBracelet",
+  "title": "Juzu Bracelet",
+  "rarity": "Common",
+  "description": "Regular enemy combats are no longer encountered in ? rooms.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "Only available before Act 3. Removes Monster room type encounters from map generation."
+}

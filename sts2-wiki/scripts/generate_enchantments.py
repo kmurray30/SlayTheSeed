@@ -1,0 +1,115 @@
+#!/usr/bin/env python3
+"""Generate Astro content collection markdown files for enchantments."""
+
+import argparse
+import json
+import os
+import re
+from pathlib import Path
+
+
+def slugify(name: str) -> str:
+    s = name.lower()
+    s = re.sub(r"[^a-z0-9]+", "-", s)
+    return s.strip("-")
+
+
+def escape_yaml(value: str) -> str:
+    if not value:
+        return '""'
+    if value.lower() in (
+        "null",
+        "true",
+        "false",
+        "yes",
+        "no",
+        "on",
+        "off",
+        "~",
+    ):
+        return json.dumps(value)
+    if any(c in value for c in ":{}\n[]#&*!|>'\"%@`"):
+        return json.dumps(value)
+    return value
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Generate enchantment content files")
+    parser.add_argument("data_dir", help="Path to versioned data directory")
+    parser.add_argument(
+        "output_dir",
+        help="Path to content/enchantments/ directory",
+    )
+    args = parser.parse_args()
+
+    data_dir = os.path.expanduser(args.data_dir)
+    output_dir = os.path.expanduser(args.output_dir)
+
+    enchantments_path = os.path.join(data_dir, "enchantments.json")
+    out = Path(output_dir)
+
+    if not os.path.exists(enchantments_path):
+        # Older versions don't have enchantment data — clear output and exit
+        if out.exists():
+            for p in out.glob("*.md"):
+                p.unlink()
+        out.mkdir(parents=True, exist_ok=True)
+        print(f"No enchantments.json in {data_dir}, cleared {output_dir}")
+        return
+
+    with open(enchantments_path) as f:
+        enchantments = json.load(f)
+
+    # Load per-entity JSON overrides
+    per_entity_dir = os.path.join(data_dir, "enchantments")
+    if os.path.isdir(per_entity_dir):
+        ench_by_class = {e["class_name"]: e for e in enchantments}
+        for fname in os.listdir(per_entity_dir):
+            if fname.endswith(".json"):
+                with open(os.path.join(per_entity_dir, fname)) as f:
+                    entity_data = json.load(f)
+                cname = entity_data.get("class_name", fname.removesuffix(".json"))
+                if cname in ench_by_class:
+                    ench_by_class[cname].update(entity_data)
+                else:
+                    ench_by_class[cname] = entity_data
+        enchantments = list(ench_by_class.values())
+
+    if out.exists():
+        for p in out.glob("*.md"):
+            p.unlink()
+    out.mkdir(parents=True, exist_ok=True)
+
+    from scripts.common import rich_text_to_html, strip_rich_text
+
+    count = 0
+    for ench in enchantments:
+        slug = slugify(ench["title"])
+        desc = ench.get("description", "")
+
+        lines = ["---"]
+        lines.append(f"title: {escape_yaml(ench['title'])}")
+        lines.append(f"class_name: {escape_yaml(ench['class_name'])}")
+        lines.append(f"card_type: {escape_yaml(ench.get('card_type', 'Any'))}")
+        lines.append(f"description_plain: {escape_yaml(strip_rich_text(desc))}")
+        lines.append(f"description_html: {escape_yaml(rich_text_to_html(desc))}")
+        extra = ench.get("extra_card_text", "")
+        if extra:
+            lines.append(f"extra_card_text: {escape_yaml(strip_rich_text(extra))}")
+        restrictions = ench.get("restrictions", [])
+        lines.append(f"restrictions: {json.dumps(restrictions)}")
+        lines.append(f"stackable: {str(ench.get('stackable', False)).lower()}")
+        sources = ench.get("sources", [])
+        lines.append(f"sources: {json.dumps(sources)}")
+        lines.append("---")
+        lines.append("")
+
+        filepath = out / f"{slug}.md"
+        filepath.write_text("\n".join(lines))
+        count += 1
+
+    print(f"Generated {count} enchantment pages in {output_dir}")
+
+
+if __name__ == "__main__":
+    main()

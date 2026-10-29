@@ -1,0 +1,111 @@
+# Root-level ignores only — each subdir keeps its own .gitignore (via subtree).
+.env
+.DS_Store
+
+# Editor/agent local state at the root
+.claude/settings.local.json
+.claude/worktrees/
+
+# Build/venv artifacts that must be regenerated per-location, never committed
+# `node_modules/` is listed HERE and not only in sts2-pycli/web: a vitest cache
+# file under the ROOT tree was committed by hand during a merge-conflict
+# resolution because nothing at this level ignored it.
+node_modules/
+**/target/
+**/.venv-*/
+**/.beads/*.db
+**/.beads/*.db-shm
+**/.beads/*.db-wal
+
+# hegel (property-testing) per-crate caches + server logs
+**/.hegel/
+
+# understand-anything skill cache (local knowledge graph) — the skill can
+# run from any subproject, so ignore it repo-wide rather than per-subdir.
+**/.understand-anything/
+
+# brainstorming visual companion
+.superpowers/
+
+# Raw extracted game builds (sts2.dll + 1.9GB .pck) — source for decompile/extract,
+# never committed; decompiled C# lands in sts2-wiki/decompiled/<version>/ instead.
+sts2_binaries/
+
+# Recorded run trajectories: the per-seed `.run.gz` corpus (and the large
+# per-run `report.jsonl`) is reproducible byte-for-byte from the recorder, so
+# it stays out of git. The small aggregate `stats-report.{md,json}` is kept.
+sts2-rs/data/run-trajectories/**/*.run.gz
+sts2-rs/data/run-trajectories/**/report.jsonl
+
+# External reference clones (bridge-mod research) — never committed.
+refs/
+
+# Ascension-climb run logs: one archived godot.log per run, and a wedged run's
+# is gigabytes of one repeated renderer error. The ledger (climb.jsonl) and the
+# human progress log are small and worth keeping; the per-run logs are not.
+logs/ascension_climb/*.godot.log
+logs/ascension_climb/*.stdout.log
+logs/ascension_climb/*.stdout.log.err
+# Same class, added 2026-08-08 when the driver started archiving them: the
+# advisor's per-run stdout slice (hundreds of KB) and the game's own run record
+# (~100 KB of map_point_history). Kept on disk because a refusal or a wedge can
+# only be read against them; not worth versioning.
+logs/ascension_climb/*.advisor.log
+logs/ascension_climb/*.run.json
+logs/ascension_climb/*.current_run.save
+
+# Python bytecode from the bridge tools
+__pycache__/
+*.pyc
+
+# Climb driver runtime noise: the heartbeat and the driver's own stdout are
+# liveness probes, not results. The ledger (climb.jsonl) and climb.log stay.
+logs/ascension_climb/heartbeat.log
+logs/ascension_climb/driver.out
+logs/ascension_climb/driver.err
+logs/ascension_climb/driver_stdout.log
+logs/ascension_climb/verify_stdout.log
+
+# Policy-prior campaign intermediates (2026-08-15): the per-character NPZ
+# shards and their merge are hundreds of MB and fully regenerable from the
+# commands in logs/2026-08-15-policy-prior/FINDINGS.md.
+logs/2026-08-15-policy-prior/corpus/*.npz
+logs/2026-08-15-policy-prior/corpus/*.npz.meta.json
+logs/2026-08-15-policy-prior/*.npz
+# Trained policy-prior artifacts from the 2026-08-15 campaign. The verdict is
+# "do not ship", so none of these are deployment candidates; they are
+# regenerable from the recipe in that directory's FINDINGS.md.
+logs/2026-08-15-policy-prior/*.weights.json
+
+# GH #447 sweep corpora: regenerable via sweep.sh from the committed panels
+logs/2026-08-19-potion-weight-447/lambda_*/runs/
+logs/2026-08-19-potion-oc/*/runs/
+logs/2026-08-19-potion-oc/*/*/runs/
+logs/2026-08-19-potion-oc/probe_critic_rows.jsonl
+
+# FMOD Studio SDK tarball — a ~130 MB vendor download used once by
+# sts2-wiki/scripts/extract_sfx.py; never a repo artifact.
+fmodstudioapi*linux.tar.gz
+
+# `just import-game` run log (runtime noise; the steps are idempotent)
+logs/import-game.log
+
+# `just fetch-donors`: unlicensed donor sources for the export's overlap gate
+release/donors/
+
+# ---------------------------------------------------------------------------
+# Generated from YOUR game copy by `just import-game` (docs/bring-your-own-game.md):
+# art, audio, the game assembly, decompiled code, the raw pck extraction.
+# Never committed to this public repository. (Game TEXT — localization and the
+# extracted data JSON — is committed; `just import-game` merely refreshes it.)
+sts2_binaries/
+sts2-wiki/decompiled/
+sts2-wiki/extracted/
+sts2-wiki/site/public/images/
+sts2-wiki/site/public/audio/
+sts2-pycli/lib/
+sts2-pycli/web/public/preview/
+sts2-pycli/web/public/preview-rig/
+sts2-pycli/deploy/asset_manifest.json
+sts2-pycli/deploy/creature_scales.json
+logs/import-game.log

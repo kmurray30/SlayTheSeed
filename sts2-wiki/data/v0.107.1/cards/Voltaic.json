@@ -1,0 +1,15 @@
+{
+  "class_name": "Voltaic",
+  "title": "Voltaic",
+  "character": "Defect",
+  "energy_cost": 3,
+  "type": "Skill",
+  "rarity": "Rare",
+  "target": "Self",
+  "keywords": ["Exhaust"],
+  "vars": [],
+  "description": "Channel Lightning equal to the Lightning already Channeled this combat.",
+  "upgraded_description": "Channel Lightning equal to the Lightning already Channeled this combat.",
+  "referenced_powers": [],
+  "notes": "Channels a variable number of Lightning orbs equal to the number already channeled this combat. Upgrade removes the Exhaust keyword."
+}

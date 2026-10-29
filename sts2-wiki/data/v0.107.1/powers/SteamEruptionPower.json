@@ -1,0 +1,9 @@
+{
+  "class_name": "SteamEruptionPower",
+  "title": "Steam Eruption",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "When killed, deals damage at the end of your next turn.",
+  "smart_description": "When killed, deals [blue]{Amount}[/blue] damage at the end of your next turn.",
+  "notes": "Steam Eruption is a Counter-type buff applied by the WaterfallGiant boss. When the owner dies, it triggers the WaterfallGiant's AboutToBlowState at the end of the player's next turn, dealing damage equal to the current counter value (the {Amount} variable resolved at runtime). The power persists on the owner after death and prevents combat from ending immediately."
+}

@@ -1,0 +1,19 @@
+{
+  "class_name": "Inky",
+  "title": "Inky",
+  "description": "This card deals [blue]1[/blue] additional damage and applies [blue]1[/blue] [gold]Weak[/gold].",
+  "extra_card_text": "Apply [blue]1[/blue] [gold]Weak[/gold].",
+  "card_type": "Attack",
+  "restrictions": [],
+  "stackable": false,
+  "show_amount": false,
+  "sources": [
+    {
+      "type": "card",
+      "class_name": "BladeOfInk",
+      "title": "Blade of Ink",
+      "amount": 1
+    }
+  ],
+  "notes": "Applies Weak to the target of the enchanted card when played (or all enemies if the card targets all enemies). Damage bonus only applies when the enchanted card deals damage via a powered attack."
+}

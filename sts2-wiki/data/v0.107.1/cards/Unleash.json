@@ -1,0 +1,25 @@
+{
+  "class_name": "Unleash",
+  "title": "Unleash",
+  "character": "Regent",
+  "energy_cost": 1,
+  "type": "Attack",
+  "rarity": "Basic",
+  "target": "Single",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 6,
+      "upgraded_value": 9
+    },
+    {
+      "type": "ExtraDamage",
+      "base_value": 1
+    }
+  ],
+  "description": "[gold]Osty[/gold] deals 7 damage.\nDeals additional damage equal to [gold]Osty's[/gold] current HP.",
+  "upgraded_description": "[gold]Osty[/gold] deals 10 damage.\nDeals additional damage equal to [gold]Osty's[/gold] current HP.",
+  "referenced_powers": [],
+  "notes": "This card only works when Osty is present. If Osty is missing or defeated, the card does not execute. The damage scales with Osty's current HP at the time of play."
+}

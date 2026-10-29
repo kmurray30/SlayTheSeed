@@ -1,0 +1,8 @@
+{
+  "class_name": "NewLeaf",
+  "title": "New Leaf",
+  "rarity": "Ancient",
+  "description": "Upon pickup, Transform 1 card.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "Transforms a card from your deck into a random card upon pickup."
+}

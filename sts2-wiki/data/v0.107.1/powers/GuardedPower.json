@@ -1,0 +1,9 @@
+{
+  "class_name": "GuardedPower",
+  "title": "Guarded",
+  "power_type": "Buff",
+  "stack_type": "Single",
+  "description": "Take half damage from enemies.",
+  "smart_description": "Take half damage from enemies. Removed if Applier dies.",
+  "notes": "The Guarded power is instanced per creature. It tracks the applier (typically an allied creature) and is automatically removed when that applier dies. The damage reduction (50%) applies only to powered attacks."
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "ShipInABottle",
+  "title": "Ship in a Bottle",
+  "rarity": "Rare",
+  "usage": "Drink",
+  "target": "Self",
+  "description": "Gain 10 Block. Next turn, gain 10 Block.",
+  "notes": "Applies Block for two consecutive turns—10 immediately and 10 more at the start of your next turn via BlockNextTurnPower. This potion can only be used during combat encounters."
+}

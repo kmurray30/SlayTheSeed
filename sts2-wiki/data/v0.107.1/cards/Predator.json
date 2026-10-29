@@ -1,0 +1,26 @@
+{
+  "class_name": "Predator",
+  "title": "Predator",
+  "character": "Silent",
+  "energy_cost": 2,
+  "type": "Attack",
+  "rarity": "Common",
+  "target": "Single",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 15,
+      "upgraded_value": 20
+    }
+  ],
+  "description": "Deal 15 damage.\nNext turn, draw 2 cards.",
+  "upgraded_description": "Deal 20 damage.\nNext turn, draw 2 cards.",
+  "referenced_powers": [
+    {
+      "class_name": "DrawCardsNextTurnPower",
+      "title": "Draw Cards Next Turn",
+      "slug": "draw-cards-next-turn"
+    }
+  ]
+}

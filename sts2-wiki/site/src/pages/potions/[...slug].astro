@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { cleanDescription } from '../../utils';
+
+export async function getStaticPaths() {
+  const potions = await getCollection('potions');
+  return potions.map(potion => ({
+    params: { slug: potion.id },
+    props: { potion },
+  }));
+}
+
+const { potion } = Astro.props;
+---
+
+<BaseLayout title={potion.data.title}>
+  <div class="card-detail">
+    <a href={`${import.meta.env.BASE_URL}potions/`} class="back-link">&larr; All Potions</a>
+
+    <div class="card-header">
+      <div class="item-row" style="align-items: center; margin-top: 0.5rem;">
+        <img
+          src={`${import.meta.env.BASE_URL}images/potion_atlas/${potion.data.image}.png`}
+          alt={potion.data.title}
+          class="item-icon-lg"
+          onerror="this.style.display='none'" />
+        <div>
+          <h1>{potion.data.title}</h1>
+          <div class="card-meta" style="font-size: 0.9rem;">
+            <span class={`rarity-${potion.data.rarity.toLowerCase()}`}>{potion.data.rarity}</span>
+            · {potion.data.usage} · {potion.data.target}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-heading">Description</h2>
+    <div class="desc-text" style="font-size: 1.05rem;" set:html={cleanDescription(potion.data.description_html || potion.data.description_plain)} />
+  </div>
+</BaseLayout>

@@ -1,0 +1,59 @@
+{
+  "class_name": "Mawler",
+  "title": "Mawler",
+  "min_hp": 76,
+  "max_hp": 76,
+  "min_hp_base": 72,
+  "max_hp_base": 72,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "RIP_AND_TEAR_MOVE",
+      "title": "Rip and Tear",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 16,
+          "damage_base": 14,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 16/14 damage"
+      ]
+    },
+    {
+      "id": "ROAR_MOVE",
+      "title": "Roar",
+      "intents": [
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": [
+        "Apply 3 Vulnerable"
+      ]
+    },
+    {
+      "id": "CLAW_MOVE",
+      "title": "Claw",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 5,
+          "damage_base": 4,
+          "hits": 2,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 5/4 damage",
+        "2 hits"
+      ]
+    }
+  ],
+  "move_pattern": "Starts with Claw. Then randomly picks from Rip and Tear, Roar (once per combat), or Claw. None repeat consecutively.",
+  "powers_on_spawn": [],
+  "notes": "Roar applies Vulnerable to the player, making it a strong setup move before attacking. Roar can only be used once per combat."
+}

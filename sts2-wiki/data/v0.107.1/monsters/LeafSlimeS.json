@@ -1,0 +1,43 @@
+{
+  "class_name": "LeafSlimeS",
+  "title": "Leaf Slime (S)",
+  "min_hp": 12,
+  "max_hp": 16,
+  "min_hp_base": 11,
+  "max_hp_base": 15,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "TACKLE_MOVE",
+      "title": "Tackle",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 4,
+          "damage_base": 3,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 3/4 damage"
+      ]
+    },
+    {
+      "id": "GOOP_MOVE",
+      "title": "Goop",
+      "intents": [
+        {
+          "type": "status",
+          "amount": 1
+        }
+      ],
+      "effects": [
+        "Add 1 Slimed to discard"
+      ]
+    }
+  ],
+  "move_pattern": "Alternates between Tackle and Goop; cannot repeat the same move twice in a row.",
+  "powers_on_spawn": [],
+  "notes": "Goop adds 1 Slimed status card to the player's discard pile. Move ID BUTT_MOVE strips to BUTT which maps to the 'Tackle' localization title."
+}

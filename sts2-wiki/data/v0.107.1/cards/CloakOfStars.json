@@ -1,0 +1,23 @@
+{
+  "class_name": "CloakOfStars",
+  "title": "Cloak of Stars",
+  "character": "Colorless",
+  "energy_cost": 0,
+  "type": "Skill",
+  "rarity": "Common",
+  "target": "Self",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Block",
+      "base_value": 7,
+      "upgraded_value": 10
+    }
+  ],
+  "description": "Gain 7 [gold]Block[/gold].",
+  "upgraded_description": "Gain 10 [gold]Block[/gold].",
+  "star_cost": 1,
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "Star-cost card using the Star resource instead of standard energy."
+}

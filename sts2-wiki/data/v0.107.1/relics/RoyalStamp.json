@@ -1,0 +1,8 @@
+{
+  "class_name": "RoyalStamp",
+  "title": "Royal Stamp",
+  "rarity": "Shop",
+  "description": "Upon pickup, choose an Attack or Skill in your [gold]Deck[/gold] to [gold]Enchant[/gold] with [purple]Royally Approved[/purple].",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "This relic triggers upon obtaining it, allowing you to select an Attack or Skill card from your deck and apply the Royally Approved enchantment, which grants Innate and Retain to that card."
+}

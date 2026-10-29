@@ -1,0 +1,9 @@
+{
+  "class_name": "FoulPotion",
+  "title": "Foul Potion",
+  "rarity": "Event",
+  "usage": "Throw",
+  "target": "AllEnemies",
+  "description": "Deal [blue]12[/blue] damage to ALL players and enemies.\nCan be thrown at the [gold]Merchant[/gold] for [blue]100[/blue] [gold]Gold[/gold] instead.",
+  "notes": "Multi-context potion: In combat, damages all players and enemies. Outside combat at Merchants (Shop or Fake Merchant events), can be thrown for 100 gold instead."
+}

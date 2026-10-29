@@ -1,0 +1,9 @@
+{
+  "class_name": "HauntPower",
+  "title": "Haunt",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever you play a [gold]Soul[/gold], a random enemy loses [blue]3[/blue] HP.",
+  "smart_description": "Whenever you play a [gold]Soul[/gold], a random enemy loses [blue]3[/blue] HP.",
+  "notes": "Triggers after a Soul card is played by the power's owner. Selects a random hittable enemy and deals unblockable, unpowered damage."
+}

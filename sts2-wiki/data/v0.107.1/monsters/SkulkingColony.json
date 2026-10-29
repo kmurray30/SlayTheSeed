@@ -1,0 +1,71 @@
+{
+  "class_name": "SkulkingColony",
+  "title": "Skulking Colony",
+  "min_hp": 80,
+  "min_hp_base": 75,
+  "max_hp": 80,
+  "max_hp_base": 75,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "ZOOM_MOVE",
+      "title": "Zoom",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 16,
+          "damage_base": 14,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 14/16 damage"]
+    },
+    {
+      "id": "ZOOM_MOVE_2",
+      "title": "Zoom",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 16,
+          "damage_base": 14,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 14/16 damage"]
+    },
+    {
+      "id": "INERTIA_MOVE",
+      "title": "Inertia",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 11,
+          "damage_base": 9,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Deal 9/11 damage", "Apply 2/4 Strength"]
+    },
+    {
+      "id": "PIERCING_STABS_MOVE",
+      "title": "Piercing Stabs",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 8,
+          "damage_base": 7,
+          "hits": 2,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 7/8 damage per hit", "2 hits"]
+    }
+  ],
+  "move_pattern": "Cycles: Zoom → Zoom → Inertia → Piercing Stabs",
+  "powers_on_spawn": ["Hardened Shell (20)"],
+  "notes": "Gains Strength each time it uses Inertia, increasing its damage output over time."
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "EntropyPower",
+  "title": "Entropy",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the start of your turn, [gold]Transform[/gold] [blue]1[/blue] card in your [gold]Hand[/gold].",
+  "smart_description": "At the start of your turn, [gold]Transform[/gold] [blue]{Amount}[/blue] {Amount:plural:card|cards} in your [gold]Hand[/gold].",
+  "notes": "This is a counter-type buff that scales with stacks. Each stack increases the number of cards transformed at turn start. Cards are transformed to random cards using combat RNG."
+}

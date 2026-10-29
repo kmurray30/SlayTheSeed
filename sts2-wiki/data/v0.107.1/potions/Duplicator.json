@@ -1,0 +1,9 @@
+{
+  "class_name": "Duplicator",
+  "title": "Duplicator",
+  "rarity": "Uncommon",
+  "usage": "Drink",
+  "target": "Self",
+  "description": "This turn, your next card is played an extra time.",
+  "notes": "Applies a DuplicationPower that causes the player's next card played this turn to be played twice."
+}

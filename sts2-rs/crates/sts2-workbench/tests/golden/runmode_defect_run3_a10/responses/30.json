@@ -1,0 +1,11 @@
+{
+ "agreed": true,
+ "available": true,
+ "band": "matched",
+ "brain": "heuristic",
+ "champion_label": "Take Barrage",
+ "champion_prob": null,
+ "margin": null,
+ "your_label": "Take Barrage",
+ "your_prob": null
+}

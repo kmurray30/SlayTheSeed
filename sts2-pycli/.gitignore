@@ -1,0 +1,99 @@
+# --- sts2-cli specifics ---
+decompiled/
+# Game DLLs in lib/<version>/ are vendored via git-lfs (see .gitattributes) so
+# the parity harness runs on any clone. Keep the unpatched backup and the
+# transient IL-patch output out of git.
+lib/*.original
+lib/*.patched
+lib/*/*.original
+lib/*/*.patched
+bin/
+obj/
+results/
+*.user
+*.suo
+.vs/
+.idea/
+*.DotSettings
+.DS_Store
+.obsidian/
+logs/
+saves/
+parity_fuzz_runs/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Environments
+.env
+.envrc
+.venv
+# per-worktree isolated wheel venvs created by scripts/wheel-venv.sh
+.venv-wt/
+.venv-*/
+env/
+venv/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# uv
+# (uv.lock is committed)
+
+# --- Editors / OS ---
+.vscode/
+*.swp
+*.swo
+Thumbs.db
+
+# Superpowers brainstorm scratch (mockups, server state)
+.superpowers/
+
+# Claude Code agent harness state
+.claude/scheduled_tasks.lock
+
+# Stray vitest/vite cache if a test run resolves its cacheDir here
+# (the real web deps live in web/node_modules, ignored separately)
+node_modules/
+synergy_out/
+
+# Firebase CLI state next to firebase.json (deploy hash cache, debug logs)
+.firebase/
+firebase-debug*.log
+
+# Playwright e2e output (when a run resolves its output dir here rather than web/)
+test-results/
+playwright-report/
+wandb/
+
+# Training-campaign output: checkpoints, per-iteration stats, probe sweeps.
+# Hundreds of MB per campaign (a single 150-iteration run is ~150MB of .pt),
+# and nothing under data/runs/ has ever been tracked — data/ppo/ holds the
+# champions that ARE committed. Ignored so a `git add -A` in a shared checkout
+# cannot sweep a live campaign into a commit.
+data/runs/
+# The private sts2_rs copy a training run or screen pins itself to
+# (python/ppo/wheel_guard.py), created next to wherever it saves: with the
+# default --save-path that is sts2-pycli/ itself, and data/ppo/ is tracked.
+sts2_rs-pin/
+# Turn-plan G0 label shards and scorer weights (GH #830): ~100 MB, reproducible
+# from docs/experiments/2026-10-22-turnplan-g0.md; the small report files live there.
+experiments/turnplan-g0/
+# Turn-plan pro-replay feasibility shards (docs/experiments/2026-10-22-turnplan-pro-feasibility.md).
+experiments/turnplan-pro/
+# GH #830 elite-gap diagnosis runs (docs/experiments/2026-10-23-830-elite-gap.md).
+experiments/elite-gap/

@@ -1,0 +1,9 @@
+{
+  "class_name": "WasteAwayPower",
+  "title": "Waste Away",
+  "power_type": "Debuff",
+  "stack_type": "Counter",
+  "description": "Gain [blue]1[/blue] less [gold]Energy[/gold] per turn.",
+  "smart_description": "Gain [blue]{Amount}[/blue] less [gold]Energy[/gold] per turn.",
+  "notes": "This power reduces the player's maximum Energy each turn by the power's stack count. Each stack reduces max energy by 1. The smart description displays the current stack count in place of {Amount}."
+}

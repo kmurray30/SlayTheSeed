@@ -1,0 +1,9 @@
+{
+  "class_name": "PagestormPower",
+  "title": "Pagestorm",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever you draw an [gold]Ethereal[/gold] card, draw [blue]1[/blue] card.",
+  "smart_description": "Whenever you draw an [gold]Ethereal[/gold] card, draw [blue]{Amount}[/blue] {Amount:plural:card|cards}.",
+  "notes": "This power triggers on card draw events. When an Ethereal card is drawn, it draws additional cards equal to the current stack value of this power. The Counter stack tracks each trigger."
+}

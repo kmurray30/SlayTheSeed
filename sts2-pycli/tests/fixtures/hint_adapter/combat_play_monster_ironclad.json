@@ -1,0 +1,525 @@
+{
+  "_provenance": "sts2-pycli/logs/headless/20260726T223606Z_2724081_1.jsonl step 9 (Task 8a smoke sweep, headless_eval.py --seed-base 1000, seed 1001, Ironclad, real DLL v0.107.1)",
+  "character": "Ironclad",
+  "state": {
+    "type": "decision",
+    "decision": "combat_play",
+    "context": {
+      "act": 1,
+      "act_name": "Overgrowth",
+      "floor": 2,
+      "total_floor": 2,
+      "room_type": "Monster",
+      "boss": {
+        "id": "THE_KIN_BOSS",
+        "name": "Kin Priest"
+      }
+    },
+    "round": 2,
+    "energy": 0,
+    "max_energy": 3,
+    "hand": [
+      {
+        "index": 0,
+        "id": "CARD.DEFEND_IRONCLAD",
+        "name": "Defend",
+        "cost": 1,
+        "type": "Skill",
+        "stats": {
+          "block": 5
+        },
+        "description": "Gain {Block:diff()} Block.",
+        "tinker_time_rider": null,
+        "can_play": false,
+        "target_type": "Self"
+      },
+      {
+        "index": 1,
+        "id": "CARD.DEFEND_IRONCLAD",
+        "name": "Defend",
+        "cost": 1,
+        "type": "Skill",
+        "stats": {
+          "block": 5
+        },
+        "description": "Gain {Block:diff()} Block.",
+        "tinker_time_rider": null,
+        "can_play": false,
+        "target_type": "Self"
+      }
+    ],
+    "enemies": [
+      {
+        "index": 0,
+        "name": "Fuzzy Wurm Crawler",
+        "hp": 22,
+        "max_hp": 57,
+        "block": 0,
+        "intents": [
+          {
+            "type": "Buff"
+          }
+        ],
+        "intends_attack": false,
+        "powers": [
+          {
+            "name": "Vulnerable",
+            "id": "VULNERABLE_POWER",
+            "description": "Vulnerable creatures take 50% more damage from Attacks.",
+            "amount": 1,
+            "display_amount": 1
+          }
+        ],
+        "move_state": "INHALE"
+      }
+    ],
+    "dead_enemies": null,
+    "player": {
+      "name": "The Ironclad",
+      "hp": 80,
+      "max_hp": 80,
+      "block": 0,
+      "gold": 99,
+      "potion_slots": 3,
+      "relics": [
+        {
+          "id": "BURNING_BLOOD",
+          "name": "Burning Blood",
+          "description": "At the end of combat, heal {Heal} HP.",
+          "vars": {
+            "Heal": 6
+          }
+        },
+        {
+          "id": "LARGE_CAPSULE",
+          "name": "Large Capsule",
+          "description": "Upon pickup, obtain {Relics} random {Relics:plural:Relic|Relics}. Add an additional Strike and Defend to your Deck.",
+          "vars": {
+            "Relics": 2
+          }
+        },
+        {
+          "id": "WHITE_STAR",
+          "name": "White Star",
+          "description": "Elites drop an additional Rare card reward.",
+          "vars": null
+        },
+        {
+          "id": "VENERABLE_TEA_SET",
+          "name": "Venerable Tea Set",
+          "description": "Whenever you enter a Rest Site, start the next combat with an additional {Energy:energyIcons()}.",
+          "vars": {
+            "Energy": 2
+          }
+        }
+      ],
+      "potions": [],
+      "deck_size": 12,
+      "deck": [
+        {
+          "id": "CARD.STRIKE_IRONCLAD",
+          "name": "Strike",
+          "cost": 1,
+          "type": "Attack",
+          "upgraded": false,
+          "description": "Deal {Damage:diff()} damage.",
+          "stats": {
+            "damage": 6
+          },
+          "keywords": null,
+          "tinker_time_rider": null,
+          "after_upgrade": {
+            "cost": 1,
+            "stats": {
+              "damage": 9
+            },
+            "description": "Deal {Damage:diff()} damage.",
+            "added_keywords": null,
+            "removed_keywords": null
+          }
+        },
+        {
+          "id": "CARD.STRIKE_IRONCLAD",
+          "name": "Strike",
+          "cost": 1,
+          "type": "Attack",
+          "upgraded": false,
+          "description": "Deal {Damage:diff()} damage.",
+          "stats": {
+            "damage": 6
+          },
+          "keywords": null,
+          "tinker_time_rider": null,
+          "after_upgrade": {
+            "cost": 1,
+            "stats": {
+              "damage": 9
+            },
+            "description": "Deal {Damage:diff()} damage.",
+            "added_keywords": null,
+            "removed_keywords": null
+          }
+        },
+        {
+          "id": "CARD.STRIKE_IRONCLAD",
+          "name": "Strike",
+          "cost": 1,
+          "type": "Attack",
+          "upgraded": false,
+          "description": "Deal {Damage:diff()} damage.",
+          "stats": {
+            "damage": 6
+          },
+          "keywords": null,
+          "tinker_time_rider": null,
+          "after_upgrade": {
+            "cost": 1,
+            "stats": {
+              "damage": 9
+            },
+            "description": "Deal {Damage:diff()} damage.",
+            "added_keywords": null,
+            "removed_keywords": null
+          }
+        },
+        {
+          "id": "CARD.STRIKE_IRONCLAD",
+          "name": "Strike",
+          "cost": 1,
+          "type": "Attack",
+          "upgraded": false,
+          "description": "Deal {Damage:diff()} damage.",
+          "stats": {
+            "damage": 6
+          },
+          "keywords": null,
+          "tinker_time_rider": null,
+          "after_upgrade": {
+            "cost": 1,
+            "stats": {
+              "damage": 9
+            },
+            "description": "Deal {Damage:diff()} damage.",
+            "added_keywords": null,
+            "removed_keywords": null
+          }
+        },
+        {
+          "id": "CARD.STRIKE_IRONCLAD",
+          "name": "Strike",
+          "cost": 1,
+          "type": "Attack",
+          "upgraded": false,
+          "description": "Deal {Damage:diff()} damage.",
+          "stats": {
+            "damage": 6
+          },
+          "keywords": null,
+          "tinker_time_rider": null,
+          "after_upgrade": {
+            "cost": 1,
+            "stats": {
+              "damage": 9
+            },
+            "description": "Deal {Damage:diff()} damage.",
+            "added_keywords": null,
+            "removed_keywords": null
+          }
+        },
+        {
+          "id": "CARD.DEFEND_IRONCLAD",
+          "name": "Defend",
+          "cost": 1,
+          "type": "Skill",
+          "upgraded": false,
+          "description": "Gain {Block:diff()} Block.",
+          "stats": {
+            "block": 5
+          },
+          "keywords": null,
+          "tinker_time_rider": null,
+          "after_upgrade": {
+            "cost": 1,
+            "stats": {
+              "block": 8
+            },
+            "description": "Gain {Block:diff()} Block.",
+            "added_keywords": null,
+            "removed_keywords": null
+          }
+        },
+        {
+          "id": "CARD.DEFEND_IRONCLAD",
+          "name": "Defend",
+          "cost": 1,
+          "type": "Skill",
+          "upgraded": false,
+          "description": "Gain {Block:diff()} Block.",
+          "stats": {
+            "block": 5
+          },
+          "keywords": null,
+          "tinker_time_rider": null,
+          "after_upgrade": {
+            "cost": 1,
+            "stats": {
+              "block": 8
+            },
+            "description": "Gain {Block:diff()} Block.",
+            "added_keywords": null,
+            "removed_keywords": null
+          }
+        },
+        {
+          "id": "CARD.DEFEND_IRONCLAD",
+          "name": "Defend",
+          "cost": 1,
+          "type": "Skill",
+          "upgraded": false,
+          "description": "Gain {Block:diff()} Block.",
+          "stats": {
+            "block": 5
+          },
+          "keywords": null,
+          "tinker_time_rider": null,
+          "after_upgrade": {
+            "cost": 1,
+            "stats": {
+              "block": 8
+            },
+            "description": "Gain {Block:diff()} Block.",
+            "added_keywords": null,
+            "removed_keywords": null
+          }
+        },
+        {
+          "id": "CARD.DEFEND_IRONCLAD",
+          "name": "Defend",
+          "cost": 1,
+          "type": "Skill",
+          "upgraded": false,
+          "description": "Gain {Block:diff()} Block.",
+          "stats": {
+            "block": 5
+          },
+          "keywords": null,
+          "tinker_time_rider": null,
+          "after_upgrade": {
+            "cost": 1,
+            "stats": {
+              "block": 8
+            },
+            "description": "Gain {Block:diff()} Block.",
+            "added_keywords": null,
+            "removed_keywords": null
+          }
+        },
+        {
+          "id": "CARD.BASH",
+          "name": "Bash",
+          "cost": 2,
+          "type": "Attack",
+          "upgraded": false,
+          "description": "Deal {Damage:diff()} damage.\nApply {VulnerablePower:diff()} Vulnerable.",
+          "stats": {
+            "damage": 8,
+            "vulnerablepower": 2
+          },
+          "keywords": null,
+          "tinker_time_rider": null,
+          "after_upgrade": {
+            "cost": 2,
+            "stats": {
+              "damage": 10,
+              "vulnerablepower": 3
+            },
+            "description": "Deal {Damage:diff()} damage.\nApply {VulnerablePower:diff()} Vulnerable.",
+            "added_keywords": null,
+            "removed_keywords": null
+          }
+        },
+        {
+          "id": "CARD.STRIKE_IRONCLAD",
+          "name": "Strike",
+          "cost": 1,
+          "type": "Attack",
+          "upgraded": false,
+          "description": "Deal {Damage:diff()} damage.",
+          "stats": {
+            "damage": 6
+          },
+          "keywords": null,
+          "tinker_time_rider": null,
+          "after_upgrade": {
+            "cost": 1,
+            "stats": {
+              "damage": 9
+            },
+            "description": "Deal {Damage:diff()} damage.",
+            "added_keywords": null,
+            "removed_keywords": null
+          }
+        },
+        {
+          "id": "CARD.DEFEND_IRONCLAD",
+          "name": "Defend",
+          "cost": 1,
+          "type": "Skill",
+          "upgraded": false,
+          "description": "Gain {Block:diff()} Block.",
+          "stats": {
+            "block": 5
+          },
+          "keywords": null,
+          "tinker_time_rider": null,
+          "after_upgrade": {
+            "cost": 1,
+            "stats": {
+              "block": 8
+            },
+            "description": "Gain {Block:diff()} Block.",
+            "added_keywords": null,
+            "removed_keywords": null
+          }
+        }
+      ],
+      "cards_played_this_turn": [
+        3,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "player_powers": null,
+    "draw_pile": [
+      {
+        "index": 0,
+        "id": "CARD.STRIKE_IRONCLAD",
+        "name": "Strike",
+        "cost": 1,
+        "type": "Attack",
+        "stats": {
+          "damage": 6
+        },
+        "description": "Deal {Damage:diff()} damage.",
+        "tinker_time_rider": null
+      },
+      {
+        "index": 1,
+        "id": "CARD.DEFEND_IRONCLAD",
+        "name": "Defend",
+        "cost": 1,
+        "type": "Skill",
+        "stats": {
+          "block": 5
+        },
+        "description": "Gain {Block:diff()} Block.",
+        "tinker_time_rider": null
+      }
+    ],
+    "discard_pile": [
+      {
+        "index": 0,
+        "id": "CARD.BASH",
+        "name": "Bash",
+        "cost": 2,
+        "type": "Attack",
+        "stats": {
+          "damage": 8,
+          "vulnerablepower": 2
+        },
+        "description": "Deal {Damage:diff()} damage.\nApply {VulnerablePower:diff()} Vulnerable.",
+        "tinker_time_rider": null
+      },
+      {
+        "index": 1,
+        "id": "CARD.DEFEND_IRONCLAD",
+        "name": "Defend",
+        "cost": 1,
+        "type": "Skill",
+        "stats": {
+          "block": 5
+        },
+        "description": "Gain {Block:diff()} Block.",
+        "tinker_time_rider": null
+      },
+      {
+        "index": 2,
+        "id": "CARD.STRIKE_IRONCLAD",
+        "name": "Strike",
+        "cost": 1,
+        "type": "Attack",
+        "stats": {
+          "damage": 6
+        },
+        "description": "Deal {Damage:diff()} damage.",
+        "tinker_time_rider": null
+      },
+      {
+        "index": 3,
+        "id": "CARD.DEFEND_IRONCLAD",
+        "name": "Defend",
+        "cost": 1,
+        "type": "Skill",
+        "stats": {
+          "block": 5
+        },
+        "description": "Gain {Block:diff()} Block.",
+        "tinker_time_rider": null
+      },
+      {
+        "index": 4,
+        "id": "CARD.STRIKE_IRONCLAD",
+        "name": "Strike",
+        "cost": 1,
+        "type": "Attack",
+        "stats": {
+          "damage": 6
+        },
+        "description": "Deal {Damage:diff()} damage.",
+        "tinker_time_rider": null
+      },
+      {
+        "index": 5,
+        "id": "CARD.STRIKE_IRONCLAD",
+        "name": "Strike",
+        "cost": 1,
+        "type": "Attack",
+        "stats": {
+          "damage": 6
+        },
+        "description": "Deal {Damage:diff()} damage.",
+        "tinker_time_rider": null
+      },
+      {
+        "index": 6,
+        "id": "CARD.STRIKE_IRONCLAD",
+        "name": "Strike",
+        "cost": 1,
+        "type": "Attack",
+        "stats": {
+          "damage": 6
+        },
+        "description": "Deal {Damage:diff()} damage.",
+        "tinker_time_rider": null
+      },
+      {
+        "index": 7,
+        "id": "CARD.STRIKE_IRONCLAD",
+        "name": "Strike",
+        "cost": 1,
+        "type": "Attack",
+        "stats": {
+          "damage": 6
+        },
+        "description": "Deal {Damage:diff()} damage.",
+        "tinker_time_rider": null
+      }
+    ],
+    "exhaust_pile": [],
+    "draw_pile_count": 2,
+    "discard_pile_count": 8,
+    "exhaust_pile_count": 0
+  }
+}

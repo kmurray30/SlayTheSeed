@@ -1,0 +1,9 @@
+{
+  "class_name": "NightmarePower",
+  "title": "Nightmare",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Add [blue]3[/blue] of a chosen card into your [gold]Hand[/gold] next turn.",
+  "smart_description": "Add [blue]3[/blue] [gold]selected card[/gold] cards into your [gold]Hand[/gold] next turn.",
+  "notes": "A card is selected when the power is applied. Before hand draw on the next turn, this power adds the specified number of copies of the selected card to your hand, then removes itself. The power's stack count (Amount) determines how many copies are added."
+}

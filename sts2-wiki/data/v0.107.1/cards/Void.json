@@ -1,0 +1,21 @@
+{
+  "class_name": "Void",
+  "title": "Void",
+  "character": "Status",
+  "energy_cost": -1,
+  "type": "Status",
+  "rarity": "Status",
+  "target": "None",
+  "keywords": [
+    "Unplayable",
+    "Ethereal"
+  ],
+  "vars": [
+    {
+      "type": "Energy",
+      "base_value": 1
+    }
+  ],
+  "description": "Whenever you draw this card, lose 1 Energy.",
+  "notes": "Void is an unplayable Status card that automatically triggers when drawn, causing the player to lose Energy. It cannot be played manually due to the Unplayable keyword and is typically applied through other effects."
+}

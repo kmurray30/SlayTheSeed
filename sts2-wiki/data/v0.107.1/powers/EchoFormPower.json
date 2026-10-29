@@ -1,0 +1,9 @@
+{
+  "class_name": "EchoFormPower",
+  "title": "Echo Form",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "The first card you play each turn is played an extra time.",
+  "smart_description": "The first card you play each turn is played an extra time. (Pluralizes based on counter: 'The first [Amount] cards you play each turn are played an extra time.' when stacked.)",
+  "notes": "This is a Counter-type buff where the stack count determines how many cards per turn will be echoed. When you have 1 stack, only the first card is echoed. With multiple stacks, the first N cards (where N equals the counter value) are echoed each turn."
+}

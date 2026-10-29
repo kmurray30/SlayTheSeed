@@ -1,0 +1,66 @@
+{
+  "class_name": "AxeRubyRaider",
+  "title": "Axe Raider",
+  "min_hp": 21,
+  "max_hp": 23,
+  "min_hp_base": 20,
+  "max_hp_base": 22,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "SWING_1",
+      "title": "Swing 1",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 6,
+          "damage_base": 5,
+          "ascension": 9
+        },
+        {
+          "type": "block",
+          "amount": 6,
+          "amount_base": 5,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 5/6 damage", "Gain 5/6 Block"]
+    },
+    {
+      "id": "SWING_2",
+      "title": "Swing 2",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 6,
+          "damage_base": 5,
+          "ascension": 9
+        },
+        {
+          "type": "block",
+          "amount": 6,
+          "amount_base": 5,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 5/6 damage", "Gain 5/6 Block"]
+    },
+    {
+      "id": "BIG_SWING",
+      "title": "Big Swing",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 13,
+          "damage_base": 12,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 12/13 damage"]
+    }
+  ],
+  "move_pattern": "Cycles: Swing 1 → Swing 2 → Big Swing",
+  "powers_on_spawn": [],
+  "notes": "Swing 1 and Swing 2 are hidden from the bestiary display, showing only Big Swing."
+}

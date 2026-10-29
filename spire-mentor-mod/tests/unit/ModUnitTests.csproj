@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Unit tests for the mod's game-free helpers: links the source files
+    directly (no sts2.dll, no Godot, no test framework), runs as a console app,
+    exits non-zero on the first failed check. `run_unit_tests.sh` builds and
+    runs it.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RollForward>Major</RollForward>
+    <!-- run_unit_tests.sh builds into .build/. A plain `dotnet build` here
+         leaves obj/ and bin/ behind, and the default glob would then compile
+         obj/'s generated AssemblyInfo next to .build/obj/'s (CS0579). -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**;.build/**</DefaultItemExcludes>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../GameVersionFormat.cs" Link="GameVersionFormat.cs" />
+    <Compile Include="../../ChoiceInference.cs" Link="ChoiceInference.cs" />
+    <Compile Include="../../CoachStyle.cs" Link="CoachStyle.cs" />
+    <Compile Include="../../CoachChipText.cs" Link="CoachChipText.cs" />
+    <Compile Include="../../SimCoachReports.cs" Link="SimCoachReports.cs" />
+    <Compile Include="../../WorkbenchUrl.cs" Link="WorkbenchUrl.cs" />
+    <Compile Include="../../CoachPanelText.cs" Link="CoachPanelText.cs" />
+    <Compile Include="../../AutoplayPause.cs" Link="AutoplayPause.cs" />
+    <Compile Include="../../EnemyTagText.cs" Link="EnemyTagText.cs" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,8 @@
+{
+  "class_name": "RuinedHelmet",
+  "title": "Ruined Helmet",
+  "rarity": "Rare",
+  "description": "The first time you gain [gold]Strength[/gold] each combat, double the amount gained.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Effect triggers only once per combat when you first gain Strength to the relic owner. Applies through power modification hook that doubles the amount. Resets after combat ends."
+}

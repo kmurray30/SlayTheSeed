@@ -1,0 +1,96 @@
+{
+  "class_name": "CeremonialBeast",
+  "title": "Ceremonial Beast",
+  "min_hp": 262,
+  "max_hp": 262,
+  "min_hp_base": 252,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "STAMP_MOVE",
+      "title": "Stamp",
+      "intents": [
+        {
+          "type": "buff",
+          "amount": 160,
+          "amount_base": 150,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Apply 160/150 Plow"]
+    },
+    {
+      "id": "PLOW_MOVE",
+      "title": "Plow",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 20,
+          "damage_base": 18,
+          "ascension": 9
+        },
+        {
+          "type": "buff",
+          "amount": 2
+        }
+      ],
+      "effects": ["Deal 20/18 damage", "Apply 2 Strength"]
+    },
+    {
+      "id": "STUN_MOVE",
+      "title": "Stun",
+      "intents": [
+        {
+          "type": "stun"
+        }
+      ],
+      "effects": ["Stun"]
+    },
+    {
+      "id": "BEAST_CRY_MOVE",
+      "title": "Beast Cry",
+      "intents": [
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": ["Apply 1 Ringing"]
+    },
+    {
+      "id": "STOMP_MOVE",
+      "title": "Stomp",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 17,
+          "damage_base": 15,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 17/15 damage"]
+    },
+    {
+      "id": "CRUSH_MOVE",
+      "title": "Crush",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 19,
+          "damage_base": 17,
+          "ascension": 9
+        },
+        {
+          "type": "buff",
+          "amount": 4,
+          "amount_base": 3,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 19/17 damage", "Apply 4/3 Strength"]
+    }
+  ],
+  "move_pattern": "Starts with Stamp, then cycles Plow repeatedly. When the Plow Power is removed externally, enters second phase: Stun → Beast Cry → Stomp → Crush → Beast Cry (repeats)",
+  "powers_on_spawn": [],
+  "notes": "Two distinct combat phases. First phase: opens with Stamp to apply Plow Power (grants Block equal to damage taken), then Plow repeatedly (applies Strength to self). Second phase triggered when Plow Power is removed externally: Stun move followed by cycling Beast Cry → Stomp → Crush. All damage and Strength values scale at Ascension 9 (Deadly Enemies). HP scales at Ascension 8 (Tough Enemies)."
+}

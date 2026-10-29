@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>spire-mentor · Experiment Lineage Tree</title>
+<style>
+  :root {
+    --bg: #f7f3ea;
+    --ink: #1f1a14;
+    --ink-soft: rgba(31, 26, 20, 0.62);
+    --line: rgba(31, 26, 20, 0.10);
+    --edge-primary: rgba(52, 66, 86, 0.55);
+    --edge-related: rgba(103, 80, 164, 0.55);
+    --accent: #2b6cb0;
+    --good: #217a52;
+    --mixed: #bd8514;
+    --bad: #b13340;
+    --serif: Georgia, 'Times New Roman', serif;
+    --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    display: flex;
+    flex-direction: column;
+    padding: 28px 36px 24px;
+    gap: 16px;
+    overflow: hidden;
+  }
+
+  header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex: 0 0 auto; }
+  .kicker {
+    font-family: var(--mono); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft);
+  }
+  h1 { font-size: 26px; font-weight: 600; margin-top: 4px; letter-spacing: -0.01em; }
+  .subtitle {
+    margin-top: 10px; font-size: 14.5px; color: var(--ink-soft);
+    max-width: 880px; line-height: 1.55;
+  }
+  .legend {
+    flex: 0 0 auto; display: flex; flex-direction: column; gap: 10px;
+    align-items: flex-end; padding-top: 6px;
+  }
+  .legend-row {
+    display: flex; gap: 14px;
+    font-family: var(--mono); font-size: 10.5px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft);
+  }
+  .legend-row .swatch { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .legend-row .dot {
+    width: 10px; height: 10px; border-radius: 5px;
+    border: 2px solid; background: var(--bg); flex: 0 0 auto;
+  }
+  .legend-row .edge-sample { width: 26px; height: 0; border-top-width: 2px; flex: 0 0 auto; }
+  .legend-row .edge-solid  { border-top: 2px solid var(--edge-primary); }
+  .legend-row .edge-dotted { border-top: 2px dotted var(--edge-related); }
+
+  /* Scrollable diagram viewport */
+  #viewport {
+    flex: 1 1 auto; min-height: 0; position: relative;
+    overflow-x: auto; overflow-y: auto;
+    background: rgba(31, 26, 20, 0.025);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    cursor: grab;
+    user-select: none;
+    touch-action: pan-y;
+  }
+  #viewport.dragging { cursor: grabbing; }
+  #canvas { position: relative; }
+
+  .row-band {
+    position: absolute; left: 0;
+    border-top: 1px solid rgba(31, 26, 20, 0.06);
+    pointer-events: none;
+  }
+  .row-band.even { background: rgba(31, 26, 20, 0.018); }
+
+  .row-label {
+    position: sticky; left: 6px; width: 230px; height: 0; z-index: 4;
+    pointer-events: none;
+  }
+  .row-label > div {
+    display: inline-block; padding: 4px 8px;
+    background: linear-gradient(90deg, var(--bg) 78%, rgba(247, 243, 234, 0));
+    font-family: var(--mono); font-size: 10px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: rgba(31, 26, 20, 0.55); white-space: nowrap;
+  }
+
+  .date-line { position: absolute; width: 1px; background: rgba(31, 26, 20, 0.08); pointer-events: none; }
+  .date-label {
+    position: absolute; font-family: var(--mono); font-size: 9.5px; font-weight: 600;
+    letter-spacing: 0.06em; color: rgba(31, 26, 20, 0.45); white-space: nowrap;
+    pointer-events: none;
+  }
+
+  svg.edges { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+  svg.edges path { transition: opacity 140ms; }
+
+  .node {
+    position: absolute;
+    padding: 6px 9px;
+    border-radius: 5px;
+    appearance: none; -webkit-appearance: none;
+    text-align: left;
+    background: var(--bg);
+    border: 1px solid rgba(31, 26, 20, 0.18);
+    border-left-width: 5px; border-left-style: solid;
+    box-shadow: 0 1px 2px rgba(31, 26, 20, 0.06);
+    cursor: pointer;
+    z-index: 2;
+    font: inherit; color: inherit;
+    transition: opacity 140ms, box-shadow 140ms, transform 140ms;
+  }
+  .node.hov {
+    box-shadow: 0 6px 18px rgba(31, 26, 20, 0.20);
+    transform: translateY(-1px);
+    z-index: 6;
+  }
+  .node.dim { opacity: 0.26; }
+  .node-meta {
+    display: flex; justify-content: space-between; align-items: center; gap: 6px;
+    font-family: var(--mono); font-size: 8.5px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 2px;
+    white-space: nowrap; overflow: hidden;
+  }
+  .node-meta .date { overflow: hidden; text-overflow: ellipsis; }
+  .node-meta .pill {
+    color: var(--bg); padding: 1px 5px; border-radius: 999px;
+    font-size: 8px; letter-spacing: 0; text-transform: none; font-weight: 600;
+    flex: 0 0 auto;
+  }
+  .node-title {
+    font-family: var(--serif); font-size: 11.5px; font-weight: 600;
+    color: var(--ink); line-height: 1.18;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  #tooltip {
+    position: absolute; width: 300px; padding: 10px 12px;
+    background: var(--bg);
+    border: 1px solid rgba(31, 26, 20, 0.30);
+    border-radius: 6px;
+    box-shadow: 0 12px 28px rgba(31, 26, 20, 0.18);
+    z-index: 10; pointer-events: none;
+    display: none;
+  }
+  #tooltip .tip-date {
+    font-family: var(--mono); font-size: 9.5px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 4px;
+    display: flex; justify-content: space-between; gap: 8px;
+  }
+  #tooltip .tip-title {
+    font-size: 14px; font-weight: 600; color: var(--ink);
+    margin-bottom: 6px; line-height: 1.2;
+  }
+  #tooltip .tip-note { font-size: 12px; color: var(--ink-soft); line-height: 1.45; }
+
+  footer {
+    flex: 0 0 auto;
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--mono); font-size: 10.5px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft);
+  }
+
+  @media (max-width: 760px) {
+    body { padding: 16px 14px; }
+    header { flex-direction: column; gap: 10px; }
+    .legend { align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="kicker">spire-mentor · research log</div>
+    <h1>Experiment lineage tree</h1>
+    <div class="subtitle">
+      May – August 2026, from the Rust engine port to live-game win rates.
+      Each row is a research theme; each card is an experiment colored by outcome.
+      Solid lines trace the primary lineage; dotted lines show influence on later work.
+      Hover a card for details; drag or scroll to pan the timeline.
+      Sources: <code>docs/experiments/</code>, git history, <code>data/ppo/champions.toml</code>.
+    </div>
+  </div>
+  <div class="legend">
+    <div class="legend-row" id="legend-status"></div>
+    <div class="legend-row">
+      <span class="swatch"><span class="edge-sample edge-solid"></span>primary path</span>
+      <span class="swatch"><span class="edge-sample edge-dotted"></span>influence</span>
+    </div>
+  </div>
+</header>
+
+<div id="viewport">
+  <div id="canvas"></div>
+</div>
+
+<footer>
+  <span id="node-count"></span>
+  <span>spire-mentor · experiment lineage</span>
+</footer>
+
+<script>
+// ============================================================================
+// DATA — experiments extracted from docs/experiments/, git history, and
+// data/ppo/champions.toml. x is a raw time coordinate (roughly proportional
+// to calendar date); rows are research themes.
+// ============================================================================
+const TREE = {
+  rows: [
+    { id: 'engine',  label: 'Rust engine & C# parity' },
+    { id: 'search',  label: 'MCTS combat search' },
+    { id: 'outer',   label: 'Outer loop: rankers & value nets' },
+    { id: 'az',      label: 'AlphaZero self-play bet' },
+    { id: 'ppo',     label: 'PPO run-policy champions' },
+    { id: 'honest',  label: 'Honest info & shadow replay' },
+    { id: 'hpdiag',  label: 'HP-attrition diagnostics' },
+    { id: 'events',  label: 'Event fix & retrain wave' },
+    { id: 'deckmut', label: 'Deck-mutation surfaces' },
+    { id: 'bridge',  label: 'Real-game bridge (SimBridge)' },
+    { id: 'climb',   label: 'Ascension-climb diagnostics' },
+  ],
+  dates: [
+    { x:   40, label: 'May 6'  }, { x:  470, label: 'May 14' },
+    { x: 1100, label: 'May 24' }, { x: 1520, label: 'Jun 4'  },
+    { x: 1940, label: 'Jun 10' }, { x: 2350, label: 'Jun 20' },
+    { x: 2920, label: 'Jun 27' }, { x: 3670, label: 'Jul 3'  },
+    { x: 4050, label: 'Jul 7'  }, { x: 4810, label: 'Jul 12' },
+    { x: 5190, label: 'Jul 19' }, { x: 6530, label: 'Jul 30' },
+    { x: 7100, label: 'Aug 2'  }, { x: 7480, label: 'Aug 5'  },
+    { x: 8050, label: 'Aug 8'  }, { x: 8430, label: 'Aug 10' },
+    { x: 9000, label: 'Aug 13' },
+  ],
+  nodes: [
+    // — Rust engine & C# parity —
+    { id:'e_port',      row:'engine', x:  40, date:'May 6',      title:'Rust engine port plan v2.1',            status:'good',
+      note:'Kicked off the Rust combat-engine port from the C# decomp: phase gates, a parity-harness runbook, sts_lightspeed as the reference architecture.' },
+    { id:'e_scaffold',  row:'engine', x: 260, date:'May 12',     title:'CLI scaffold + strategy layer',         status:'good',
+      note:'Scaffolded the sts2-cli crates mirroring sts_lightspeed, with the strategy layer specced through two critique rounds.' },
+    { id:'e_audits',    row:'engine', x: 680, date:'May 15–24', title:'Content & parity audit wave',       status:'good',
+      note:'Completeness and faithfulness audits: Ironclad content, monster AI depth, card faithfulness for all five characters, RNG parity (xoshiro vs .NET).' },
+    { id:'e_fuzz',      row:'engine', x:1100, date:'May 29',     title:'Fuzz-driven parity campaign',           status:'good',
+      note:'Seven parity audits in one day, including C#↔Rust fuzz drift and bucket root-causing — the systematic parity grind begins.' },
+    { id:'e_simlab',    row:'engine', x:1520, date:'Jun 4–9', title:'SimLab parity sweeps v2',             status:'good',
+      note:'SimLab studies and sweep-v2 rounds 1–3 with cascade triage and an economic-parity methodology.' },
+    { id:'e_v107',      row:'engine', x:2680, date:'Jun 26',     title:'v0.107.1 content port',                 status:'good',
+      note:'Migrated the engine from the v0.103.2 decomp to v0.107.1 — the version pin that matches the live game build.' },
+    { id:'e_world_err', row:'engine', x:6340, date:'Jul 28–29', title:'World-error visibility + budget',   status:'good',
+      note:'Surfaced swallowed world throws and rebaselined the engine; GH #315 widened the action budget to T_MAX=320/A_MAX=160 after a 103-option shop removal killed a run.' },
+    { id:'e_manifest',  row:'engine', x:8050, date:'Aug 8',      title:'champions.toml source of truth',        status:'good',
+      note:'Replaced four hand-kept champion lists (and a glob that once shipped a retired net, PR #339) with an exact sha256-pinned manifest generated into Rust and Docker.' },
+    { id:'e_covperf',   row:'engine', x:8430, date:'Aug 9–11', title:'Coverage sweep + perf anchor',       status:'good',
+      note:'A coverage-gap sweep added 304 tests and found six defects; the release-2000 perf anchor showed no regression, and combat fallbacks fell 187 → 0.' },
+
+    // — MCTS combat search —
+    { id:'s_mcts',      row:'search', x: 470, date:'May 14',     title:'First MCTS hint agent',                 status:'good',
+      note:'MCTS hint system integrated into the CLI, importing improvements from sts_lightspeed — the first search agent.' },
+    { id:'s_leaf',      row:'search', x: 890, date:'May 17',     title:'Leaf eval & monster AI depth',          status:'good',
+      note:'Monster-AI depth audits plus MCTS leaf-eval and search improvements; the generalist wave-6 architecture is specced.' },
+    { id:'s_redesign',  row:'search', x:1730, date:'Jun 9',      title:'Search redesign, phases 0–3',      status:'good',
+      note:'Combat-search redesign plan: foundations, wide Texel leaf, expert iteration, information-set search.' },
+    { id:'s_budget',    row:'search', x:1940, date:'Jun 10',     title:'Search budget is the dominant lever',   status:'good',
+      note:'Full-run findings: boss-fight search budget dominates — act-1 win rate 21.5% → 65%+; the wide Texel leaf is +11pp at 1000 sims (efficiency, not ceiling).' },
+    { id:'s_probes',    row:'search', x:7480, date:'Aug 5',      title:'Leaf-saturation & rollout probes',      status:'bad',
+      note:'Two combat levers falsified: the wide Texel leaf is flat at saturation, and the rollout block bump is a cliff — graded-Defend shipped OFF (GH #293).' },
+    { id:'s_a8audit',   row:'search', x:8430, date:'Aug 9–10', title:'A8 decision audit',                  status:'good',
+      note:'Recorded why each decision was made across 30 A8 runs; findings shipped — the MCTS override now stands down when any rollout won.' },
+
+    // — Outer loop: rankers & value nets —
+    { id:'o_plan',      row:'outer', x:2160, date:'Jun 12',      title:'Full-run AI plan v2',                   status:'good',
+      note:'The outer-loop program: strategy, benchmarks and the experiment queue for run-level intelligence.' },
+    { id:'o_oracle',    row:'outer', x:2350, date:'Jun 20',      title:'Deckbuilding headroom oracle',          status:'mixed',
+      note:'Generate-and-validate funnel stopped at 77/150 samples: 72.9% of decks came out generic, so no valid headroom number — two root causes to fix before a re-run.' },
+    { id:'o_curve',     row:'outer', x:2540, date:'Jun 24',      title:'A0–A10 baseline curve',            status:'good',
+      note:'First ascension curve of the blessed pair: 39.0% at A0 falling to 2.2% at A10 with zero act-1 losses — greenlit the label campaign (superseded post-honest-search).' },
+    { id:'o_bless',     row:'outer', x:2730, date:'Jun 25',      title:'All-ascension value net blessed',       status:'mixed',
+      note:'Retraining on the full A0–A10 corpus lifted the tilted blend +1.68 with no A0 regression — blessed, then reversed two days later by the V-pathing saga.' },
+    { id:'o_saga',      row:'outer', x:2920, date:'Jun 27',      title:'V-pathing net-negative',                status:'bad',
+      note:'The value-net saga: V-pathing was net-negative, +9.2pp with the net OFF (p=0.0002). Shipped ranker-only; the value-net line ends here.' },
+    { id:'o_ranker',    row:'outer', x:3110, date:'Jun 28',      title:'v107 ranker ascension screen',          status:'mixed',
+      note:'Ranker-only A0–A10 screen: 39.4% → 0.4%. Its “high-ascension wall is combat-side” reading was later retired by the Defect/Regent re-anchors.' },
+    { id:'o_synergy',   row:'outer', x:4870, date:'Jul 14–17', title:'Synergy v2 catalog',                 status:'good',
+      note:'Nine stages from PPO-probe and embedding geometry to dose-response and workbench UI; merged as PR #269, superseding the v1 catalog.' },
+
+    // — AlphaZero self-play bet —
+    { id:'az_bet',      row:'az', x:1620, date:'Jun 7',          title:'AlphaZero self-play bet',               status:'mixed',
+      note:'Committed the full AZ on-manifold self-play roadmap as the risk posture for run-level learning.' },
+    { id:'az_m14',      row:'az', x:3250, date:'Jul 1',          title:'AZ milestones M1–M4',              status:'mixed',
+      note:'Combat surrogate, planning transition, outer-loop MCTS and value net landed as scaffolding for self-play.' },
+    { id:'az_m5a',      row:'az', x:3460, date:'Jul 2',          title:'M5a card-reward: dead parity',          status:'mixed',
+      note:'Gen-1 self-play card-reward A/B came back Δ −0.2pp, p=1.0 — mechanics work and are non-destructive, so M5b was greenlit.' },
+    { id:'az_m5b',      row:'az', x:3670, date:'Jul 3',          title:'M5b map-pathing falsified',             status:'bad',
+      note:'Best λ dead parity (−0.80pp, p=0.77) and monotonic degradation to −10.6pp at λ=2.0. The AlphaZero line ends here.' },
+
+    // — PPO run-policy champions —
+    { id:'p_plan',      row:'ppo', x:3860, date:'Jul 3',         title:'PPO full-run plan',                     status:'good',
+      note:'Pivoted the same day M5b died: port the sts_lightspeed_fork PPO method. The surface-signal probe battery passed gate G0.' },
+    { id:'p_it350',     row:'ppo', x:4050, date:'Jul 7',         title:'Ironclad it350 — first champion',  status:'good',
+      note:'First blessed PPO champion: 84.0% greedy at A0 vs the deployed ranker’s 40.2% (p≈5.7e-191), plateau confirmed vs it400.' },
+    { id:'p_sil390',    row:'ppo', x:4240, date:'Jul 9',         title:'Silent it390 promoted',                 status:'mixed',
+      note:'68.95% vs the incumbent’s 15.8% — later flagged as clairvoyant-era and not comparable to honest-search numbers.' },
+    { id:'p_asc55',     row:'ppo', x:4430, date:'Jul 10',        title:'Ironclad asc_it55 (asc-conditioned)',   status:'mixed',
+      note:'First ascension-conditioned net (C_ASC input). Statistically flat vs it350 at every level; deployed to carry the new architecture.' },
+    { id:'p_def80',     row:'ppo', x:4620, date:'Jul 11',        title:'Defect asc_it80 promoted',              status:'good',
+      note:'With no ranker to bootstrap from, a heuristic expert (4.3% at A0) warm-started a run to 88.7% A0-only, then an ascension finetune.' },
+    { id:'p_reg800',    row:'ppo', x:5950, date:'Jul 25',        title:'Regent it800 promoted',                 status:'good',
+      note:'First served Regent net: deployed full-MCTS 42.6% vs it220’s 5.1% (p~1e-20); median run floor rose 31 → 45.' },
+    { id:'p_nec750',    row:'ppo', x:6330, date:'Jul 28',        title:'Necrobinder it750 promoted',            status:'good',
+      note:'A0 greedy 44.8% vs the buggy-era champion’s 2.3% — a ~19× lift; converged at 43–45%.' },
+
+    // — Honest info & shadow replay —
+    { id:'h_flip',      row:'honest', x:4810, date:'Jul 12',     title:'Clairvoyance removed (BeliefDraw)',     status:'good',
+      note:'HiddenInfoMode::BeliefDraw became the default. Measured rent: −22.80pp (p=1.1e-86) — invalidating every pre-flip win rate.' },
+    { id:'h_census',    row:'honest', x:5000, date:'Jul 18',     title:'Shadow replay divergence census',       status:'mixed',
+      note:'Replayed 60 recorded real-DLL runs in lockstep: four fix rounds raised median rows survived 125 → ~186 and full completions 2 → 7, then returns diminished.' },
+    { id:'h_phase1',    row:'honest', x:5190, date:'Jul 19',     title:'Shadow-fed search: flat',               status:'bad',
+      note:'Feeding MCTS the lossless native combat state scored 6/60 vs the 10/60 baseline — reconstruction loss ruled out as the rung-3.5 gap; shadow kept only as a parity fuzzer.' },
+
+    // — HP-attrition diagnostics —
+    { id:'d_arrival',   row:'hpdiag', x:5380, date:'Jul 19',     title:'Residual is HP, not deck',              status:'good',
+      note:'Seed-matched traces: real-DLL runs reach every act boss with a near-matched deck but 13–16 HP lower. Deprioritized the run-level deck net; target HP preservation.' },
+    { id:'d_hpflow',    row:'hpdiag', x:5570, date:'Jul 19',     title:'Deficit is in-fight combat bleed',      status:'good',
+      note:'HP-budget decomposition: +5.9/+12.9/+41.2 HP lost per act in-fight at matched fight counts, with out-of-combat recovery equal or better — rejects the meta-layer attribution.' },
+    { id:'d_parity',    row:'hpdiag', x:5760, date:'Jul 19',     title:'Engine models fights faithfully',       status:'good',
+      note:'One-step differ over 3,549 recorded transitions: mean signed damage error ≤0.6 HP/turn and no lethal blindness — H-parity rejected as the bleed driver.' },
+    { id:'d_fork',      row:'hpdiag', x:5950, date:'Jul 19',     title:'Lossless state gives no HP gain',       status:'mixed',
+      note:'Shadow-on vs shadow-off HP flow had no consistent direction; the shadow retires around floor 15–19, so the lever is the Texel eval’s line preference.' },
+    { id:'d_autopsy',   row:'hpdiag', x:6140, date:'Jul 26',     title:'Deaths are attrition-shaped',           status:'good',
+      note:'Replaying killer fights 20× showed 17/26 non-boss deaths were attrition-shaped (entered at median 17% max HP) — unparked HP repricing (#301).' },
+
+    // — Event fix & retrain wave —
+    { id:'ev_ic',       row:'events', x:6530, date:'Jul 30',     title:'Ironclad event pilot promoted',         status:'good',
+      note:'PR #317 fixed event rooms being auto-resolved in training — the meta had never once made an event choice. 150-iter pilot: +15.5pp pooled A0–A10 (31.6% → 47.2%); an LR-anneal tail added a cleanly attributable +6.0pp.' },
+    { id:'ev_sil',      row:'events', x:6720, date:'Jul 31–Aug 5', title:'Silent event pilot',             status:'mixed',
+      note:'Leg 1 delivered +14.58pp on the A0–A10 gate; leg 2 (+2.71pp, p=0.016) failed the p<0.01 bar, and an embedding-splice ablation changed zero of 365 event decisions — the gain is real but the mechanism unattributed. Promoted as asc_it300.' },
+    { id:'ev_def_re',   row:'events', x:7100, date:'Aug 2',      title:'Defect re-anchor: no regression',       status:'good',
+      note:'Re-measured asc_it80 under honest search: −24.9pp against a measured −22.8pp clairvoyance rent — accounted for. Exposed untrained events and a recipe gap; pre-registered gates become standard here.' },
+    { id:'ev_def_gate', row:'events', x:7290, date:'Aug 4',      title:'Defect asc_it230 promoted',             status:'good',
+      note:'+12.3pp pooled (49.4% → 61.7%, p=7.1e-24), all 11 levels positive with the largest gains at A7/A8 — retiring the “high ascension is a combat-side ceiling” prior.' },
+    { id:'ev_reg',      row:'events', x:7480, date:'Aug 5',      title:'Regent asc_it200 promoted',             status:'good',
+      note:'Retracted the July “null” finetune (its env hid events: emb_event drift exactly 0.0) and re-ran with event signal + LR anneal: +7.5pp pooled (p=1.1e-10), all levels positive.' },
+    { id:'ev_nec',      row:'events', x:7670, date:'Aug 6–8', title:'Necrobinder asc_it300 promoted',      status:'good',
+      note:'The last A0-only champion falls: +10.91pp pooled (21.0% → 31.9%, p<1e-4), worst level −0.50pp. All five characters now ascension-conditioned and event-trained.' },
+
+    // — Deck-mutation surfaces —
+    { id:'dm_surf',     row:'deckmut', x:8240, date:'Aug 8',     title:'Deck-mutation surfaces exposed',        status:'good',
+      note:'GH #399: remove/upgrade/transform/enchant/event-grant handed to the run policy instead of engine auto-resolve — the second “the env was hiding a decision surface” fix, after events.' },
+    { id:'dm_pre',      row:'deckmut', x:8430, date:'Aug 9',     title:'Preflight + gradient check',            status:'good',
+      note:'One 64-game iteration confirmed all five surfaces reach the policy (fine keys sum exactly to coarse); mutation-row embeddings drift 3.3× other rows — campaign launched.' },
+    { id:'dm_ic',       row:'deckmut', x:8620, date:'Aug 9–10', title:'Ironclad deckmut_it150 promoted',   status:'good',
+      note:'+8.9pp pooled (42.1% → 51.0%, p=9.2e-14), worst level −1.0pp. The “gain concentrates at A5+ via curse removal” prediction was falsified — the curve peaks at A7/A8.' },
+    { id:'dm_sil_run',  row:'deckmut', x:8810, date:'Aug 10',    title:'Silent deck-mutation campaign',         status:'mixed',
+      note:'Attempt 1 lost 2h35m to a host power event with no checkpoint; attempt 2 relaunched under systemd with --save-every 5 and reproduced iteration 0 exactly. Budget slipped ~30 h → ~42 h.' },
+    { id:'dm_sil_gate', row:'deckmut', x:9000, date:'Aug 13',    title:'Silent deckmut_it150 promoted',         status:'good',
+      note:'+15.0pp pooled (27.5% → 42.4%, p=2.1e-38), all 11 levels positive — exceeding Ironclad’s +8.9pp, which supports the removal hypothesis against the author’s own guess.' },
+
+    // — Real-game bridge (SimBridge) —
+    { id:'br_plan',     row:'bridge', x:4210, date:'Jul 10',     title:'Real-game bridge plan',                 status:'good',
+      note:'The SimBridge C# mod plan for bridging the AI stack to the running game — start of the live-game lane.' },
+    { id:'br_advisor',  row:'bridge', x:7480, date:'Aug 5',      title:'Advisor mode ships',                    status:'good',
+      note:'AI-coach UI with advice protocol v3; F7 autoplay covers every decision screen (PRs #377/#378).' },
+    { id:'br_f7',       row:'bridge', x:7670, date:'Aug 6',      title:'F7 lane verified unattended',           status:'good',
+      note:'Built advisor_autoplay plus a strict log checker; fixed reward-skip loops, shop-exit races and three re-ask stalls, ending in the first advisor-lane victory (9/9 checks).' },
+    { id:'br_mod',      row:'bridge', x:8050, date:'Aug 8',      title:'SimBridge ships as a mod',              status:'good',
+      note:'Packaged as a distributable mod (PR #402), alongside the champion-manifest cutover.' },
+    { id:'br_speed',    row:'bridge', x:8430, date:'Aug 10',     title:'5× faster real-game runs',         status:'good',
+      note:'Parallel search, think-time fps cap and unattended pacing; the advisor retuned to 8×4000/8000 (PR #426).' },
+    { id:'br_live',     row:'bridge', x:8810, date:'Aug 12',     title:'First live-exe A8 win rate',            status:'mixed',
+      note:'SimBridge drove the real exe for 40 graded runs per character: Ironclad 13/40 (32.5%), Silent 11/40 (27.5%), indistinguishable at this n; loss shapes differ sharply.' },
+
+    // — Ascension-climb diagnostics —
+    { id:'cl_issues',   row:'climb', x:7860, date:'Aug 6–7', title:'Ascension-climb defect log',           status:'mixed',
+      note:'~19 defects while driving the advisor lane up the ladder; about half fixed in flight. Key finding: live-game action refusals scale with run depth, not the Queen (Fisher p=0.0023).' },
+    { id:'cl_queen',    row:'climb', x:8050, date:'Aug 7',       title:'Queen eval collapse: eval was right',   status:'good',
+      note:'Deterministic repro: at the live 139 HP every action ties at q=−1.45, but the same deck wins at 500 HP — a lost position, not an eval bug. Pushed the defect upstream to deck-building (GH #399).' },
+    { id:'cl_hand',     row:'climb', x:8240, date:'Aug 7',       title:'Hand-select livelock fixed',            status:'good',
+      note:'Four legitimate select-confirm cycles produced byte-identical loop-guard keys and tripped MaxChoicesPerWindow; fixed by resetting the window when combat history advances.' },
+    { id:'cl_host',     row:'climb', x:8430, date:'Aug 7',       title:'Host unresponsiveness: refuted',        status:'bad',
+      note:'Blamed a 5× throughput loss (clock throttling) for the streaming stutter — refuted after a reboot: the session felt fine at the same work_ms. Cause still unidentified.' },
+  ],
+  primaryEdges: [
+    ['e_port','e_scaffold'], ['e_scaffold','e_audits'], ['e_audits','e_fuzz'],
+    ['e_fuzz','e_simlab'], ['e_simlab','e_v107'], ['e_v107','e_world_err'],
+    ['e_world_err','e_manifest'], ['e_manifest','e_covperf'],
+    ['e_scaffold','s_mcts'], ['s_mcts','s_leaf'], ['s_leaf','s_redesign'],
+    ['s_redesign','s_budget'], ['d_autopsy','s_probes'], ['s_probes','s_a8audit'],
+    ['s_budget','o_plan'], ['o_plan','o_oracle'], ['o_oracle','o_curve'],
+    ['o_curve','o_bless'], ['o_bless','o_saga'], ['o_saga','o_ranker'], ['o_ranker','o_synergy'],
+    ['az_bet','az_m14'], ['az_m14','az_m5a'], ['az_m5a','az_m5b'], ['az_m5b','p_plan'],
+    ['p_plan','p_it350'], ['p_it350','p_sil390'], ['p_sil390','p_asc55'],
+    ['p_asc55','p_def80'], ['p_def80','p_reg800'], ['p_reg800','p_nec750'], ['p_nec750','ev_ic'],
+    ['h_flip','h_census'], ['h_census','h_phase1'], ['h_phase1','d_arrival'],
+    ['d_arrival','d_hpflow'], ['d_hpflow','d_parity'], ['d_parity','d_fork'], ['d_fork','d_autopsy'],
+    ['ev_ic','ev_sil'], ['ev_sil','ev_def_re'], ['ev_def_re','ev_def_gate'],
+    ['ev_def_gate','ev_reg'], ['ev_reg','ev_nec'],
+    ['cl_queen','dm_surf'], ['dm_surf','dm_pre'], ['dm_pre','dm_ic'],
+    ['dm_ic','dm_sil_run'], ['dm_sil_run','dm_sil_gate'],
+    ['br_plan','br_advisor'], ['br_advisor','br_f7'], ['br_f7','br_mod'],
+    ['br_mod','br_speed'], ['br_speed','br_live'], ['br_f7','cl_issues'],
+    ['cl_issues','cl_queen'], ['cl_issues','cl_hand'], ['cl_issues','cl_host'],
+  ],
+  relatedEdges: [
+    ['h_flip','ev_ic'], ['h_flip','ev_def_re'], ['d_autopsy','ev_ic'],
+    ['p_sil390','ev_sil'], ['p_def80','ev_def_re'], ['p_reg800','ev_reg'], ['p_nec750','ev_nec'],
+    ['p_it350','o_synergy'], ['e_v107','o_ranker'], ['br_plan','h_census'],
+    ['ev_ic','dm_surf'], ['ev_nec','e_manifest'],
+    ['dm_ic','br_live'], ['s_a8audit','br_live'],
+  ],
+};
+
+const STATUS_COLOR = { good: '#217a52', mixed: '#bd8514', bad: '#b13340' };
+const STATUS_LABEL = { good: 'Worked', mixed: 'Mixed', bad: 'Failed' };
+
+// Layout constants
+const X_SCALE  = 1.0;
+const X_PAD    = 250;   // room for the sticky row labels at scroll 0
+const TOP_PAD  = 40;
+const DATE_Y   = 14;
+const NODE_W   = 172;
+const NODE_H   = 44;
+const BOTTOM_PAD = 14;
+
+// ============================================================================
+// Renderer — vanilla-JS port of the lineage-tree layout.
+// ============================================================================
+(function render() {
+  const viewport = document.getElementById('viewport');
+  const canvas = document.getElementById('canvas');
+
+  // Legend
+  const legendStatus = document.getElementById('legend-status');
+  for (const s of ['good', 'mixed', 'bad']) {
+    const span = document.createElement('span');
+    span.className = 'swatch';
+    span.innerHTML = `<span class="dot" style="border-color:${STATUS_COLOR[s]}"></span>${STATUS_LABEL[s]}`;
+    legendStatus.appendChild(span);
+  }
+
+  // --- X layout (time axis) ---
+  const xs = TREE.nodes.map(n => n.x);
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const canvasW = Math.round((maxX - minX) * X_SCALE) + NODE_W + X_PAD * 2;
+  const nodeX = {};
+  for (const n of TREE.nodes) nodeX[n.id] = X_PAD + (n.x - minX) * X_SCALE;
+
+  // --- Adjacency for hover highlighting ---
+  const adj = {};
+  for (const n of TREE.nodes) adj[n.id] = new Set();
+  for (const [a, b] of TREE.primaryEdges) { adj[a] && adj[a].add(b); adj[b] && adj[b].add(a); }
+  for (const [a, b] of TREE.relatedEdges) { adj[a] && adj[a].add(b); adj[b] && adj[b].add(a); }
+
+  const byId = {};
+  let rowY = {};
+  let canvasH = 0;
+
+  const nodeEls = {};
+  const edgeEls = [];   // { a, b, el }
+  let hovered = null;
+
+  function layoutY() {
+    const availH = Math.max(0, viewport.clientHeight - TOP_PAD - BOTTOM_PAD);
+    const rowH = Math.max(54, availH / TREE.rows.length);
+    rowY = {};
+    TREE.rows.forEach((r, i) => { rowY[r.id] = TOP_PAD + i * rowH; });
+    canvasH = TOP_PAD + TREE.rows.length * rowH + BOTTOM_PAD;
+    return rowH;
+  }
+
+  function edgePath(a, b) {
+    const A = byId[a], B = byId[b];
+    if (!A || !B) return '';
+    const x1 = A.px + NODE_W, y1 = A.py + NODE_H / 2;
+    const x2 = B.px,          y2 = B.py + NODE_H / 2;
+    const dx = Math.max(40, Math.abs(x2 - x1) * 0.45);
+    return `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+  }
+
+  function build() {
+    const rowH = layoutY();
+    canvas.style.width = canvasW + 'px';
+    canvas.style.height = canvasH + 'px';
+    canvas.innerHTML = '';
+
+    // Row bands + sticky labels
+    TREE.rows.forEach((r, i) => {
+      const band = document.createElement('div');
+      band.className = 'row-band' + (i % 2 === 0 ? ' even' : '');
+      band.style.top = (rowY[r.id] - 8) + 'px';
+      band.style.width = canvasW + 'px';
+      band.style.height = rowH + 'px';
+      canvas.appendChild(band);
+
+      const lbl = document.createElement('div');
+      lbl.className = 'row-label';
+      lbl.style.top = (rowY[r.id] + 12) + 'px';
+      lbl.innerHTML = `<div>${r.label}</div>`;
+      canvas.appendChild(lbl);
+    });
+
+    // Date gridlines
+    for (const d of TREE.dates) {
+      const px = X_PAD + (d.x - minX) * X_SCALE;
+      const line = document.createElement('div');
+      line.className = 'date-line';
+      line.style.left = px + 'px';
+      line.style.top = (DATE_Y + 14) + 'px';
+      line.style.height = (canvasH - DATE_Y - 18) + 'px';
+      canvas.appendChild(line);
+      const lab = document.createElement('div');
+      lab.className = 'date-label';
+      lab.style.left = (px + 4) + 'px';
+      lab.style.top = DATE_Y + 'px';
+      lab.textContent = d.label;
+      canvas.appendChild(lab);
+    }
+
+    // Place nodes
+    for (const n of TREE.nodes) {
+      byId[n.id] = Object.assign({}, n, { px: nodeX[n.id], py: rowY[n.row] });
+    }
+
+    // Edges (SVG under nodes)
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'edges');
+    svg.setAttribute('width', canvasW);
+    svg.setAttribute('height', canvasH);
+    edgeEls.length = 0;
+    const mkEdge = (a, b, related) => {
+      const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p.setAttribute('d', edgePath(a, b));
+      p.setAttribute('fill', 'none');
+      p.setAttribute('stroke', related ? 'rgba(103,80,164,0.55)' : 'rgba(52,66,86,0.55)');
+      p.setAttribute('stroke-width', related ? 1.4 : 1.6);
+      p.setAttribute('stroke-linecap', 'round');
+      if (related) p.setAttribute('stroke-dasharray', '5 6');
+      svg.appendChild(p);
+      edgeEls.push({ a, b, el: p, related });
+    };
+    for (const [a, b] of TREE.primaryEdges) mkEdge(a, b, false);
+    for (const [a, b] of TREE.relatedEdges) mkEdge(a, b, true);
+    canvas.appendChild(svg);
+
+    // Node cards
+    for (const n of TREE.nodes) {
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'node';
+      el.dataset.id = n.id;
+      el.setAttribute('aria-label', `${n.date}: ${n.title}. ${STATUS_LABEL[n.status]}. ${n.note}`);
+      el.style.left = byId[n.id].px + 'px';
+      el.style.top = byId[n.id].py + 'px';
+      el.style.width = NODE_W + 'px';
+      el.style.height = NODE_H + 'px';
+      el.style.borderLeftColor = STATUS_COLOR[n.status];
+      el.innerHTML =
+        `<div class="node-meta"><span class="date">${n.date}</span>` +
+        `<span class="pill" style="background:${STATUS_COLOR[n.status]}">${STATUS_LABEL[n.status].toLowerCase()}</span></div>` +
+        `<div class="node-title">${n.title}</div>`;
+      el.addEventListener('mouseenter', () => { if (!drag.active) setHovered(n.id); });
+      el.addEventListener('mouseleave', () => { if (hovered === n.id) setHovered(null); });
+      el.addEventListener('focus', () => setHovered(n.id));
+      el.addEventListener('blur', () => { if (hovered === n.id) setHovered(null); });
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Escape') { el.blur(); setHovered(null); }
+      });
+      canvas.appendChild(el);
+      nodeEls[n.id] = el;
+    }
+
+    // Tooltip
+    const tip = document.createElement('div');
+    tip.id = 'tooltip';
+    canvas.appendChild(tip);
+  }
+
+  function setHovered(id) {
+    hovered = id;
+    const tip = document.getElementById('tooltip');
+    for (const [nid, el] of Object.entries(nodeEls)) {
+      const isHov = nid === id;
+      const isAdj = id != null && adj[id] && adj[id].has(nid);
+      el.classList.toggle('hov', isHov);
+      el.classList.toggle('dim', id != null && !isHov && !isAdj);
+    }
+    for (const e of edgeEls) {
+      const active = id != null && (e.a === id || e.b === id);
+      const dim = id != null && !active;
+      e.el.setAttribute('stroke', active ? '#2b6cb0'
+        : (e.related ? 'rgba(103,80,164,0.55)' : 'rgba(52,66,86,0.55)'));
+      e.el.setAttribute('stroke-width', active ? (e.related ? 2.0 : 2.4) : (e.related ? 1.4 : 1.6));
+      e.el.style.opacity = dim ? 0.16 : 1;
+    }
+    if (id == null) { tip.style.display = 'none'; return; }
+    const n = byId[id];
+    tip.innerHTML =
+      `<div class="tip-date"><span>${n.date}</span><span>${TREE.rows.find(r => r.id === n.row)?.label ?? ''}</span></div>` +
+      `<div class="tip-title">${n.title}</div>` +
+      `<div class="tip-note">${n.note}</div>`;
+    const rect = viewport.getBoundingClientRect();
+    const screenX = n.px + NODE_W / 2 - viewport.scrollLeft;
+    const flipX = screenX > rect.width / 2;
+    tip.style.left = (flipX ? n.px - 300 - 8 : n.px + NODE_W + 8) + 'px';
+    // keep tooltip inside vertical bounds
+    const tipTop = Math.min(Math.max(4, n.py - 6), canvasH - 130);
+    tip.style.top = tipTop + 'px';
+    tip.style.display = 'block';
+  }
+
+  // --- Drag-to-pan + wheel→horizontal ---
+  const drag = { active: false, startX: 0, startScrollLeft: 0 };
+  viewport.addEventListener('pointerdown', e => {
+    if (e.button !== 0 || e.target.closest('.node')) return;
+    drag.active = true;
+    drag.startX = e.clientX;
+    drag.startScrollLeft = viewport.scrollLeft;
+    viewport.classList.add('dragging');
+    viewport.setPointerCapture && viewport.setPointerCapture(e.pointerId);
+  });
+  viewport.addEventListener('pointermove', e => {
+    if (!drag.active) return;
+    viewport.scrollLeft = drag.startScrollLeft - (e.clientX - drag.startX);
+  });
+  const endDrag = e => {
+    if (!drag.active) return;
+    drag.active = false;
+    viewport.classList.remove('dragging');
+    viewport.releasePointerCapture && viewport.releasePointerCapture(e.pointerId);
+  };
+  viewport.addEventListener('pointerup', endDrag);
+  viewport.addEventListener('pointercancel', endDrag);
+  viewport.addEventListener('wheel', e => {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      viewport.scrollLeft += e.deltaY;
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  // Rebuild on resize (y layout depends on viewport height)
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { build(); setHovered(null); }, 120);
+  });
+
+  build();
+  document.getElementById('node-count').textContent =
+    `${TREE.nodes.length} experiments · ${TREE.rows.length} themes · May 6 – Aug 13, 2026`;
+})();
+</script>
+</body>
+</html>

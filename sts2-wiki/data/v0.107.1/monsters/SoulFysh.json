@@ -1,0 +1,82 @@
+{
+  "class_name": "SoulFysh",
+  "title": "Soul Fysh",
+  "min_hp": 221,
+  "max_hp": 221,
+  "min_hp_base": 211,
+  "max_hp_base": 211,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "BECKON_MOVE",
+      "title": "Beckon",
+      "intents": [
+        {
+          "type": "status",
+          "amount": 2
+        }
+      ],
+      "effects": ["Add 2 Beckon cards"]
+    },
+    {
+      "id": "DE_GAS_MOVE",
+      "title": "De-Gas",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 17,
+          "damage_base": 16,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 16/17 damage"]
+    },
+    {
+      "id": "GAZE_MOVE",
+      "title": "Gaze",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 8,
+          "damage_base": 7,
+          "ascension": 9
+        },
+        {
+          "type": "status",
+          "amount": 1
+        }
+      ],
+      "effects": ["Deal 7/8 damage", "Add 1 Beckon card"]
+    },
+    {
+      "id": "FADE_MOVE",
+      "title": "Fade",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Gain 2 Intangible"]
+    },
+    {
+      "id": "SCREAM_MOVE",
+      "title": "Scream",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 15,
+          "damage_base": 13,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": ["Deal 13/15 damage", "Apply 3 Vulnerable"]
+    }
+  ],
+  "move_pattern": "Cycles: Beckon → De-Gas → Gaze → Fade → Scream",
+  "powers_on_spawn": [],
+  "notes": "Soul Fysh alternates between visible and invisible states. During Fade, the monster becomes invisible and gains 2 Intangible; during Scream, it becomes visible again. The monster generates Beckon cards that are added to the player's deck: 2 cards on the Beckon move, and 1 additional card on each Gaze attack. Music parameters change based on the current state."
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "RetainHandPower",
+  "title": "Retain Hand",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "[gold]Retain[/gold] your [gold]Hand[/gold] for the next [blue]2[/blue] turns.",
+  "smart_description": "[gold]Retain[/gold] your [gold]Hand[/gold] (this turn if stack=1, or for the next [blue]{Amount}[/blue] turns if stack>1).",
+  "notes": "Decrements by 1 at the end of each turn while the power owner's side is active. Only affects the power owner (ShouldFlush returns true if applied to other players)."
+}

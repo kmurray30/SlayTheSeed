@@ -1,0 +1,123 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { processBBCode, cleanDescription } from '../../utils';
+
+export async function getStaticPaths() {
+  const events = await getCollection('events');
+  return events.map(event => ({
+    params: { slug: event.id },
+    props: { event },
+  }));
+}
+
+const { event } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+// Build enchantment name -> slug lookup for auto-linking
+const allEnchantments = await getCollection('enchantments');
+const enchantmentLinks: Record<string, string> = {};
+for (const ench of allEnchantments) {
+  enchantmentLinks[ench.data.title] = `${base}enchantments/${ench.id}/`;
+}
+
+function linkEnchantments(html: string): string {
+  let result = html;
+  for (const [name, url] of Object.entries(enchantmentLinks)) {
+    const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // Match enchantment names, possibly wrapped in a <span> tag, not already in an <a>
+    // Pattern 1: <span class="...">Name</span> -> <a href="..."><span>Name</span></a>
+    const spanRegex = new RegExp(`(<span[^>]*>)(${escaped})(</span>)(?![^<]*</a>)`, 'g');
+    result = result.replace(spanRegex, `<a href="${url}">$1$2$3</a>`);
+    // Pattern 2: bare Name not inside any tag
+    const bareRegex = new RegExp(`(?<![">\\w])${escaped}(?![^<]*</a>)(?!\\w)`, 'g');
+    result = result.replace(bareRegex, `<a href="${url}">${name}</a>`);
+  }
+  return result;
+}
+---
+
+<BaseLayout title={event.data.title}>
+  <div class="card-detail">
+    <a href={`${import.meta.env.BASE_URL}events/`} class="back-link">&larr; All Events</a>
+
+    <div class="card-header">
+      <h1>{event.data.title}</h1>
+      {event.data.acts.length > 0 && (
+        <div class="card-meta" style="font-size: 0.9rem;">{event.data.acts.join(', ')}</div>
+      )}
+    </div>
+
+    {event.data.description_html && (
+      <>
+        <h2 class="section-heading">Description</h2>
+        <div class="desc-text" set:html={linkEnchantments(cleanDescription(processBBCode(event.data.description_html)))} />
+      </>
+    )}
+
+    {event.data.options.length > 0 && (
+      <>
+        <h2 class="section-heading">Options</h2>
+        <div style="margin-top: 0.5rem;">
+          {event.data.options.map(opt => {
+            const title = typeof opt === 'string' ? opt : opt.title;
+            const desc = typeof opt === 'string' ? '' : opt.description;
+            const requires = typeof opt === 'string' ? '' : opt.requires || '';
+            return (
+              <div class="event-option">
+                <h3 set:html={cleanDescription(processBBCode(title))} />
+                {desc && <div class="desc-text" style="font-size: 0.9rem;" set:html={linkEnchantments(cleanDescription(processBBCode(desc)))} />}
+                {requires && <div class="card-meta" style="font-size: 0.85rem; margin-top: 0.25rem; color: var(--text-muted);" set:html={cleanDescription(processBBCode(requires))} />}
+              </div>
+            );
+          })}
+        </div>
+      </>
+    )}
+
+    {event.data.conditions && (
+      <>
+        <h2 class="section-heading">Conditions</h2>
+        <p class="card-meta" style="font-size: 0.9rem;">{event.data.conditions}</p>
+      </>
+    )}
+
+    {event.data.notes && (
+      <>
+        <h2 class="section-heading">Mechanics</h2>
+        <div class="desc-text" style="font-size: 0.9rem; line-height: 1.7;" set:html={linkEnchantments(cleanDescription(processBBCode(event.data.notes)))} />
+      </>
+    )}
+
+    {event.data.card_refs.length > 0 && (
+      <>
+        <h2 class="section-heading">Related Cards</h2>
+        <div class="card-grid compact" style="margin-top: 0.75rem;">
+          {event.data.card_refs.map(card => (
+            <a href={`${import.meta.env.BASE_URL}cards/${card.slug}/`} class="card-entry">
+              <h3 style="font-size: 0.95rem;">{card.title}</h3>
+            </a>
+          ))}
+        </div>
+      </>
+    )}
+
+    {event.data.relic_refs.length > 0 && (
+      <>
+        <h2 class="section-heading">Related Relics</h2>
+        <div class="card-grid compact" style="margin-top: 0.75rem;">
+          {event.data.relic_refs.map(relic => (
+            <a href={`${import.meta.env.BASE_URL}relics/${relic.slug}/`} class="card-entry" style="display: flex; gap: 0.75rem; align-items: center;">
+              <img
+                src={`${import.meta.env.BASE_URL}images/relic_atlas/${relic.slug.replace(/-/g, '_')}.png`}
+                alt={relic.title}
+                class="item-icon"
+                onerror="this.style.display='none'" />
+              <h3 style="font-size: 0.95rem;">{relic.title}</h3>
+            </a>
+          ))}
+        </div>
+      </>
+    )}
+  </div>
+</BaseLayout>

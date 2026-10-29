@@ -1,0 +1,8 @@
+{
+  "class_name": "MusicBox",
+  "title": "Music Box",
+  "rarity": "Ancient",
+  "description": "Create an Ethereal copy of the first Attack you play each turn.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "The relic triggers once per turn on the first Attack card played. It creates a copy of that card with the Ethereal keyword applied, which means the copy is removed at the end of combat. The effect resets at the start of each turn."
+}

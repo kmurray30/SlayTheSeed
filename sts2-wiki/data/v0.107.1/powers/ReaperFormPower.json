@@ -1,0 +1,9 @@
+{
+  "class_name": "ReaperFormPower",
+  "title": "Reaper Form",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever Attacks deal damage, apply that much [gold]Doom[/gold].",
+  "smart_description": "Whenever Attacks deal damage, apply [blue]counter[/blue] times that much [gold]Doom[/gold].",
+  "notes": "Counter stack tracks the multiplier for Doom application. Each point of counter increases the Doom applied by that multiple of the damage dealt."
+}

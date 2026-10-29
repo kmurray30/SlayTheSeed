@@ -1,0 +1,9 @@
+{
+  "class_name": "SeekingEdgePower",
+  "title": "Seeking Edge",
+  "power_type": "Buff",
+  "stack_type": "Single",
+  "description": "[gold]Sovereign Blade[/gold] now hits ALL enemies.",
+  "smart_description": "[gold]Sovereign Blade[/gold] now hits ALL enemies.",
+  "notes": "This power modifies the behavior of Sovereign Blade cards. It doesn't do anything on its own—instead, Sovereign Blade cards check for this power's presence and change their targeting from a single enemy to all enemies."
+}

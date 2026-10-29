@@ -1,0 +1,8 @@
+{
+ "action": "select_map_node",
+ "args": {
+  "col": 1,
+  "row": 8
+ },
+ "policy": "ppo"
+}

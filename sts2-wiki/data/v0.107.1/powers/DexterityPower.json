@@ -1,0 +1,9 @@
+{
+  "class_name": "DexterityPower",
+  "title": "Dexterity",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Dexterity improves [gold]Block[/gold] gained from cards.",
+  "smart_description": "{Amount:cond:<0?Decreases|Increases} [gold]Block[/gold] gained from cards by [blue]{Amount:abs()}[/blue].",
+  "notes": "This power modifies block gain additively. It applies only to the owner's cards and only counts toward powered card block or monster move block. Dexterity allows negative stacks, meaning it can decrease block gain when the amount is negative."
+}

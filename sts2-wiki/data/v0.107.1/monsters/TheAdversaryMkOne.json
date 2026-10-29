@@ -1,0 +1,59 @@
+{
+  "class_name": "TheAdversaryMkOne",
+  "title": "The Adversary Mk 1",
+  "min_hp": 100,
+  "max_hp": 100,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "SMASH_MOVE",
+      "title": "Smash",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 12
+        }
+      ],
+      "effects": [
+        "Deal 12 damage"
+      ]
+    },
+    {
+      "id": "BEAM_MOVE",
+      "title": "Beam",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 15
+        }
+      ],
+      "effects": [
+        "Deal 15 damage"
+      ]
+    },
+    {
+      "id": "BARRAGE_MOVE",
+      "title": "Barrage",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 8,
+          "hits": 2
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Deal 8 damage",
+        "2 hits",
+        "Apply 2 Strength"
+      ]
+    }
+  ],
+  "move_pattern": "Cycles: Smash → Beam → Barrage",
+  "powers_on_spawn": [
+    "Artifact"
+  ],
+  "notes": "Gains 2 Strength each time it uses Barrage, so its attack damage increases over time. Spawns with ArtifactPower applied at 0 stacks."
+}

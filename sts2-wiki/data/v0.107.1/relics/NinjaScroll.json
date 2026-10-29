@@ -1,0 +1,8 @@
+{
+  "class_name": "NinjaScroll",
+  "title": "Ninja Scroll",
+  "rarity": "Shop",
+  "description": "At the start of each combat, add 3 Shivs into your Hand.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Triggers at the beginning of the first turn (BeforeHandDraw hook) to add 3 Shiv cards directly to your hand."
+}

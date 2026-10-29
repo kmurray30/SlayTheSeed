@@ -1,0 +1,50 @@
+{
+  "class_name": "CorpseSlug",
+  "title": "Corpse Slug",
+  "min_hp": 27,
+  "max_hp": 29,
+  "min_hp_base": 25,
+  "max_hp_base": 27,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "WHIP_SLAP_MOVE",
+      "title": "Whip Slap",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 3,
+          "hits": 2
+        }
+      ],
+      "effects": ["2 hits of 3 damage"]
+    },
+    {
+      "id": "GLOMP_MOVE",
+      "title": "Glomp",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 9,
+          "damage_base": 8,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 8/9 damage"]
+    },
+    {
+      "id": "GOOP_MOVE",
+      "title": "Goop",
+      "intents": [
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": ["Apply 2 Frail"]
+    }
+  ],
+  "move_pattern": "Cycles through: Whip Slap → Glomp → Goop",
+  "powers_on_spawn": ["4/5 Ravenous"],
+  "notes": "Applies Ravenous on spawn, scaling with Ascension. When multiple Corpse Slugs are encountered together, they cycle through different starting moves to avoid all using the same move pattern."
+}

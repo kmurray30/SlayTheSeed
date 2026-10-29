@@ -1,0 +1,14 @@
+{
+  "class_name": "BattlewornDummyEventEncounter",
+  "title": "Battleworn Dummy",
+  "room_type": "Monster",
+  "is_weak": false,
+  "monsters": [
+    "BattleFriendV1",
+    "BattleFriendV2",
+    "BattleFriendV3"
+  ],
+  "total_monsters": 1,
+  "tags": [],
+  "notes": "Event encounter with conditional monster spawning based on DummySetting enum. Spawns exactly one BattleFriend variant (V1, V2, or V3). Tracks RanOutOfTime state flag. Does not grant end-of-combat rewards."
+}

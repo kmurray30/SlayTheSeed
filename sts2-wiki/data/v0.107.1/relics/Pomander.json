@@ -1,0 +1,9 @@
+{
+  "class_name": "Pomander",
+  "title": "Pomander",
+  "rarity": "Ancient",
+  "character": null,
+  "description": "Upon pickup, Upgrade a card.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "Triggers an interactive card selection (Deck for Upgrade) when obtained, allowing the player to choose 1 card to upgrade immediately."
+}

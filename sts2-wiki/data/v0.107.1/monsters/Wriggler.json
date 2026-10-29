@@ -1,0 +1,51 @@
+{
+  "class_name": "Wriggler",
+  "title": "Wriggler",
+  "min_hp": 18,
+  "max_hp": 22,
+  "min_hp_base": 17,
+  "max_hp_base": 21,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "NASTY_BITE_MOVE",
+      "title": "Nasty Bite",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 7,
+          "damage_base": 6,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 6/7 damage"]
+    },
+    {
+      "id": "WRIGGLE_MOVE",
+      "title": "Wriggle",
+      "intents": [
+        {
+          "type": "buff"
+        },
+        {
+          "type": "status"
+        }
+      ],
+      "effects": ["Apply 2 Strength", "Add 1 Infection to discard"]
+    },
+    {
+      "id": "SPAWNED_MOVE",
+      "title": "Spawned",
+      "intents": [
+        {
+          "type": "stun"
+        }
+      ],
+      "effects": ["Stunned on spawn"]
+    }
+  ],
+  "move_pattern": "Alternates between Nasty Bite and Wriggle. First move depends on slot: odd slots (1, 3) start with Nasty Bite; even slots (2, 4) start with Wriggle. May start with Spawned (stun effect) if spawned while stunned.",
+  "powers_on_spawn": [],
+  "notes": "Wrigglers spawn in groups with alternating attack/buff patterns based on their slot position. Odd-numbered wrigglers (1, 3) lead with Nasty Bite before cycling into Wriggle; even-numbered wrigglers (2, 4) lead with Wriggle before cycling into Nasty Bite."
+}

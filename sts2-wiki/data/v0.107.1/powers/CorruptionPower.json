@@ -1,0 +1,8 @@
+{
+  "class_name": "CorruptionPower",
+  "title": "Corruption",
+  "power_type": "Buff",
+  "stack_type": "Single",
+  "description": "Skills cost 0. Whenever you play a Skill, Exhaust it.",
+  "notes": "Despite being categorized as a Buff, this is typically a penalty power applied by enemies. It removes all energy cost from Skills but forces them to Exhaust after being played, making them one-time use per turn."
+}

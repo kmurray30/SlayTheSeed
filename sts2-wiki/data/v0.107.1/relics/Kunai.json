@@ -1,0 +1,8 @@
+{
+  "class_name": "Kunai",
+  "title": "Kunai",
+  "rarity": "Rare",
+  "description": "Every time you play [blue]3[/blue] Attacks in a single turn, gain [blue]1[/blue] [gold]Dexterity[/gold].",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "The counter displays your current attack count (0–2) during each turn. Triggers every 3 attacks played in a single turn, resetting the counter at turn start and after combat ends."
+}

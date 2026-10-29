@@ -1,0 +1,19 @@
+{
+  "class_name": "Beckon",
+  "title": "Beckon",
+  "character": "Status",
+  "energy_cost": -2,
+  "type": "Status",
+  "rarity": "Status",
+  "target": "None",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "HpLoss",
+      "base_value": 6
+    }
+  ],
+  "description": "At the end of your turn, if this is in your [gold]Hand[/gold], lose 6 HP.",
+  "x_cost": false,
+  "notes": "Beckon is an unplayable Status card (debuff) that automatically triggers its effect at the end of each turn while in your hand. It applies unblockable, unpowered damage and cannot be upgraded."
+}

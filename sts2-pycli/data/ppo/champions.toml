@@ -1,0 +1,75 @@
+# The deployed PPO run-policy champions. THIS FILE IS THE SOURCE OF TRUTH.
+#
+# Every lane that serves a champion reads it from here:
+#
+#   * python/champions.py            <- the loader
+#   * python/workbench/ppo_policy.py <- both inference backends
+#   * python/synergy/embed_geometry.py
+#   * packaging/SimAdvisor.spec      <- the shipped advisor exe
+#   * sts2-rs/crates/sts2-runai/src/ppo/net.rs   (GENERATED region)
+#   * ./Dockerfile                               (GENERATED region)
+#
+# The last two cannot read this file at runtime -- a Rust worktree has no
+# sibling sts2-pycli/, and `COPY` is Dockerfile syntax -- so they are generated
+# from it by `just sync-champions` and byte-checked by `just check-champions`.
+# Never hand-edit inside their markers.
+#
+# WHY EXACT FILENAMES. The old resolver globbed `<stem>*.onnx` and took the
+# highest <N> *present in whatever tree it ran in* -- and the repo, the Cloud
+# Run image, and the frozen advisor bundle are three different trees. That let
+# a promotion silently no-op (PR #339 shipped a retired Ironclad net for a
+# release) and let a leftover retired file with a higher iteration outrank the
+# real champion. Naming the file removes both: a stale net on disk is now inert,
+# and a MISSING champion is a loud error instead of a quiet demotion.
+#
+# To promote:   just promote-champion <character> <onnx-filename>
+# Then:         just check-champions   (also runs inside `just check` / `just ci`)
+#
+# Fields
+#   onnx    served by the Rust/ONNX backend, the container and the advisor exe.
+#   ckpt    the torch checkpoint. Named explicitly so it cannot drift to a
+#           different iteration than the .onnx.
+#   sha256  of the .onnx AS SHIPPED. The playbook requires shipping the exact
+#           file the gate swept rather than re-exporting; this is what makes
+#           that checkable. Verified by the test suite and the exe build, not
+#           on every runtime load.
+#   gate    one line on what promoted it. Full story: <net>.provenance.md.
+#   features  encoder features this net was TRAINED with (ppo.schema's
+#             STS2_PPO_FEATURES names, comma-separated). Empty = the default
+#             schema. Read at serve time so a champion is never handed a
+#             column it never trained on (GH #545).
+
+[ironclad]
+onnx = "ppo_fullrun_ironclad_cardmods_it850.onnx"
+ckpt = "ppo_fullrun_ironclad_cardmods_it850.pt"
+sha256 = "a89010583715c6b68595ee918e2e8ecc698f36d5e4b048426e5fbec7973f3a86"
+gate = "PASSED its pre-registered A10 gate 2026-10-27; promoted by user decision. A10 x 1000 paired seeds (panel 133,000,000): 21.7% -> 28.1%, +6.40pp, discordant 163 candidate-only / 99 champion-only, McNemar exact two-sided p=9.2e-05 (rule: delta>0 and p<0.01). A9 estimate from those runs 48.7% -> 55.4%, +6.70pp, p=2.9e-04. True A9 x 400 (panel 133,100,000, readout only): 49.5% -> 51.2%, +1.75pp, p=0.60. 0 errored rows in 2,800. Both arms vs the deployed ppo_fullrun_ironclad_a10_it700, one binary (src_hash aa7acaa26a2bf981), net_greedy, 1000/4000, shipped GH #830 Ironclad search, --act1 roll, potion-swap OFF, torch .pt, each arm featurized at its own checkpoint cfg. Standard eval (playbook 2.6, 4000/16000 = the advisor budget, A10 x 400, seeds 91,000,000): 30.00% A10 / 56.50% A9-est vs the outgoing net 26.75% / 52.25% (paired +3.25pp, p=0.27, different wheels). Recipe: true resume a10_it700 -> it850, A10-only, PLR off, features card_mods,reward_upgrade (cont_proj widened 25->26 slots with zero columns), LR re-anneal 0.42 -> 0.30, trained under the GH #830 search with STS2_RUNAI_POTION_SWAP=1, served OFF. ATTRIBUTES NOTHING: the two encoder features, 150 more A10 iterations, the LR re-open and training under the #830 search are confounded. See ppo_fullrun_ironclad_cardmods_it850.provenance.md and docs/experiments/2026-10-27-ironclad-a10-cardmods.md."
+features = "card_mods,reward_upgrade"
+
+[silent]
+onnx = "ppo_fullrun_silent_cont_it300_v0111vocab.onnx"
+ckpt = "ppo_fullrun_silent_cont_it300_v0111vocab.pt"
+sha256 = "804dda517f8f4b203db8a42172f54520b1f3354f1f828df2b0150f4a2d833b43"
+gate = "PASSED its pre-registered gate 2026-09-08. +5.64pp pooled on 2200 paired cells (200 seeds x A0-A10, panel 76,000,000) vs ppo_fullrun_silent_deckmut_it150, McNemar exact two-sided p=6.9e-07; seed-clustered p=7.5e-04 (design effect 2.19x). ALL 11 levels positive, worst +2.50pp against a -5.0pp guard; overall 46.91% -> 52.55%; 0 errored rows in 4,400. This is the CONTROL arm of the Silent PLR A/B: PLR itself measured NULL on a separate 4400-cell panel (-1.07pp +/- 1.33pp, clustered p=0.42, |effect| < 2.60pp at 95%), so the promoted recipe is PLR-FREE. The gain is a 150-iteration continuation bundled with --act1 roll, reward_upgrade, cheap sims and 960 games/iter, and ATTRIBUTES NOTHING among them. Trained with STS2_RUNAI_POTION_SWAP=1, served with it OFF. See ppo_fullrun_silent_cont_it300.provenance.md and docs/experiments/2026-09-02-silent-plr-ab.md. || 2026-10-18 GH #799: this file is a VOCAB RE-EXPORT of the SAME weights, NOT a new training and NOT re-gated. The card/relic/potion tables grew 580->599 / 297->299 / 63->64 ids for the v0.111.0 content (new rows seeded from the old OOV row by _widen_padded_embedding); ppo_fullrun_silent_cont_it300_v0111vocab.pt is a byte copy of ppo_fullrun_silent_cont_it300.pt. Exported from the checkpoint (scripts/reexport_champions_vocab.py); every other initializer is bit-identical to the shipped graph's. Logits and value BIT-IDENTICAL to the shipped ppo_fullrun_silent_cont_it300 graph on 2527 real v0.107.1 decisions (42 runs, A0-A10, act1 roll; scripts/vocab_reexport_equivalence.py), so the result above still describes this net. Under v0.111.0 the new ids read as the old OOV row (no 0.111 training: GH #802). See ppo_fullrun_silent_cont_it300_v0111vocab.provenance.md."
+features = ""  # GH #723: declared "reward_upgrade" until 2026-09-13, but the trainer's acting checkpoint carried no cfg, so this net was COLLECTED at the default schema and never saw the flag. Serving it on would hand the net a column it never trained on, silently -- the feature appends no slot. (GH #841: the checkpoint cfg, which `promote-champion` derives this from, said "reward_upgrade" too; rewritten to "" in the .pt and its pre-#799 twin.)
+
+[defect]
+onnx = "ppo_fullrun_defect_deckmut_it150_v0111vocab.onnx"
+ckpt = "ppo_fullrun_defect_deckmut_it150_v0111vocab.pt"
+sha256 = "88080ccd53cf4918eed2021e44512b9d362e4f0cbaead3a4bd4295f95d5b1219"
+gate = "first flags-on (deck-mutation) Defect champion: +5.5pp pooled vs asc_it230 (58.1% -> 63.6%), McNemar p=2.0e-06, A0-A10 x200 paired, panel 43M, 10/11 levels positive, worst A10 -1.5pp (GH #429). NOT attributable to learned deck mutation -- the baseline never trained on this env; see provenance. || 2026-10-18 GH #799: this file is a VOCAB RE-EXPORT of the SAME weights, NOT a new training and NOT re-gated. The card/relic/potion tables grew 580->599 / 297->299 / 63->64 ids for the v0.111.0 content (new rows seeded from the old OOV row by _widen_padded_embedding); ppo_fullrun_defect_deckmut_it150_v0111vocab.pt is a byte copy of ppo_fullrun_defect_deckmut_it150.pt. Built by widening the shipped graph's tables in place (scripts/reexport_champions_vocab.py): re-exporting from the checkpoint would have widened its 9-cat/19-cont input contract to today's 12/25, a different graph from the one gated. Logits and value BIT-IDENTICAL to the shipped ppo_fullrun_defect_deckmut_it150 graph on 2506 real v0.107.1 decisions (38 runs, A0-A10, act1 roll; scripts/vocab_reexport_equivalence.py), so the result above still describes this net. Under v0.111.0 the new ids read as the old OOV row (no 0.111 training: GH #802). See ppo_fullrun_defect_deckmut_it150_v0111vocab.provenance.md."
+features = ""
+
+[regent]
+onnx = "ppo_fullrun_regent_deckmut_it150_v0111vocab.onnx"
+ckpt = "ppo_fullrun_regent_deckmut_it150_v0111vocab.pt"
+sha256 = "57859226f5cfb638adb1c4dedd22367f68ed2afea3617721c89e5f51f5a69233"
+gate = "50.6% pooled A0-A10 flags-on, +4.55pp over the retired asc_it200 on 2200 paired cells (fresh panel 47,000,000), McNemar exact p=1.1e-04, 9/11 levels positive, worst A10 -4.0pp (rule allows -5.0). Last of the five deck-mutation legs (GH #399/#427); the #432 stopgap retired with it. NOT attributable to learned deck mutation -- the baseline never trained on this env; see provenance. || 2026-10-18 GH #799: this file is a VOCAB RE-EXPORT of the SAME weights, NOT a new training and NOT re-gated. The card/relic/potion tables grew 580->599 / 297->299 / 63->64 ids for the v0.111.0 content (new rows seeded from the old OOV row by _widen_padded_embedding); ppo_fullrun_regent_deckmut_it150_v0111vocab.pt is a byte copy of ppo_fullrun_regent_deckmut_it150.pt. Built by widening the shipped graph's tables in place (scripts/reexport_champions_vocab.py): re-exporting from the checkpoint would have widened its 10-cat/19-cont input contract to today's 12/25, a different graph from the one gated. Logits and value BIT-IDENTICAL to the shipped ppo_fullrun_regent_deckmut_it150 graph on 2503 real v0.107.1 decisions (50 runs, A0-A10, act1 roll; scripts/vocab_reexport_equivalence.py), so the result above still describes this net. Under v0.111.0 the new ids read as the old OOV row (no 0.111 training: GH #802). See ppo_fullrun_regent_deckmut_it150_v0111vocab.provenance.md."
+features = ""
+
+[necrobinder]
+onnx = "ppo_fullrun_necrobinder_deckmut_it150_v0111vocab.onnx"
+ckpt = "ppo_fullrun_necrobinder_deckmut_it150_v0111vocab.pt"
+sha256 = "84d612de27125ea7f2141e661700303322d0b820bbdbe3147aa9076093f8e002"
+gate = "33.1% pooled A0-A10 flags-on, +6.8pp over the retired asc_it300 on 2200 paired cells (fresh panel 41,000,000), McNemar exact p=6.1e-10, ALL 11 levels positive and NONE regressing (worst +1.0pp). First boss-conditioned champion (N_CAT 10). NOT attributable to any single cause -- see provenance (GH #431). || 2026-10-18 GH #799: this file is a VOCAB RE-EXPORT of the SAME weights, NOT a new training and NOT re-gated. The card/relic/potion tables grew 580->599 / 297->299 / 63->64 ids for the v0.111.0 content (new rows seeded from the old OOV row by _widen_padded_embedding); ppo_fullrun_necrobinder_deckmut_it150_v0111vocab.pt is a byte copy of ppo_fullrun_necrobinder_deckmut_it150.pt. Built by widening the shipped graph's tables in place (scripts/reexport_champions_vocab.py): re-exporting from the checkpoint would have widened its 10-cat/19-cont input contract to today's 12/25, a different graph from the one gated. Logits and value BIT-IDENTICAL to the shipped ppo_fullrun_necrobinder_deckmut_it150 graph on 2504 real v0.107.1 decisions (47 runs, A0-A10, act1 roll; scripts/vocab_reexport_equivalence.py), so the result above still describes this net. Under v0.111.0 the new ids read as the old OOV row (no 0.111 training: GH #802). See ppo_fullrun_necrobinder_deckmut_it150_v0111vocab.provenance.md."
+features = ""

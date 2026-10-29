@@ -1,0 +1,9 @@
+{
+  "class_name": "PaelsLegion",
+  "title": "Pael's Legion",
+  "rarity": "Ancient",
+  "character": null,
+  "description": "Doubles Block gained from a card, then goes to sleep for 2 turns.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Summons a pet companion with random appearance (eyes, horns, spikes, or wings). Block doubling is multiplicative and triggers once per cooldown cycle. After doubling Block on a card play, the relic enters cooldown for 2 turns before it can double Block again. The pet displays the current cooldown counter via animations: BlockTrigger when activated, SleepTrigger when cooling down, WakeUpTrigger when reactivating."
+}

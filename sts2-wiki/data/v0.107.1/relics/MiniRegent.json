@@ -1,0 +1,8 @@
+{
+  "class_name": "MiniRegent",
+  "title": "Mini Regent",
+  "rarity": "Rare",
+  "description": "The first time you spend Energy each turn, gain 1 Strength.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Triggers once per side turn via the AfterStarsSpent hook (when Energy is spent). The per-turn cooldown is tracked internally and resets at the start of each side turn and after combat ends."
+}

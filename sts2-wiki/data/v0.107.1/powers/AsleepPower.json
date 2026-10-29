@@ -1,0 +1,9 @@
+{
+  "class_name": "AsleepPower",
+  "title": "Asleep",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Creature enters a dormant state. Awakens when HP is lost or after the duration expires.",
+  "smart_description": "Awakens upon losing HP or after [blue]{Amount}[/blue] turns.",
+  "notes": "This power is specific to Lagavulin Matriarch. It decrements by 1 each turn and awakens immediately if the owner takes unblocked damage. When the counter reaches 0 at turn end, the creature performs its WakeUpMove. Upon awakening, any associated PlatingPower is removed first."
+}

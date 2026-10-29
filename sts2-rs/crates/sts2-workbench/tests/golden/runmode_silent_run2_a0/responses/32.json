@@ -1,0 +1,502 @@
+{
+ "details": [],
+ "error": null,
+ "label": "Map → (1,2)",
+ "step": {
+  "action_label": "",
+  "assets_base": "https://assets.test",
+  "chosen_action": null,
+  "decision": "shop",
+  "idx": 0,
+  "meta": {
+   "act": 1,
+   "act_name": "Overgrowth",
+   "bg_col": 1,
+   "bg_row": 2,
+   "bg_seed": 2,
+   "floor": 2,
+   "step_no": 0,
+   "turn": null
+  },
+  "pv": null,
+  "scores": [],
+  "source": "live",
+  "state": {
+   "act": 1,
+   "act1": "overgrowth",
+   "act_name": "Overgrowth",
+   "ascension": 0,
+   "bg_col": 1,
+   "bg_row": 2,
+   "bg_seed": 2,
+   "card_removal_cost": 75,
+   "cards": [
+    {
+     "card_cost": 1,
+     "color": "green",
+     "cost": 78,
+     "description": "Deal 6 damage for each Attack already played this turn.",
+     "description_rich": "Deal 6 damage for each Attack already played this turn.",
+     "id": "FINISHER",
+     "image": "https://assets.test/card_atlas/silent/finisher.png",
+     "index": 0,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Finisher",
+     "on_sale": false,
+     "rarity": "Uncommon",
+     "type": "Attack"
+    },
+    {
+     "card_cost": 0,
+     "color": "green",
+     "cost": 38,
+     "description": "Deal 8 damage X times.",
+     "description_rich": "Deal 8 damage X times.",
+     "id": "SKEWER",
+     "image": "https://assets.test/card_atlas/silent/skewer.png",
+     "index": 1,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Skewer",
+     "on_sale": true,
+     "rarity": "Uncommon",
+     "type": "Attack"
+    },
+    {
+     "card_cost": 1,
+     "color": "green",
+     "cost": 73,
+     "description": "Draw cards until you have 6 in your Hand.",
+     "description_rich": "Draw cards until you have 6 in your Hand.",
+     "id": "EXPERTISE",
+     "image": "https://assets.test/card_atlas/silent/expertise.png",
+     "index": 2,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Expertise",
+     "on_sale": false,
+     "rarity": "Uncommon",
+     "type": "Skill"
+    },
+    {
+     "card_cost": 0,
+     "color": "green",
+     "cost": 51,
+     "description": "Draw 1 card.\nDiscard 1 card.",
+     "description_rich": "Draw 1 card.\nDiscard 1 card.",
+     "id": "PREPARED",
+     "image": "https://assets.test/card_atlas/silent/prepared.png",
+     "index": 3,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Prepared",
+     "on_sale": false,
+     "rarity": "Common",
+     "type": "Skill"
+    },
+    {
+     "card_cost": 1,
+     "color": "green",
+     "cost": 79,
+     "description": "Shivs deal 4 additional damage.",
+     "description_rich": "Shivs deal 4 additional damage.",
+     "id": "ACCURACY",
+     "image": "https://assets.test/card_atlas/silent/accuracy.png",
+     "index": 4,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Accuracy",
+     "on_sale": false,
+     "rarity": "Uncommon",
+     "type": "Power"
+    },
+    {
+     "card_cost": 0,
+     "color": "colorless",
+     "cost": 83,
+     "description": "Retain.\nExhaust up to 3 cards in your Hand.\nExhaust.",
+     "description_rich": "[gold]Retain[/gold].\nExhaust up to 3 cards in your Hand.\n[gold]Exhaust[/gold].",
+     "id": "PURITY",
+     "image": "https://assets.test/card_atlas/colorless/purity.png",
+     "index": 5,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Purity",
+     "on_sale": false,
+     "rarity": "Uncommon",
+     "type": "Skill"
+    },
+    {
+     "card_cost": 0,
+     "color": "colorless",
+     "cost": 177,
+     "description": "Deal 3 damage.\nAt the start of your next turn, return this to your Hand.",
+     "description_rich": "Deal 3 damage.\nAt the start of your next turn, return this to your Hand.",
+     "id": "BOLAS",
+     "image": "https://assets.test/card_atlas/colorless/bolas.png",
+     "index": 6,
+     "is_available": true,
+     "is_stocked": false,
+     "name": "Bolas",
+     "on_sale": false,
+     "rarity": "Rare",
+     "type": "Attack"
+    }
+   ],
+   "decision": "shop",
+   "floor": 2,
+   "options": [
+    {
+     "action": "buy_card",
+     "args": {
+      "card_index": 0
+     },
+     "enabled": true,
+     "label": "Buy FINISHER.title (78g)"
+    },
+    {
+     "action": "buy_card",
+     "args": {
+      "card_index": 1
+     },
+     "enabled": true,
+     "label": "Buy SKEWER.title (38g)"
+    },
+    {
+     "action": "buy_card",
+     "args": {
+      "card_index": 2
+     },
+     "enabled": true,
+     "label": "Buy EXPERTISE.title (73g)"
+    },
+    {
+     "action": "buy_card",
+     "args": {
+      "card_index": 3
+     },
+     "enabled": true,
+     "label": "Buy PREPARED.title (51g)"
+    },
+    {
+     "action": "buy_card",
+     "args": {
+      "card_index": 4
+     },
+     "enabled": true,
+     "label": "Buy ACCURACY.title (79g)"
+    },
+    {
+     "action": "buy_card",
+     "args": {
+      "card_index": 5
+     },
+     "enabled": true,
+     "label": "Buy PURITY.title (83g)"
+    },
+    {
+     "action": "buy_potion",
+     "args": {
+      "potion_index": 0
+     },
+     "enabled": true,
+     "label": "Buy VULNERABLE_POTION.title (50g)"
+    },
+    {
+     "action": "buy_potion",
+     "args": {
+      "potion_index": 1
+     },
+     "enabled": true,
+     "label": "Buy SKILL_POTION.title (50g)"
+    },
+    {
+     "action": "buy_potion",
+     "args": {
+      "potion_index": 2
+     },
+     "enabled": true,
+     "label": "Buy TOUCH_OF_INSANITY.title (75g)"
+    },
+    {
+     "action": "remove_card",
+     "args": {},
+     "enabled": true,
+     "label": "Remove a card (75g)"
+    },
+    {
+     "action": "leave_room",
+     "args": {},
+     "enabled": true,
+     "label": "Leave shop"
+    }
+   ],
+   "player": {
+    "block": 0,
+    "deck": [
+     {
+      "color": "green",
+      "cost": 1,
+      "description": "Deal 6 damage.",
+      "description_rich": "Deal 6 damage.",
+      "id": "STRIKE_SILENT",
+      "image": "https://assets.test/card_atlas/silent/strike_silent.png",
+      "index": 0,
+      "name": "Strike",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "green",
+      "cost": 1,
+      "description": "Deal 6 damage.",
+      "description_rich": "Deal 6 damage.",
+      "id": "STRIKE_SILENT",
+      "image": "https://assets.test/card_atlas/silent/strike_silent.png",
+      "index": 1,
+      "name": "Strike",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "green",
+      "cost": 1,
+      "description": "Deal 6 damage.",
+      "description_rich": "Deal 6 damage.",
+      "id": "STRIKE_SILENT",
+      "image": "https://assets.test/card_atlas/silent/strike_silent.png",
+      "index": 2,
+      "name": "Strike",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "green",
+      "cost": 1,
+      "description": "Deal 6 damage.",
+      "description_rich": "Deal 6 damage.",
+      "id": "STRIKE_SILENT",
+      "image": "https://assets.test/card_atlas/silent/strike_silent.png",
+      "index": 3,
+      "name": "Strike",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "green",
+      "cost": 1,
+      "description": "Deal 6 damage.",
+      "description_rich": "Deal 6 damage.",
+      "id": "STRIKE_SILENT",
+      "image": "https://assets.test/card_atlas/silent/strike_silent.png",
+      "index": 4,
+      "name": "Strike",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "green",
+      "cost": 1,
+      "description": "Gain 5 Block.",
+      "description_rich": "Gain 5 Block.",
+      "id": "DEFEND_SILENT",
+      "image": "https://assets.test/card_atlas/silent/defend_silent.png",
+      "index": 5,
+      "name": "Defend",
+      "rarity": "Basic",
+      "type": "Skill",
+      "upgraded": false
+     },
+     {
+      "color": "green",
+      "cost": 1,
+      "description": "Gain 5 Block.",
+      "description_rich": "Gain 5 Block.",
+      "id": "DEFEND_SILENT",
+      "image": "https://assets.test/card_atlas/silent/defend_silent.png",
+      "index": 6,
+      "name": "Defend",
+      "rarity": "Basic",
+      "type": "Skill",
+      "upgraded": false
+     },
+     {
+      "color": "green",
+      "cost": 1,
+      "description": "Gain 5 Block.",
+      "description_rich": "Gain 5 Block.",
+      "id": "DEFEND_SILENT",
+      "image": "https://assets.test/card_atlas/silent/defend_silent.png",
+      "index": 7,
+      "name": "Defend",
+      "rarity": "Basic",
+      "type": "Skill",
+      "upgraded": false
+     },
+     {
+      "color": "green",
+      "cost": 1,
+      "description": "Gain 5 Block.",
+      "description_rich": "Gain 5 Block.",
+      "id": "DEFEND_SILENT",
+      "image": "https://assets.test/card_atlas/silent/defend_silent.png",
+      "index": 8,
+      "name": "Defend",
+      "rarity": "Basic",
+      "type": "Skill",
+      "upgraded": false
+     },
+     {
+      "color": "green",
+      "cost": 1,
+      "description": "Gain 5 Block.",
+      "description_rich": "Gain 5 Block.",
+      "id": "DEFEND_SILENT",
+      "image": "https://assets.test/card_atlas/silent/defend_silent.png",
+      "index": 9,
+      "name": "Defend",
+      "rarity": "Basic",
+      "type": "Skill",
+      "upgraded": false
+     },
+     {
+      "color": "green",
+      "cost": 0,
+      "description": "Deal 3 damage.\nApply 1 Weak.",
+      "description_rich": "Deal 3 damage.\nApply 1 Weak.",
+      "id": "NEUTRALIZE",
+      "image": "https://assets.test/card_atlas/silent/neutralize.png",
+      "index": 10,
+      "name": "Neutralize",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "green",
+      "cost": 1,
+      "description": "Gain 8 Block.\nDiscard 1 card.",
+      "description_rich": "Gain 8 Block.\nDiscard 1 card.",
+      "id": "SURVIVOR",
+      "image": "https://assets.test/card_atlas/silent/survivor.png",
+      "index": 11,
+      "name": "Survivor",
+      "rarity": "Basic",
+      "type": "Skill",
+      "upgraded": false
+     },
+     {
+      "color": "green",
+      "cost": 2,
+      "description": "Retain.\nApply 7 Poison.",
+      "description_rich": "[gold]Retain[/gold].\nApply 7 Poison.",
+      "id": "SNAKEBITE",
+      "image": "https://assets.test/card_atlas/silent/snakebite.png",
+      "index": 12,
+      "name": "Snakebite",
+      "rarity": "Common",
+      "type": "Skill",
+      "upgraded": false
+     }
+    ],
+    "gold": 113,
+    "hp": 59,
+    "max_hp": 70,
+    "name": "Silent",
+    "potion_slots": 3,
+    "potions": [
+     {
+      "description": "Choose 1 of 3 random Attack cards to add into your Hand. It's free to play this turn.",
+      "id": "ATTACK_POTION",
+      "image": "https://assets.test/potion_atlas/attack_potion.png",
+      "name": "Attack Potion"
+     }
+    ],
+    "relics": [
+     {
+      "description": "At the start of each combat, draw 2 additional cards.",
+      "id": "RING_OF_THE_SNAKE",
+      "image": "https://assets.test/relic_atlas/ring_of_the_snake.png",
+      "name": "Ring of the Snake"
+     },
+     {
+      "description": "At the start of Elite combats, draw 2 additional cards and gain 1 Energy.",
+      "id": "BOOMING_CONCH",
+      "image": "https://assets.test/relic_atlas/booming_conch.png",
+      "name": "Booming Conch"
+     }
+    ]
+   },
+   "potions": [
+    {
+     "cost": 50,
+     "description": "Apply 3 Vulnerable.",
+     "id": "VULNERABLE_POTION",
+     "image": "https://assets.test/potion_atlas/vulnerable_potion.png",
+     "index": 0,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Vulnerable Potion"
+    },
+    {
+     "cost": 50,
+     "description": "Choose 1 of 3 random Skill cards to add into your Hand. It's free to play this turn.",
+     "id": "SKILL_POTION",
+     "image": "https://assets.test/potion_atlas/skill_potion.png",
+     "index": 1,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Skill Potion"
+    },
+    {
+     "cost": 75,
+     "description": "Choose a card in your Hand. It is free to play this combat.",
+     "id": "TOUCH_OF_INSANITY",
+     "image": "https://assets.test/potion_atlas/touch_of_insanity.png",
+     "index": 2,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Touch of Insanity"
+    }
+   ],
+   "relics": [
+    {
+     "cost": 299,
+     "description": "At the start of each combat, add a random card into your Hand. It's free to play this turn.",
+     "id": "VEXING_PUZZLEBOX",
+     "image": "https://assets.test/relic_atlas/vexing_puzzlebox.png",
+     "index": 0,
+     "is_available": true,
+     "is_stocked": false,
+     "name": "Vexing Puzzlebox"
+    },
+    {
+     "cost": 171,
+     "description": "Upon pickup, Upgrade 2 random Attacks.",
+     "id": "WHETSTONE",
+     "image": "https://assets.test/relic_atlas/whetstone.png",
+     "index": 1,
+     "is_available": true,
+     "is_stocked": false,
+     "name": "Whetstone"
+    },
+    {
+     "cost": 213,
+     "description": "While you have no potions, you have 2 additional Dexterity.",
+     "id": "BELT_BUCKLE",
+     "image": "https://assets.test/relic_atlas/belt_buckle.png",
+     "index": 2,
+     "is_available": true,
+     "is_stocked": false,
+     "name": "Belt Buckle"
+    }
+   ]
+  }
+ }
+}

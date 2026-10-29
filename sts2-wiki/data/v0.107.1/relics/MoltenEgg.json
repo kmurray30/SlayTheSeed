@@ -1,0 +1,8 @@
+{
+  "class_name": "MoltenEgg",
+  "title": "Molten Egg",
+  "rarity": "Rare",
+  "description": "Whenever you add an Attack card to your [gold]Deck[/gold], [gold]Upgrade[/gold] it.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Applies to Attack cards gained from card rewards, shops, and direct deck additions. Only available before Act 3."
+}

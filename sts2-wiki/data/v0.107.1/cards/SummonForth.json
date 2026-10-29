@@ -1,0 +1,21 @@
+{
+  "class_name": "SummonForth",
+  "title": "Summon Forth",
+  "character": "Necrobinder",
+  "energy_cost": 1,
+  "type": "Skill",
+  "rarity": "Uncommon",
+  "target": "Self",
+  "keywords": ["Forge", "Retain"],
+  "vars": [
+    {
+      "type": "Forge",
+      "base_value": 8,
+      "upgraded_value": 11
+    }
+  ],
+  "description": "Put [gold]Sovereign Blade[/gold] into your [gold]Hand[/gold] from anywhere.\n[gold]Forge[/gold] +8.",
+  "upgraded_description": "Put [gold]Sovereign Blade[/gold] into your [gold]Hand[/gold] from anywhere.\n[gold]Forge[/gold] +11.",
+  "referenced_powers": [],
+  "notes": "Searches the entire card collection for all Sovereign Blade cards that are not in your hand and puts them into your hand."
+}

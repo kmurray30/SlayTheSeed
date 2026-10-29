@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Differential black-box harness for SpireMentor's BridgeServer.
+    Deliberately has NO compile-time reference to SpireMentor.dll, sts2.dll or
+    GodotSharp: SpireMentor.dll is loaded at runtime from a path given on the
+    command line and driven purely through reflection, so the same harness
+    binary works against any build (current or rewritten server).
+    Only Harmony (real 0Harmony 2.4.2, same file the mod builds against) is
+    referenced, to intercept the few game-side calls the server makes.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- Harmony/MonoMod cannot detour on CoreCLR 10+; stay on 9.x (same as Sts2Headless). -->
+    <RollForward>LatestMinor</RollForward>
+    <NoWarn>$(NoWarn);CS8600;CS8602;CS8604</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>$(PycliLib)/0Harmony.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="MonoMod.Backports">
+      <HintPath>$(PycliLib)/MonoMod.Backports.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="MonoMod.ILHelpers">
+      <HintPath>$(PycliLib)/MonoMod.ILHelpers.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+</Project>

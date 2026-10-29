@@ -1,0 +1,8 @@
+{
+  "class_name": "FakeBloodVial",
+  "title": "Blood Vial???",
+  "rarity": "Event",
+  "description": "At the start of each combat, heal [green]1[/green] HP.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Healing is applied on turn 1 only via the AfterPlayerTurnStartLate hook."
+}

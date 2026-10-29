@@ -1,0 +1,9 @@
+{
+  "class_name": "KnockdownPower",
+  "title": "Knockdown",
+  "power_type": "Debuff",
+  "stack_type": "Counter",
+  "description": "This creature takes [blue]{Amount}[/blue] times the damage from other players this turn.",
+  "smart_description": "Other allies deal [blue]{Amount}[/blue] times more damage to this enemy this turn.",
+  "notes": "Knockdown is a turn-duration debuff that increases damage taken from allies by the stack count. It expires at the end of the afflicted creature's side's turn. The damage multiplier applies only to powered attacks from other creatures (not the applier)."
+}

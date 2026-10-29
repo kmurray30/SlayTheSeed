@@ -1,0 +1,9 @@
+{
+  "class_name": "CurlUpPower",
+  "title": "Curl Up",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "When damaged, rolls up and gains block. (Once per combat)",
+  "smart_description": "Gains [blue]{Amount}[/blue] [gold]Block[/gold] upon first being hit.",
+  "notes": "Monster-specific power used primarily by Louse enemies. Triggers when the card that dealt damage to the owner is played again. {Amount} is the block value granted, which varies by monster instance. Power removes itself after triggering. If owner is a LouseProgenitor, sets the Curled status flag."
+}

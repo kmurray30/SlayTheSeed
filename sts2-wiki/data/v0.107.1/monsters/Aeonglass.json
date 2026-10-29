@@ -1,0 +1,75 @@
+{
+  "class_name": "Aeonglass",
+  "title": "Aeonglass",
+  "min_hp": 535,
+  "max_hp": 535,
+  "min_hp_base": 512,
+  "max_hp_base": 512,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "EBB_MOVE",
+      "title": "Ebb",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 32,
+          "damage_base": 26,
+          "ascension": 9
+        },
+        {
+          "type": "block",
+          "amount": 33
+        }
+      ],
+      "effects": [
+        "Deal 26/32 damage",
+        "Gain 33 Block"
+      ]
+    },
+    {
+      "id": "EYE_LASERS_MOVE",
+      "title": "Eye Lasers",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 12,
+          "damage_base": 11,
+          "hits": 2,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 11/12 damage",
+        "2 hits"
+      ]
+    },
+    {
+      "id": "INCREASING_INTENSITY_MOVE",
+      "title": "Increasing Intensity",
+      "intents": [
+        {
+          "type": "status",
+          "amount": 2,
+          "amount_base": 1,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Add 1/2 Wither to discard",
+        "Gain 3/4 Strength (increases by 1 each use)",
+        "Upgrade all Wither cards in player's deck"
+      ]
+    }
+  ],
+  "move_pattern": "Cycles through Ebb → Eye Lasers → Increasing Intensity",
+  "powers_on_spawn": [
+    "Withering Presence",
+    "Artifact Power"
+  ],
+  "notes": "Aeonglass gains Strength progressively with each Increasing Intensity move, starting at 3/4 Strength and increasing by 1 each subsequent use. Each use of Increasing Intensity also upgrades all existing Wither cards in the player's deck, scaling up their effects. Withering Presence is applied to all opponents at game start (6 stacks), and Artifact Power is applied to Aeonglass itself (3 stacks)."
+}

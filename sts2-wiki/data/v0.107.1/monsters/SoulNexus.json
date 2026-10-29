@@ -1,0 +1,58 @@
+{
+  "class_name": "SoulNexus",
+  "title": "Soul Nexus",
+  "min_hp": 254,
+  "min_hp_base": 234,
+  "hp_ascension": 8,
+  "max_hp": 254,
+  "max_hp_base": 234,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "SOUL_BURN_MOVE",
+      "title": "Soul Burn",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 31,
+          "damage_base": 29,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 29/31 damage"]
+    },
+    {
+      "id": "MAELSTROM_MOVE",
+      "title": "Maelstrom",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 7,
+          "damage_base": 6,
+          "hits": 4,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 6/7 damage", "4 hits"]
+    },
+    {
+      "id": "DRAIN_LIFE_MOVE",
+      "title": "Drain Life",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 19,
+          "damage_base": 18,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": ["Deal 18/19 damage", "Apply 2 Vulnerable", "Apply 2 Weak"]
+    }
+  ],
+  "move_pattern": "Randomly cycles through Soul Burn, Maelstrom, and Drain Life (cannot repeat consecutively)",
+  "powers_on_spawn": [],
+  "notes": "Maelstrom is hidden from the bestiary despite being part of the active move pool. Monster does not fade after death and remains on screen until removed from room."
+}

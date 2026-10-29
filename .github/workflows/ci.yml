@@ -1,0 +1,157 @@
+# The game-free gate: everything that can run without a Slay the Spire 2
+# install. Tests that need the game skip (Rust: cfg/probe-gated; Python: the
+# `oracle` marker; sts2-wiki: skipUnless on the decompilation / art / audio;
+# web: existsSync guards), so a green run here proves the engine, the
+# encoder/PPO stack, the extraction tooling and the web app — not parity with
+# the game.
+#
+# Caches are SAVED only on pushes to main and RESTORED everywhere: a pull
+# request reads main's caches but never writes its own, so PR runs cannot
+# evict main's entries from the repository's 10 GB cache.
+#
+# This file lives ONLY in the public repository (added at export from the
+# private repo's release/public-overlay/); the private repo runs local gates.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# A newer push to a PR cancels its running CI. On main a running run is never
+# cancelled: syncs can land minutes apart, and cancelling would starve the
+# ~10 min cold Rust jobs (no result, and no cache saved for the next run).
+# Further main pushes queue behind it; GitHub keeps only the newest one queued.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  rust:
+    name: rust (fmt, clippy, nextest, doctests, wasm)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: sts2-rs
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.99.1
+          components: rustfmt, clippy
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: sts2-rs
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - uses: taiki-e/install-action@nextest
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+      - run: cargo nextest run --workspace --profile ci
+      - run: cargo test --workspace --doc
+      - run: cargo check --target wasm32-unknown-unknown -p sts2-workbench-wasm
+
+  python:
+    name: python (ruff, pytest, champions; game-free)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: sts2-pycli
+    steps:
+      - uses: actions/checkout@v4
+      # uv sync builds the sts2_rs PyO3 wheel from ../sts2-rs (editable path dep).
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.99.1
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: sts2-rs
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          save-cache: ${{ github.ref == 'refs/heads/main' }}
+      - run: uv sync --dev
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run --frozen python scripts/sync_champions.py --check
+      - run: uv run pytest tests -m "not oracle" -q
+
+  wiki:
+    name: sts2-wiki + import scripts (ruff, mypy, unittest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          save-cache: ${{ github.ref == 'refs/heads/main' }}
+      # encode_sfx's integration tests run the real ffmpeg/ffprobe.
+      - run: sudo apt-get update -q && sudo apt-get install -y -q ffmpeg
+      # scripts/ (import_game.py, check_art.py) has no project of its own:
+      # ruff's default rule set, pinned so a ruff release cannot redden CI.
+      - run: uvx ruff@0.15.6 check --isolated --select E4,E7,E9,F scripts/
+      - working-directory: sts2-wiki
+        run: |
+          uv sync
+          uv run ruff check scripts/ tools/
+          uv run ruff format --check scripts/ tools/
+          uv run mypy scripts/
+          uv run python -m unittest discover -t . -s scripts -p 'test_*.py'
+          uv run python -m unittest tools.lookup.test_lookup
+
+  web:
+    name: web (vitest, typecheck, eslint, build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: sts2-pycli/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24   # the npm (11) the lockfile is maintained with; npm 10 rejects it
+          cache: npm
+          cache-dependency-path: sts2-pycli/web/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npx tsc -b
+      - run: npx eslint .
+      - run: npx vite build
+
+  windows:
+    # The onboarding path (import-game, the workbench) is native Windows too;
+    # this catches path, encoding and line-ending bugs the Linux jobs cannot.
+    name: windows (sts2-wiki unittest, pytest; game-free)
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.99.1
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: sts2-rs
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          save-cache: ${{ github.ref == 'refs/heads/main' }}
+      - working-directory: sts2-wiki
+        run: |
+          uv sync
+          uv run python -m unittest discover -t . -s scripts -p 'test_*.py'
+      - working-directory: sts2-pycli
+        run: |
+          uv sync --dev
+          uv run pytest tests -m "not oracle" -q

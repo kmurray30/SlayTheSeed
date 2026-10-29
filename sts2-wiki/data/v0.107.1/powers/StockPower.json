@@ -1,0 +1,8 @@
+{
+  "class_name": "StockPower",
+  "title": "Stock",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "When killed, a new Axebot is summoned in its place.",
+  "notes": "A counter-based buff that triggers on the bearer's death. If the counter is greater than 0, an Axebot enemy is summoned with StockAmount decremented by 1. The power prevents combat from ending as long as it exists."
+}

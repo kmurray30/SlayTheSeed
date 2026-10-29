@@ -1,0 +1,26 @@
+{
+  "class_name": "HandOfGreed",
+  "title": "Hand of Greed",
+  "character": "Colorless",
+  "energy_cost": 2,
+  "type": "Attack",
+  "rarity": "Rare",
+  "target": "Single",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 20,
+      "upgraded_value": 25
+    },
+    {
+      "type": "Gold",
+      "base_value": 20,
+      "upgraded_value": 25
+    }
+  ],
+  "description": "Deal 20 damage.\nIf [gold]Fatal[/gold], gain 20 [gold]Gold[/gold].",
+  "upgraded_description": "Deal 25 damage.\nIf [gold]Fatal[/gold], gain 25 [gold]Gold[/gold].",
+  "referenced_powers": [],
+  "notes": "Gains Gold only if the target dies. Requires all powers on the target to support the Fatal condition."
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "ThunderPower",
+  "title": "Thunder",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever you [gold]Evoke Lightning[/gold], deal [blue]8[/blue] damage to each enemy hit.",
+  "smart_description": "Whenever you [gold]Evoke Lightning[/gold], deal [blue]{Amount}[/blue] damage to each enemy hit.",
+  "notes": "Triggers whenever a Lightning Orb is evoked by the power's owner. Each counter stack increases the damage dealt per orb evocation."
+}

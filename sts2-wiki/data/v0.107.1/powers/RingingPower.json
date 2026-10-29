@@ -1,0 +1,9 @@
+{
+  "class_name": "RingingPower",
+  "title": "Ringing",
+  "power_type": "Debuff",
+  "stack_type": "Single",
+  "description": "You can only play [blue]1[/blue] card this turn.",
+  "smart_description": "You can only play [blue]1[/blue] card this turn.",
+  "notes": "Applies the Ringing affliction to all cards in the player's hand and to any new cards that enter combat. Affected cards cannot be played unless it is the first card played this turn. Automatically removed at the end of the player's turn and clears all Ringing afflictions from cards."
+}

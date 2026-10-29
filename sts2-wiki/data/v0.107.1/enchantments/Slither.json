@@ -1,0 +1,21 @@
+{
+  "class_name": "Slither",
+  "title": "Slither",
+  "description": "When you draw this card, randomize its cost from [blue]0[/blue] to [blue]3[/blue].",
+  "card_type": "Any",
+  "restrictions": [
+    "Cannot enchant Unplayable cards",
+    "Cannot enchant X-cost cards"
+  ],
+  "stackable": false,
+  "show_amount": false,
+  "sources": [
+    {
+      "type": "event",
+      "class_name": "WoodCarvings",
+      "title": "Wood Carvings",
+      "amount": 1
+    }
+  ],
+  "notes": "Randomizes the enchanted card's energy cost to 0-3 each time it is drawn. The randomization occurs during the card draw phase."
+}

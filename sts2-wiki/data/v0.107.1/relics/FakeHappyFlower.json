@@ -1,0 +1,8 @@
+{
+  "class_name": "FakeHappyFlower",
+  "title": "Happy Flower???",
+  "rarity": "Event",
+  "description": "Every [blue]5[/blue] turns, gain 1 energy.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Displays a counter showing turns until the next energy gain. Resets to 0 after combat ends."
+}

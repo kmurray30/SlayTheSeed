@@ -1,0 +1,21 @@
+{
+  "class_name": "Clone",
+  "title": "Clone",
+  "description": "This card can be duplicated at [gold]Rest Sites[/gold].",
+  "card_type": "Any",
+  "restrictions": [
+    "Cannot be applied to Curses, Status cards, or Relics",
+    "Cannot be applied to cards with the Unplayable keyword"
+  ],
+  "stackable": false,
+  "show_amount": false,
+  "sources": [
+    {
+      "type": "relic",
+      "class_name": "PaelsGrowth",
+      "title": "Pael's Growth",
+      "amount": 4
+    }
+  ],
+  "notes": "Clone is a marker enchantment with no direct mechanical effect on the card itself. At rest sites, the Clone Rest Site option duplicates all cloned cards into the deck."
+}

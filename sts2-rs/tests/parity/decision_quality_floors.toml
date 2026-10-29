@@ -1,0 +1,138 @@
+# Per-class agreement floors consumed by
+# `scripts/decision_quality_gate.py --floors tests/parity/decision_quality_floors.toml`
+# (GH #446, item 4). A branch whose agreement on a class falls below its
+# floor FAILS the gate even when the paired McNemar against the base is
+# neutral — the floor is what stops a slow drift that never trips a single
+# paired test. Classes absent from this table have no floor.
+#
+# Ratchet rule, same as `blunder_budgets.toml`: when a change lands that
+# lifts a class, tighten its floor in the same commit. Never loosen one
+# without a written reason in the commit body.
+#
+# Baseline (2026-10-18, deployed dialect c_puct 2.5, 1000 sims x 4 seeds,
+# `combat_position_book_v3.json` 292 positions on the belt-carrying pool,
+# `dominance_pairs.json` 578 positions / 726 pairs on the belt-less pool;
+# both rebuilt on 99d45de25 with their original parameters, see History):
+#
+#   book by motif       n    gold_agr        book by tier   n   gold_agr
+#   incoming_attack    188   0.782           boss           83  0.765
+#   no_attack_intent   104   0.769           common        139  0.802
+#   free_play_in_hand   87   0.704           elite          70  0.743
+#   power_in_hand       59   0.725
+#   potion_available   199   0.748           dominance by axis   n     pair_acc
+#   multi_enemy         86   0.756           enemy_hp          2472   0.7609
+#   gold_potion         31   0.677           player_block       424   0.6509
+#
+# Dominance figures are the gate's own (a tie counts as wrong); the binary
+# prints 0.7625 / 0.6557 for the same run because it gives ties half credit.
+#
+# Floors sit ~5pp under the baseline, rounded down to the nearest 0.01, so
+# seed-to-seed noise on a 34-position class does not fail an unrelated
+# change. Classes with fewer than 20 positions on the v3 book carry no
+# floor yet: gold_end_turn 14, proven_pair 3, lethal_threat 1, low_hp 1,
+# lethal_available 0. The last three are a harvest artefact — every fixture
+# is snapshotted at 70 HP, so "about to die" positions barely exist; a
+# low-snapshot-HP pool is the fix, not a wider one.
+#
+# ── the hard book (`book_hard*` sections) ────────────────────────────
+#
+# A SECOND book, gated under its own section names because it is not
+# comparable to v3 and shares motif names with it. `combat_position_book
+# hard` keeps only positions the deployed agent wins 20-80% of the time and
+# answers them by forced-first-move playouts with the hidden information
+# re-dealt per playout, so the agent agrees ~0.33 where it agrees ~0.78 on
+# v3. Feeding one table to both books would fail the other on sight.
+#
+# Baseline (2026-10-18, 99d45de25, deployed dialect c_puct 2.5, 1000 sims
+# x 4 seeds, `combat_position_book_hard.json` 300 positions on
+# `data/run-fixtures-hard`, rebuilt with its original parameters; the sweep
+# prints gold_agr 0.278 overall):
+#
+#   by tier          n   gold_agr      by playout margin     n   gold_agr
+#   boss           109   0.250         all                 300   0.278
+#   common          43   0.262         margin_ge_10         43   0.535
+#   elite          148   0.302         margin_ge_20         16   0.766
+#
+#   by motif         n   gold_agr
+#   gold_potion     99   0.217
+#
+# `margin_ge_10` is the subset that matters and the reason the margin
+# sections exist: the median hard position is a 3.1pp near-tie where a
+# flipped pick costs nothing measurable, while a miss on this subset costs
+# +13pp of fight win probability. Gate changes to the search's evaluation
+# here (GH #446, `logs/2026-09-07-potion-diagnostic/FINDINGS.md`).
+#
+# Floors on this book sit `baseline - max(5pp, 1.5 sd)` rounded down to
+# 0.01, where sd is the binomial spread over the POSITION count (cells are
+# four seeds of the same position, not four independent draws). That is
+# looser than the v3 rule because the hard classes are small — 11pp of slack
+# on `margin_ge_10`'s 43 positions. The floor is the anti-drift backstop
+# here, not the sensitive test; the paired McNemar is.
+#
+# No floor on: `margin_ge_20` (16 positions), `gold_end_turn` (18),
+# `lethal_threat` (9), `low_hp` (8), `proven_pair` (1) — under the
+# 20-position rule above. No floors on
+# this book's position-shape motifs (`incoming_attack`, `potion_available`,
+# …) either: on a book of near-ties they would be seven more chances to
+# fail on noise without naming anything a change can act on. Of the two
+# answer-shape motifs the diagnostic priced, only `gold_potion` still clears
+# 20 positions on the rebuilt book.
+#
+# History: the 2026-09-05 v2-book baseline (159 positions, belt-less pool)
+# was incoming_attack 0.801 / no_attack_intent 0.931 / free_play 0.875 /
+# power 0.812 / multi_enemy 0.799; boss 0.859 / common 0.902 / elite 0.788.
+# v3 is harder across the board (gold_agr 0.843 -> 0.775) because it
+# carries potion belts (213/303 positions offer a drink) and nearly all the
+# elite/boss positions the pool has.
+#
+# History: 2026-10-18 rebuild (GH #805). Every suite here had gone stale.
+# On `origin/main` d49681517, 0/303 v3 positions realized to the state the
+# book froze (likely the #762 scenario-builder change; hard and dominance
+# were not checked there). The #805 fix that gives fixture combats their
+# `player.character` (Defect's 3-slot orb belt; character-keyed search
+# policy) moves every hash again: on that tree the old suites verified
+# 0/303, 0/300 and 0/584. All three were rebuilt with their
+# original parameters (`logs/2026-10-18-learned-rollout/books/`), and every
+# floor was re-derived from the new baseline by the rules above — some sit
+# BELOW the old ones (hard `all` 0.28 -> 0.22) because the rule's
+# 1.5 sd term and the new baselines say so, not because anything got
+# worse: the old and new numbers are on different position sets and are
+# not comparable. The 2026-09-05 v3 / dominance baseline was
+# incoming_attack 0.760 / no_attack_intent 0.801 / free_play 0.747 /
+# power 0.759 / potion 0.741 / multi_enemy 0.724 / gold_potion 0.654;
+# boss 0.761 / common 0.806 / elite 0.727; enemy_hp 0.7680 / player_block
+# 0.6425. The 2026-09-08 hard baseline was all 0.334 / margin_ge_10 0.520;
+# boss 0.264 / common 0.395 / elite 0.358; gold_end_turn 0.430 /
+# gold_potion 0.214.
+
+[book]
+incoming_attack   = 0.73
+no_attack_intent  = 0.71
+free_play_in_hand = 0.65
+power_in_hand     = 0.67
+potion_available  = 0.69
+multi_enemy       = 0.70
+gold_potion       = 0.62
+
+[book_tier]
+boss   = 0.71
+common = 0.75
+elite  = 0.69
+
+[dominance]
+enemy_hp     = 0.71
+player_block = 0.60
+
+# ── hard book ─────────────────────────────────────────────────────────
+
+[book_hard]
+gold_potion   = 0.15
+
+[book_hard_tier]
+boss   = 0.18
+common = 0.16
+elite  = 0.24
+
+[book_hard_margin]
+all          = 0.22
+margin_ge_10 = 0.42

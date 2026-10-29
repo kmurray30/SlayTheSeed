@@ -1,0 +1,9 @@
+{
+  "class_name": "SoldiersStew",
+  "title": "Soldier's Stew",
+  "rarity": "Rare",
+  "usage": "CombatOnly",
+  "target": "AnyPlayer",
+  "description": "All cards containing Strike gain 1 Replay this combat.",
+  "notes": "This potion applies a persistent effect during combat that increases the replay count of all Strike cards in the deck by 1. The effect lasts for the current combat only."
+}

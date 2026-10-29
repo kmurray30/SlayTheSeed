@@ -1,0 +1,17 @@
+{
+  "class_name": "ScrollsOfBitingNormal",
+  "title": "Many Scrolls of Biting",
+  "room_type": "Monster",
+  "is_weak": false,
+  "monsters": [
+    "ScrollOfBiting",
+    "ScrollOfBiting",
+    "ScrollOfBiting",
+    "ScrollOfBiting"
+  ],
+  "total_monsters": 4,
+  "tags": [
+    "Scrolls"
+  ],
+  "notes": "All four ScrollOfBiting monsters have randomized starter moves determined by RNG. The first monster's starter move is selected randomly (0-2), and the subsequent monsters use cyclic offsets (n+1 % 3, n+2 % 3), with the fourth monster always using move index 2."
+}

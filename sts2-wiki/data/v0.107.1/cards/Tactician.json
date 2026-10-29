@@ -1,0 +1,21 @@
+{
+  "class_name": "Tactician",
+  "title": "Tactician",
+  "character": "Silent",
+  "energy_cost": 3,
+  "type": "Skill",
+  "rarity": "Uncommon",
+  "target": "Self",
+  "keywords": ["Sly"],
+  "vars": [
+    {
+      "type": "Energy",
+      "base_value": 1,
+      "upgraded_value": 2
+    }
+  ],
+  "description": "Gain 1 Energy.",
+  "upgraded_description": "Gain 2 Energy.",
+  "referenced_powers": [],
+  "x_cost": false
+}

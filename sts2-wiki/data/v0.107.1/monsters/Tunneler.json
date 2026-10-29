@@ -1,0 +1,67 @@
+{
+  "class_name": "Tunneler",
+  "title": "Tunneler",
+  "min_hp": 92,
+  "max_hp": 92,
+  "min_hp_base": 87,
+  "max_hp_base": 87,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "BITE_MOVE",
+      "title": "Bite",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 15,
+          "damage_base": 13,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 15/13 damage"]
+    },
+    {
+      "id": "BURROW_MOVE",
+      "title": "Burrow",
+      "intents": [
+        {
+          "type": "buff"
+        },
+        {
+          "type": "block",
+          "amount": 37,
+          "amount_base": 32,
+          "ascension": 8
+        }
+      ],
+      "effects": ["Apply 1 Burrowed", "Gain 37/32 Block"]
+    },
+    {
+      "id": "BELOW_MOVE",
+      "title": "Attack from Below",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 26,
+          "damage_base": 23,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 26/23 damage"]
+    },
+    {
+      "id": "DIZZY_MOVE",
+      "title": "Unburrow",
+      "intents": [
+        {
+          "type": "stun"
+        }
+      ],
+      "effects": ["Wake up from stun"]
+    }
+  ],
+  "move_pattern": "Cycles: Bite → Burrow → Attack from Below → Attack from Below (repeating). When stunned, plays Unburrow to wake up on the next turn.",
+  "powers_on_spawn": [],
+  "notes": "The Tunneler gains the Burrowed power when using Burrow, which changes its visual state to hidden (underground) and provides Block. After being externally stunned, it plays Unburrow on its next turn to wake up and return to the attack cycle. The Unburrow move is hidden from the bestiary. Attack from Below is performed from the hidden state with special visual positioning effects."
+}

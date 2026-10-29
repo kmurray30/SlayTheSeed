@@ -1,0 +1,63 @@
+{
+  "class_name": "HauntedShip",
+  "title": "Haunted Ship",
+  "min_hp": 67,
+  "min_hp_base": 63,
+  "max_hp": 67,
+  "max_hp_base": 63,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "HAUNT_MOVE",
+      "title": "Haunt",
+      "intents": [
+        {
+          "type": "debuff"
+        },
+        {
+          "type": "status"
+        }
+      ],
+      "effects": [
+        "Apply 3 Weak",
+        "Add 5 Dazed to discard"
+      ]
+    },
+    {
+      "id": "SWIPE_MOVE",
+      "title": "Swipe",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 14,
+          "damage_base": 13,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 13/14 damage"
+      ]
+    },
+    {
+      "id": "STOMP_MOVE",
+      "title": "Stomp",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 5,
+          "damage_base": 4,
+          "hits": 3,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 4/5 damage",
+        "3 hits"
+      ]
+    }
+  ],
+  "move_pattern": "Starts with Haunt. Then alternates between Swipe and Stomp (Swipe → Stomp → Swipe → Stomp → ...).",
+  "powers_on_spawn": [],
+  "notes": "Haunted Ship uses phobia spine visual skin. The creature applies Weak via an interactive choice, allowing the player to distribute it among their characters in multiplayer."
+}

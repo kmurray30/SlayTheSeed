@@ -1,0 +1,26 @@
+{
+  "class_name": "Spite",
+  "title": "Spite",
+  "character": "Ironclad",
+  "energy_cost": 0,
+  "type": "Attack",
+  "rarity": "Uncommon",
+  "target": "Single",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 5
+    },
+    {
+      "type": "Repeat",
+      "base_value": 2,
+      "upgraded_value": 3
+    }
+  ],
+  "description": "Deal 5 damage.\nIf you lost HP this turn,\nhits 2 times.",
+  "upgraded_description": "Deal 5 damage.\nIf you lost HP this turn,\nhits 3 times.",
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "Deals damage with a conditional multiplier—if you've taken unblocked damage this turn, the attack hits multiple times instead of once. The hit count is determined by the Repeat var (2 base, 3 upgraded)."
+}

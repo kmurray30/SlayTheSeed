@@ -1,0 +1,9 @@
+{
+  "class_name": "MazalethsGift",
+  "title": "Mazaleth's Gift",
+  "rarity": "Rare",
+  "usage": "Apply",
+  "target": "AnyPlayer",
+  "description": "Gain [blue]1[/blue] [gold]Ritual[/gold].",
+  "notes": "Combat-only potion that applies Ritual power to the player."
+}

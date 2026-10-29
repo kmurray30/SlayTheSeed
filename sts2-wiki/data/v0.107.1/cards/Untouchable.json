@@ -1,0 +1,20 @@
+{
+  "class_name": "Untouchable",
+  "title": "Untouchable",
+  "character": "Silent",
+  "energy_cost": 2,
+  "type": "Skill",
+  "rarity": "Common",
+  "target": "Self",
+  "keywords": ["Sly"],
+  "vars": [
+    {
+      "type": "Block",
+      "base_value": 6,
+      "upgraded_value": 9
+    }
+  ],
+  "description": "Gain 6 Block.",
+  "upgraded_description": "Gain 9 Block.",
+  "x_cost": false
+}

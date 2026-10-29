@@ -1,0 +1,15 @@
+{
+  "class_name": "BodySlam",
+  "title": "Body Slam",
+  "character": "Ironclad",
+  "energy_cost": 1,
+  "type": "Attack",
+  "rarity": "Common",
+  "target": "Single",
+  "keywords": [],
+  "vars": [],
+  "description": "Deal damage equal to your Block.",
+  "upgraded_cost": 0,
+  "x_cost": false,
+  "notes": "Damage is calculated as your current Block value at the time of play. In combat, displays the exact damage amount."
+}

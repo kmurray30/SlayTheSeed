@@ -1,0 +1,58 @@
+{
+  "class_name": "SpinyToad",
+  "title": "Spiny Toad",
+  "min_hp": 121,
+  "max_hp": 124,
+  "min_hp_base": 116,
+  "max_hp_base": 119,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "PROTRUDING_SPIKES_MOVE",
+      "title": "Protruding Spikes",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Apply 5 Thorns"
+      ]
+    },
+    {
+      "id": "SPIKE_EXPLOSION_MOVE",
+      "title": "Spike Explosion",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 25,
+          "damage_base": 23,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 25/23 damage",
+        "Remove 5 Thorns"
+      ]
+    },
+    {
+      "id": "TONGUE_LASH_MOVE",
+      "title": "Tongue Lash",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 19,
+          "damage_base": 17,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 19/17 damage"
+      ]
+    }
+  ],
+  "move_pattern": "Cycles: Protruding Spikes → Spike Explosion → Tongue Lash",
+  "powers_on_spawn": [],
+  "notes": "Spiny Toad uses a spiked mechanic: it applies 5 Thorns to itself with Protruding Spikes, then removes them when it uses Spike Explosion. The monster's animations differ based on whether it is currently spiked or not."
+}

@@ -1,0 +1,22 @@
+{
+  "class_name": "EchoingSlash",
+  "title": "Echoing Slash",
+  "character": "Silent",
+  "energy_cost": 1,
+  "type": "Attack",
+  "rarity": "Rare",
+  "target": "AllEnemies",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 10,
+      "upgraded_value": 13
+    }
+  ],
+  "description": "Deal 10 damage to ALL enemies.\nRepeat this effect for each enemy killed.",
+  "upgraded_description": "Deal 13 damage to ALL enemies.\nRepeat this effect for each enemy killed.",
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "The card repeats its damage effect once for each enemy killed during the attack, creating a cascading loop that continues until no more enemies are defeated in a pass."
+}

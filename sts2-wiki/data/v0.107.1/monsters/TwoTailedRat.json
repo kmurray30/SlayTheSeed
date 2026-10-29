@@ -1,0 +1,61 @@
+{
+  "class_name": "TwoTailedRat",
+  "title": "Two-Tailed Rat",
+  "min_hp": 18,
+  "max_hp": 22,
+  "min_hp_base": 17,
+  "max_hp_base": 21,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "SCRATCH_MOVE",
+      "title": "Scratch",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 9,
+          "damage_base": 8,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 9/8 damage"]
+    },
+    {
+      "id": "DISEASE_BITE_MOVE",
+      "title": "Disease Bite",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 7,
+          "damage_base": 6,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 7/6 damage"]
+    },
+    {
+      "id": "SCREECH_MOVE",
+      "title": "Screech",
+      "intents": [
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": ["Apply 1 Frail"]
+    },
+    {
+      "id": "CALL_FOR_BACKUP_MOVE",
+      "title": "Call for Backup",
+      "intents": [
+        {
+          "type": "summon"
+        }
+      ],
+      "effects": ["Summon a Two-Tailed Rat"]
+    }
+  ],
+  "move_pattern": "Randomly cycles through Scratch, Disease Bite, and Screech. When summoning is available, has a 75% chance to use Call for Backup instead. Each regular attack has an 8% chance when summoning is available.",
+  "powers_on_spawn": [],
+  "notes": "The Two-Tailed Rat has a 2-turn cooldown before it can summon copies of itself. It can summon up to 3 additional rats (4 total in combat). Summoning count is synchronized across all instances in the fight—each rat tracks the same call_for_backup_count. When a rat is in its cooldown period, it only performs regular attacks (Scratch or Disease Bite, chosen equally) or applies debuffs (Screech). No other rat can summon while one is already summoning (prevents multiple spawns in the same turn)."
+}

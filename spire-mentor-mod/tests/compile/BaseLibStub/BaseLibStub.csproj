@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    COMPILE-ONLY stand-in for Alchyr's BaseLib (v3.4.1), the mod's settings-UI
+    dependency. It declares exactly the API surface SpireMentorModConfig.cs
+    uses, with empty bodies, so `build_mod.sh` can type-check the mod on a box
+    that has no BaseLib install (BaseLib is not vendored in this repo and is
+    only fetched by install-windows-deps.ps1). A DLL built against this stub is
+    NEVER deployed: build_mod.sh writes it to tests/compile/.build/ only, and
+    the real build (Windows, `dotnet build` in spire-mentor-mod/) keeps
+    referencing the installed BaseLib.dll. Point BASELIB_DIR at a real BaseLib
+    to compile against it instead.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <AssemblyName>BaseLib</AssemblyName>
+    <RootNamespace>BaseLib</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <NoWarn>$(NoWarn);MSB3270;CS0067</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="sts2">
+      <HintPath>$(Sts2DataDir)/sts2.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="GodotSharp">
+      <HintPath>$(Sts2DataDir)/GodotSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+</Project>

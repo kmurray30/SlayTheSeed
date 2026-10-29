@@ -1,0 +1,8 @@
+{
+  "class_name": "BigMushroom",
+  "title": "Big Mushroom",
+  "rarity": "Event",
+  "description": "Upon pickup, raise your Max HP by 20. At the start of each combat, draw 2 fewer cards.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "Reduces hand draw by 2 only on turn 1 of combat. Triggers a growth animation (1.5x scale) upon pickup and when entering any room."
+}

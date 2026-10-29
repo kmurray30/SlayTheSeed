@@ -1,0 +1,9 @@
+{
+  "class_name": "GamblersBrew",
+  "title": "Gambler's Brew",
+  "rarity": "Uncommon",
+  "usage": "Drink",
+  "target": "Self",
+  "description": "Discard any number of cards, then draw that many.",
+  "notes": "Allows the player to select any number of cards from hand to discard and replace with an equal number of draws. Useful for cycling through deck or removing unwanted cards during combat."
+}

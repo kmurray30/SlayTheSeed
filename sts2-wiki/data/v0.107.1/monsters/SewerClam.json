@@ -1,0 +1,40 @@
+{
+  "class_name": "SewerClam",
+  "title": "Sewer Clam",
+  "min_hp": 58,
+  "max_hp": 58,
+  "min_hp_base": 56,
+  "max_hp_base": 56,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "JET_MOVE",
+      "title": "Jet",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 11,
+          "damage_base": 10,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 10/11 damage"]
+    },
+    {
+      "id": "PRESSURIZE_MOVE",
+      "title": "Pressurize",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Apply 4 Strength to self"]
+    }
+  ],
+  "move_pattern": "Alternates: Jet → Pressurize → Jet → Pressurize..., starting with Jet. Applies Strength each cycle to increase damage output.",
+  "powers_on_spawn": [
+    "Plating 8/9"
+  ],
+  "notes": "Sewer Clam uses a simple two-move cycle to become increasingly dangerous. It starts by attacking, then buffs itself with Strength, which increases its damage on subsequent Jet attacks. Gains additional Plating at A8+."
+}

@@ -1,0 +1,112 @@
+{
+  "class_name": "TestSubject",
+  "title": "Test Subject #C{Count}",
+  "min_hp": 111,
+  "max_hp": 111,
+  "min_hp_base": 100,
+  "max_hp_base": 100,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "BITE_MOVE",
+      "title": "Bite",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 22,
+          "damage_base": 20,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 22/20 damage"]
+    },
+    {
+      "id": "SKULL_BASH_MOVE",
+      "title": "Skull Bash",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 16,
+          "damage_base": 14,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": ["Deal 16/14 damage", "Apply 1 Vulnerable"]
+    },
+    {
+      "id": "MULTI_CLAW_MOVE",
+      "title": "Multi-Claw",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 11,
+          "damage_base": 10,
+          "hits": 3,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 11/10 damage", "3+ hits (scales each use)"]
+    },
+    {
+      "id": "PHASE3_LACERATE_MOVE",
+      "title": "Lacerate",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 11,
+          "damage_base": 10,
+          "hits": 3,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 11/10 damage", "3 hits"]
+    },
+    {
+      "id": "BIG_POUNCE",
+      "title": "Big Pounce",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 45
+        }
+      ],
+      "effects": ["Deal 45 damage"]
+    },
+    {
+      "id": "BURNING_GROWL_MOVE",
+      "title": "Burning Growl",
+      "intents": [
+        {
+          "type": "status",
+          "amount": 5,
+          "amount_base": 3,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Add 5/3 Burn to discard", "Gain 3/2 Strength"]
+    },
+    {
+      "id": "RESPAWN_MOVE",
+      "title": "Respawn",
+      "intents": [
+        {
+          "type": "heal"
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Revive to full health", "Transform to next form"]
+    }
+  ],
+  "move_pattern": "Starts with Bite. Phase 1: Alternates Bite ↔ Skull Bash. On death, respawns. Phase 2 (Respawn 1): Repeats Multi-Claw (hit count increments each use: 3→4→5...). On death, respawns again. Phase 3 (Respawn 2+): Cycles Lacerate → Big Pounce → Burning Growl → Lacerate.",
+  "powers_on_spawn": ["Adaptable", "Enrage"],
+  "notes": "Three-phase boss. Phase 1 (100/111 HP): Alternates between Bite and Skull Bash. Phase 2 (200/212 HP): Uses Multi-Claw repeatedly; hit count increases by 1 each turn (starts at 3). Gains Painful Stabs power on this phase. Phase 3 (300/313 HP): Cycles through Lacerate, Big Pounce, and Burning Growl. Gains Nemesis power on this phase, loses Adaptable and Painful Stabs. Burning Growl adds Burn status cards to player's discard and applies Strength to Test Subject. Enrage starts at 2/3 stacks (A9). HP scales at A8 (ToughEnemies), damage/status at A9 (DeadlyEnemies). The monster's title includes a kill counter from the run."
+}

@@ -1,0 +1,21 @@
+{
+  "class_name": "ToolsOfTheTrade",
+  "title": "Tools of the Trade",
+  "character": "Silent",
+  "energy_cost": 1,
+  "type": "Power",
+  "rarity": "Rare",
+  "target": "Self",
+  "keywords": [],
+  "vars": [],
+  "description": "At the start of your turn, draw 1 card and discard 1 card.",
+  "upgraded_cost": 0,
+  "referenced_powers": [
+    {
+      "class_name": "ToolsOfTheTradePower",
+      "title": "Tools of the Trade",
+      "slug": "tools-of-the-trade"
+    }
+  ],
+  "notes": "Applies ToolsOfTheTradePower to self on play. The power stacks by amount, modifying draw count and discard amount each turn accordingly."
+}

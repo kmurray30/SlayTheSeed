@@ -1,0 +1,9 @@
+{
+  "class_name": "LeadershipPower",
+  "title": "Leadership",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "All other allies deal [blue]1[/blue] additional damage.",
+  "smart_description": "All other allies deal [blue]{Amount}[/blue] additional damage.",
+  "notes": "This power grants bonus damage to other allies only. The power owner does not benefit from their own Leadership power. The bonus applies only to powered attacks (attacks that come from cards with power/ability damage)."
+}

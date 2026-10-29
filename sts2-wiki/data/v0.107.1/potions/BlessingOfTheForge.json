@@ -1,0 +1,9 @@
+{
+  "class_name": "BlessingOfTheForge",
+  "title": "Blessing of the Forge",
+  "rarity": "Uncommon",
+  "usage": "Drink",
+  "target": "Self",
+  "description": "[gold]Upgrade[/gold] all cards in your [gold]Hand[/gold] for the rest of combat.",
+  "notes": "Can only be used during combat. Upgrades all upgradable cards currently in hand."
+}

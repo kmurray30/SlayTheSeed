@@ -1,0 +1,148 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    SpireMentor: phase 0 real-game bridge mod for Slay the Spire 2 v0.107.1.
+    See ../docs/plans/2026-07-10-real-game-bridge.md for the design.
+
+    Deliberately plain Microsoft.NET.Sdk (NOT Godot.NET.Sdk): we only consume
+    Godot/sts2 types via direct assembly references, we do not author scenes,
+    signals, or [Export]ed properties, so no Godot source generators are
+    needed. This mirrors refs/STS2MCP (proven to compile this way) rather
+    than the Alchyr BaseLib template (which needs Godot.NET.Sdk to build a
+    .pck; phase 0 ships has_pck:false, so we don't need that machinery).
+  -->
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>true</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>SpireMentor</RootNamespace>
+    <AssemblyName>SpireMentor</AssemblyName>
+    <LangVersion>latest</LangVersion>
+    <!-- The game ships a platform-specific sts2.dll; mods are MSIL and run on any platform. -->
+    <NoWarn>$(NoWarn);MSB3270</NoWarn>
+  </PropertyGroup>
+
+  <!--
+    Game install discovery, same order as scripts/import_game.py: STS2_GAME_DIR
+    (-p:STS2_GAME_DIR="C:/path/to/Slay the Spire 2" or the environment
+    variable), else the Steam library whose libraryfolders.vdf "apps" block
+    lists the game (app id 2868840; finds libraries on other drives), else the
+    main Steam library, else the default Steam path.
+  -->
+  <PropertyGroup>
+    <SteamRoot>$(registry:HKEY_CURRENT_USER\Software\Valve\Steam@SteamPath)</SteamRoot>
+    <SteamRoot Condition="'$(SteamRoot)' == ''">C:/Program Files (x86)/Steam</SteamRoot>
+    <SteamLibraryFoldersVdf>$(SteamRoot)/steamapps/libraryfolders.vdf</SteamLibraryFoldersVdf>
+    <!-- Keeps only the "path" of the library block whose apps list 2868840;
+         [^}]* stops the match leaving that block. No match leaves the file
+         text (with quotes) as the result, which the next line discards. -->
+    <Sts2SteamLibrary Condition="'$(STS2_GAME_DIR)' == '' and Exists('$(SteamLibraryFoldersVdf)')">$([System.Text.RegularExpressions.Regex]::Replace($([System.IO.File]::ReadAllText('$(SteamLibraryFoldersVdf)')), '(?s)^.*?"path"\s*"([^"]*)"[^}]*"apps"\s*\{[^}]*"2868840".*$', '$1').Replace('\\', '/'))</Sts2SteamLibrary>
+    <Sts2SteamLibrary Condition="$(Sts2SteamLibrary.Contains('&quot;'))"></Sts2SteamLibrary>
+    <SteamLibraryPath Condition="'$(Sts2SteamLibrary)' != '' and Exists('$(Sts2SteamLibrary)/steamapps/common/Slay the Spire 2')">$(Sts2SteamLibrary)/steamapps</SteamLibraryPath>
+    <AutoSteamPath>$(SteamRoot)/steamapps</AutoSteamPath>
+    <SteamLibraryPath Condition="'$(SteamLibraryPath)' == '' and Exists('$(AutoSteamPath)/common/Slay the Spire 2')">$(AutoSteamPath)</SteamLibraryPath>
+    <SteamLibraryPath Condition="'$(SteamLibraryPath)' == ''">C:/Program Files (x86)/Steam/steamapps</SteamLibraryPath>
+    <STS2_GAME_DIR Condition="'$(STS2_GAME_DIR)' == ''">$(SteamLibraryPath)/common/Slay the Spire 2</STS2_GAME_DIR>
+    <Sts2DataDir>$(STS2_GAME_DIR)/data_sts2_windows_x86_64</Sts2DataDir>
+    <ModsPath>$(STS2_GAME_DIR)/mods/</ModsPath>
+    <!-- BaseLib: a manual install in <game>/mods/BaseLib, else the Steam
+         Workshop item (3737335127) the game loads it from when subscribed.
+         package.ps1 asks for this property too. -->
+    <BaseLibDir Condition="'$(BaseLibDir)' == '' and Exists('$(ModsPath)BaseLib/BaseLib.dll')">$(ModsPath)BaseLib</BaseLibDir>
+    <BaseLibDir Condition="'$(BaseLibDir)' == ''">$(SteamLibraryPath)/workshop/content/2868840/3737335127/BaseLib</BaseLibDir>
+    <SimPycliDir>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)/../sts2-pycli'))</SimPycliDir>
+  </PropertyGroup>
+
+  <!--
+    One DLL for every supported game build (GH #800): v0.107.1 (stable) and
+    v0.111.0 (beta). It compiles against whichever sts2.dll is installed; the
+    members whose signature differs between the builds are reached through
+    SimGameApi.cs, and tests/compile/build_mod.sh checks the DLL binds against
+    every build present.
+  -->
+
+  <Target Name="CheckDependencyPaths" BeforeTargets="Build;Restore">
+    <Error
+        Text="Slay the Spire 2 game data not found at '$(Sts2DataDir)'. Pass -p:STS2_GAME_DIR=&quot;C:/path/to/Slay the Spire 2&quot; if it's installed somewhere else."
+        Condition="'$(Sts2DataDir)' == '' or !Exists('$(Sts2DataDir)')" />
+    <Error
+        Text="BaseLib not found in '$(ModsPath)BaseLib/' or the Steam Workshop folder. SpireMentor depends on Alchyr's BaseLib (settings-UI framework); subscribe to it on the Workshop, or install its release (dll + pck + json) into &lt;game&gt;/mods/BaseLib/. See https://github.com/Alchyr/BaseLib-StS2/releases (v3.4.1 verified against game v0.107.1)."
+        Condition="!Exists('$(BaseLibDir)/BaseLib.dll')" />
+  </Target>
+
+  <!-- tests/ holds separate projects (the wire harness, the compile-only
+       BaseLib stub) plus their build trees; the default **/*.cs glob would
+       otherwise compile them into SpireMentor.dll.
+       obj/ and bin/ are excluded by default only while they ARE the output
+       paths: tests/compile/build_mod.sh redirects BaseIntermediateOutputPath,
+       so a plain `dotnet build`'s obj/ would then be globbed in and its
+       generated AssemblyInfo.cs fail the build with CS0579 (duplicate
+       attributes). -->
+  <ItemGroup>
+    <Compile Remove="tests/**;obj/**;bin/**" />
+    <None Remove="tests/**;obj/**;bin/**" />
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('$(Sts2DataDir)')">
+    <Reference Include="sts2">
+      <HintPath>$(Sts2DataDir)/sts2.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(Sts2DataDir)/0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="GodotSharp">
+      <HintPath>$(Sts2DataDir)/GodotSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- Installed mod, not game data: the game loads mods/BaseLib/BaseLib.dll
+         into the shared ALC, so referencing the deployed copy guarantees we
+         compile against exactly the assembly we run against. -->
+    <Reference Include="BaseLib" Condition="Exists('$(BaseLibDir)/BaseLib.dll')">
+      <HintPath>$(BaseLibDir)/BaseLib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!--
+    Deploy target (validation gate #2): copies the built DLL + manifest + config
+    template to <game>/mods/SpireMentor/ so the game's ModManager picks it up.
+    Runs automatically after every Build; `deploy.ps1` is a standalone wrapper
+    for re-running deployment without a rebuild.
+  -->
+  <!-- Pass -p:SpireMentorSkipDeploy=true to compile without touching the game
+       dir (the running game locks mods/SpireMentor/SpireMentor.dll). -->
+  <Target Name="DeploySpireMentor" AfterTargets="Build" Condition="Exists('$(STS2_GAME_DIR)') and '$(SpireMentorSkipDeploy)' != 'true'">
+    <MakeDir Directories="$(ModsPath)SpireMentor" />
+    <ItemGroup>
+      <DeployFiles Include="$(TargetDir)SpireMentor.dll" />
+      <DeployFiles Include="$(MSBuildProjectDirectory)/SpireMentor.json" />
+      <DeployFiles Include="$(MSBuildProjectDirectory)/SpireMentor.conf.template" />
+    </ItemGroup>
+    <Copy SourceFiles="@(DeployFiles)" DestinationFolder="$(ModsPath)SpireMentor/" />
+    <!-- Default advisor launcher (phase 8): SimAdvisorProcess falls back to
+         this script when the settings page leaves the command blank. The
+         sts2-pycli path (SimPycliDir) is baked in at deploy time from this
+         repo layout. -->
+    <WriteLinesToFile
+        File="$(ModsPath)SpireMentor/SimAdvisor.cmd"
+        Overwrite="true"
+        Lines="@echo off;cd /d &quot;$(SimPycliDir)&quot;;uv run python python/realgame_advisor.py %25*" />
+    <Message Text="SpireMentor deployed to $(ModsPath)SpireMentor/" Importance="high" />
+  </Target>
+
+  <!--
+    Prepares what SimAdvisor.cmd's `uv run` needs, so the game never waits on
+    it: the sts2-pycli venv and the sts2_rs extension (a release maturin build,
+    minutes the first time; see sts2-pycli/pyproject.toml). Same sync `uv run`
+    does, so the launcher's run is then a no-op; an instant cache hit when the
+    engine is unchanged. A failure only warns: the mod itself is deployed and
+    the advisor would retry the build at launch.
+    Pass -p:SpireMentorSkipAdvisorSync=true to skip it.
+  -->
+  <Target Name="SyncSpireMentorAdvisor" AfterTargets="DeploySpireMentor" Condition="Exists('$(STS2_GAME_DIR)') and '$(SpireMentorSkipDeploy)' != 'true' and '$(SpireMentorSkipAdvisorSync)' != 'true'">
+    <Message Text="Preparing the advisor: uv sync in $(SimPycliDir) (builds the Rust engine when it changed; minutes the first time) ..." Importance="high" />
+    <Exec Command="uv sync" WorkingDirectory="$(SimPycliDir)" ContinueOnError="WarnAndContinue" StandardOutputImportance="high" StandardErrorImportance="high" />
+  </Target>
+</Project>

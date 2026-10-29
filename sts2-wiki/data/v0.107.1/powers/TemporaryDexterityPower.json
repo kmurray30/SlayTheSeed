@@ -1,0 +1,9 @@
+{
+  "class_name": "TemporaryDexterityPower",
+  "title": "Temporary Dexterity",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Gain [gold]Dexterity[/gold] until the end of this turn.",
+  "smart_description": "Gain [blue]{Amount}[/blue] [gold]Dexterity[/gold] until the end of this turn.",
+  "notes": "Abstract base class representing a temporary Dexterity buff lasting until the end of the current turn. The displayed title is derived from the OriginModel (card, potion, or relic) that applies it. When applied, internally triggers a DexterityPower to grant the actual +Dexterity. At end of turn, the power is removed and a negative DexterityPower is applied to undo the buff. Stack type Counter allows multiple stacks to coexist. Can be inverted to debuff (negative Dexterity) by setting IsPositive to false."
+}

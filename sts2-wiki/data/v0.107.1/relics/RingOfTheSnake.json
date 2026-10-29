@@ -1,0 +1,8 @@
+{
+  "class_name": "RingOfTheSnake",
+  "title": "Ring of the Snake",
+  "rarity": "Starter",
+  "description": "At the start of each combat, draw [blue]2[/blue] additional cards.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Draws 2 additional cards only on the first turn of combat. The effect is applied via ModifyHandDraw hook and checks that TurnNumber <= 1."
+}

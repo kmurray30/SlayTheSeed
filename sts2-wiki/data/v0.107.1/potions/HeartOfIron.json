@@ -1,0 +1,9 @@
+{
+  "class_name": "HeartOfIron",
+  "title": "Heart of Iron",
+  "rarity": "Uncommon",
+  "usage": "Apply",
+  "target": "AnyPlayer",
+  "description": "Gain [blue]7[/blue] [gold]Plating[/gold].",
+  "notes": "Combat-only potion that grants the Plating power for defensive utility."
+}

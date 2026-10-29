@@ -1,0 +1,9 @@
+{
+  "class_name": "NoxiousFumesPower",
+  "title": "Noxious Fumes",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the start of your turn, apply [blue]2[/blue] [gold]Poison[/gold] to ALL enemies.",
+  "smart_description": "At the start of your turn, apply [blue]{Amount}[/blue] [gold]Poison[/gold] to ALL enemies.",
+  "notes": "This is a Counter-type power. Each stack increases the amount of Poison applied to all enemies at turn start. The power applies Poison via its counter value (Amount). Also displays a hover tip linking to Poison for reference."
+}

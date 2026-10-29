@@ -1,0 +1,10 @@
+{
+  "class_name": "FabricatorNormal",
+  "title": "Fabricator",
+  "room_type": "Monster",
+  "is_weak": false,
+  "monsters": ["Fabricator"],
+  "total_monsters": 1,
+  "tags": [],
+  "notes": "The Fabricator encounter features a central Fabricator unit that spawns defensive and aggressive bots during combat. While the initial spawn contains only the Fabricator, the AllPossibleMonsters set includes bots from both defenseSpawns and aggroSpawns that may be generated dynamically via the Fabricator's abilities. The encounter has a custom scene with adjusted camera scaling (0.85x) and offset."
+}

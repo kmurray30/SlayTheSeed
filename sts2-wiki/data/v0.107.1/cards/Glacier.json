@@ -1,0 +1,21 @@
+{
+  "class_name": "Glacier",
+  "title": "Glacier",
+  "character": "Defect",
+  "energy_cost": 2,
+  "type": "Skill",
+  "rarity": "Uncommon",
+  "target": "Self",
+  "keywords": ["Channel"],
+  "vars": [
+    {
+      "type": "Block",
+      "base_value": 6,
+      "upgraded_value": 9
+    }
+  ],
+  "description": "Gain 6 [gold]Block[/gold].\n[gold]Channel[/gold] 2 [gold]Frost[/gold].",
+  "upgraded_description": "Gain 9 [gold]Block[/gold].\n[gold]Channel[/gold] 2 [gold]Frost[/gold].",
+  "referenced_powers": [],
+  "notes": "Channels 2 Frost Orbs."
+}

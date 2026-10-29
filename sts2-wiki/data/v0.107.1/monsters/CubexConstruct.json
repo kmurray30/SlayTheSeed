@@ -1,0 +1,71 @@
+{
+  "class_name": "CubexConstruct",
+  "title": "Cubex Construct",
+  "min_hp": 70,
+  "max_hp": 70,
+  "min_hp_base": 65,
+  "max_hp_base": 65,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "CHARGE_UP_MOVE",
+      "title": "Charge Up",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Apply 2 Strength"]
+    },
+    {
+      "id": "REPEATER_BLAST_MOVE",
+      "title": "Repeater Blast",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 8,
+          "damage_base": 7,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Deal 8/7 damage", "Apply 2 Strength"]
+    },
+    {
+      "id": "REPEATER_BLAST_MOVE_2",
+      "title": "Repeater Blast",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 8,
+          "damage_base": 7,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Deal 8/7 damage", "Apply 2 Strength"]
+    },
+    {
+      "id": "EXPEL_MOVE",
+      "title": "Expel",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 6,
+          "damage_base": 5,
+          "hits": 2,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 6/5 damage", "2 hits"]
+    }
+  ],
+  "move_pattern": "Starts with Charge Up to apply Strength. Then cycles: Repeater Blast → Repeater Blast → Expel, repeating.",
+  "powers_on_spawn": ["Artifact"],
+  "notes": "Starts burrowed with 13 Block on spawn. Applies Strength to itself each turn except when using Expel, gradually increasing damage output. Uses Artifact Power to block negative effects."
+}

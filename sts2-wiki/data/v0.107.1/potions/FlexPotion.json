@@ -1,0 +1,9 @@
+{
+  "class_name": "FlexPotion",
+  "title": "Flex Potion",
+  "rarity": "Common",
+  "usage": "CombatOnly",
+  "target": "AnyPlayer",
+  "description": "Gain [blue]5[/blue] [gold]Strength[/gold]. At the end of your turn, lose [blue]5[/blue] [gold]Strength[/gold].",
+  "notes": "The Strength boost is temporary, lasting only until the end of your turn."
+}

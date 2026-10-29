@@ -1,0 +1,9 @@
+{
+  "class_name": "SlowPower",
+  "title": "Slow",
+  "power_type": "Debuff",
+  "stack_type": "Counter",
+  "description": "Whenever you play a card, this enemy receives [blue]10%[/blue] more damage from Attacks this turn.",
+  "smart_description": "This enemy receives [blue]10%[/blue] more damage from Attacks this turn. (Displays accumulated bonus per card played)",
+  "notes": "Counter-type power that accumulates with each card the player plays. Each stack adds 10% multiplicative damage bonus to Attacks against the power's owner. Resets to 0 at the start of the enemy's turn."
+}

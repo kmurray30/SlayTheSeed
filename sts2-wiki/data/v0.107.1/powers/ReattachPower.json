@@ -1,0 +1,9 @@
+{
+  "class_name": "ReattachPower",
+  "title": "Reattach",
+  "power_type": "Buff",
+  "stack_type": "None",
+  "description": "If other segments are still alive, revives in [blue]2[/blue] turns with [blue]25[/blue] HP.",
+  "smart_description": "If other segments are still alive, revives in [blue]2[/blue] turns with [blue]25[/blue] HP.",
+  "notes": "Specific to Decimillipede Segment enemies. Prevents the segment from being targeted or affected by powers while reviving. The segment will not trigger Fatal until all other segments with this power are dead. The power persists after the owner's death and can revive the segment multiple times as long as other segments survive."
+}

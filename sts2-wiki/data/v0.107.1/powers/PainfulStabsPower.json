@@ -1,0 +1,9 @@
+{
+  "class_name": "PainfulStabsPower",
+  "title": "Painful Stabs",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Shuffle 1 Wound into your Discard Pile each time you receive unblocked attack damage.",
+  "smart_description": "Shuffle [blue]{Amount}[/blue] [gold]{Amount:plural:Wound|Wounds}[/gold] into your Discard Pile each time you receive unblocked attack damage.",
+  "notes": "This power triggers on the wearer receiving unblocked damage from attacks. For each instance of unblocked damage received, it shuffles Amount wounds into the discard pile. Multiple hits in a single attack each trigger separate shuffles."
+}

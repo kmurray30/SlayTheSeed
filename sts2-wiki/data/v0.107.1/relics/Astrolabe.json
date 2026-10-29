@@ -1,0 +1,8 @@
+{
+  "class_name": "Astrolabe",
+  "title": "Astrolabe",
+  "rarity": "Ancient",
+  "description": "Upon pickup, Transform 3 cards, then Upgrade them.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "Selects 3 cards from your deck, replaces each with a random card of the same cost, and Upgrades all the new cards."
+}

@@ -1,0 +1,21 @@
+{
+  "class_name": "HelixDrill",
+  "title": "Helix Drill",
+  "character": "Defect",
+  "energy_cost": 0,
+  "type": "Attack",
+  "rarity": "Rare",
+  "target": "Single",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 3,
+      "upgraded_value": 5
+    }
+  ],
+  "description": "Deal 3 damage for each 1 Energy previously spent this turn. In Combat: Hits equal to energy spent this turn",
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "Hit count is calculated as total energy spent this turn (excluding this card's own cost when played from hand). Scales multiplicatively: total damage = base_damage × hit_count."
+}

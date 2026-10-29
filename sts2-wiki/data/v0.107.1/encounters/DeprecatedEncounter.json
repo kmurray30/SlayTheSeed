@@ -1,0 +1,10 @@
+{
+  "class_name": "DeprecatedEncounter",
+  "title": "Deprecated Encounter",
+  "room_type": "Monster",
+  "is_weak": false,
+  "monsters": [],
+  "total_monsters": 0,
+  "tags": [],
+  "notes": "Placeholder encounter representing monsters that have been removed from the game. Used primarily for run history. Spawns no actual monsters."
+}

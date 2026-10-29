@@ -1,0 +1,9 @@
+{
+  "class_name": "Ashwater",
+  "title": "Ashwater",
+  "rarity": "Uncommon",
+  "usage": "CombatOnly",
+  "target": "Self",
+  "description": "[gold]Exhaust[/gold] any number of cards in your [gold]Hand[/gold].",
+  "notes": "Select any number of cards from your hand to exhaust when used. Displays the Exhaust keyword on hover."
+}

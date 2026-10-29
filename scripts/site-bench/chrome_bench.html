@@ -1,0 +1,8 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>hint bench</title>
+<!-- Served next to ./pkg (the shipped wasm-bindgen --target web build). Runs the
+     same walk + /api/bench timing as hint_bench.rs / wasm_hint_bench.mjs, on the
+     page's main thread (the app runs it in a Web Worker; the worker round trip,
+     ~0.6 ms, is therefore NOT included). Results land in window.__lines. -->
+<script type="module" src="./chrome_bench_page.js"></script>

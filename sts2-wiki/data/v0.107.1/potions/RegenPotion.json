@@ -1,0 +1,9 @@
+{
+  "class_name": "RegenPotion",
+  "title": "Regen Potion",
+  "rarity": "Uncommon",
+  "usage": "Drink",
+  "target": "Self",
+  "description": "Gain [green]5[/green] [gold]Regen[/gold].",
+  "notes": "CombatOnly potion that cannot be generated in combat (only obtained through specific acquisition paths)."
+}

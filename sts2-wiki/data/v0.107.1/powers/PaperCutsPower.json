@@ -1,0 +1,9 @@
+{
+  "class_name": "PaperCutsPower",
+  "title": "Paper Cuts",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever this creature deals unblocked attack damage to you, you lose [blue]1[/blue] [gold]Max HP[/gold].",
+  "smart_description": "Whenever [gold]{OwnerName}[/gold] deals unblocked attack damage to you, you lose [blue]{Amount}[/blue] [gold]Max HP[/gold].",
+  "notes": "This power is applied by enemies. Each unblocked attack damage dealt triggers an instance of max HP loss equal to the power's stack amount. The Counter stack type tracks individual instances or cumulative effect."
+}

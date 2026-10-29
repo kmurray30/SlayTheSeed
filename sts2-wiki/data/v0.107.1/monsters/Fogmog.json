@@ -1,0 +1,54 @@
+{
+  "class_name": "Fogmog",
+  "title": "Fogmog",
+  "min_hp": 78,
+  "max_hp": 78,
+  "min_hp_base": 74,
+  "max_hp_base": 74,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "ILLUSION_MOVE",
+      "title": "Illusory Spores",
+      "intents": [
+        {
+          "type": "summon"
+        }
+      ],
+      "effects": ["Summon an EyeWithTeeth ally"]
+    },
+    {
+      "id": "SWIPE_MOVE",
+      "title": "Thwack",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 9,
+          "damage_base": 8,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Deal 8/9 damage", "Apply 1 Strength"]
+    },
+    {
+      "id": "HEADBUTT_MOVE",
+      "title": "Headbutt",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 16,
+          "damage_base": 14,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 14/16 damage"]
+    }
+  ],
+  "move_pattern": "Starts with Illusory Spores (summons an ally). Then Thwack. Afterwards cycles: 40% chance (Thwack → Headbutt) or 60% chance (Headbutt) → back to Thwack.",
+  "powers_on_spawn": [],
+  "notes": "Fogmog's opening move summons an EyeWithTeeth ally to aid it in combat. After the first Thwack, Fogmog alternates between attacking and choosing randomly between a paired Thwack+Headbutt or just Headbutt. The Headbutt move is not displayed in the bestiary but is executed as part of the attack pattern."
+}

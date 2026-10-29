@@ -1,0 +1,9 @@
+{
+  "class_name": "ThornsPower",
+  "title": "Thorns",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "When hit by an attack, deal damage back.",
+  "smart_description": "When hit by an attack, deal [blue]{Amount}[/blue] damage back.",
+  "notes": "Only triggers when hit by powered attacks or Omnislice. The damage dealt back equals the current stack value."
+}

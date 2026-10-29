@@ -1,0 +1,9 @@
+{
+  "class_name": "Vambrace",
+  "title": "Vambrace",
+  "rarity": "Uncommon",
+  "character": null,
+  "description": "The first time you gain Block from a card each combat, double the amount gained.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "The relic tracks which card first gains block in a combat. That card's block gain is doubled. Once the card that gained block has been played, the doubling effect is consumed for the rest of combat. If the same card gains block multiple times before being played, all instances are doubled."
+}

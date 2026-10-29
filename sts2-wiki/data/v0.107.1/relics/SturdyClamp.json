@@ -1,0 +1,8 @@
+{
+  "class_name": "SturdyClamp",
+  "title": "Sturdy Clamp",
+  "rarity": "Rare",
+  "description": "Up to [blue]10[/blue] [gold]Block[/gold] persists across turns.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "At the end of each turn, prevents your block from clearing. Any block above 10 is lost, retaining a maximum of 10 block for the next turn."
+}

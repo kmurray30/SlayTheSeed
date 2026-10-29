@@ -1,0 +1,8 @@
+{
+  "class_name": "Kaleidoscope",
+  "title": "Kaleidoscope",
+  "rarity": "Ancient",
+  "description": "Upon pickup, obtain [blue]2[/blue] card rewards from other characters.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Only available at Neow if all character card pools are unlocked. Upon pickup, creates card rewards by selecting from up to 3 other characters' card pools, with one card randomly created from each selected pool."
+}

@@ -1,0 +1,63 @@
+{
+  "class_name": "Inklet",
+  "title": "Inklet",
+  "min_hp": 12,
+  "max_hp": 18,
+  "min_hp_base": 11,
+  "max_hp_base": 17,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "JAB_MOVE",
+      "title": "Jab",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 4,
+          "damage_base": 3,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 3/4 damage"
+      ]
+    },
+    {
+      "id": "WHIRLWIND_MOVE",
+      "title": "Whirlwind",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 3,
+          "damage_base": 2,
+          "hits": 3,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 2/3 damage, 3 hits"
+      ]
+    },
+    {
+      "id": "PIERCING_GAZE_MOVE",
+      "title": "Piercing Gaze",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 11,
+          "damage_base": 10,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 10/11 damage"
+      ]
+    }
+  ],
+  "move_pattern": "Starts with Jab (or Whirlwind if positioned in the middle). After Jab, randomly chooses between Piercing Gaze and Whirlwind. Both Piercing Gaze and Whirlwind return to Jab, creating a repeating cycle.",
+  "powers_on_spawn": [
+    "Slippery"
+  ],
+  "notes": "Piercing Gaze is hidden from the bestiary but still attacks during combat. MiddleInklet variant starts with Whirlwind instead of Jab, changing the opening turn's damage pattern."
+}

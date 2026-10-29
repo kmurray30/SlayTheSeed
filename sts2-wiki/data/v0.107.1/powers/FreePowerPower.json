@@ -1,0 +1,9 @@
+{
+  "class_name": "FreePowerPower",
+  "title": "Free Power",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "The next Power you play costs [blue]0[/blue] {energyPrefix:energyIcons(1)}.",
+  "smart_description": "The next {Amount:plural:Power|[blue]{}[/blue] Powers} you play {Amount:plural:costs|cost} [blue]0[/blue] {energyPrefix:energyIcons(1)}.",
+  "notes": "Decrements by 1 each time a Power card is played from hand or play pile. When stacked multiple times, the cost reduction applies to multiple consecutive Powers."
+}

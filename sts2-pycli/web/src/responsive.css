@@ -1,0 +1,387 @@
+/* ============================================================================
+   Tablet-in-landscape layout (and, for free, any short/narrow desktop window).
+   ============================================================================
+   The workbench was built for a maximised desktop window and nothing else, so
+   on an Android tablet in landscape it was unplayable: at 1024x640 the chrome
+   (two tool rows, the 78px HUD band, the combat tool bar) ate 350 of the 640
+   px, the fixed 320px side panel ate a third of the width, and the ~290px of
+   stage that was left clipped the player off the top of the screen entirely.
+
+   Three separate fixes, in the order they matter:
+
+     1. GIVE THE BOARD THE PIXELS. Everything here that shrinks padding or
+        collapses a panel exists to hand vertical and horizontal space back to
+        the stage, because the stage is the game.
+     2. FIT THE SCENE TO WHAT IS LEFT — that is `.gs-stage-scale` (game-skin.css
+        + stageZoom.ts), not this file.
+     3. GIVE TOUCH AN EQUIVALENT for anything that only appears on hover.
+
+   What a maximised desktop window sees: the shell classes below (which are the
+   inline styles App.tsx used to carry, moved here verbatim so a media query
+   can reach them), and the top row's sideways scroll — which is a fix at EVERY
+   width, since that row was being clipped on a half-width desktop window too.
+   Everything else is behind a media query it does not match.
+   ============================================================================ */
+
+/* ---- app shell ------------------------------------------------------------
+   `dvh`, not `vh`: on Android Chrome `100vh` is the viewport with the URL bar
+   HIDDEN, so a `100vh` app is taller than the screen the moment the bar is
+   showing and the bottom tool bar sits under it, unreachable. `dvh` tracks the
+   bar. The `vh` line stays as the fallback for anything without `dvh`.
+
+   `grid-template-columns` is set inline by App.tsx — it is the one thing here
+   that depends on React state (whether the side panel is a column at all). */
+.wb-shell {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+.wb-main {
+  display: flex; flex-direction: column; min-height: 0; min-width: 0;
+  overflow: hidden;
+  border-right: 1px solid var(--border);
+}
+.wb-side { display: flex; flex-direction: column; min-height: 0; background: var(--panel); }
+.wb-side[hidden] { display: none; }
+
+/* Narrow viewport: the panel stops being a column and becomes a drawer over
+   the board, so the game keeps the full width. Same DOM either way — the run
+   history, the minimap and the reasoning panel are all still live, they are
+   just on top of the board instead of beside it. */
+.wb-side--overlay {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 40;
+  width: min(320px, 88vw);
+  border-left: 1px solid var(--border);
+  box-shadow: -12px 0 28px rgba(0, 0, 0, .5);
+}
+
+/* ---- top tool row ---------------------------------------------------------
+   view switch · AI chips · context controls · Run / Analyze / Tools menus ·
+   where-am-I (src/topbar/TopBar.tsx). It used to be ~25 buttons in one
+   sideways-scrolling row; the menus are what got the width back. The row
+   still scrolls rather than wraps as a last resort (a 640px-tall screen
+   cannot spare a second row), but at desktop widths it now fits. */
+/* No z-index here: it would make the bar a stacking context, and the side
+   toggle's z 41 (which must beat the side drawer's z 40) would then be scoped
+   inside it and lose. The menus carry their own z-index instead. */
+.wb-topbar { display: flex; align-items: center; gap: 8px; padding: 10px;
+  border-bottom: 1px solid var(--border); min-width: 0; }
+.wb-topbar-scroll {
+  flex: 1 1 auto; min-width: 0;
+  display: flex; align-items: center; gap: 12px;
+  overflow-x: auto; overflow-y: visible;
+  /* The bar is one row of controls, not a scroll region to read: the scrollbar
+     would cost more height than it earns. Swipe (touch) and shift-wheel
+     (desktop) both still work. */
+  scrollbar-width: none;
+}
+.wb-topbar-scroll::-webkit-scrollbar { display: none; }
+/* Without this the buttons squash toward zero width instead of overflowing. */
+.wb-topbar-scroll > * { flex: 0 0 auto; }
+/* A row that overflows in one axis clips in the other, which would cut the
+   dropdowns off at the bar's bottom edge. Only clip when actually scrolling. */
+.wb-topbar-scroll:not(:has(.wb-menu-list)) { overflow-y: hidden; }
+.wb-topbar-scroll:has(.wb-menu-list) { overflow: visible; }
+
+.wb-segmented, .wb-chips, .wb-context, .wb-menus { display: inline-flex; align-items: center; gap: 4px; }
+.wb-menus { gap: 6px; }
+.wb-context { gap: 8px; }
+/* The segmented view switch: one pill, the pressed segment filled. */
+.wb-segmented button { border-radius: 0; margin-left: -1px; }
+.wb-segmented button:first-child { border-top-left-radius: 6px; border-bottom-left-radius: 6px; margin-left: 0; }
+.wb-segmented button:last-child { border-top-right-radius: 6px; border-bottom-right-radius: 6px; }
+.wb-segmented button[aria-pressed="true"] { background: var(--accent-weak); color: var(--accent-strong); opacity: 1; }
+/* Persistent AI switches: pills, accent when on. */
+.wb-chip { border-radius: 999px; }
+.wb-chip--on { color: var(--accent-strong); border-color: var(--accent); }
+/* The where-am-I readout is the one thing allowed to give way: it shrinks
+   and ellipsises before the row starts to scroll. */
+.wb-topbar-scroll > .wb-where { color: var(--muted); margin-left: auto; white-space: nowrap;
+  flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+
+/* ---- dropdown menus (src/topbar/Menu.tsx) --------------------------------- */
+.wb-menu { position: relative; display: inline-block; }
+.wb-menu-trigger--active { color: var(--accent-strong); }
+.wb-menu-caret { font-size: 10px; opacity: .7; margin-left: 2px; }
+.wb-menu-list {
+  position: absolute; top: calc(100% + 4px); left: 0; z-index: 50;
+  min-width: 220px; padding: 4px;
+  /* Same face as the bar's buttons: these are controls, not body text. */
+  font-family: var(--font); font-size: 13px;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .55);
+  display: flex; flex-direction: column;
+}
+/* The menus sit at the right end of the bar, beside the side panel, which
+   paints over anything that spills under it: open every list leftward from
+   its trigger so it stays over the screen column. */
+.wb-menus .wb-menu-list { left: auto; right: 0; }
+/* Replay's run picker lists long file names; cap it so the bar still fits. */
+.wb-context select { max-width: 200px; }
+.wb-menu-item {
+  display: flex; align-items: center; gap: 8px; padding: 6px 10px 6px 6px;
+  border-radius: 5px; cursor: pointer; white-space: nowrap;
+  color: var(--text); text-decoration: none; font: inherit;
+}
+.wb-menu-item:hover, .wb-menu-item:focus-visible { background: var(--panel-raised); outline: none; }
+.wb-menu-item--disabled { cursor: default; opacity: .5; }
+.wb-menu-item--disabled:hover { background: transparent; }
+.wb-menu-item--danger { color: var(--hp); }
+.wb-menu-check { width: 12px; text-align: center; color: var(--accent-strong); flex: 0 0 auto; }
+.wb-menu-label { flex: 1 1 auto; }
+.wb-menu-reason { color: var(--muted); font-size: 11px; margin-left: 16px; white-space: nowrap; }
+.wb-menu-sep { height: 1px; background: var(--border); margin: 4px 2px; }
+/* A hosted control (fx cycler, sound + slider, offline, bench, bug report):
+   the row lays its pieces out like the old bar did, left to right. */
+/* `flex-wrap`: a hosted row can carry a control AND a status piece (the
+   offline button + its "330/4156 cached" count); the second piece drops to
+   its own line rather than pushing the row past the menu's edge. */
+.wb-menu-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; padding: 3px 6px; }
+.wb-menu-row:empty { display: none; }
+.wb-menu-row > button { flex: 0 0 auto; }
+.wb-menu-row > input[type="range"] { flex: 1 1 auto; min-width: 80px; }
+
+/* ---- command palette (src/topbar/CommandPalette.tsx) ---------------------- */
+.wb-palette-backdrop { position: fixed; inset: 0; z-index: 100;
+  background: oklch(20% 0.02 255 / .5); display: flex; justify-content: center; align-items: flex-start; padding-top: 12vh; }
+.wb-palette { width: min(520px, 92vw); max-height: 70vh; display: flex; flex-direction: column;
+  font-family: var(--font); font-size: 13px;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, .6); overflow: hidden; }
+.wb-palette > input { margin: 8px; padding: 8px 10px; font-size: 14px; }
+.wb-palette-list { overflow-y: auto; padding: 0 8px 8px; }
+.wb-palette-group { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; padding: 8px 8px 2px; }
+.wb-palette-item { display: flex; align-items: center; gap: 12px; padding: 6px 8px; border-radius: 5px; cursor: pointer; }
+.wb-palette-item--cursor { background: var(--panel-raised); }
+.wb-palette-item--disabled { opacity: .5; cursor: default; }
+.wb-palette-label { flex: 1 1 auto; }
+.wb-palette-state { color: var(--muted); }
+.wb-palette-reason { color: var(--muted); font-size: 11px; }
+.wb-palette-kbd { color: var(--accent); font: inherit; font-size: 11px; border: 1px solid var(--border); border-radius: 4px; padding: 0 5px; }
+.wb-palette-empty { color: var(--muted); padding: 12px 8px; }
+.wb-palette-hint { color: var(--muted); font-size: 11px; padding: 6px 10px; border-top: 1px solid var(--border); }
+
+/* The panel toggle sits OUTSIDE the scroller so it is always on screen — it is
+   the way back from a drawer covering the board. It also has to sit ABOVE the
+   drawer (z 40): the drawer is pinned to the right edge, which is exactly where
+   this button lives, so without this the act of opening the panel buries the
+   only control that closes it again. */
+.wb-side-toggle { flex: 0 0 auto; position: relative; z-index: 41; }
+
+/* ---- panel grips ----------------------------------------------------------
+   The drag handle on the free edge of a collapsible dock — the PPO policy panel
+   under the board, the "machine reasoning" panel over the run log (see
+   components/panelChrome.tsx). Both docks can otherwise grow until the thing
+   they annotate is off screen, which on a tablet in landscape is the whole
+   viewport.
+
+   Invisible until it is pointed at or focused: each dock already draws a border
+   on the edge the grip sits over, so a second permanent line would be chrome
+   for its own sake. `touch-action: none` is load-bearing — without it the
+   browser claims the vertical drag for scrolling and the grip never moves on a
+   touchscreen, which is the device that needs it most. */
+.wb-grip { height: 6px; flex: 0 0 auto; cursor: row-resize; touch-action: none;
+  background: transparent; }
+.wb-grip:hover, .wb-grip:focus-visible { background: var(--border); }
+.wb-grip--dragging, .wb-grip--dragging:hover { background: var(--accent); }
+
+/* ---- compact chrome -------------------------------------------------------
+   Keyed on HEIGHT, because height is what the board is starving for. Catches
+   every tablet in landscape and also a 1366x768 laptop, where the same
+   starvation clipped 236px off the top of the player.
+
+   And on phone WIDTH (a tablet in portrait, ~627px): there the starvation is
+   sideways — the HUD band wrapped its relics under the sockets, the combat
+   tool row ran to three lines and the top row to two — and the same
+   compaction is the answer. `useMediaQuery.SHORT_QUERY` stays height-only:
+   what JS gates on it (the analyze button's home, the card-select sizing) is
+   about height. */
+@media (max-height: 800px), (max-width: 760px) {
+  .wb-topbar { padding: 5px 8px; gap: 6px; }
+  .wb-topbar button, .wb-topbar select, .wb-topbar input { padding: 3px 7px; font-size: 12px; }
+
+  /* The HUD band: 78px of portrait, heart, coin, potion sockets and relics.
+     Everything in it is sized in px off the band's own height, so one scale
+     factor on the whole band keeps it composed and hands ~24px back. */
+  .gs-hud { min-height: 60px; padding: 2px 12px; gap: 12px; }
+  .gs-hud-char { width: 44px; height: 44px; border-radius: 11px; }
+  .gs-hud-char .gs-hud-charletter { font-size: 20px; }
+  .gs-hud-asc { width: 24px; height: 27px; right: -7px; bottom: -5px; }
+  .gs-hud-heart { width: 35px; height: 33px; }
+  .gs-hud-coin { width: 31px; height: 31px; }
+  .gs-hud-hpnum, .gs-hud-goldnum { font-size: 24px; -webkit-text-stroke-width: 3px; }
+  .gs-hud-socket { width: 32px; height: 32px; border-radius: 8px; }
+  .gs-hud-socket img { width: 29px; height: 29px; }
+  .gs-hud-relic, .gs-hud-relic img { width: 34px; height: 34px; }
+  .gs-hud-scroll { width: 32px; height: 39px; }
+  .gs-hud-scroll img { width: 23px; height: 23px; }
+  .gs-hud-deck img { width: 35px; height: 37px; }
+  .gs-hud-deckcount { min-width: 20px; height: 20px; font-size: 11px; }
+  .gs-hud::after { height: 12px; }
+
+  /* The combat tool row under the board (play best / autoplay / search / …).
+     ONE row, scrolling sideways, at every width — the buttons AND the `hint:`
+     MCTS knobs, which used to get their own full-width line under them (two
+     lines, 79px; three on a phone-width portrait screen). Two things paid for
+     that: the board, which is 45px taller with the knobs inline; and the
+     board's STEADINESS — a wrapping row changes height whenever its contents
+     do, and "thinking…" / "select a target…" appear and vanish on every play.
+     Each time they wrapped the row, the stage (its flex:1 sibling) resized
+     under the fighters mid-turn. `nowrap` makes the row's height a function
+     of nothing but its font. */
+  .gs-toolrow { padding: 5px 10px 6px; gap: 8px; flex-wrap: nowrap;
+    overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+  .gs-toolrow::-webkit-scrollbar { display: none; }
+  .gs-toolrow > * { flex: 0 0 auto; white-space: nowrap; }
+  .gs-toolrow > button { padding: 4px 9px; font-size: 12px; }
+  .gs-toolrow-adv { display: inline-flex; width: auto; margin-top: 0; }
+  .gs-toolrow-adv > .mono { flex-wrap: nowrap; }
+  /* In combat the analyze-only bar between the top row and the HUD is gone
+     (App.tsx folds the button into the top row): 32px for one button. */
+
+  /* ---- side panel ----
+     The run history's rows are `font: inherit` and nothing above them set a
+     size, so they came out at the browser's 16px default — the largest type
+     on the screen, in the panel that has the least room. */
+  .wb-side { font-size: 12px; }
+
+  /* ---- act map ----
+     The same authored-in-px problem as the combat stage, one screen over: the
+     legend slip is pinned 88px from the sheet's top and the Proceed banner
+     96px from its bottom, both at desktop type sizes. On a ~370px-tall map
+     viewport the slip's bottom rows land ON the banner and you cannot read
+     either. Scaled down together so they clear each other again.
+     The `.gs-map` prefixes are load-bearing: skins/map.css is imported by
+     MapView.tsx, i.e. AFTER this file, so at equal specificity IT wins and
+     these rules silently do nothing. */
+  .gs-map .gsm-legend { top: 52px; width: 168px; padding: 10px 14px 12px; }
+  .gs-map .gsm-legend-title { font-size: 23px; margin-bottom: 3px; }
+  .gs-map .gsm-legend-row, .gs-map .gsm-legend-route { font-size: 16px; gap: 8px; padding: 0; }
+  .gs-map .gsm-legend-ico { flex: 0 0 22px; width: 22px; height: 22px; }
+  .gs-map .gsm-legend-ico img { width: 21px; height: 21px; }
+  .gs-map .gsm-legend-ico--coin img { width: 13px; height: 13px; }
+  .gs-map .gsm-proceed { width: 196px; height: 70px; bottom: 60px; font-size: 22px; padding: 0 37px 0 11px; }
+}
+
+/* ---- narrow chrome --------------------------------------------------------
+   Keyed on WIDTH: the side panel is a drawer here (see .wb-side--overlay and
+   NARROW_QUERY), and the drawer has the same 16px-history problem the short
+   viewport does. A tablet in portrait matches this and not the block above. */
+@media (max-width: 1200px) {
+  .wb-side { font-size: 12px; }
+  /* The act map's legend slip covers the rightmost column of rooms at ~1000px
+     of width (it is pointer-transparent, so they still take a tap — you just
+     cannot see which room you are tapping). The icons say what they are. */
+  .gs-map .gsm-legend { display: none; }
+}
+
+/* ---- phone landscape ------------------------------------------------------
+   360–412 CSS px tall (a Pixel in landscape: 412 as an installed app, 360 in a
+   browser tab). The compact chrome above still left 166 of 412 px to the
+   workbench and 246 to the game, and the scene sat on its zoom floor. Here
+   the workbench gets out of the way:
+
+     - the top row FOLDS AWAY. `.wb-chrome-toggle` (App.tsx) is the one
+       control that stays, pinned over the HUD's right end; the row opens
+       over the board as a sheet and takes no height of its own.
+     - the HUD band and the combat tool row shrink to a sliver (40px / 30px),
+       every part scaled off the band's height like the compact rules do.
+
+   The stage comes out ~342px tall on 412 — the framing then draws the scene
+   at ~0.44 instead of the 0.42 floor, with the room cropped to the fighters.
+   Kept in sync with `useMediaQuery.PHONE_LANDSCAPE_QUERY` BY HAND. */
+@media (max-height: 520px) {
+  .wb-chrome-toggle {
+    position: fixed; top: 3px; right: 3px; z-index: 46;
+    width: 30px; height: 30px; padding: 0; line-height: 1;
+    font-size: 16px; border-radius: 6px;
+    background: rgba(20, 30, 38, .82); border-color: rgba(150, 182, 198, .35);
+  }
+  .wb-topbar--sheet {
+    position: absolute; top: 0; left: 0; right: 36px; z-index: 45;
+    background: var(--panel); box-shadow: 0 8px 24px rgba(0, 0, 0, .55);
+    border-bottom: 1px solid var(--border);
+  }
+  .wb-topbar--sheet[hidden] { display: none; }
+  /* The sheet is absolute, so `.wb-main` has to be its containing block. */
+  .wb-main { position: relative; }
+  /* Room for the toggle at the band's right end. */
+  .gs-hud { min-height: 40px; padding: 1px 36px 1px 8px; gap: 8px; }
+  .gs-hud-char { width: 30px; height: 30px; border-radius: 8px; }
+  .gs-hud-char .gs-hud-charletter { font-size: 14px; }
+  .gs-hud-asc { width: 16px; height: 18px; right: -5px; bottom: -4px; }
+  .gs-hud-heart { width: 24px; height: 23px; }
+  .gs-hud-coin { width: 21px; height: 21px; }
+  .gs-hud-hpnum, .gs-hud-goldnum { font-size: 17px; -webkit-text-stroke-width: 2px; }
+  .gs-hud-potions { padding: 2px 5px; gap: 4px; border-radius: 9px; }
+  .gs-hud-socket { width: 22px; height: 22px; border-radius: 6px; }
+  .gs-hud-socket img { width: 20px; height: 20px; }
+  .gs-hud-relic, .gs-hud-relic img { width: 24px; height: 24px; }
+  .gs-hud-relictray { gap: 4px; }
+  .gs-hud-scroll { width: 22px; height: 27px; }
+  .gs-hud-scroll img { width: 16px; height: 16px; }
+  .gs-hud-deck img { width: 24px; height: 26px; }
+  .gs-hud-deckcount { min-width: 14px; height: 14px; font-size: 9px; }
+  .gs-hud-right { gap: 8px; }
+  .gs-hud::after { height: 8px; }
+  .gs-toolrow { padding: 3px 8px 4px; gap: 6px; }
+  .gs-toolrow > button { padding: 2px 7px; font-size: 11px; }
+  .gs-toolrow-adv > .mono { font-size: 11px; gap: 6px; }
+  .gs-toolrow-adv input, .gs-toolrow-adv select { padding: 1px 4px; font-size: 11px; }
+  .wb-runbar { padding: 2px 10px; }
+  .wb-runbar button { padding: 1px 6px; }
+}
+
+/* ---- phone-width (a tablet in portrait) -----------------------------------
+   The HUD band is authored for ~1000px of width: portrait plaque, heart, coin,
+   three sockets, the relics, then the map and deck plaques. At 627px the
+   relic tray, which wraps, and the right cluster, which does not, simply
+   overlapped. Let the tray scroll sideways in the room it is given instead. */
+@media (max-width: 700px) {
+  .gs-hud { gap: 8px; padding-left: 8px; padding-right: 8px; }
+  .gs-hud-relictray { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .gs-hud-relictray::-webkit-scrollbar { display: none; }
+  .gs-hud-right { gap: 8px; }
+  /* The run controls (best · play to end · analyze) wrapped to two lines on a
+     phone in portrait; one scrolling row, like the top bar. */
+  .wb-runbar { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .wb-runbar::-webkit-scrollbar { display: none; }
+  .wb-runbar > * { flex: 0 0 auto; }
+  .wb-runbar > span { min-width: 0 !important; }
+}
+
+/* ---- phone portrait (≤ 480px wide) ----------------------------------------
+   Portrait plaque, heart, HP, coin, gold, three sockets and the map / deck
+   plaques add up to ~470px of band; at 412 the plaques hung off the right
+   edge. Two rows: the vitals and the plaques on the first, the potion belt
+   and the relics on the second — the belt is the widest single part, and
+   with it on the first row the plaques still wrapped. */
+@media (max-width: 480px) {
+  .gs-hud { flex-wrap: wrap; row-gap: 3px; gap: 8px; padding: 3px 8px 4px; }
+  .gs-hud-char { width: 38px; height: 38px; }
+  .gs-hud-heart { width: 30px; height: 28px; }
+  .gs-hud-coin { width: 27px; height: 27px; }
+  .gs-hud-hpnum, .gs-hud-goldnum { font-size: 21px; -webkit-text-stroke-width: 2.5px; }
+  .gs-hud-potions { order: 9; padding: 3px 6px; gap: 4px; }
+  .gs-hud-socket { width: 28px; height: 28px; }
+  .gs-hud-socket img { width: 25px; height: 25px; }
+  .gs-hud-relictray { order: 10; flex: 1 1 auto; }
+  .gs-hud-right { gap: 8px; }
+}
+
+/* ---- touch ----------------------------------------------------------------
+   No hover means no card lift, and the fan is DESIGNED to be cropped by the
+   stage edge (the game crops it too) with the lift as the way to read a card
+   in full. On a touchscreen that left the hand permanently half-visible — the
+   "you don't see all the cards" half of the bug.
+
+   There is no CSS for it here, deliberately: the lift is already React state
+   (`.gs-hovered`, see .gs-handslot-lift in game-skin.css) rather than
+   `:hover`, so Hand.tsx just drives that same state from a tap — first tap
+   raises the card, second plays it. One raise mechanism, not two.
+
+   Likewise the potion popover already opens on `:focus-within` as well as
+   `:hover` (.gs-potion-pop in game-skin.css) and its socket is tabbable, so a
+   tap opens it. Nothing to add. */

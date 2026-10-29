@@ -1,0 +1,28 @@
+{
+  "class_name": "CrimsonMantle",
+  "title": "Crimson Mantle",
+  "character": "Ironclad",
+  "energy_cost": 1,
+  "type": "Power",
+  "rarity": "Rare",
+  "target": "Self",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Block",
+      "base_value": 8,
+      "upgraded_value": 10
+    }
+  ],
+  "description": "At the start of your turn, lose 1 HP and gain 8 Block.",
+  "upgraded_description": "At the start of your turn, lose 1 HP and gain 10 Block.",
+  "x_cost": false,
+  "referenced_powers": [
+    {
+      "class_name": "CrimsonMantlePower",
+      "title": "Crimson Mantle",
+      "slug": "crimson-mantle"
+    }
+  ],
+  "notes": "Each time this card is played, it increments the self-damage counter of the power, causing the player to take increased damage from the power's effect."
+}

@@ -1,0 +1,61 @@
+{
+  "class_name": "TurretOperator",
+  "title": "Turret Operator",
+  "min_hp": 51,
+  "max_hp": 51,
+  "min_hp_base": 41,
+  "max_hp_base": 41,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "UNLOAD_MOVE",
+      "title": "Unload!",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 4,
+          "damage_base": 3,
+          "hits": 5,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 3/4 damage",
+        "5 hits"
+      ]
+    },
+    {
+      "id": "UNLOAD_MOVE_2",
+      "title": "Unload!",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 4,
+          "damage_base": 3,
+          "hits": 5,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 3/4 damage",
+        "5 hits"
+      ]
+    },
+    {
+      "id": "RELOAD_MOVE",
+      "title": "Reload",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Apply 1 Strength"
+      ]
+    }
+  ],
+  "move_pattern": "Cycles: Unload! → Unload! → Reload",
+  "powers_on_spawn": [],
+  "notes": "The Turret Operator gains Strength each cycle, making it increasingly dangerous. Two consecutive Unload moves deal 20-30 total damage (15-20 base) before Reload buffs the enemy, so the threat scales over multiple cycles."
+}

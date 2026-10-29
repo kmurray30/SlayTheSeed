@@ -1,0 +1,26 @@
+{
+  "class_name": "Apparition",
+  "title": "Apparition",
+  "character": "Event",
+  "energy_cost": 1,
+  "type": "Skill",
+  "rarity": "Ancient",
+  "target": "Self",
+  "keywords": ["Ethereal", "Exhaust"],
+  "vars": [
+    {
+      "type": "Intangible",
+      "base_value": 1
+    }
+  ],
+  "description": "Gain +1 [gold]Intangible[/gold].",
+  "x_cost": false,
+  "referenced_powers": [
+    {
+      "class_name": "IntangiblePower",
+      "title": "Intangible",
+      "slug": "intangible"
+    }
+  ],
+  "notes": "On upgrade, the Ethereal keyword is removed, making this card retain in hand and playable on subsequent turns instead of being discarded after play."
+}

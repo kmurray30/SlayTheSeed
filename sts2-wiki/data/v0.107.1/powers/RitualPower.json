@@ -1,0 +1,9 @@
+{
+  "class_name": "RitualPower",
+  "title": "Ritual",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Gain [gold]Strength[/gold] at the end of your turn.",
+  "smart_description": "At the end of your turn, gain [blue]Strength[/blue] equal to this power's stacks.",
+  "notes": "Counter-based power where each stack represents one Strength to apply. If applied by an enemy on the same turn, the effect is skipped on the first trigger (to prevent immediate triggering when an enemy grants it mid-combat)."
+}

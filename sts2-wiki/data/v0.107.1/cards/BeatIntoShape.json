@@ -1,0 +1,31 @@
+{
+  "class_name": "BeatIntoShape",
+  "title": "Beat into Shape",
+  "character": "Necrobinder",
+  "energy_cost": 1,
+  "type": "Attack",
+  "rarity": "Rare",
+  "target": "Single",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 5,
+      "upgraded_value": 7
+    },
+    {
+      "type": "Forge",
+      "base_value": 5,
+      "upgraded_value": 7
+    },
+    {
+      "type": "Forge",
+      "base_value": 5,
+      "upgraded_value": 7
+    }
+  ],
+  "description": "Deal 5 damage. [gold]Forge[/gold] 5 for each powered attack against this enemy this turn, reduced by 5 for each hit this card deals.",
+  "upgraded_description": "Deal 7 damage. [gold]Forge[/gold] 7 for each powered attack against this enemy this turn, reduced by 7 for each hit this card deals.",
+  "referenced_powers": [],
+  "notes": "CalculatedForge counts the number of powered attacks made to the target this turn. The final Forge amount is the count multiplied by the Forge value, minus (CalculationExtra × hit count from this card). The three vars represent: Damage dealt, Forge multiplier per powered attack, and Forge adjustment per hit."
+}

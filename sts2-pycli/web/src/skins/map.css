@@ -1,0 +1,466 @@
+/* ============================================================================
+   map.css — the game-skinned map surface (.gs-map)
+   ============================================================================
+   The full map screen renders the act as ink on the game's own parchment
+   scroll (map_bgs/<region>/map_{top,middle,bottom}_<region>.png), pinned in a
+   dark cave. Node icons are the game's run_history room stamps, printed into
+   the paper by the per-type duotone filters in MapView (NOT by a blend mode —
+   see the ink-lab comment there); paths are hand-drawn dashes; the AI's
+   planned route stays but reads as a red pencil someone took to the sheet.
+
+   Every rule here is scoped under .gs-map. The parchment layer URLs arrive as
+   inline CSS vars from MapView (they must go through assetUrl(), which the
+   stylesheet can't call):
+     --gsm-parch-top / --gsm-parch-mid / --gsm-parch-bot : url(...) layers.
+   ========================================================================== */
+
+.gs-map {
+  /* ink palette, sampled off refs/game-map-2.png at 6x */
+  --gsm-ink: #2b2116;         /* visited ink / lassos */
+  --gsm-ink-soft: #4a3b26;    /* labels on parchment */
+  --gsm-ink-faint: #6f5a3c;   /* unwalked path dashes */
+  --gsm-parch: #a58a63;       /* parchment ground, measured (165,138,99) */
+  --gsm-parch-hi: #d9c49a;
+  --gsm-plan: #3f7a33;        /* green pencil: the AI route overlay */
+  --gsm-cave: #0b1b25;        /* the rock the sheet is pinned to */
+  --gsm-cave-lit: #21495d;    /* the teal plane the cave light catches */
+  --gsm-cave-deep: #061119;   /* crevices between the rock planes */
+  --gsm-cave-text: #b6a98f;   /* chrome text on the cave background */
+  /* the parchment art's own transparent side margin: the hide starts this far
+     in from the layer's edge, so anything that must land ON paper (edge fades)
+     inset by it, and anything that must land on ROCK (the cave walls) stops
+     there */
+  --gsm-sheet-inset: 8.4%;
+  font-family: var(--game-font, "Kreon", Georgia, serif);
+}
+
+/* ------------------------------------------------------------- full screen */
+/* Full-bleed: the sheet IS the screen. No card, no radius, no gutters — the
+   cave only bleeds at the extreme edges, where the parchment art's own deckle
+   runs out (the 1920x1359 layers are transparent outside the hide). */
+.gs-map--scene {
+  position: relative;
+  display: flex; flex-direction: column;
+  height: 100%;
+  min-height: 480px;
+  box-sizing: border-box;
+  padding: 0;
+  overflow: hidden;
+  background:
+    /* the lit floor pooling under the sheet */
+    radial-gradient(120% 46% at 50% 104%, rgba(43, 96, 118, 0.5), transparent 68%),
+    radial-gradient(150% 40% at 8% 98%, rgba(34, 74, 88, 0.42), transparent 62%),
+    radial-gradient(110% 55% at 50% -6%, rgba(38, 78, 92, 0.3), transparent 72%),
+    linear-gradient(#0c1e29 0%, #0a1620 46%, var(--gsm-cave) 100%);
+}
+/* soft cave vignette above the background, below the content */
+.gs-map--scene::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none; z-index: 6;
+  /* just enough to seat the sheet in the rock; heavier than this and the
+     parchment's left third goes muddy and the ink loses its contrast floor */
+  box-shadow: inset 0 0 130px 2px rgba(2, 5, 8, 0.42);
+}
+
+/* --------------------------------------------------------------- cave walls */
+/* Faceted rock either side of the sheet: angular strata with a cold rim on the
+   light-facing edges and a stalactite fringe hanging from the ceiling, then a
+   dark band right against the paper for the shadow the sheet casts. All CSS —
+   the PCK ships no map-surround art, and a flat colour here was r4's single
+   biggest depth deduction ("no cave walls, stalactites, rim light, fog"). */
+.gsm-cave {
+  position: absolute; top: 0; bottom: 0; z-index: 1;
+  width: calc(var(--gsm-sheet-inset) + 26px);
+  pointer-events: none;
+}
+.gsm-cave--l { left: 0; }
+.gsm-cave--r { right: 0; transform: scaleX(-1); }
+/* the rock: hard-stop gradients read as flat planes meeting at an angle */
+.gsm-cave::before {
+  content: ""; position: absolute; inset: 0;
+  /* Faceted strata: hard-stop stripes at a slight tilt read as flat rock
+     planes meeting at an angle, the way the reference's cave wall does. Kept
+     at the ref's measured luminance (#12303f-#26526a) — r4's version was
+     multiplied down into the void and vanished. */
+  background:
+    /* Three hard-stop gradients at three very different angles. Where their
+       seams cross, the wall breaks into large irregular polygons — angular
+       rock. A single-angle stripe set reads as a curtain and a repeating one
+       reads as corrugation; both were tried and both looked like a pattern. */
+    linear-gradient(163deg, transparent 0 17%, rgba(4, 16, 23, 0.88) 17% 32%,
+      transparent 32% 53%, rgba(110, 190, 218, 0.11) 53% 59%,
+      transparent 59% 78%, rgba(4, 16, 23, 0.72) 78% 100%),
+    linear-gradient(21deg, transparent 0 38%, rgba(8, 28, 38, 0.62) 38% 51%,
+      transparent 51% 84%, rgba(110, 190, 218, 0.08) 84% 89%, transparent 89%),
+    linear-gradient(78deg,
+      #061620 0 14%, #1b4257 14% 31%, #0a222d 31% 40%, #27596f 40% 55%,
+      #0d2836 55% 76%, #1e4a5f 76% 88%, #071a23 88% 100%);
+  /* a ragged wall face, and the stalactite teeth that hang into the frame */
+  clip-path: polygon(
+    0 0, 100% 0, 92% 2.5%, 100% 5%, 84% 8%, 97% 11%, 88% 15%,
+    100% 19%, 90% 24%, 99% 29%, 86% 34%, 96% 40%, 100% 46%,
+    89% 52%, 98% 58%, 91% 64%, 100% 70%, 87% 76%, 97% 82%,
+    92% 88%, 100% 94%, 95% 100%, 0 100%);
+}
+/* rim light where the cave mouth catches the ridges, then the shadow the
+   hanging sheet throws onto the rock right beside it */
+.gsm-cave::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    linear-gradient(97deg, transparent 0 31%, rgba(120, 200, 228, 0.2) 33%,
+      transparent 36%, transparent 56%, rgba(120, 200, 228, 0.14) 58%,
+      transparent 61%),
+    linear-gradient(180deg, rgba(2, 10, 14, 0.75) 0, transparent 16%,
+      transparent 82%, rgba(2, 10, 14, 0.7) 100%),
+    linear-gradient(90deg, transparent 0 78%, rgba(2, 8, 12, 0.6) 100%);
+}
+
+/* stage: one full-width sheet with the legend slip and the Proceed banner
+   pinned onto its right edge, exactly as the game frames them */
+.gsm-stage {
+  position: relative; z-index: 2;
+  flex: 1 1 auto; min-height: 0;
+  display: flex;
+  padding: 0 10px;
+}
+
+/* --------------------------------------------------------------- parchment */
+.gsm-parchment {
+  position: relative;
+  flex: 1 1 auto; min-width: 0; min-height: 0;
+  display: flex; flex-direction: column;
+}
+.gsm-parch-bg {
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none;
+  /* the grain layer multiplies; isolate so it can only ever darken the paper
+     under it, never the cave behind the sheet */
+  isolation: isolate;
+}
+/* The game's three layers: a tileable middle covering whatever height the act
+   needs, and the rolled top / torn bottom deckle pinned over the scrolling
+   body so the sheet's edges stay put while the ink slides under them. */
+.gsm-parch-mid { position: absolute; inset: 0;
+  background: var(--gsm-parch-mid) center top / 100% auto repeat-y; }
+
+/* Paper is not a flat fill. One tiled layer repeats identically down the whole
+   act, so the variation that says "sheet" — fibre freckles, foxing blotches,
+   the sheen where light rakes across it, dirt in the corners — is painted here
+   across the WHOLE sheet, at a scale the tile can never produce. */
+.gsm-parch-grain {
+  position: absolute; left: var(--gsm-sheet-inset); right: var(--gsm-sheet-inset);
+  top: 0; bottom: 0;
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+  background:
+    /* raking sheen (lightens, so it is layered as a soft highlight below) */
+    radial-gradient(58% 34% at 27% 31%, rgba(120, 92, 58, 0.22), transparent 70%),
+    radial-gradient(44% 26% at 78% 68%, rgba(120, 92, 58, 0.18), transparent 72%),
+    /* foxing blotches */
+    radial-gradient(9% 7% at 14% 78%, rgba(104, 76, 44, 0.3), transparent 70%),
+    radial-gradient(7% 5% at 63% 18%, rgba(104, 76, 44, 0.26), transparent 70%),
+    radial-gradient(11% 6% at 88% 41%, rgba(104, 76, 44, 0.22), transparent 72%),
+    /* fibre freckles: two offset dot fields at different pitches so the
+       repeat is not legible */
+    radial-gradient(circle at 11% 19%, rgba(78, 58, 34, 0.42) 0 1.2px, transparent 1.7px),
+    radial-gradient(circle at 57% 74%, rgba(78, 58, 34, 0.34) 0 0.9px, transparent 1.4px),
+    radial-gradient(circle at 81% 33%, rgba(78, 58, 34, 0.3) 0 1.4px, transparent 1.9px),
+    radial-gradient(circle at 34% 61%, rgba(78, 58, 34, 0.26) 0 0.8px, transparent 1.3px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%,
+    137px 113px, 89px 149px, 211px 167px, 61px 97px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat,
+    repeat, repeat, repeat, repeat;
+}
+/* the sheen: a separate screen pass so it lifts the paper rather than dirtying it */
+.gsm-parch-bg::after {
+  content: ""; position: absolute;
+  left: var(--gsm-sheet-inset); right: var(--gsm-sheet-inset); top: 0; bottom: 0;
+  pointer-events: none;
+  /* a wide, soft ramp: a tight one leaves a visible seam across the sheet */
+  background: linear-gradient(118deg, transparent 0 6%,
+    rgba(255, 240, 208, 0.13) 31%, rgba(255, 240, 208, 0.05) 53%, transparent 80%);
+}
+/* grime pooled where the sheet meets the rock — reads as the paper curling
+   back into shadow at its own edges rather than being cut out with scissors */
+.gsm-parch-bg::before {
+  content: ""; position: absolute; inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(58, 40, 20, 0.55) 0, rgba(58, 40, 20, 0.16) 5%, transparent 13%),
+    linear-gradient(270deg, rgba(58, 40, 20, 0.55) 0, rgba(58, 40, 20, 0.16) 5%, transparent 13%),
+    radial-gradient(120% 60% at 50% 108%, rgba(46, 30, 14, 0.4), transparent 60%);
+}
+
+.gsm-parch-edges { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+/* The torn-edge fade, painted UNDER the two deckle strips (::before, so the
+   children cover it): ink dissolves into blank paper on the way down, so an
+   act taller than the frame reads as "more map down there" instead of a
+   guillotine cut across the bottom node row. Inset to the hide (r4 ran it the
+   full container width, so the wash spilled onto the dark rock as a bleached
+   band) and softened, so it fades the ink without bleaching the paper. */
+.gsm-parch-edges::before {
+  content: ""; position: absolute;
+  left: var(--gsm-sheet-inset); right: var(--gsm-sheet-inset); bottom: 0; height: 118px;
+  background: linear-gradient(rgba(165, 138, 99, 0) 0%, rgba(165, 138, 99, 0.42) 52%,
+    rgba(165, 138, 99, 0.86) 82%, rgb(165, 138, 99) 100%);
+}
+/* the same, at the top: the act runs on up under the rolled edge */
+.gsm-parch-edges::after {
+  content: ""; position: absolute;
+  left: var(--gsm-sheet-inset); right: var(--gsm-sheet-inset); top: 0; height: 74px;
+  background: linear-gradient(rgb(165, 138, 99) 0%, rgba(165, 138, 99, 0.8) 30%,
+    rgba(165, 138, 99, 0) 100%);
+}
+/* The rolled top edge is pulled up under the HUD band's 17px torn overhang, so
+   the sheet runs off the top of the frame with no seam — the game's map is not
+   a card with a top edge in the middle of the screen. */
+.gsm-parch-top { position: absolute; left: 0; right: 0; top: -68px; height: 96px;
+  background: var(--gsm-parch-top) top center / 100% auto no-repeat; }
+/* The torn bottom edge, cut in CSS rather than sampled from the art layer: the
+   art's tear lands at an image-scale-dependent height (it left ~85px of dead
+   cave under the sheet at 1600px wide). Teeth of varied depth, cave below. */
+/* Paper has thickness. One tear outline is stamped three times at different
+   heights — a dark band where the sheet's face curls away, the pale fibrous
+   lip that catches the light, and the void below. A `filter: drop-shadow` on
+   the clipped strip cannot do this: CSS applies filters BEFORE clip-path, so
+   the shadow is clipped off with everything else outside the teeth (that is
+   why r4's deckle stayed a flat strip). */
+.gs-map--scene {
+  --gsm-tear: polygon(0 100%, 100% 100%, 100% 46%, 98.1% 18%, 95.4% 61%, 93.0% 27%,
+    90.2% 9%, 87.6% 52%, 85.1% 22%, 82.0% 68%, 79.4% 31%, 76.5% 13%, 73.8% 57%,
+    71.0% 25%, 68.1% 71%, 65.4% 36%, 62.5% 8%, 59.8% 49%, 57.0% 20%, 54.1% 64%,
+    51.3% 30%, 48.4% 11%, 45.6% 55%, 42.8% 24%, 39.9% 69%, 37.1% 33%, 34.2% 7%,
+    31.4% 51%, 28.6% 19%, 25.7% 62%, 22.9% 28%, 20.0% 10%, 17.2% 54%, 14.3% 23%,
+    11.5% 66%, 8.6% 34%, 5.8% 12%, 2.9% 57%, 0 26%);
+}
+.gsm-tear { position: absolute; left: 0; right: 0; height: 46px;
+  clip-path: var(--gsm-tear); }
+.gsm-tear--shadow { bottom: 8px; background: rgba(28, 17, 6, 0.5); }
+.gsm-tear--lip { bottom: 3px; background: rgba(206, 180, 134, 0.95); }
+.gsm-parch-bot { position: absolute; left: 0; right: 0; bottom: 0; height: 46px;
+  background: var(--gsm-cave);
+  clip-path: var(--gsm-tear);
+}
+
+
+.gsm-parch-body {
+  position: relative;
+  flex: 1 1 auto; min-height: 0;
+  overflow: auto;
+  /* PARCH_PAD_X in MapView.tsx mirrors the horizontal value. The BOTTOM value
+     is deliberately deep: .gsm-proceed (bottom 96px, 88px tall) and .gsm-back
+     (bottom 26px, 76px tall) are pinned over this sheet and, unlike .gsm-legend,
+     are live controls that cannot be pointer-events:none. Without room to
+     scroll past them a bottom-corner node sat under a wedge and was
+     unclickable. 190px clears the taller of the two. */
+  padding: 30px 46px 190px;
+  /* `safe`: a lattice wider than the sheet (a phone in portrait) used to be
+     centred with both ends past the box, and you cannot scroll to the left
+     of a flex container's content box. `safe` falls back to flex-start there,
+     so the sheet scrolls sideways and every column can be reached. */
+  display: flex; justify-content: safe center; align-items: flex-start;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(36, 27, 15, 0.34) transparent;
+}
+.gsm-parch-body::-webkit-scrollbar { width: 9px; height: 9px; }
+/* The lattice is an <svg> sized in px by MapView. As a flex item it SHRANK to
+   the box (flex-shrink: 1, and an SVG's min-width is 0), and an SVG clips its
+   own overflow — so on a 412px phone a 563px act was squeezed into 299px and
+   four of its seven columns were cut off INSIDE the svg, where no scroll can
+   reach them. Keep it at its own size; the body scrolls. */
+.gsm-parch-body > svg { flex: 0 0 auto; }
+/* Phone width: the sheet's 46px side gutters are a fifth of the screen. */
+@media (max-width: 760px) {
+  .gsm-parch-body { padding-left: 16px; padding-right: 16px; }
+}
+/* Phone landscape: the scene's 480px floor is taller than the whole screen,
+   which put the Proceed banner — pinned to the scene's bottom — below the
+   fold of the outer scroller. The sheet is the screen; let it be short. */
+@media (max-height: 520px) {
+  .gs-map--scene { min-height: 0; }
+}
+.gsm-parch-body::-webkit-scrollbar-thumb {
+  background: rgba(36, 27, 15, 0.32); border-radius: 6px; }
+.gsm-parch-body::-webkit-scrollbar-track { background: transparent; }
+
+/* ------------------------------------------------------------------ legend */
+/* the game's ice-blue torn note, pinned over the sheet's right deckle */
+.gsm-legend {
+  position: absolute; z-index: 4; right: 14px; top: 88px;
+  width: 208px;
+  padding: 16px 20px 20px;
+  pointer-events: none;
+  transform: rotate(-2.2deg);
+  background:
+    linear-gradient(168deg, #d7eef8 0%, #b6dcee 46%, #96c8e0 100%);
+  color: #12384f;
+  clip-path: polygon(
+    2.5% 1.2%, 14% 0.2%, 27% 1.6%, 39% 0.1%, 52% 1.4%, 66% 0.2%, 79% 1.7%, 92% 0.3%,
+    100% 4%, 98.4% 12%, 100% 21%, 97.8% 30%, 99.6% 39%, 97.6% 48%, 99.8% 57%,
+    97.9% 66%, 99.7% 75%, 98.0% 84%, 100% 93%, 96% 99.4%,
+    83% 98.2%, 70% 99.8%, 57% 98.4%, 44% 99.9%, 31% 98.3%, 18% 99.7%, 5% 98.5%,
+    0% 92%, 2.1% 83%, 0.3% 74%, 2.2% 65%, 0.4% 56%, 2.3% 47%, 0.5% 38%,
+    2.1% 29%, 0.4% 20%, 2.4% 11%);
+  filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.65));
+}
+.gsm-legend-title { font-size: 32px; font-weight: 700; text-align: center;
+  letter-spacing: 0.2px; color: #123246; margin: 0 0 6px;
+  text-shadow: 0 2px 0 rgba(255, 255, 255, 0.45); }
+.gsm-legend-row, .gsm-legend-route {
+  display: flex; align-items: center; gap: 11px;
+  font-size: 21px; font-weight: 700; padding: 1px 0;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4); }
+.gsm-legend-ico { flex: 0 0 30px; width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center; }
+.gsm-legend-ico img { width: 28px; height: 28px; object-fit: contain; }
+/* the game's Unknown key is a struck coin, not a bare "?" */
+.gsm-legend-ico--coin {
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #c9a13c 0%, #a5801f 62%, #7d5f12 100%);
+  box-shadow: inset 0 -2px 3px rgba(60, 40, 4, 0.5);
+}
+.gsm-legend-ico--coin img { width: 17px; height: 17px;
+  filter: brightness(1.9) saturate(0.25); }
+/* the route key is the one entry the game does not have; smaller, and its
+   swatch is drawn in the same pencil the sheet uses */
+.gsm-legend-route { pointer-events: auto; cursor: help;
+  margin-top: 8px; padding-top: 7px; font-size: 16px; font-weight: 700;
+  border-top: 1px solid rgba(24, 70, 96, 0.28); color: #1b4964; }
+
+/* ---------------------------------------------------------- Proceed banner */
+/* The game's painted arrow-banner, hung on the ROCK clear of the sheet: warm
+   dark red with a rough brushed silhouette and dark-gold lettering. On this
+   screen it advances the replay to the next map decision (see MapView's
+   nextMapIdx), and is disabled — titled with the reason — when there is
+   nothing to confirm. r4's version was a crisp polygon in bright cream that
+   the viewport's overflow clipped in half. */
+.gsm-proceed {
+  position: absolute; z-index: 5; right: 16px; bottom: 96px;
+  width: 244px; height: 88px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 46px 0 14px;
+  border: none; cursor: pointer;
+  font-family: inherit; font-size: 28px; font-weight: 700; letter-spacing: 0.5px;
+  /* the ref letters this in a warm light grey with a hard dark shadow, not in
+     gold — gold read as a web CTA */
+  color: #cfc2aa; text-shadow: 0 2px 2px rgba(14, 3, 0, 0.8);
+  background:
+    radial-gradient(130% 150% at 26% 16%, rgba(196, 74, 48, 0.42), transparent 64%),
+    linear-gradient(#7d2416 0%, #6a1c0f 46%, #46110a 100%);
+  /* swallowtail, straight body, barbed head — the reference's silhouette */
+  clip-path: polygon(0% 22%, 60% 22%, 60% 4%, 100% 50%, 60% 96%, 60% 78%,
+    0% 78%, 6.5% 50%);
+  /* a thin olive keyline that FOLLOWS the torn silhouette (a border or outline
+     would draw the untrimmed box), then the banner's own cast shadow */
+  filter:
+    drop-shadow(1.5px 0 0 #6b6122) drop-shadow(-1.5px 0 0 #6b6122)
+    drop-shadow(0 1.5px 0 #6b6122) drop-shadow(0 -1.5px 0 #6b6122)
+    drop-shadow(0 10px 16px rgba(0, 0, 0, 0.72));
+}
+.gsm-proceed:hover:not(:disabled) {
+  background:
+    radial-gradient(130% 150% at 26% 16%, rgba(216, 94, 62, 0.5), transparent 64%),
+    linear-gradient(#902d1c 0%, #7b2314 46%, #551509 100%);
+}
+.gsm-proceed:focus-visible { outline: 3px solid #e2b466; outline-offset: -8px; }
+/* A banner with nothing to confirm must not hit-test either: a disabled button
+   still swallows the click rather than passing it to the node underneath. */
+.gsm-proceed:disabled { cursor: default; pointer-events: none;
+  filter: saturate(0.45) brightness(0.6) drop-shadow(0 8px 14px rgba(0, 0, 0, 0.6)); }
+
+/* ------------------------------------------------------- red back wedge */
+/* the game's bottom-left return ribbon (MapOverlay's close button) */
+.gsm-back {
+  position: absolute; z-index: 8; left: -4px; bottom: 26px;
+  width: 158px; height: 76px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 30px 0 8px;
+  border: none; cursor: pointer;
+  font-size: 40px; line-height: 1; color: #f7e7c6;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(#b8351f 0%, #a02714 46%, #7d1a0e 100%);
+  clip-path: polygon(0% 2%, 100% 0%, 78% 50%, 100% 100%, 0% 97%);
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.6));
+}
+.gsm-back:hover { background: linear-gradient(#d9482e 0%, #c2331d 46%, #9d2313 100%); }
+.gsm-back:focus-visible { outline: 3px solid #f7e7c6; outline-offset: -8px; }
+
+/* ------------------------------------------------------------ SVG ink work */
+/* The stamps are printed by the per-type duotone filters MapView emits, which
+   already land them in the game's measured map palette. Nothing here may
+   re-saturate them: round 4's `mix-blend-mode: multiply` + `contrast(1.55)
+   saturate(1.25)` is the exact chain that produced the neon "emoji" node set
+   both critics led with. */
+/* unwalked stamps are laid a shade lighter than walked ones — the game prints
+   every node at the same weight, so this stays subtle enough to read as ink
+   pressure rather than as a disabled UI state */
+.gsm-node-future { opacity: 0.86; }
+/* reachable stamps sit fully inked and invite the click */
+.gs-map g[data-can] { cursor: pointer; }
+.gs-map g[data-can] .gsm-node-art,
+.gs-map g[data-jump] .gsm-node-art {
+  transform-box: fill-box; transform-origin: center;
+  transition: transform 120ms ease-out;
+}
+.gs-map g[data-can]:hover .gsm-node-art,
+.gs-map g[data-can]:focus-visible .gsm-node-art,
+.gs-map g[data-jump]:hover .gsm-node-art { transform: scale(1.14); }
+.gs-map g[data-can]:focus-visible { outline: none; }
+.gs-map g[data-can]:focus-visible .gsm-can-ring { opacity: 1; }
+
+/* gentle breathing on the reachable-node ring so the choice reads at a
+   glance; stilled for prefers-reduced-motion */
+@keyframes gsm-breathe { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.92; } }
+@media (prefers-reduced-motion: no-preference) {
+  .gs-map .gsm-can-ring { animation: gsm-breathe 2.2s ease-in-out infinite; }
+}
+
+/* The big boss ink is flooded flat by the #<id>-boss filter in MapView, so it
+   needs no colour work here — only the softest possible settle into the paper.
+   A drop-shadow would put it back ON the sheet instead of IN it. */
+.gsm-boss-ink { opacity: 0.94; }
+
+/* ------------------------------------------------------- compact (minimap) */
+.gs-map--compact {
+  margin: 4px 6px 6px;
+  border-radius: 6px;
+  /* 118%, not 100%: the parchment layer is transparent for ~5.7% on its left
+     and ~7.6% on its right (the hand-torn deckle), and at the dock's ~300px
+     width that put the outermost node column ON the tear with nothing under
+     it. The strip is only ~7 columns wide, so there is no room to pad the ink
+     inwards — oversize the paper instead and let the deckle fall outside the
+     rounded frame, which the inset border already draws. */
+  background: var(--gsm-parch-mid) 50% 0 / 118% auto repeat-y, var(--gsm-parch);
+  box-shadow: inset 0 0 0 1px rgba(40, 30, 16, 0.5), inset 0 0 26px rgba(46, 32, 14, 0.4);
+}
+
+/* --------------------------------------------- fallback map-choice buttons */
+.gsm-choices { padding: 40px; display: flex; flex-direction: column;
+  align-items: center; gap: 24px; }
+.gsm-choices h2 { margin: 0; font-weight: 700; letter-spacing: 0.4px;
+  color: #d8cbb0; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); }
+.gsm-choice-row { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; }
+.gsm-choice {
+  width: 126px; padding: 18px 12px 14px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-family: inherit; cursor: pointer;
+  color: var(--gsm-ink);
+  background:
+    radial-gradient(120% 90% at 50% 8%, var(--gsm-parch-hi) 0%, var(--gsm-parch) 78%, #b3915f 100%);
+  border: 2px solid rgba(51, 40, 26, 0.75);
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5), inset 0 0 14px rgba(60, 44, 20, 0.25);
+}
+.gsm-choice:hover:not(:disabled) { transform: translateY(-2px);
+  box-shadow: 0 9px 20px rgba(0, 0, 0, 0.55), inset 0 0 14px rgba(60, 44, 20, 0.25); }
+.gsm-choice:disabled { cursor: default; opacity: 0.7; }
+.gsm-choice-type { font-weight: 700; font-size: 15px; }
+.gsm-choice-coord { font-size: 11px; color: var(--gsm-ink-soft); }
+/* the picker's stamps print on parchment too, so they get the same muted
+   register the map's do — never the raw UI hues */
+.gsm-choice img { filter: saturate(0.4) brightness(0.86) contrast(1.05); }
+
+/* text on parchment (empty state, reconstructed rows) */
+.gsm-on-parch { color: var(--gsm-ink); }
+.gsm-muted-parch { color: var(--gsm-ink-soft); }

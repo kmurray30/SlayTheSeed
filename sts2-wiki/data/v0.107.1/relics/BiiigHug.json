@@ -1,0 +1,8 @@
+{
+  "class_name": "BiiigHug",
+  "title": "Biiig Hug",
+  "rarity": "Ancient",
+  "description": "Upon pickup, remove 4 cards from your Deck. Whenever you shuffle your Draw Pile, add a Soot into your Draw Pile.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "This relic removes 4 cards from your deck via interactive selection when obtained. Each time you shuffle your Draw Pile, a Soot card is added to it at a random position. Hover tips display details about the Soot card generated."
+}

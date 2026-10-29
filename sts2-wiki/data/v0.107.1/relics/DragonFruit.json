@@ -1,0 +1,8 @@
+{
+  "class_name": "DragonFruit",
+  "title": "Dragon Fruit",
+  "rarity": "Shop",
+  "description": "Whenever you gain [gold]Gold[/gold], raise your Max HP by [blue]1[/blue].",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Only available in Acts 1–2 treasure chests. Triggers whenever the player gains gold from any source."
+}

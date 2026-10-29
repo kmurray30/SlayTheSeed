@@ -1,0 +1,21 @@
+{
+  "class_name": "Volley",
+  "title": "Volley",
+  "character": "Colorless",
+  "energy_cost": -1,
+  "type": "Attack",
+  "rarity": "Uncommon",
+  "target": "RandomEnemy",
+  "keywords": [],
+  "x_cost": true,
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 10,
+      "upgraded_value": 14
+    }
+  ],
+  "description": "Deal 10 damage to a random enemy X times.",
+  "referenced_powers": [],
+  "notes": "Each point of X energy increases the number of times damage is dealt to a random enemy."
+}

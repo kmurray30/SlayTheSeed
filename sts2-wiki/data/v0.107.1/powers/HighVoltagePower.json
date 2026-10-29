@@ -1,0 +1,9 @@
+{
+  "class_name": "HighVoltagePower",
+  "title": "High Voltage",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the end of this creature's turn, it gains [blue]2[/blue] [gold]Strength[/gold].",
+  "smart_description": "At the end of [gold]{OwnerName}'s[/gold] turn, it gains [blue]{Amount}[/blue] [gold]Strength[/gold].",
+  "notes": "A counter-based buff that grants Strength equal to its stack count at the end of each turn. Each time the condition is met, the stack count increases, creating escalating damage potential."
+}

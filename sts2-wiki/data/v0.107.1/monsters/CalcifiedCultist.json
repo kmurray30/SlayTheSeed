@@ -1,0 +1,42 @@
+{
+  "class_name": "CalcifiedCultist",
+  "title": "Calcified Cultist",
+  "min_hp": 39,
+  "max_hp": 42,
+  "min_hp_base": 38,
+  "max_hp_base": 41,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "INCANTATION_MOVE",
+      "title": "Incantation",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Apply 2 Ritual"
+      ]
+    },
+    {
+      "id": "DARK_STRIKE_MOVE",
+      "title": "Dark Strike",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 11,
+          "damage_base": 9,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 9/11 damage"
+      ]
+    }
+  ],
+  "move_pattern": "Uses Incantation to apply Ritual, then repeatedly uses Dark Strike",
+  "powers_on_spawn": [],
+  "notes": "After using Incantation, Dark Strike becomes its only move for the rest of the combat."
+}

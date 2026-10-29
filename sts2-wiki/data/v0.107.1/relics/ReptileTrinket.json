@@ -1,0 +1,8 @@
+{
+  "class_name": "ReptileTrinket",
+  "title": "Reptile Trinket",
+  "rarity": "Uncommon",
+  "description": "Whenever you use a potion, gain [blue]3[/blue] [gold]Strength[/gold] this turn.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Triggers when the player uses a potion during combat. Applies ReptileTrinketPower, granting 3 Strength for that turn only. Effect only activates if combat is in progress."
+}

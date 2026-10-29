@@ -1,0 +1,8 @@
+{
+  "class_name": "PaelsWing",
+  "title": "Pael's Wing",
+  "rarity": "Ancient",
+  "description": "You may sacrifice card rewards to Pael. Every [blue]2[/blue] sacrifices, obtain a [gold]Relic[/gold].",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Adds a 'Sacrifice' alternative to every card reward screen. Each sacrifice increments a counter; when the counter reaches the threshold (default 2), automatically obtains a relic from the player's relic pool and triggers a visual animation."
+}

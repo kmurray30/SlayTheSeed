@@ -1,0 +1,18 @@
+{
+  "class_name": "Slimed",
+  "title": "Slimed",
+  "character": "Status",
+  "energy_cost": -2,
+  "type": "Status",
+  "rarity": "Status",
+  "target": "None",
+  "keywords": ["Exhaust"],
+  "vars": [
+    {
+      "type": "Cards",
+      "base_value": 1
+    }
+  ],
+  "description": "Draw 1 card.",
+  "notes": "Status card inflicted on the player by enemies. Takes up deck space and cannot be played from hand."
+}

@@ -1,0 +1,8 @@
+{
+  "class_name": "TungstenRod",
+  "title": "Tungsten Rod",
+  "rarity": "Rare",
+  "description": "Whenever you would lose HP, lose [blue]1[/blue] less.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Reduces all HP loss taken by the player by 1 (after other HP loss modifications). Triggers a Flash visual effect when HP loss is modified."
+}

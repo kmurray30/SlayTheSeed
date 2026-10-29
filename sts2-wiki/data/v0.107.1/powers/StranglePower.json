@@ -1,0 +1,9 @@
+{
+  "class_name": "StranglePower",
+  "title": "Strangle",
+  "power_type": "Debuff",
+  "stack_type": "Counter",
+  "description": "Whenever you play a card this turn, this enemy loses [blue]2[/blue] HP.",
+  "smart_description": "Whenever you play a card this turn, this enemy loses [blue]{Amount}[/blue] HP.",
+  "notes": "This power is instanced per applier (the player who applied it). It tracks individual cards played to avoid triggering on itself when stacking multiple copies. The power automatically expires at the end of the applier's turn."
+}

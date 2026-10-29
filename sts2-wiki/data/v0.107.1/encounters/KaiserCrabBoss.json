@@ -1,0 +1,10 @@
+{
+  "class_name": "KaiserCrabBoss",
+  "title": "Kaiser Crab",
+  "room_type": "Boss",
+  "is_weak": false,
+  "monsters": ["Crusher", "Rocket"],
+  "total_monsters": 2,
+  "tags": [],
+  "notes": "Multi-part boss encounter featuring Crusher and Rocket in separate designated slots. Uses custom background and music track (act2_boss_kaiser_crab) with adjusted camera scaling (0.75x)."
+}

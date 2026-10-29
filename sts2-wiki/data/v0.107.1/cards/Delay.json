@@ -1,0 +1,31 @@
+{
+  "class_name": "Delay",
+  "title": "Delay",
+  "character": "Necrobinder",
+  "energy_cost": 2,
+  "type": "Skill",
+  "rarity": "Uncommon",
+  "target": "Self",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Block",
+      "base_value": 11,
+      "upgraded_value": 13
+    },
+    {
+      "type": "Energy",
+      "base_value": 1,
+      "upgraded_value": 2
+    }
+  ],
+  "description": "Gain +11 [gold]Block[/gold].\nNext turn, gain 1 Energy.",
+  "x_cost": false,
+  "referenced_powers": [
+    {
+      "class_name": "EnergyNextTurnPower",
+      "title": "Next Turn Energy",
+      "slug": "energy-next-turn-power"
+    }
+  ]
+}

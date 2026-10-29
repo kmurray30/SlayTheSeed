@@ -1,0 +1,18 @@
+{
+  "class_name": "Wither",
+  "title": "Wither",
+  "character": "Status",
+  "energy_cost": -2,
+  "type": "Status",
+  "rarity": "Status",
+  "target": "None",
+  "keywords": ["Unplayable"],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 3
+    }
+  ],
+  "description": "At the end of your turn, if this is in your [gold]Hand[/gold], take 3 damage.",
+  "notes": "Debuff status card that cannot be played from hand. Damages the player at the end of each turn if it remains in their hand. Has a special 'fake upgrade' mechanic where Wither.FakeUpgrade() increases damage by 3, but this is not a normal card upgrade (MaxUpgradeLevel = 0)."
+}

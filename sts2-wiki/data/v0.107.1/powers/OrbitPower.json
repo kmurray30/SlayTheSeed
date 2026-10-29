@@ -1,0 +1,8 @@
+{
+  "class_name": "OrbitPower",
+  "title": "Orbit",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Every 4 Energy you spend, gain an Energy.",
+  "smart_description": "Every 4 Energy you spend, gain 1 Energy."
+}

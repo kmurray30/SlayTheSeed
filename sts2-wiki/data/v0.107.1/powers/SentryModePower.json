@@ -1,0 +1,9 @@
+{
+  "class_name": "SentryModePower",
+  "title": "Sentry Mode",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the start of your turn, add [blue]{Amount}[/blue] [gold]Sweeping Gaze[/gold] into your [gold]Hand[/gold].",
+  "smart_description": "At the start of your turn, add [blue]{Amount}[/blue] [gold]Sweeping Gaze[/gold] into your [gold]Hand[/gold].",
+  "notes": "Stack value determines how many Sweeping Gaze cards are added per turn at the start of hand draw phase."
+}

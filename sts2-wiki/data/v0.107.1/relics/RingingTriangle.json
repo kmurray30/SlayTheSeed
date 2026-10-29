@@ -1,0 +1,8 @@
+{
+  "class_name": "RingingTriangle",
+  "title": "Ringing Triangle",
+  "rarity": "Shop",
+  "description": "Retain your Hand on the first turn of combat.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "This relic uses ShouldFlush() to prevent hand discard on turn 1. Starting from turn 2, normal hand discard rules apply."
+}

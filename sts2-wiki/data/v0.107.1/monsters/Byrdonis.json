@@ -1,0 +1,42 @@
+{
+  "class_name": "Byrdonis",
+  "title": "Byrdonis",
+  "min_hp": 90,
+  "max_hp": 90,
+  "min_hp_base": 81,
+  "max_hp_base": 84,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "SWOOP_MOVE",
+      "title": "Swoop",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 19,
+          "damage_base": 17,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 19/17 damage"]
+    },
+    {
+      "id": "PECK_MOVE",
+      "title": "Peck",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 4,
+          "damage_base": 3,
+          "hits": 3,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 4/3 damage", "3 hits"]
+    }
+  ],
+  "move_pattern": "Alternates between Swoop and Peck",
+  "powers_on_spawn": ["Territorial"],
+  "notes": "Applies Territorial power on spawn, which limits the player's ability to play cards."
+}

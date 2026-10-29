@@ -1,0 +1,8 @@
+{
+  "class_name": "Kifuda",
+  "title": "Kifuda",
+  "rarity": "Shop",
+  "description": "Upon pickup, [gold]Enchant[/gold] up to [blue]3[/blue] cards with [purple]Adroit[/purple].",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Interactive pickup effect: opens a card selector to choose up to 3 cards from your deck to enchant with Adroit. Selection is mandatory and requires manual confirmation."
+}

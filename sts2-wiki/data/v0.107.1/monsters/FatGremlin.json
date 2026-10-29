@@ -1,0 +1,39 @@
+{
+  "class_name": "FatGremlin",
+  "title": "Fat Gremlin",
+  "min_hp": 14,
+  "max_hp": 18,
+  "min_hp_base": 13,
+  "max_hp_base": 17,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "SPAWNED_MOVE",
+      "title": "Wake Up",
+      "intents": [
+        {
+          "type": "stun"
+        }
+      ],
+      "effects": [
+        "Monster is stunned"
+      ]
+    },
+    {
+      "id": "FLEE_MOVE",
+      "title": "Flee",
+      "intents": [
+        {
+          "type": "escape"
+        }
+      ],
+      "effects": [
+        "Monster escapes combat"
+      ]
+    }
+  ],
+  "move_pattern": "Starts stunned (Wake Up). Then flees from combat on subsequent turns.",
+  "powers_on_spawn": [],
+  "notes": "Fat Gremlin spawns stunned and wakes up on the first turn. After awakening, it immediately begins fleeing from combat each turn, making it a non-threatening encounter."
+}

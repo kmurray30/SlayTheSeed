@@ -1,0 +1,68 @@
+{
+  "class_name": "Vantom",
+  "title": "Vantom",
+  "min_hp": 183,
+  "max_hp": 183,
+  "min_hp_base": 173,
+  "max_hp_base": 173,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "INK_BLOT_MOVE",
+      "title": "Ink Blot",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 8,
+          "damage_base": 7,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 7/8 damage"]
+    },
+    {
+      "id": "INKY_LANCE_MOVE",
+      "title": "Inky Lance",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 7,
+          "damage_base": 6,
+          "hits": 2,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 6/7 damage", "2 hits"]
+    },
+    {
+      "id": "DISMEMBER_MOVE",
+      "title": "Dismember",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 30,
+          "damage_base": 26,
+          "ascension": 9
+        },
+        {
+          "type": "status"
+        }
+      ],
+      "effects": ["Deal 26/30 damage", "Add 3 Wounds to discard"]
+    },
+    {
+      "id": "PREPARE_MOVE",
+      "title": "Prepare",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Apply 2 Strength"]
+    }
+  ],
+  "move_pattern": "Cycles: Ink Blot → Inky Lance → Dismember → Prepare",
+  "powers_on_spawn": ["Slippery Power 8/9"],
+  "notes": "Vantom advances through a progressive charging animation sequence with each move cycle, with the visual intensity increasing through Prepare before resetting. Each move updates an internal progression meter (vantom_progress parameter) that visually escalates the animation state. Slippery Power is applied at spawn with the amount scaling at A8 (8 base → 9 at A8+)."
+}

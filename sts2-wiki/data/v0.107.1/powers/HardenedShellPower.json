@@ -1,0 +1,9 @@
+{
+  "class_name": "HardenedShellPower",
+  "title": "Hardened Shell",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "This creature cannot lose more than [blue]20[/blue] HP each turn.",
+  "smart_description": "This creature cannot lose more than [blue]20[/blue] HP each turn.",
+  "notes": "Damage cap resets at the start of each turn. Displays remaining damage capacity as the counter value. All damage instances that would exceed the cap in a single turn are reduced."
+}

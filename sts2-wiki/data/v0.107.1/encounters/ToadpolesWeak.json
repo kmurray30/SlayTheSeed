@@ -1,0 +1,12 @@
+{
+  "class_name": "ToadpolesWeak",
+  "title": "Toadpoles",
+  "room_type": "Monster",
+  "is_weak": true,
+  "monsters": [
+    "Toadpole"
+  ],
+  "total_monsters": 2,
+  "tags": [],
+  "notes": "Encounter spawns two Toadpoles with different positioning: one front, one back."
+}

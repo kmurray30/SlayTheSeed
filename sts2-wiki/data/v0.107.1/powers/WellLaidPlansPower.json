@@ -1,0 +1,9 @@
+{
+  "class_name": "WellLaidPlansPower",
+  "title": "Well-Laid Plans",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the end of your turn, [gold]Retain[/gold] up to [blue]1[/blue] card.",
+  "smart_description": "At the end of your turn, [gold]Retain[/gold] up to [blue]{Amount}[/blue] {Amount:plural:card|cards}.",
+  "notes": "Each stack of this power allows you to retain one additional card at the end of your turn. Uses BeforeFlushLate timing to ensure the player has full information about other end-of-turn effects before choosing which cards to retain."
+}

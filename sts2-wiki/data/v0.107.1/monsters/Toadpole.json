@@ -1,0 +1,60 @@
+{
+  "class_name": "Toadpole",
+  "title": "Toadpole",
+  "min_hp": 22,
+  "max_hp": 26,
+  "min_hp_base": 21,
+  "max_hp_base": 25,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "SPIKEN_MOVE",
+      "title": "Spiken",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Gain 2 Thorns"
+      ]
+    },
+    {
+      "id": "SPIKE_SPIT_MOVE",
+      "title": "Spike Spit",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 4,
+          "damage_base": 3,
+          "hits": 3,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Remove 2 Thorns",
+        "Deal 4/3 damage",
+        "3 hits"
+      ]
+    },
+    {
+      "id": "WHIRL_MOVE",
+      "title": "Whirl",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 8,
+          "damage_base": 7,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 8/7 damage"
+      ]
+    }
+  ],
+  "move_pattern": "Position-dependent starting move: begins with Spiken if in front position, Whirl if not in front. Then cycles: Spiken → Spike Spit → Whirl → (repeat).",
+  "powers_on_spawn": [],
+  "notes": "Toadpole uses Thorns to defend itself. Spiken gains Thorns before attacking, Spike Spit removes Thorns while dealing multi-hit damage, and Whirl provides consistent single-hit damage. The initial move in the cycle depends on the monster's front/back positioning."
+}

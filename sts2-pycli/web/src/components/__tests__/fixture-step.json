@@ -1,0 +1,67 @@
+{
+ "idx": 0,
+ "decision": "combat_play",
+ "source": "log",
+ "pv": null,
+ "chosen_action": null,
+ "meta": {
+  "turn": 3,
+  "step_no": 1
+ },
+ "scores": [],
+ "state": {
+  "decision": "combat_play",
+  "round": 3,
+  "energy": 2,
+  "max_energy": 3,
+  "draw_pile_count": 5,
+  "discard_pile_count": 3,
+  "player": {
+   "name": "Ironclad",
+   "hp": 58,
+   "max_hp": 72,
+   "block": 8,
+   "image": "/assets/character_sprites/ironclad.png",
+   "rig": "/assets/character_rigs/ironclad/ironclad",
+   "rig_scale": 0.28,
+   "rig_bounds_h": 560
+  },
+  "player_powers": [
+   {
+    "name": "Strength",
+    "amount": 2
+   }
+  ],
+  "enemies": [
+   {
+    "index": 0,
+    "name": "Scroll of Biting",
+    "hp": 28,
+    "max_hp": 40,
+    "block": 0,
+    "intents": [
+     {
+      "type": "Attack",
+      "damage": 12,
+      "hits": 1
+     }
+    ],
+    "image": "/assets/monsters/scroll_of_biting.png"
+   }
+  ],
+  "hand": [
+   {
+    "index": 0,
+    "id": "CARD.STRIKE_IRONCLAD",
+    "name": "Strike",
+    "cost": 1,
+    "type": "Attack",
+    "description": "Deal 6 damage.",
+    "can_play": true,
+    "image": "/assets/card_atlas/ironclad/strike_ironclad.png",
+    "color": "red",
+    "rarity": "basic"
+   }
+  ]
+ }
+}

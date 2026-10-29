@@ -1,0 +1,18 @@
+{
+  "class_name": "WasteAway",
+  "title": "Waste Away",
+  "character": "Status",
+  "energy_cost": -1,
+  "type": "Status",
+  "rarity": "Status",
+  "target": "None",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Energy",
+      "base_value": 1
+    }
+  ],
+  "description": "Gain 1 less Energy per turn.",
+  "notes": "Status card applied to the player as a debuff. Cannot be upgraded or randomly generated in combat. Applies the WasteAwayPower effect."
+}

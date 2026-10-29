@@ -1,0 +1,8 @@
+{
+  "class_name": "StarPotion",
+  "title": "Star Potion",
+  "rarity": "Common",
+  "usage": "CombatOnly",
+  "target": "Self",
+  "description": "Gain 3 stars."
+}

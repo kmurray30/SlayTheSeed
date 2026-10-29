@@ -1,0 +1,82 @@
+{
+  // The Node-globals project, carved out of tsconfig.app.json (see its "types"
+  // comment): these tests import node:fs/node:path to read shipped files off
+  // disk -- sfxMapCoverage.test.ts walks the audio tree, shopMerchantAnchor
+  // reads shop.css (vitest stubs CSS imports, `?raw` included, so a stylesheet
+  // cannot be import-ed into a test) -- which needs @types/node. Scoping that need
+  // to a dedicated project — rather than a triple-slash directive in the
+  // file itself — is required because @types/node's globals (process,
+  // __dirname, ...) are a `declare global` augmentation: TypeScript merges
+  // those across the WHOLE PROGRAM that references the package, not just the
+  // referencing file, so a triple-slash directive inside tsconfig.app.json's
+  // program would re-leak Node globals across all of `src` (final review
+  // finding 5, 2026-08-23, feat/workbench-game-sounds).
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node-tests.tsbuildinfo",
+    "types": ["node"]
+  },
+  "include": [
+    "src/sound/__tests__/sfxMapCoverage.test.ts",
+    "src/skins/__tests__/shopMerchantAnchor.test.ts",
+    "src/components/__tests__/arenaForegroundZIndex.test.ts",
+    // Same reason: reads game-skin.css off disk to pin GH #610's finding that
+    // the game grades its combat rooms with nothing at all, so a future round
+    // cannot quietly re-fit a brightness/haze/vignette pass onto them.
+    "src/components/__tests__/arenaRoomGrade.test.ts",
+    // Same reason: reads game-skin.css off disk to pin the dying-enemy
+    // chrome fade rule (Task 14 fix round 1) — jsdom does not apply
+    // stylesheets, so this can't be checked by rendering.
+    "src/components/__tests__/gameSkinDying.test.ts",
+    // manifestShape reads the EXTRACTED vfx manifest off disk. It must not
+    // `import` it: the art tree is gitignored and `.dockerignore`d, and the
+    // image's web stage copies only `sts2-pycli/web/`, so a static import
+    // makes `npm run build` fail inside the container.
+    "src/effects/__tests__/manifestShape.test.ts",
+    // Same reason: reads the committed manifest.json AND the extracted crab /
+    // explosion `.skel` rigs off disk, to pin the three hand-typed strings
+    // GH #642's explosion hangs on (event name, bone name, effect key)
+    // against the generated artifacts they have to match.
+    "src/effects/__tests__/crabRigEvents.test.ts",
+    // Same reason: reads the committed vfx_bindings.json off disk to prove
+    // effectForEvent's bidirectional `_MOVE`-suffix join resolves real
+    // owner keys, not just a synthetic fixture shaped like one.
+    "src/effects/__tests__/bindingsRealTable.test.ts",
+    // Same reason again: reads both the committed manifest.json and
+    // vfx_bindings.json off disk to prove the four newly-selectable Spine
+    // effects route to the spine draw path for real, and that vfx_adrenaline
+    // stays unselectable in the real table, not just a synthetic fixture.
+    "src/effects/__tests__/spineVfxSelection.test.ts",
+    // Same reason: reads the committed manifest.json off disk to prove
+    // simulate.ts's ParticleSystemSpec still covers every field a real
+    // emitter's process carries — a synthetic fixture can't catch a field
+    // the extractor starts emitting that this integrator doesn't implement.
+    "src/effects/particles/__tests__/simulateManifestCoverage.test.ts",
+    // Same reason: reads the committed manifest.json off disk to prove
+    // startComposite/isDone against the real 13 composites (staggered
+    // startDelay, the real-table tint form, the mirrorX-gated coin flip),
+    // not a synthetic fixture shaped like one.
+    "src/effects/particles/__tests__/composite.test.ts",
+    // Same reason: reads the committed manifest.json off disk to prove the
+    // shader classification and flipbook cell math against the real
+    // materials — that every shader in use is one this port has classified,
+    // and that a flipbook without a curve is frame-by-offset rather than a
+    // missing animation.
+    "src/effects/particles/__tests__/shaders.test.ts",
+    // Reads the coach fixture shared with the Python advisor's tests
+    // (tests/fixtures/coach/rank_autopsy_cases.json), so the autopsy ranking
+    // twins are pinned by one file.
+    "src/coach/coachRank.test.ts",
+    // `types: ["node"]` above replaces the app project's `types: []`, and
+    // neither pulls in `vite/client` — that arrives via this triple-slash
+    // d.ts, which tsconfig.app.json gets for free from `include: ["src"]`.
+    // Without it, `import.meta.env` in any module a test here imports (e.g.
+    // effects/manifest.ts) fails to compile.
+    "src/vite-env.d.ts"
+  ],
+  // Cancel the inherited exclude (tsconfig.app.json excludes these exact
+  // files so the two projects don't double-check them) -- `extends` inherits
+  // both `include` and `exclude`, and an unresolved `exclude` here would
+  // otherwise exclude the very files this project exists to include.
+  "exclude": []
+}

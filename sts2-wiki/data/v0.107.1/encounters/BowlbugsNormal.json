@@ -1,0 +1,10 @@
+{
+  "class_name": "BowlbugsNormal",
+  "title": "Bowlbug Swarm",
+  "room_type": "Monster",
+  "is_weak": false,
+  "monsters": ["BowlbugRock", "BowlbugEgg", "BowlbugSilk", "BowlbugNectar"],
+  "total_monsters": 3,
+  "tags": ["Workers"],
+  "notes": "Always spawns 1 BowlbugRock and 2 workers randomly selected from {BowlbugEgg, BowlbugSilk, BowlbugNectar}, each limited to 1 per encounter"
+}

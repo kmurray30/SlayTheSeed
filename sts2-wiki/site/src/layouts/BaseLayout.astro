@@ -1,0 +1,138 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const version = import.meta.env.PUBLIC_STS2_VERSION || 'v0.107.0';
+const allVersions = (import.meta.env.PUBLIC_STS2_ALL_VERSIONS || 'v0.107.0').split(',');
+const latest = import.meta.env.PUBLIC_STS2_LATEST || 'v0.107.0';
+
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} — STS2 Wiki</title>
+    <link rel="stylesheet" href={`${base}styles/global.css`} />
+    <meta name="description" content="Unofficial Slay the Spire 2 wiki — cards, relics, potions, monsters, and more from decompiled game data." />
+  </head>
+  <body>
+    <nav class="site-nav">
+      <div class="nav-inner">
+        <a href={base} class="nav-brand" title="Home" style="font-size: 1.4rem;">
+          <span style="margin-right: 0.25rem;">&#x2694;</span> STS2 Wiki
+        </a>
+        <div class="search-box" style="margin-left: auto;">
+          <input type="text" id="site-search" placeholder="Search..." autocomplete="off" />
+          <div class="search-results" id="search-results"></div>
+        </div>
+        {allVersions.length > 1 && (
+          <select id="version-select" class="version-select" data-current={version} data-latest={latest}>
+            {allVersions.map(v => (
+              <option value={v} selected={v === version}>{v}{v === latest ? ' (latest)' : ''}</option>
+            ))}
+          </select>
+        )}
+      </div>
+    </nav>
+    <main class="site-main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      Unofficial wiki generated from decompiled game data ({version}).
+      Not affiliated with Mega Crit Games.
+    </footer>
+
+    <script define:vars={{ base, version, latest }}>
+      // Version selector
+      const versionSelect = document.getElementById('version-select');
+      if (versionSelect) {
+        versionSelect.addEventListener('change', () => {
+          const selected = versionSelect.value;
+          const current = versionSelect.dataset.current;
+          const latestVer = versionSelect.dataset.latest;
+          let path = window.location.pathname;
+
+          // Strip the current version prefix from the path
+          const siteBase = '/sts2-wiki/';
+          let pagePath = path.startsWith(siteBase) ? path.slice(siteBase.length) : path;
+
+          // If current version is not latest, strip the version prefix
+          if (current !== latestVer && pagePath.startsWith(current + '/')) {
+            pagePath = pagePath.slice(current.length + 1);
+          }
+
+          // Build new URL
+          let newPath;
+          if (selected === latestVer) {
+            newPath = siteBase + pagePath;
+          } else {
+            newPath = siteBase + selected + '/' + pagePath;
+          }
+
+          window.location.href = newPath;
+        });
+      }
+
+      // Simple client-side search index (built from nav page titles)
+      const searchInput = document.getElementById('site-search');
+      const searchResults = document.getElementById('search-results');
+      let searchIndex = null;
+
+      async function loadSearchIndex() {
+        if (searchIndex) return searchIndex;
+        try {
+          const resp = await fetch(`${base}search-index.json`);
+          searchIndex = await resp.json();
+          return searchIndex;
+        } catch {
+          return [];
+        }
+      }
+
+      if (searchInput && searchResults) {
+        let debounce;
+        searchInput.addEventListener('input', () => {
+          clearTimeout(debounce);
+          debounce = setTimeout(async () => {
+            const query = searchInput.value.trim().toLowerCase();
+            if (query.length < 2) {
+              searchResults.classList.remove('active');
+              return;
+            }
+            const index = await loadSearchIndex();
+            const matches = index.filter(item =>
+              item.title.toLowerCase().includes(query)
+            ).slice(0, 12);
+
+            if (matches.length === 0) {
+              searchResults.innerHTML = '<div style="padding: 0.75rem 1rem; color: var(--text-muted); font-size: 0.85rem;">No results</div>';
+            } else {
+              searchResults.innerHTML = matches.map(m =>
+                `<a href="${m.url}"><span>${m.title}</span><span class="search-type">${m.type}</span></a>`
+              ).join('');
+            }
+            searchResults.classList.add('active');
+          }, 150);
+        });
+
+        searchInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            searchResults.classList.remove('active');
+            searchInput.blur();
+          }
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+            searchResults.classList.remove('active');
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

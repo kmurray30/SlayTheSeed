@@ -1,0 +1,8 @@
+{
+  "class_name": "BoomingConch",
+  "title": "Booming Conch",
+  "rarity": "Ancient",
+  "description": "At the start of Elite combats, draw 2 additional cards and gain 1 energy.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "This relic triggers at the start of Elite combats on the first turn. It both increases hand draw and grants energy at the same time."
+}

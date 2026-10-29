@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>spire-mentor Run-AI — how the pieces fit together</title>
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b22; --panel2:#1c2530; --ink:#e6edf3; --muted:#9aa7b4;
+    --line:#2a3441; --accent:#4ea1ff; --accent2:#ffb454; --green:#3fb950; --red:#f85149;
+    --purple:#bc8cff; --teal:#39d3c3; --pill:#22303f;
+    --mono:"SF Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;font-size:16px}
+  .wrap{display:grid;grid-template-columns:260px 1fr;max-width:1400px;margin:0 auto}
+  /* nav */
+  nav{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;padding:28px 18px;border-right:1px solid var(--line);background:var(--panel)}
+  nav h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 12px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:5px 10px;border-radius:7px;font-size:14px;margin-bottom:2px}
+  nav a:hover{background:var(--panel2);color:var(--ink)}
+  nav .sub{padding-left:22px;font-size:13px}
+  nav .tag{font-size:11px;color:var(--accent);font-family:var(--mono)}
+  /* main */
+  main{padding:40px 56px 120px;min-width:0}
+  header.hero{margin-bottom:40px}
+  .hero h1{font-size:34px;margin:0 0 8px;letter-spacing:-.02em}
+  .hero p.sub{color:var(--muted);font-size:18px;margin:0}
+  .crumb{font-family:var(--mono);font-size:12px;color:var(--accent2);letter-spacing:.04em;margin-bottom:8px}
+  section{margin:46px 0;scroll-margin-top:24px}
+  h2.sec{font-size:25px;border-bottom:1px solid var(--line);padding-bottom:10px;margin:0 0 18px;letter-spacing:-.01em}
+  h3{font-size:18px;margin:26px 0 10px;color:var(--ink)}
+  p{margin:12px 0}
+  code{font-family:var(--mono);font-size:.86em;background:var(--panel2);padding:2px 6px;border-radius:5px;color:var(--teal)}
+  a.ref{font-family:var(--mono);font-size:.8em;color:var(--accent);text-decoration:none;background:var(--pill);padding:1px 6px;border-radius:5px;white-space:nowrap}
+  a.ref:hover{background:#2c3e52}
+  .lead{font-size:18px;color:var(--ink)}
+  .muted{color:var(--muted)}
+  /* cards */
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:1080px){.g4{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .card.accent{border-color:#2d4a6b}
+  .card h4{margin:0 0 6px;font-size:16px;display:flex;align-items:center;gap:8px}
+  .dot{width:11px;height:11px;border-radius:3px;display:inline-block;flex:none}
+  .card p{margin:6px 0;font-size:14.5px;color:var(--muted)}
+  /* stat tiles */
+  .stat{background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:12px;padding:18px}
+  .stat .big{font-size:30px;font-weight:700;letter-spacing:-.02em}
+  .stat .lbl{font-size:12.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:4px}
+  .stat .note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.4}
+  .up{color:var(--green)} .down{color:var(--red)} .neu{color:var(--accent2)}
+  /* tables */
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em}
+  td.num{font-family:var(--mono);white-space:nowrap}
+  tr:hover td{background:#11161d}
+  /* callouts */
+  .why{border-left:3px solid var(--accent2);background:#1d1c14;border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0}
+  .why b{color:var(--accent2)}
+  .note-box{border-left:3px solid var(--accent);background:#101a26;border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0}
+  .warn-box{border-left:3px solid var(--red);background:#231314;border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0}
+  .pill{display:inline-block;font-family:var(--mono);font-size:11.5px;padding:2px 8px;border-radius:20px;background:var(--pill);color:var(--accent);border:1px solid #2c3e52}
+  .pill.green{background:#11251a;color:var(--green);border-color:#1d3d29}
+  .pill.amber{background:#241d10;color:var(--accent2);border-color:#3d3019}
+  .pill.red{background:#241314;color:var(--red);border-color:#3d1d1f}
+  ul.tight li{margin:5px 0}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin:10px 0}
+  .legend span{display:flex;align-items:center;gap:7px}
+  figure{margin:18px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px;overflow-x:auto}
+  figcaption{color:var(--muted);font-size:13px;margin-top:12px;text-align:center}
+  .kicker{font-family:var(--mono);font-size:12px;color:var(--purple);letter-spacing:.05em}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:28px 0}
+  .footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:18px;margin-top:50px}
+  svg text{font-family:var(--sans)}
+  .swatch-mcts{background:#bc8cff}.swatch-rank{background:#4ea1ff}.swatch-val{background:#39d3c3}.swatch-heur{background:#ffb454}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ============ NAV ============ -->
+<nav>
+  <h2>Run-AI Explainer</h2>
+  <a href="#tldr">TL;DR</a>
+  <a href="#pieces">The four pieces</a>
+  <a href="#map">Big-picture map</a>
+  <a href="#combat">① Combat — MCTS</a>
+  <a href="#meta">② Meta — tiered stack</a>
+  <a href="#card" class="sub">↳ Card rewards</a>
+  <a href="#path" class="sub">↳ Pathing</a>
+  <a href="#ranker">The ranker, precisely</a>
+  <a href="#value">The value net</a>
+  <a href="#timing">Timing budget</a>
+  <a href="#fallback">Fallbacks</a>
+  <a href="#numbers">Win-rates &amp; metrics</a>
+  <a href="#why">Why each choice</a>
+  <a href="#caveats">Caveats</a>
+</nav>
+
+<!-- ============ MAIN ============ -->
+<main>
+<header class="hero">
+  <div class="crumb">spire-mentor · sts2-rs/crates/sts2-runai · internal</div>
+  <h1>How the Run-AI decides</h1>
+  <p class="sub">MCTS, the value net, the ranker, and the heuristics — what each one is for, when it fires, how long it takes, and why we built it that way.</p>
+  <div style="margin-top:22px;padding:14px 18px;border:1px solid #6b4a12;border-left:4px solid var(--accent2);border-radius:8px;background:#241c0e">
+    <strong style="color:var(--accent2)">HISTORICAL — describes the pre-PPO architecture.</strong>
+    <p style="margin:8px 0 0;color:var(--muted)">The pick-ranker stack was removed on 2026-07-12 and the value net was
+    turned off in the v0.107.1 retrain (V-pathing measured net-negative, +9.2pp with it OFF). Every out-of-combat
+    decision is now made by a per-character PPO transformer champion; combat is still MCTS. Win-rates quoted below
+    also predate honest search (landed 2026-07-12, worth about −22.8pp) and are <em>not</em> comparable to current
+    numbers. Its engine timings (transitions/sec, searches/sec, combat costs) date from mid-2026 as well and predate the
+    October 2026 engine speed-up; the current figures are on the documentation site. Kept as the clearest surviving
+    explanation of the tiered-decision design and the reasoning behind it.</p>
+  </div>
+</header>
+
+<!-- TLDR -->
+<section id="tldr">
+  <h2 class="sec">TL;DR</h2>
+  <p class="lead">There is <b>one rule for combat</b> and <b>one rule for everything else</b>.</p>
+  <div class="grid g2">
+    <div class="card accent">
+      <h4><span class="dot swatch-mcts"></span>In combat → always simulate</h4>
+      <p>Every combat decision runs <b>chance-node MCTS</b> (1000 sims, 4000 at bosses). No learned net picks the move; the search does. Leaf states are scored by a fast hand-tuned heuristic. There is no "is the net confident?" shortcut here.</p>
+    </div>
+    <div class="card accent">
+      <h4><span class="dot swatch-heur"></span>Out of combat → heuristic first, simulate only when unsure</h4>
+      <p>Card rewards, smith, deck edits, relics, paths, rest: scored instantly by a heuristic <b>value function&nbsp;V</b>. If the top-2 are <b>close</b> (low margin), we escalate to short combat rollouts. The <b>ranker</b> is a learned shortcut that replaces those rollouts on card choices.</p>
+    </div>
+  </div>
+  <div class="note-box">
+    <b>Where the "ranker vs sims" gate actually lives.</b> The "not sure → simulate" decision keys off the <i>heuristic value function's top-2 margin</i> — <u>not</u> the ranker's confidence. The ranker is either (a) the sole decider on card surfaces with no sim fallback (<code>--policy ranker</code>), or (b) a candidate pre-filter that narrows which moves the already-triggered sims evaluate (<code>--policy tiered</code> + prefilter).
+  </div>
+  <div class="grid g4" style="margin-top:18px">
+    <div class="stat"><div class="big up">35.3%</div><div class="lbl">deployed win rate</div><div class="note">706 / 2000 · Ironclad A0 · release-2000 panel · eval-cheap + chance-node</div></div>
+    <div class="stat"><div class="big">~60–100</div><div class="lbl">meta decisions / run</div><div class="note">almost all ≤4 options → search is nearly free, evaluation quality is everything</div></div>
+    <div class="stat"><div class="big">1000<span class="muted" style="font-size:18px"> / 4000</span></div><div class="lbl">combat sims (normal / boss)</div><div class="note">eval-cheap budget; strong mode is 5000 / 15000</div></div>
+    <div class="stat"><div class="big neu">44.9%</div><div class="lbl">ranker top-1 agreement</div><div class="note">vs the rollout oracle, held-out by seed</div></div>
+  </div>
+</section>
+
+<!-- THE PIECES -->
+<section id="pieces">
+  <h2 class="sec">The four pieces — one line each</h2>
+  <table>
+    <thead><tr><th>Piece</th><th>What it is</th><th>What it answers</th><th>Where it runs</th><th>Cost</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="dot swatch-mcts"></span> <b>MCTS</b></td>
+        <td>Monte-Carlo tree search (UCT, chance nodes). A real search over the game engine.</td>
+        <td>"Which move in <i>this fight</i>?"</td>
+        <td>Combat (runtime) &amp; inside rollout probes</td>
+        <td class="num">~0.55&nbsp;s / fight</td>
+      </tr>
+      <tr>
+        <td><span class="dot swatch-heur"></span> <b>Heuristic V</b></td>
+        <td>Hand-tuned linear scoring of a run-state (deck, HP, gold, relics, boss). No learning at runtime.</td>
+        <td>"How good is this <i>run position</i>?"</td>
+        <td>Every meta decision (tier 1)</td>
+        <td class="num">~µs</td>
+      </tr>
+      <tr>
+        <td><span class="dot swatch-rank"></span> <b>Ranker</b></td>
+        <td>~1M-param MLP that scores card-shaped options. A <i>learned distillation</i> of expensive rollouts.</td>
+        <td>"Which card to take / remove / upgrade?"</td>
+        <td>Card surfaces (<code>--policy ranker</code>) or as prefilter</td>
+        <td class="num">≪ 1 combat</td>
+      </tr>
+      <tr>
+        <td><span class="dot swatch-val"></span> <b>Value net</b></td>
+        <td>Smaller MLP: run-state → expected final act reached / win. Learned.</td>
+        <td>"How far will this run get?"</td>
+        <td>Pathing, card-refine, shop oracle</td>
+        <td class="num">≪ 1 combat</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="legend">
+    <span><span class="dot swatch-mcts"></span> MCTS — search</span>
+    <span><span class="dot swatch-heur"></span> Heuristic V — instant scoring</span>
+    <span><span class="dot swatch-rank"></span> Ranker — learned card chooser</span>
+    <span><span class="dot swatch-val"></span> Value net — learned run evaluator</span>
+  </div>
+</section>
+
+<!-- BIG MAP -->
+<section id="map">
+  <h2 class="sec">The big-picture map</h2>
+  <p>Every decision the agent faces is routed by a single fork: is this a combat decision or a meta decision? <span class="ref">policy/mod.rs:151-267</span></p>
+  <figure>
+  <svg viewBox="0 0 980 560" width="100%" role="img" aria-label="Decision routing diagram">
+    <defs>
+      <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#7d8b99"/>
+      </marker>
+      <style>
+        .box{rx:11;stroke-width:1.5}
+        .lbl{fill:#e6edf3;font-size:15px;font-weight:600}
+        .sm{fill:#9aa7b4;font-size:12.5px}
+        .e{stroke:#7d8b99;stroke-width:1.6;fill:none;marker-end:url(#arr)}
+        .yes{fill:#3fb950;font-size:12px;font-weight:600}
+        .no{fill:#f85149;font-size:12px;font-weight:600}
+      </style>
+    </defs>
+
+    <!-- entry -->
+    <rect x="400" y="14" width="180" height="46" rx="11" fill="#1c2530" stroke="#3a4a5c"/>
+    <text x="490" y="35" text-anchor="middle" class="lbl">Decision arrives</text>
+    <text x="490" y="52" text-anchor="middle" class="sm">surfaced option list</text>
+
+    <!-- fork -->
+    <path d="M490,60 L490,92" class="e"/>
+    <polygon points="490,92 560,128 490,164 420,128" fill="#161b22" stroke="#bc8cff" stroke-width="1.6"/>
+    <text x="490" y="125" text-anchor="middle" class="lbl">Phase ==</text>
+    <text x="490" y="142" text-anchor="middle" class="lbl">Combat?</text>
+
+    <!-- combat branch -->
+    <path d="M420,128 L250,128 L250,170" class="e"/>
+    <text x="320" y="120" class="yes">combat</text>
+    <rect x="120" y="172" width="260" height="86" rx="11" fill="#1d1830" stroke="#bc8cff"/>
+    <text x="250" y="198" text-anchor="middle" class="lbl">① MctsCombatPolicy</text>
+    <text x="250" y="220" text-anchor="middle" class="sm">chance-node MCTS · 1000 / 4000 sims</text>
+    <text x="250" y="238" text-anchor="middle" class="sm">leaf = Texel heuristic · rollout depth 200</text>
+
+    <!-- meta branch -->
+    <path d="M560,128 L730,128 L730,170" class="e"/>
+    <text x="640" y="120" class="no">meta</text>
+    <rect x="600" y="172" width="260" height="64" rx="11" fill="#241d10" stroke="#ffb454"/>
+    <text x="730" y="198" text-anchor="middle" class="lbl">② TieredPolicy</text>
+    <text x="730" y="218" text-anchor="middle" class="sm">heuristic V → margin gate → probes</text>
+
+    <!-- tier 1 -->
+    <path d="M730,236 L730,268" class="e"/>
+    <rect x="600" y="270" width="260" height="60" rx="11" fill="#241d10" stroke="#3d3019"/>
+    <text x="730" y="294" text-anchor="middle" class="lbl">Tier 1 · Heuristic V</text>
+    <text x="730" y="314" text-anchor="middle" class="sm">score all options · margin = top1 − top2</text>
+
+    <!-- margin diamond -->
+    <path d="M730,330 L730,356" class="e"/>
+    <polygon points="730,356 812,396 730,436 648,396" fill="#161b22" stroke="#ffb454" stroke-width="1.6"/>
+    <text x="730" y="392" text-anchor="middle" class="lbl">margin ≥</text>
+    <text x="730" y="409" text-anchor="middle" class="sm">threshold?</text>
+
+    <!-- confident -->
+    <path d="M648,396 L470,396 L470,440" class="e"/>
+    <text x="545" y="388" class="yes">yes — confident</text>
+    <rect x="350" y="442" width="240" height="56" rx="11" fill="#11251a" stroke="#3fb950"/>
+    <text x="470" y="466" text-anchor="middle" class="lbl">Take tier-1 pick</text>
+    <text x="470" y="485" text-anchor="middle" class="sm">no simulation — instant</text>
+
+    <!-- unsure -->
+    <path d="M812,396 L900,396 L900,442" class="e"/>
+    <text x="828" y="388" class="no">no — close call</text>
+    <rect x="640" y="444" width="270" height="100" rx="11" fill="#1d1830" stroke="#bc8cff"/>
+    <text x="775" y="470" text-anchor="middle" class="lbl">Tier 2/3 · rollout probes</text>
+    <text x="775" y="490" text-anchor="middle" class="sm">simulate top candidates' future fights</text>
+    <text x="775" y="508" text-anchor="middle" class="sm">(elite + boss) with MCTS · re-rank</text>
+    <text x="775" y="526" text-anchor="middle" class="sm">ranker may pre-filter which get probed</text>
+
+    <!-- card surface aside -->
+    <rect x="120" y="300" width="300" height="120" rx="11" fill="#101a26" stroke="#4ea1ff"/>
+    <text x="270" y="324" text-anchor="middle" class="lbl">— or — Ranker policy</text>
+    <text x="270" y="346" text-anchor="middle" class="sm">on card-shaped surfaces only:</text>
+    <text x="270" y="365" text-anchor="middle" class="sm">ranker net → argmax. No margin gate,</text>
+    <text x="270" y="383" text-anchor="middle" class="sm">no sim fallback. Other surfaces</text>
+    <text x="270" y="401" text-anchor="middle" class="sm">fall back to Heuristic V.</text>
+  </svg>
+  <figcaption>One fork splits the whole agent. Combat is always search; meta is heuristic-first with a margin-gated escalation to simulation.</figcaption>
+  </figure>
+</section>
+
+<!-- COMBAT -->
+<section id="combat">
+  <h2 class="sec">① Combat — MCTS, every time</h2>
+  <p>When the engine hands the agent a <i>combat</i> decision, it builds a fresh search tree over a clone of the combat state and runs Monte-Carlo Tree Search. There is no learned policy gate: the search <i>is</i> the decision. <span class="ref">policy/mod.rs:200-251</span></p>
+
+  <div class="grid g3">
+    <div class="card"><h4>Tree policy</h4><p>Classic <b>UCT</b>: <code>Q + c·√(ln N / n)</code>, <code>c=√2</code>. Default mode is <b>chance nodes</b> (DPW + expectimax over stochastic draws/shuffles), matching the real game's randomness. <span class="ref">sts2-mcts/src/lib.rs:21,317,330</span></p></div>
+    <div class="card"><h4>Leaf evaluation</h4><p>At the depth cap, a <b>hand-tuned heuristic</b> scores the state — the wide 172-feature Texel evaluator (<code>TexelWide</code>), <u>not</u> a learned net. Terminal loss is clamped to −0.9. <span class="ref">value_net.rs:1737-1750</span></p></div>
+    <div class="card"><h4>Rollout depth = 200</h4><p>Engine default is 10 — which truncated act-1 fights before they ended and was the 2026-06-12 win-rate floor. At depth 10 a fight bleeds 13 HP; at 200 it bleeds 3. <span class="ref">policy/mod.rs:76-83</span></p></div>
+  </div>
+
+  <h3>How the move is finally chosen</h3>
+  <p>After <code>search_n(sims)</code>, the root child is picked by <b>mean value, then visits</b> — except a <b>lost-position override</b> fires first: if every move looks lost, prefer dealing damage / clearing Slippery over a suicidal <code>EndTurn</code>. <span class="ref">policy/mod.rs:200-251 · lib.rs:1152-1204</span></p>
+
+  <div class="grid g4">
+    <div class="stat"><div class="big">1000</div><div class="lbl">sims · normal fight</div></div>
+    <div class="stat"><div class="big">4000</div><div class="lbl">sims · boss fight</div><div class="note">bosses are pivotal → more search</div></div>
+    <div class="stat"><div class="big">200</div><div class="lbl">rollout depth</div><div class="note">long enough to finish act-1 fights</div></div>
+    <div class="stat"><div class="big">√2</div><div class="lbl">UCT exploration c</div></div>
+  </div>
+  <div class="why"><b>Why MCTS and not a learned combat policy?</b> Combat is where the real complexity (and variance) lives, and the engine simulates fast (~1.4–1.5M transitions/sec). Search over the true rules is the strongest signal we have — so in combat we pay for it directly. Learned value nets <i>exist</i> as optional leaf evaluators but are not what the deployed budgets use.</div>
+</section>
+
+<!-- META -->
+<section id="meta">
+  <h2 class="sec">② Meta decisions — the tiered stack</h2>
+  <p class="lead">A whole 3-act run has only ~60–100 meta decisions, almost all with ≤4 options. So the search space is trivial — what matters is <i>evaluation quality</i>. The design funnels combat (the ground truth, but slow) into offline labels and a thin, uncertainty-gated runtime escalation. <span class="ref">docs/plans/2026-06-12-full-run-ai-plan.md:205-215</span></p>
+
+  <h3>The three tiers</h3>
+  <table>
+    <thead><tr><th>Tier</th><th>What</th><th>When</th><th>Cost / decision</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill amber">Tier 1</span></td><td>Heuristic V (or ranker net) scores every option; pick argmax ΔV</td><td><b>Every</b> meta decision</td><td class="num">~µs–ms</td></tr>
+      <tr><td><span class="pill">Tier 2</span></td><td><code>fight_delta</code> rollout probes — short MCTS of the candidate's future elite+boss</td><td>Card surfaces where top-2 margin &lt; threshold</td><td class="num">~0.5 s</td></tr>
+      <tr><td><span class="pill green">Tier 3</span></td><td>Full-budget probes (sims 1000)</td><td>Boss-relic picks (~2–5 pivotal / run)</td><td class="num">up to ~30 s box</td></tr>
+    </tbody>
+  </table>
+
+  <h3>The margin gate</h3>
+  <p>Tier 1 returns scores; the <b>margin</b> is simply <code>top1 − top2</code>. <span class="ref">heuristic.rs:68-77</span> If that margin clears the per-surface threshold, the heuristic is confident and we stop. Otherwise we escalate. Thresholds live in <code>data/runai/heuristic_v.toml</code> <code>[tiers]</code>:</p>
+  <table>
+    <thead><tr><th>Surface</th><th>Margin threshold</th><th>Escalates to</th></tr></thead>
+    <tbody>
+      <tr><td>Card reward</td><td class="num">0.02</td><td>tier-2 fight_delta</td></tr>
+      <tr><td>Deck mutation (remove/upgrade/transform)</td><td class="num">deck_mutation_margin</td><td>tier-2</td></tr>
+      <tr><td>Boss relic</td><td class="num">0.05</td><td>tier-3 (sims 1000)</td></tr>
+      <tr><td>Path / Rest</td><td class="num">0.0 <span class="pill red">off</span></td><td>built &amp; measured, demoted — no headroom (E12/E13 pending)</td></tr>
+    </tbody>
+  </table>
+
+  <!-- CARD REWARDS -->
+  <h3 id="card">↳ Card-reward decisions, end to end</h3>
+  <figure>
+  <svg viewBox="0 0 980 300" width="100%" role="img" aria-label="Card reward flow">
+    <defs>
+      <marker id="arr2" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#7d8b99"/></marker>
+      <style>.b{rx:10}.t{fill:#e6edf3;font-size:13.5px;font-weight:600}.s{fill:#9aa7b4;font-size:11.5px}.e2{stroke:#7d8b99;stroke-width:1.5;fill:none;marker-end:url(#arr2)}</style>
+    </defs>
+    <rect x="16" y="110" width="150" height="74" rx="10" fill="#1c2530" stroke="#3a4a5c"/>
+    <text x="91" y="138" text-anchor="middle" class="t">Offered cards</text>
+    <text x="91" y="157" text-anchor="middle" class="s">+ implicit Skip</text>
+
+    <path d="M166,147 L206,147" class="e2"/>
+    <rect x="208" y="100" width="180" height="94" rx="10" fill="#241d10" stroke="#ffb454"/>
+    <text x="298" y="126" text-anchor="middle" class="t">Tier-1: score each</text>
+    <text x="298" y="146" text-anchor="middle" class="s">ΔV = V(deck+card) − V(deck)</text>
+    <text x="298" y="164" text-anchor="middle" class="s">pick argmax, only if ΔV &gt; 0</text>
+    <text x="298" y="182" text-anchor="middle" class="s">else Skip · margin = top1−top2</text>
+
+    <path d="M388,147 L428,147" class="e2"/>
+    <polygon points="500,100 560,147 500,194 440,147" fill="#161b22" stroke="#ffb454" stroke-width="1.5"/>
+    <text x="500" y="143" text-anchor="middle" class="t">margin</text>
+    <text x="500" y="161" text-anchor="middle" class="s">≥ 0.02?</text>
+
+    <path d="M500,194 L500,250 L360,250" class="e2"/>
+    <text x="508" y="216" class="s" fill="#3fb950">yes → take it (instant)</text>
+    <rect x="190" y="226" width="170" height="46" rx="10" fill="#11251a" stroke="#3fb950"/>
+    <text x="275" y="254" text-anchor="middle" class="t">Heuristic pick</text>
+
+    <path d="M560,147 L600,147" class="e2"/>
+    <text x="566" y="132" class="s" fill="#f85149">no</text>
+    <rect x="602" y="92" width="362" height="118" rx="10" fill="#1d1830" stroke="#bc8cff"/>
+    <text x="783" y="116" text-anchor="middle" class="t">Tier-2 escalation</text>
+    <text x="783" y="136" text-anchor="middle" class="s">order candidates (ranker prefilter, if on)</text>
+    <text x="783" y="154" text-anchor="middle" class="s">keep top 3 → fight_delta each:</text>
+    <text x="783" y="172" text-anchor="middle" class="s">probe its elite + pinned boss,</text>
+    <text x="783" y="190" text-anchor="middle" class="s">K paired seeds, MCTS per move → re-rank</text>
+
+    <path d="M783,210 L783,250 L600,250" class="e2"/>
+    <rect x="430" y="226" width="170" height="46" rx="10" fill="#1d1830" stroke="#bc8cff"/>
+    <text x="515" y="247" text-anchor="middle" class="t">Rollout-best pick</text>
+    <text x="515" y="264" text-anchor="middle" class="s">argmax DeltaStats.score()</text>
+  </svg>
+  <figcaption>Card rewards: instant heuristic when the choice is clear, simulated future fights when it's close. <span class="ref">heuristic.rs:156-168 · picks.rs:44-56 · tiered.rs:370-423</span></figcaption>
+  </figure>
+  <p>The rollout score that breaks the tie blends outcomes: <code>win − loss + 0.002·dmg − 0.004·hp_lost</code> — winning dominates, then HP economy, then tempo. <span class="ref">rollout.rs:441-449</span></p>
+
+  <!-- PATHING -->
+  <h3 id="path">↳ Pathing decisions</h3>
+  <p>Pathing does <b>not</b> use the card machinery. Every floor it <b>enumerates all paths</b> from the current node to the boss (no pruning, cap 10k), walks each through a cheap projection model, scores <code>V(projected state at boss arrival) + per-room terms</code>, and commits only the <b>first edge</b> of the best path — then replans next floor. <span class="ref">surfaces/pathing.rs:1-11,31-72</span></p>
+  <div class="grid g2">
+    <div class="card"><h4><span class="dot swatch-heur"></span> The projection model</h4><p>Not a per-fight rollout. A table-based walk: expected HP loss per room (<code>monster 8/12/16</code>, <code>elite 18/26/34</code> by act), gold, reward ΔV, rest = max(heal, smith), events as uniform chance nodes. Boss rooms deliberately excluded — we evaluate V <i>at boss arrival</i>. <span class="ref">projection.rs:64-112</span></p></div>
+    <div class="card"><h4><span class="dot swatch-val"></span> Optional V-pathing</h4><p>With a value net attached, map edges can instead be ranked by <code>V(projected economy)</code>. There is also a built <code>path_delta</code> probe that simulates the one committing edge's <i>next</i> encounter — but it's <span class="pill red">gated off</span> by default (<code>path_margin = 0</code>): measured, no headroom. <span class="ref">ranker.rs:102-115 · rollout.rs:994-1089</span></p></div>
+  </div>
+  <div class="why"><b>Why enumerate instead of search?</b> The map is a tiny DAG and V is cheap, so exhaustive enumeration is affordable and exact. The hard part isn't <i>search</i> — it's <i>"what is V at a future node?"</i>, which is undefined without a model of how HP/gold/deck evolve along the way. That's what the projection model supplies. <span class="ref">projection.rs:7-9</span></div>
+</section>
+
+<!-- RANKER -->
+<section id="ranker">
+  <h2 class="sec">The ranker, precisely — what is its function?</h2>
+  <p class="lead">The ranker is a <b>learned shortcut that replaces expensive rollouts on card-shaped choices</b>. It is trained to imitate what the tier-2/3 simulations would have decided, so at runtime you get rollout-quality card picks at near-zero cost.</p>
+
+  <div class="grid g2">
+    <div class="card accent">
+      <h4><span class="dot swatch-rank"></span> Architecture — listwise MLP, ~1M params</h4>
+      <p><b>Context encoder:</b> 1477-dim run-state → <code>Linear(1477→512) + ReLU</code>.</p>
+      <p><b>Per-candidate head:</b> <code>[512 context ⊕ 64-dim card embedding ⊕ 5 candidate scalars]</code> → <code>Linear→64→ReLU→Linear→1</code>. One scalar score per option; policy takes argmax. <span class="ref">eval/ranker.rs:303-403</span></p>
+    </div>
+    <div class="card accent">
+      <h4>Input features</h4>
+      <p><b>Context (1477):</b> deck histogram <code>[count, upgraded]</code> per card (1158) + relic multi-hot (294) + 25 scalars (HP, gold, act, boss proximity, ascension, deck stats…) incl. a boss-identity one-hot. Built only from a <code>VisibleRunView</code> — no peeking. <span class="ref">ranker_features.rs:318-387</span></p>
+      <p><b>Candidate (5):</b> <code>upgraded</code> flag + one-hot {Add, Remove, Upgrade, Skip}, plus the 64-dim embedding of the card. <span class="ref">ranker_features.rs:244-302</span></p>
+    </div>
+  </div>
+
+  <h3>What it's trained on</h3>
+  <p>The deployed <code>ranker_chain500</code> learns the <b>rollout oracle's preference order</b> via listwise softmax cross-entropy. The label per option is its <code>chain_delta</code> rollout score — survival of a chained <code>[normal×2, elite, boss]</code> sequence with HP carryover (a non-myopic attrition signal), with the per-move probe search itself being chance-node MCTS to match the deployed combat search.</p>
+  <ul class="tight">
+    <li><b>Coverage:</b> card rewards (incl. Skip), deck remove / upgrade / transform, smith picks.</li>
+    <li><b>Not covered → falls back to heuristic:</b> boss/shop relics, gold, potions, pathing, events, rest, combat. <span class="ref">ranker_features.rs:287-291</span></li>
+    <li><b>Two roles:</b> sole decider (<code>--policy ranker</code>, argmax, no sim fallback) <i>or</i> a tier-2 pre-filter that picks which candidates get probed (<code>--policy tiered</code>). <span class="ref">tiered.rs:64-71,177-188</span></li>
+  </ul>
+  <div class="why"><b>Why a ranker at all?</b> The honest evaluator is the rollout — but it costs ~0.5 s/decision. The ranker <i>distills</i> ~66k rollout labels into a forward pass that's effectively free, so card picks get rollout-grade judgment everywhere, not just on the few decisions we can afford to simulate live. <span class="ref">full-run-ai-plan.md:214-215</span></div>
+</section>
+
+<!-- VALUE NET -->
+<section id="value">
+  <h2 class="sec">The value net — "how far will this run get?"</h2>
+  <div class="grid g2">
+    <div class="card">
+      <h4><span class="dot swatch-val"></span> Architecture</h4>
+      <p>Simpler than the ranker: same 1477-dim context, no card embedding/head. <code>standardize → Linear(1477→256) + ReLU → Linear→1 → ·σ+µ</code>. Single scalar output. <span class="ref">eval/run_value.rs:239-264</span></p>
+    </div>
+    <div class="card">
+      <h4>What it predicts</h4>
+      <p>The deployed <code>value_human_a0</code> predicts <code>acts_reached + win</code> (win-aware graded return), trained on the spire-codex <b>human corpus</b>. Pure win/loss is unusable at ~0% wins, so "act reached" is the graded learning signal. <span class="ref">train_value.py:1-19</span></p>
+    </div>
+  </div>
+  <p><b>Where it's used:</b> ranking map edges (V-pathing), re-ranking the ranker's top-N card picks by <code>V(resulting state)</code> (the "act-3 wall" refinement), and as a shop oracle. <span class="ref">ranker.rs:102-160</span></p>
+</section>
+
+<!-- TIMING -->
+<section id="timing">
+  <h2 class="sec">Timing budget — how long does each thing take?</h2>
+  <p>The whole architecture is shaped by one cost asymmetry: a learned net eval is essentially free; a real combat is ~0.5 s. Everything else follows from spending search only where it pays.</p>
+  <table>
+    <thead><tr><th>Operation</th><th>Cost</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Engine transition</td><td class="num">~0.7 µs</td><td>~1.4–1.5M tx/sec</td></tr>
+      <tr><td><span class="dot swatch-rank"></span> Ranker / <span class="dot swatch-val"></span> value-net eval</td><td class="num">≪ 1 combat</td><td>sparse matrix-vec, zero-activation skips — effectively free</td></tr>
+      <tr><td><span class="dot swatch-heur"></span> Heuristic V (one meta option)</td><td class="num">~µs</td><td>linear over ~dozen features</td></tr>
+      <tr><td>MCTS move @ 100 sims</td><td class="num">~2.2 ms</td><td>the probe move budget</td></tr>
+      <tr><td>Truncated 5-turn probe</td><td class="num">~45 ms</td><td></td></tr>
+      <tr><td><span class="dot swatch-mcts"></span> Full combat @ 1000 sims</td><td class="num">~0.55 s</td><td>~46 searches/sec on the Nibbit fixture</td></tr>
+      <tr><td>Tier-2 <code>fight_delta</code> escalation</td><td class="num">~0.5 s</td><td>2 encounters × K paired seeds × truncated probes; <code>FightCache</code> (LRU 4096) dedups</td></tr>
+      <tr><td>Tier-3 boss-relic escalation</td><td class="num">≤ ~30 s box</td><td>sims 1000; kept here so ~2–5 escalations/run stay under wall-clock</td></tr>
+    </tbody>
+  </table>
+  <h3>Runtime probe budgets <span class="muted" style="font-size:14px">(data/runai/heuristic_v.toml [tiers])</span></h3>
+  <table>
+    <thead><tr><th></th><th>sims / move</th><th>K (paired seeds)</th><th>T (turn truncation)</th><th>leaf</th></tr></thead>
+    <tbody>
+      <tr><td>Tier 2</td><td class="num">100</td><td class="num">32</td><td class="num">8</td><td>TexelWide</td></tr>
+      <tr><td>Tier 3 (boss)</td><td class="num">1000</td><td class="num">16</td><td class="num">8</td><td>TexelWide</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- FALLBACKS -->
+<section id="fallback">
+  <h2 class="sec">Fallbacks at every layer</h2>
+  <p>The system is defensive — every layer degrades to a safe default rather than panicking.</p>
+  <table>
+    <thead><tr><th>Situation</th><th>Falls back to</th><th>Ref</th></tr></thead>
+    <tbody>
+      <tr><td>MCTS returns an untranslatable combat action (Channel/Evoke/multi-pick), or one not in the surfaced list</td><td>meta policy</td><td class="num">mod.rs:170,249-303</td></tr>
+      <tr><td>Combat over / no combat object</td><td>meta policy</td><td class="num">mod.rs:256-266</td></tr>
+      <tr><td>&lt; 2 candidates at a card surface</td><td>tier-1 heuristic pick</td><td class="num">tiered.rs:399-401</td></tr>
+      <tr><td>No elite/boss horizon to probe</td><td>tier-1 pick</td><td class="num">tiered.rs:171-172</td></tr>
+      <tr><td>Tier-1 scores unavailable (no margin)</td><td>tier-1 pick, no escalation</td><td class="num">tiered.rs:390-392</td></tr>
+      <tr><td>Ranker candidate doesn't encode as card-shaped</td><td>tier-1 ordering</td><td class="num">tiered.rs:211-231</td></tr>
+      <tr><td>Ranker policy on a non-card surface</td><td>Heuristic V</td><td class="num">ranker.rs:117-119</td></tr>
+      <tr><td>Terminal MCTS root</td><td><code>SearchError::TerminalRoot</code> (no panic)</td><td class="num">lib.rs:1303-1368</td></tr>
+      <tr><td>Lost position in combat</td><td>damage/Slippery-clear override vs suicide EndTurn</td><td class="num">lib.rs:1152-1204</td></tr>
+      <tr><td>Any heuristic surface with empty/missing options</td><td>option 0, clamped to <code>len-1</code></td><td class="num">heuristic.rs:125-260</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- NUMBERS -->
+<section id="numbers">
+  <h2 class="sec">Win-rates, accuracy &amp; calibration numbers</h2>
+  <p class="muted">All on Ironclad A0, release-2000 seed panel, eval-cheap combat, chance-node deploy unless noted. Magnitudes measured on engine <code>a83b33c4</code> (provisional bless 2026-06-21) — see caveats.</p>
+
+  <h3>Deployed agent &amp; the confirmed lever</h3>
+  <div class="grid g3">
+    <div class="stat"><div class="big up">35.3%</div><div class="lbl">deployed pair win rate</div><div class="note">706 / 2000 · ranker_chain500 + value_human_a0</div></div>
+    <div class="stat"><div class="big up">+3.45 pp</div><div class="lbl">#63 feature-fix lever</div><div class="note">35.3% vs prior 31.9% (637/2000) · McNemar <b>p = 0.0067 **</b> CONFIRMED</div></div>
+    <div class="stat"><div class="big neu">+1.7 pp</div><div class="lbl">#67 chance-vs-PIMC labels</div><div class="note">706 vs 672 · p = 0.157 ns — DIRECTIONAL NULL (adopted on train/deploy consistency)</div></div>
+  </div>
+
+  <h3>Ranker — offline accuracy</h3>
+  <table>
+    <thead><tr><th>Net</th><th>Top-1 oracle agreement</th><th>Listwise loss</th><th>Labels</th></tr></thead>
+    <tbody>
+      <tr><td><b>ranker_chain500</b> (deployed, chance-probe labels)</td><td class="num up">44.9%</td><td class="num">1.3813</td><td class="num">65,986 over 500 seeds</td></tr>
+      <tr><td>PIMC-probe control</td><td class="num">41.9%</td><td class="num">1.3878</td><td class="num">same decisions</td></tr>
+    </tbody>
+  </table>
+  <p class="muted">Top-1 agreement = how often the net's argmax matches the rollout oracle's best option, held out by seed (no leakage). Soft targets via <code>softmax(rollout_scores / τ)</code>, τ fit to target entropy 0.5.</p>
+
+  <h3>Value net — calibration &amp; standalone</h3>
+  <div class="grid g4">
+    <div class="stat"><div class="big">0.669</div><div class="lbl">Act-1 win-AUC</div><div class="note">n = 41,918</div></div>
+    <div class="stat"><div class="big">0.765</div><div class="lbl">Act-2 win-AUC</div><div class="note">n = 21,595</div></div>
+    <div class="stat"><div class="big">0.735</div><div class="lbl">Act-3 win-AUC</div><div class="note">n = 8,987</div></div>
+    <div class="stat"><div class="big up">7.6%</div><div class="lbl">value-policy standalone</div><div class="note">153/2000 vs self-play V 1.9% · p ≈ 7e-19 (4× win rate)</div></div>
+  </div>
+
+  <h3>Calibration of the gates (why the magic numbers)</h3>
+  <table>
+    <thead><tr><th>Knob</th><th>Setting</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>Probe truncation T</td><td class="num">8 turns</td><td>shortest horizon with Kendall <b>τ = 0.879 ≥ 0.85</b>; T=5 flips <b>28%</b> of top picks</td></tr>
+      <tr><td>Paired seeds K</td><td class="num">32</td><td>K=16 still flips <b>17.3%</b> of top picks; K=32 is first arm under the 10% bar</td></tr>
+      <tr><td>Combat rollout depth</td><td class="num">200</td><td>depth 10 bleeds <b>13 HP</b> on a weak fight; depth 200 bleeds <b>3 HP</b></td></tr>
+      <tr><td><code>relic_default</code> weight</td><td class="num">0.10 → 0.50</td><td>win rate <b>8.6% → 11.9%</b> · McNemar <b>p ≈ 5e-6</b></td></tr>
+      <tr><td>Tier-3 sims (not 5000)</td><td class="num">1000</td><td>keeps ~2–5 escalations/run under the ~30 s box wall</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- WHY -->
+<section id="why">
+  <h2 class="sec">Why we made each choice</h2>
+  <div class="grid g2">
+    <div class="card"><h4>Why split combat vs meta?</h4><p>They have opposite shapes. Combat: huge branching, fast simulator → <b>search wins</b>. Meta: ~60–100 decisions, ≤4 options each → search is free, so <b>evaluation quality is everything</b>. One mechanism can't be best at both.</p></div>
+    <div class="card"><h4>Why heuristic-first with a margin gate?</h4><p>Simulating every meta decision would cost minutes/run for no benefit — most picks are obvious. Spend the expensive rollouts only where the cheap evaluator is <b>genuinely unsure</b> (small top-2 margin). "Thin uncertainty-gated escalation."</p></div>
+    <div class="card"><h4>Why gate on the heuristic margin, not ranker confidence?</h4><p>The margin is a property of the <i>value landscape</i> (how close the options are), which is exactly the question "is this decision pivotal?". A net's softmax confidence is not calibrated to that, and the ranker doesn't even cover all meta surfaces.</p></div>
+    <div class="card"><h4>Why a learned ranker if rollouts are the ground truth?</h4><p>Rollouts are ~0.5 s each — too slow to run on every card pick. The ranker distills ~66k rollout labels into a free forward pass, so <i>every</i> card pick gets rollout-grade judgment, not just the escalated few.</p></div>
+    <div class="card"><h4>Why chance-node MCTS (vs single-determinization)?</h4><p>It models the game's real stochasticity (draws, shuffles) via expectimax instead of pretending one fixed shuffle. It's also the default the deployed labels were trained against — train/deploy consistency.</p></div>
+    <div class="card"><h4>Why "act reached" as the value target?</h4><p>At ~0% win rate a pure win/loss label is almost all zeros — no gradient. Final act ∈ {1,2,3} (+win) is a graded signal that still tracks run health, so the net learns something useful before win rate climbs.</p></div>
+    <div class="card"><h4>Why enumerate paths instead of searching?</h4><p>The map is a small DAG and V is cheap, so full enumeration is exact and affordable. The real difficulty is defining V at future nodes — solved by the projection model, not by more search.</p></div>
+    <div class="card"><h4>Why are Path/Rest probes built but turned off?</h4><p>They were measured (E2 said Path/Rest own the act-2 frontier) but the live probes showed <b>no win-rate headroom</b> yet, so they're gated off (<code>margin = 0</code>) pending better calibration (E12/E13). Build, measure, demote.</p></div>
+  </div>
+  <div class="note-box"><b>The one-sentence design thesis</b> (from the plan): <i>combat simulation is the ground truth but too slow to be the runtime evaluator, so it is funneled into (a) offline labeling/calibration and (b) a thin uncertainty-gated runtime escalation path.</i> Everything above is a consequence of that sentence.</div>
+</section>
+
+<!-- CAVEATS -->
+<section id="caveats">
+  <h2 class="sec">Caveats &amp; honest gaps</h2>
+  <div class="warn-box">
+    <b>Engine-stale magnitudes.</b> The deployed nets were labeled/trained/evaluated on engine <code>a83b33c4</code>; local main is ~33 C#-parity commits ahead. The <code>schema_id</code> still matches, so the nets <b>load and run</b> — but the +3.45 pp and the #67 null were measured on the branch engine. Directions are robust; <b>exact magnitudes should be re-anchored</b> on main's tip before being quoted as current.
+  </div>
+  <ul class="tight">
+    <li><b>Value net (human) MVP gaps:</b> Neow &amp; boss relics not modeled (only relic-choice picks), no potion tracking, Ironclad A0 only. <span class="ref">manifest.json human_value</span></li>
+    <li><b>Un-tuned-by-data knobs:</b> the <code>DeltaStats::score</code> blend coefficients are a hand-set M2 blend; meta-move margins are "starting points only"; heuristic_v.toml weights are honest M1 priors awaiting a full M2 refit.</li>
+    <li><b>Ranker coverage is card-shaped only</b> — relics, gold, potions, events, pathing all still ride the hand-tuned heuristic. That's the obvious next surface to learn.</li>
+  </ul>
+</section>
+
+<div class="footer">
+  Generated for internal use · sources: <code>sts2-rs/crates/sts2-runai/</code> (policy, eval, rollout), <code>data/runai/heuristic_v.toml</code>, <code>data/runai/nets/manifest.json</code>, <code>docs/plans/2026-06-12-full-run-ai-plan.md</code>. Line references are to the repo state at generation time — click-through and re-verify before relying on exact line numbers.
+</div>
+
+</main>
+</div>
+</body>
+</html>

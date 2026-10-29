@@ -1,0 +1,57 @@
+{
+  "class_name": "Nibbit",
+  "title": "Nibbit",
+  "min_hp": 44,
+  "max_hp": 48,
+  "min_hp_base": 42,
+  "max_hp_base": 46,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "BUTT_MOVE",
+      "title": "Butt",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 13,
+          "damage_base": 12,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 12/13 damage"]
+    },
+    {
+      "id": "SLICE_MOVE",
+      "title": "Hesitant Slice",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 7,
+          "damage_base": 6,
+          "ascension": 9
+        },
+        {
+          "type": "block",
+          "amount": 6,
+          "amount_base": 5,
+          "ascension": 8
+        }
+      ],
+      "effects": ["Deal 6/7 damage", "Gain 5/6 Block"]
+    },
+    {
+      "id": "HISS_MOVE",
+      "title": "Hiss",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Apply 2/3 Strength"]
+    }
+  ],
+  "move_pattern": "Cycles: Butt → Slice → Hiss. When alone, starts with Butt. When in a group and positioned in front, starts with Slice. When positioned in back, starts with Hiss.",
+  "powers_on_spawn": [],
+  "notes": "Nibbit's initial move varies based on whether it fights alone or grouped. Position (front vs. back) determines the starting move when grouped. Slice is not displayed in the bestiary."
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "SummonNextTurnPower",
+  "title": "Summon Next Turn",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the start of your next turn, [gold]Summon[/gold] [blue]2[/blue].",
+  "smart_description": "At the start of your next turn, [gold]Summon[/gold] [blue]{Amount}[/blue].",
+  "notes": "This power activates at the start of the player's next turn, immediately summoning creatures and then removing itself. The Amount field determines how many creatures are summoned."
+}

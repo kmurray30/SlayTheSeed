@@ -1,0 +1,8 @@
+{
+  "class_name": "ForbiddenGrimoirePower",
+  "title": "Forbidden Grimoire",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the end of combat, remove a card from your Deck.",
+  "smart_description": "At the end of combat, remove cards from your Deck equal to this power's stack count."
+}

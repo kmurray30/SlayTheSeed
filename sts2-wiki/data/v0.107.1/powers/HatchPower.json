@@ -1,0 +1,9 @@
+{
+  "class_name": "HatchPower",
+  "title": "Hatch",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Hatches after X turns.",
+  "smart_description": "Hatches after {Amount} turn(s).",
+  "notes": "Counter decrements by 1 after each turn the owner participates in. Hatches when counter reaches 0."
+}

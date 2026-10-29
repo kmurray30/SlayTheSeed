@@ -1,0 +1,315 @@
+[project]
+name = "sts2-pycli"
+version = "0.1.0"
+description = "Headless CLI for Slay the Spire 2 (Python tooling for the C# headless runner)"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.136.3",
+    "google-cloud-storage>=2.18.0",
+    "mcp>=1.27.0",
+    "uvicorn[standard]>=0.46.0",
+    "sts2-rs",
+    "pydantic>=2.13.3",
+    "numpy>=2.4.6",
+    "scipy>=1.17.1",
+    "scikit-learn>=1.9.0",
+    "joblib>=1.5.3",
+    "umap-learn>=0.5.12",
+    "starlette>=1.0.0",
+    "torch>=2.12.1",
+    "wandb>=0.28.0",
+    "onnxruntime>=1.28.0",
+]
+
+[tool.uv]
+package = false
+# Build the editable sts2_rs (see [tool.uv.sources]) with the thin-LTO
+# `pyext` cargo profile instead of `release`. uv rebuilds it after every Rust
+# edit, so this is on every pytest gate's path: the fat-LTO link alone took
+# 208 s, `pyext` takes ~48 s. Explicit `maturin --release` builds (Dockerfile,
+# setup.sh, wheel-venv.sh) are unaffected.
+config-settings-package = { sts2-rs = { "build-args" = "--profile pyext" } }
+
+[tool.uv.sources]
+# sts2_rs — Rust MCTS hint backend, lives in the sibling sts2-rs repo.
+# The `sts2_hint` Python package imports it as `sts2_rs`.
+#
+# Listed in [project.dependencies] so `uv sync` keeps it installed
+# instead of uninstalling it on every sync. uv builds it through
+# maturin's PEP 517 hooks (`build_editable`), which default to the
+# RELEASE cargo profile (overridden to the thin-LTO `pyext` profile by
+# `config-settings-package` above), not a debug build. (The debug-build
+# concern that previously kept this out
+# of dependencies was a conflation with the `maturin develop` *command*,
+# which defaults to debug; uv never invokes that command.)
+#
+# `editable = true` links the Python layer live, and the compiled .so is
+# now rebuilt AUTOMATICALLY on any Rust source change: the editable
+# package's pyproject (`../sts2-rs/crates/sts2-py/pyproject.toml`) declares
+# `[tool.uv] cache-keys` spanning the whole Rust workspace, so every
+# `uv run` (even `--frozen`) rebuilds when a `.rs`/`Cargo.toml`/`Cargo.lock`
+# changed and is an instant cache hit otherwise. No manual
+# `maturin develop` / `uv sync --reinstall-package` needed for the
+# main-checkout `uv run` path — this killed the recurring main-checkout
+# "stale wheel" trap (uv used to reinstall a cached build over a fresh
+# `maturin develop` on every sync). NOTE: the swarm/worktree facet (many
+# checkouts sharing this one `.venv`) is handled separately by
+# `scripts/wheel-venv.sh` content-addressed venvs — see CLAUDE.md.
+#
+# If/when sts2_rs ships pre-built wheels on a registry, replace this
+# with a versioned `dependencies = ["sts2-rs>=X"]` entry.
+sts2-rs = { path = "../sts2-rs/crates/sts2-py", editable = true }
+
+[dependency-groups]
+# The packaged advisor exe's build env (GH #380): synced with
+# `uv sync --only-group advisor-exe` into .venv-advisor, so the PROJECT deps
+# (torch, wandb, fastapi, ...) are structurally absent and cannot leak into
+# the PyInstaller bundle. Lists the advisor's true runtime closure only.
+advisor-exe = [
+  # No numpy / onnxruntime: the run policy scores through `sts2_rs`
+  # (`ppo.rust_policy`, tract + the Rust encoder), so the ~54 MB pair the
+  # advisor used to carry for `ppo.onnx_policy` is not in its closure at all.
+  # `tests/test_advisor_closure_is_numpy_free.py` is the gate -- absence from
+  # this group is what makes a re-introduction fail the build rather than
+  # silently re-inflate the bundle.
+  "pyinstaller>=6.11",
+  "sts2-rs",
+]
+dev = [
+  "coverage[toml]>=7.13.5",
+  "deptry>=0.25.1",
+  "git-cliff>=2.13.1",
+  "networkx>=3.4",
+  "onnx>=1.22.0",
+  "onnxscript>=0.7.1",
+  "optuna>=4.9.0",
+  "prek>=0.3.11",
+  "pytest>=8.4.0",
+  "pytest-cov>=7.1.0",
+  "pytest-timeout>=2.3.0",
+  "pytest-xdist>=3.6.0",
+  "ruff>=0.13.0",
+  "sync-with-uv>=0.5.0",
+  "ty>=0.0.34",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Make modules under python/ importable from tests (e.g. `from sts2_client
+# import Game` in conftest.py). python/ is not a package on disk — we keep
+# the legacy script-style imports working by adding it to sys.path.
+pythonpath = ["python"]
+# Each test spawns its own C# headless game process, so tests are independent
+# and parallelize cleanly. `-n auto` uses one worker per CPU core via xdist.
+#
+# `-m "not slow"` keeps the default run a fast feedback gate. The slow-marked
+# tests are full-run PPO/parity walks: ~2700 CPU-seconds, most of it in
+# tests/test_ppo_rust_parity.py alone. With enough cores they merely produce a
+# long serial tail (~90s of work followed by ~500s of near-idle stragglers); on
+# a 4-8 core machine they dominate and push the suite past 45 minutes.
+# Run them explicitly with `just test-slow` (or `pytest -m slow`), and the whole
+# suite with `just test-all`.
+# `--dist worksteal`: the test durations are very uneven (a few run-length
+# walks of 10-28 s among ~3400 sub-second tests). The default `load` hands
+# each worker its share up front, so a long test drawn late ran on past the
+# rest; worksteal rebalances as workers drain (~65 s -> ~57 s, 32 cores).
+addopts = "-ra -n auto --dist worksteal -m 'not slow'"
+# Tests spawn the C# headless game process via subprocess; cap runaway tests.
+timeout = 600
+markers = [
+  "slow: tests that take significant time (run on demand, not in `just test`)",
+  "oracle: needs the C# oracle, i.e. the player's own game assembly in lib/ (skipped when absent; `-m 'not oracle'` is the game-free subset)",
+  "game_data: reads game-derived data (localization_eng/, sts2-wiki/data, card_db.json), training checkpoints or private deploy files; skipped when absent (see tests/conftest.py)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+extend-exclude = [
+  "lib",
+  "logs",
+  "saves",
+  "decompiled",
+  "localization_eng",
+  "localization_zhs",
+]
+
+[tool.ruff.lint]
+preview = true
+select = [
+  "B",   # flake8-bugbear
+  "E",   # pycodestyle errors
+  "F",   # pyflakes
+  "I",   # isort
+  "PLW1514", # open/read_text/write_text without encoding= (locale-dependent: cp1252 on Windows)
+  "PTH", # pathlib over os.path
+  "RUF", # ruff-specific rules
+  "SIM", # flake8-simplify
+  "UP",  # pyupgrade
+  "W",   # pycodestyle warnings
+]
+ignore = [
+  "B007",   # Unused loop variable
+  "B008",   # Function call in default argument
+  "B904",   # raise from
+  "B905",   # zip() without strict=
+  "E501",   # line too long (formatter handles it)
+  "E741",   # ambiguous variable name
+  "PTH100", # os.path.abspath
+  "PTH103", # os.makedirs
+  "PTH107", # os.remove
+  "PTH109", # os.getcwd
+  "PTH110", # os.path.exists
+  "PTH111", # os.path.expanduser
+  "PTH112", # os.path.isdir
+  "PTH113", # os.path.isfile
+  "PTH118", # os.path.join
+  "PTH119", # os.path.basename
+  "PTH120", # os.path.dirname
+  "PTH123", # builtin open() vs Path.open()
+  "PTH207", # glob
+  "PTH208", # os.listdir
+  "RUF001", # ambiguous unicode in strings (game uses Chinese)
+  "RUF002", # ambiguous unicode in docstrings
+  "RUF003", # ambiguous unicode in comments
+  "SIM105", # contextlib.suppress
+  "SIM108", # ternary instead of if-else
+  "SIM116", # dict instead of consecutive ifs
+]
+unfixable = [
+  "F401", # unused import
+  "F841", # unused variable
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/*" = ["B"]
+# Existing scripts predate the linter setup — relax the rules they trip.
+# New code should not need these blanket ignores.
+"python/*" = ["E722", "F401", "F841", "RUF059", "SIM102", "SIM103", "SIM115"]
+"agent/*" = ["E722", "F401", "F841", "RUF059", "SIM102", "SIM103", "SIM115"]
+# RUF069 (float `==`) is right in general and wrong for these two files. Every
+# value they assert on is `round(int / int, k)` from `runstats` — winrates,
+# per-turn means, used-rates — checked against 0.0 / 0.5 / 1.0 / 1.5 / 20.0,
+# all exactly representable in binary. `==` is therefore both correct and the
+# STRONGER assertion; rewriting to `pytest.approx` would widen a passing exact
+# check into one that lets a real arithmetic regression through. Scoped to
+# these two files rather than `tests/*` so a genuinely sloppy float comparison
+# elsewhere still gets caught.
+"tests/runstats/test_analyze.py" = ["RUF069"]
+"tests/test_runstats_trace_mine.py" = ["RUF069"]
+# Same call, different reason: `belief_draw_c_puct` RETURNS the bare literals
+# 0.8 / 1.41 / 2.5 — no arithmetic happens on the way out, so `==` against
+# those same literals compares identical doubles. It is the exact assertion
+# this rule wants (the boundary constants are pinned, not approximated), and
+# `pytest.approx` would let a genuine retune of the constant slip through.
+"tests/test_c_puct_budget_rule.py" = ["RUF069"]
+
+[tool.coverage.run]
+source = ["python", "tests"]
+omit = ["tests/*", "*/__init__.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "def __repr__",
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.deptry.per_rule_ignores]
+# `python/synergy/` is the offline synergy-discovery CLI, not a served
+# path — nothing outside the package imports it. Its onnx/networkx uses
+# are lazy function-level imports, so the modules load fine without them
+# and the deps stay dev-only rather than bloating the deployed image.
+DEP004 = ["networkx", "onnx"]
+
+[tool.deptry]
+# Script-style sibling modules under python/ (added to sys.path, not installed
+# packages). The list drifted while the venv's deptry wrapper was broken by the
+# repo rename (sts2-cli -> sts2-pycli): `just deptry` failed to spawn, so new
+# modules never got registered here.
+known_first_party = [
+  "champions",
+  "sync_champions",
+  "game_log",
+  "ppo",
+  "ppo_decode",
+  "runtime_paths",
+  "sts2_client",
+  "sts2_combat",
+  "sts2_format",
+  "parity_audit",
+  "parity_fuzz",
+  "parity_fuzz_scenario",
+  "parity_fuzz_state",
+  "play",
+  "replay",
+  "simlab",
+  "sts2_hint",
+  "sweep_manifest",
+  "trace_subject",
+  "workbench",
+  "synergy",
+  "act1_replay",
+  "boss_only",
+  "play_full_run_rust",
+  "run_arena",
+  "run_files",
+  "run_parity",
+  "run_policy",
+  "run_setup_parity",
+  "run_stepper",
+  "combat_mirror",
+  "coop_coordination",
+  "coop_replay",
+  "diag_leaf_saturation",
+  "encoder_combat_surrogate",
+  "eval_combat_surrogate_net",
+  "eval_run_value_net",
+  "realgame_adapter",
+  "realgame_advisor",
+  "realgame_advisor_mirror",
+  "realgame_bridge",
+  "realgame_control",
+  "realgame_eval",
+  "realgame_hand_select",
+  "realgame_livetree",
+  "realgame_mcts",
+  "realgame_ppo",
+  "realgame_random",
+  "realgame_workbench_log",
+  "runstats",
+  "shadow_replay",
+  "sts2_realgame",
+  "train_combat_surrogate_net",
+  "train_combat_surrogate_transformer",
+  "train_run_value_net",
+  "train_value",
+]
+exclude = [
+  "agent/.*",
+  "tests/.*",
+  "python/replay/tests/.*",
+  "python/synergy/tests/.*",
+  ".venv",
+  "lib",
+  "decompiled",
+]
+
+[tool.ty.src]
+# Existing code (scripts and tests) predates type checking and uses dict-shaped
+# game state heavily. ty is installed and ready — opt new code in by adding
+# its directory to `include` (or removing it from `exclude`).
+exclude = [
+  "python/**",
+  "agent/**",
+  "tests/**",
+  "lib/**",
+  "decompiled/**",
+  "saves/**",
+  "logs/**",
+]

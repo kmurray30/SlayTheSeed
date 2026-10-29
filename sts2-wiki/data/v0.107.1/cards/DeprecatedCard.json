@@ -1,0 +1,16 @@
+{
+  "class_name": "DeprecatedCard",
+  "title": "Deprecated Card",
+  "character": "Status",
+  "energy_cost": 0,
+  "type": "Status",
+  "rarity": "Status",
+  "target": "None",
+  "keywords": [
+    "Exhaust"
+  ],
+  "vars": [],
+  "description": "[blue]This card was removed in a recent update.[/blue]\nDraw 1 card.\nRemove this from your [gold]Deck[/gold].",
+  "referenced_powers": [],
+  "notes": "Placeholder card used internally when a card has been removed or deprecated from the game. Cannot be upgraded (MaxUpgradeLevel = 0). Not displayed in the card library. When played: draws 1 card, then removes itself from the deck."
+}

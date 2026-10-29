@@ -1,0 +1,19 @@
+{
+  "config": {
+    "character": "Ironclad",
+    "depth": 10,
+    "encounter": "SHRINKER_BEETLE_WEAK",
+    "fair": false,
+    "sims": 300,
+    "threads": 1
+  },
+  "git_sha": "fa7b13fef1307b5668d4cc77475066fe4a0c317f",
+  "host": "a4000-224n3",
+  "max_ms": 12.293,
+  "p50_ms": 8.124,
+  "p95_ms": 9.845,
+  "platform": "Linux-6.8.0-111-generic-x86_64-with-glibc2.39",
+  "samples_n": 100,
+  "schema_version": 1,
+  "timestamp_utc": "2026-05-14T22:50:48.337180+00:00"
+}

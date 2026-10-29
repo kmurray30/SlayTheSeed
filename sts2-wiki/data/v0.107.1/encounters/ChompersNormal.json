@@ -1,0 +1,15 @@
+{
+  "class_name": "ChompersNormal",
+  "title": "An Automaton Pair",
+  "room_type": "Monster",
+  "is_weak": false,
+  "monsters": [
+    "Chomper",
+    "Chomper"
+  ],
+  "total_monsters": 2,
+  "tags": [
+    "Chomper"
+  ],
+  "notes": "Encounter with two Chomper automatons. The second Chomper has ScreamFirst=true, causing it to attack on its first turn."
+}

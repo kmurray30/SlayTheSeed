@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { cleanDescription } from '../../utils';
+
+export async function getStaticPaths() {
+  const relics = await getCollection('relics');
+  return relics.map(relic => ({
+    params: { slug: relic.id },
+    props: { relic },
+  }));
+}
+
+const { relic } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+// Build source link lookup from events and ancients
+const allEvents = await getCollection('events');
+const allAncients = await getCollection('ancients');
+
+// For Dusty Tome: load ancient-rarity cards
+const allCards = relic.data.class_name === 'DustyTome'
+  ? (await getCollection('cards')).filter(c => c.data.rarity === 'Ancient').sort((a, b) => a.data.title.localeCompare(b.data.title))
+  : [];
+
+const sourceLinks: Record<string, { url: string; label: string }> = {};
+for (const ev of allEvents) {
+  sourceLinks[ev.data.class_name] = { url: `${base}events/${ev.id}/`, label: ev.data.title };
+}
+for (const anc of allAncients) {
+  sourceLinks[anc.data.class_name] = { url: `${base}ancients/${anc.id}/`, label: anc.data.title };
+}
+---
+
+<BaseLayout title={relic.data.title}>
+  <div class="card-detail">
+    <a href={`${import.meta.env.BASE_URL}relics/`} class="back-link">&larr; All Relics</a>
+
+    <div class="card-header">
+      <div class="item-row" style="align-items: center; margin-top: 0.5rem;">
+        <img
+          src={`${import.meta.env.BASE_URL}images/relic_atlas/${relic.data.image}.png`}
+          alt={relic.data.title}
+          class="item-icon-lg"
+          onerror="this.style.display='none'" />
+        <div>
+          <h1>{relic.data.title}</h1>
+          <div class="card-meta" style="font-size: 0.9rem;">
+            <span class={`rarity-${relic.data.rarity.toLowerCase()}`}>{relic.data.rarity}</span>
+            {relic.data.pool && relic.data.pool !== 'Shared' && relic.data.pool !== 'Unknown' && (
+              <> · {relic.data.pool}</>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-heading">Description</h2>
+    <div class="desc-text" style="font-size: 1.05rem;" set:html={cleanDescription(relic.data.description_html || relic.data.description_plain)} />
+
+    {relic.data.flavor && (
+      <p class="flavor">{relic.data.flavor}</p>
+    )}
+
+    <table class="stat-table" style="margin-top: 1.5rem;">
+      <tr><th>Rarity</th><td><span class={`rarity-${relic.data.rarity.toLowerCase()}`}>{relic.data.rarity}</span></td></tr>
+      {relic.data.character && (
+        <tr><th>Character</th><td>{relic.data.character} only</td></tr>
+      )}
+      {relic.data.pool && relic.data.pool !== 'Shared' && relic.data.pool !== 'Unknown' && !relic.data.character && (
+        <tr><th>Pool</th><td>{relic.data.pool}</td></tr>
+      )}
+      {relic.data.sources.length > 0 && (
+        <tr><th>Sources</th><td>
+          {relic.data.sources.map((source, i) => {
+            const link = sourceLinks[source];
+            return (
+              <>
+                {i > 0 && ', '}
+                {link
+                  ? <a href={link.url}>{link.label}</a>
+                  : source
+                }
+              </>
+            );
+          })}
+        </td></tr>
+      )}
+    </table>
+
+    {allCards.length > 0 && (
+      <>
+        <h2 class="section-heading" style="margin-top: 1.5rem;">Ancient Cards</h2>
+        <div class="card-grid compact" style="margin-top: 0.75rem;">
+          {allCards.map(card => (
+            <a href={`${base}cards/${card.id}/`} class="card-entry" style="display: flex; gap: 0.75rem; align-items: center;">
+              <div>
+                <h3 style="font-size: 0.95rem;" class={card.data.character === 'Event' ? '' : `char-${card.data.character.toLowerCase()}`}>{card.data.title}</h3>
+                <div class="card-meta">{card.data.character === 'Event' ? 'Any' : card.data.character} · {card.data.type} · {card.data.energy_cost} Energy</div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </>
+    )}
+  </div>
+</BaseLayout>

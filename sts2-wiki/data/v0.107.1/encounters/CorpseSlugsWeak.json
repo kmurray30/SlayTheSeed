@@ -1,0 +1,15 @@
+{
+  "class_name": "CorpseSlugsWeak",
+  "title": "Corpse Slugs",
+  "room_type": "Monster",
+  "is_weak": true,
+  "monsters": [
+    "CorpseSlug",
+    "CorpseSlug"
+  ],
+  "total_monsters": 2,
+  "tags": [
+    "Slugs"
+  ],
+  "notes": "Both Corpse Slugs are ensured to start with different moves."
+}

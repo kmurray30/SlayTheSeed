@@ -1,0 +1,8 @@
+{
+  "class_name": "BingBong",
+  "title": "Bing Bong",
+  "rarity": "Event",
+  "description": "Whenever you add a card to your [gold]Deck[/gold], add one additional copy.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Whenever a card is added to your deck, a duplicate of that card is also added to the bottom of your deck. This applies to cards obtained through rewards, purchases, and other deck-building sources. Cards created as duplicates are tracked to prevent recursive duplication."
+}

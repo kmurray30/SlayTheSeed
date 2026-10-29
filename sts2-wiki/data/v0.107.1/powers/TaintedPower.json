@@ -1,0 +1,9 @@
+{
+  "class_name": "TaintedPower",
+  "title": "Tainted",
+  "power_type": "Debuff",
+  "stack_type": "Counter",
+  "description": "Take additional damage from Attacks this turn.",
+  "smart_description": "Take [blue]{Amount}[/blue] additional damage from Attacks this turn.",
+  "notes": "This debuff increases the damage taken from powered attacks (attacks with the IsPoweredAttack property). The amount of additional damage is equal to the stack count. The power automatically removes itself after the enemy's turn ends."
+}

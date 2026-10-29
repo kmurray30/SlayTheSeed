@@ -1,0 +1,44 @@
+{
+  "class_name": "SlumberingBeetle",
+  "title": "Slumbering Beetle",
+  "min_hp": 89,
+  "max_hp": 89,
+  "min_hp_base": 86,
+  "max_hp_base": 86,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "SNORE_MOVE",
+      "title": "Snore",
+      "intents": [
+        {
+          "type": "sleep"
+        }
+      ],
+      "effects": ["Dormant"]
+    },
+    {
+      "id": "ROLL_OUT_MOVE",
+      "title": "Roll Out",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 18,
+          "damage_base": 16,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Deal 16/18 damage", "Apply 2 Strength"]
+    }
+  ],
+  "move_pattern": "Starts with Snore. While asleep (has Slumber power), repeats Snore. Once awake (Slumber power removed), cycles Roll Out repeatedly, gaining Strength each turn.",
+  "powers_on_spawn": [
+    "Plating (15/18)",
+    "Slumber 3"
+  ],
+  "notes": "This monster starts dormant with Slumber and Plating powers. It cycles Snore until awakened (which removes both Slumber and Plating powers). Once awake, it switches to the aggressive Roll Out move, gaining Strength each turn."
+}

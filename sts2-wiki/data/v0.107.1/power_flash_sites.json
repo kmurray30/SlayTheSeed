@@ -1,0 +1,725 @@
+{
+  "version": "v0.107.1",
+  "sites": [
+    {
+      "power": "ARSENAL",
+      "cs_class": "ArsenalPower",
+      "cs_line": 23,
+      "ported": true,
+      "rust": "card_effects.rs:fire_arsenal_strength_on_card_generation",
+      "reason": null
+    },
+    {
+      "power": "AUTOMATION",
+      "cs_class": "AutomationPower",
+      "cs_line": 45,
+      "ported": true,
+      "rust": "lib.rs (per-card-drawn loop, automation_flashes)",
+      "reason": null
+    },
+    {
+      "power": "BIASED_COGNITION",
+      "cs_class": "BiasedCognitionPower",
+      "cs_line": 25,
+      "ported": true,
+      "rust": "hooks.rs:after_side_turn_start",
+      "reason": null
+    },
+    {
+      "power": "BLACK_HOLE",
+      "cs_class": "BlackHolePower",
+      "cs_line": 39,
+      "ported": true,
+      "rust": "lib.rs:CombatState::apply_black_hole_on_stars_event",
+      "reason": null
+    },
+    {
+      "power": "BLOCK_NEXT_TURN",
+      "cs_class": "BlockNextTurnPower",
+      "cs_line": 23,
+      "ported": true,
+      "rust": "hooks.rs:after_block_cleared",
+      "reason": null
+    },
+    {
+      "power": "BLUR",
+      "cs_class": "BlurPower",
+      "cs_line": 35,
+      "ported": true,
+      "rust": "hooks.rs:dispatch_after_preventing_block_clear",
+      "reason": null
+    },
+    {
+      "power": "CALL_OF_THE_VOID",
+      "cs_class": "CallOfTheVoidPower",
+      "cs_line": 44,
+      "ported": true,
+      "rust": "hooks.rs (BeforeHandDraw card-generation dispatch, CallOfTheVoid branch)",
+      "reason": null
+    },
+    {
+      "power": "CHILD_OF_THE_STARS",
+      "cs_class": "ChildOfTheStarsPower",
+      "cs_line": 19,
+      "ported": true,
+      "rust": "lib.rs:CombatState::apply_child_of_the_stars_on_stars_spent",
+      "reason": null
+    },
+    {
+      "power": "COOLANT",
+      "cs_class": "CoolantPower",
+      "cs_line": 25,
+      "ported": true,
+      "rust": "hooks.rs:after_side_turn_start",
+      "reason": null
+    },
+    {
+      "power": "CORROSIVE_WAVE",
+      "cs_class": "CorrosiveWavePower",
+      "cs_line": 32,
+      "ported": true,
+      "rust": "lib.rs:CombatState::invoke_card_drawn_for_newly_drawn",
+      "reason": null
+    },
+    {
+      "power": "COUNTDOWN",
+      "cs_class": "CountdownPower",
+      "cs_line": 25,
+      "ported": true,
+      "rust": "hooks.rs:after_turn_end (Countdown arm)",
+      "reason": null
+    },
+    {
+      "power": "CRAB_RAGE",
+      "cs_class": "CrabRagePower",
+      "cs_line": 35,
+      "ported": true,
+      "rust": "hooks.rs:after_death (CrabRage arm)",
+      "reason": null
+    },
+    {
+      "power": "CRIMSON_MANTLE",
+      "cs_class": "CrimsonMantlePower",
+      "cs_line": 29,
+      "ported": true,
+      "rust": "hooks.rs:after_side_turn_start",
+      "reason": null
+    },
+    {
+      "power": "DAMPEN",
+      "cs_class": "DampenPower",
+      "cs_line": 37,
+      "ported": true,
+      "rust": "monster_power_effects.rs:dampen_after_applied",
+      "reason": null
+    },
+    {
+      "power": "DANSE_MACABRE",
+      "cs_class": "DanseMacabrePower",
+      "cs_line": 26,
+      "ported": true,
+      "rust": "hooks.rs (BeforeCardPlayed block-grant walk, flash_danse_macabre latch)",
+      "reason": null
+    },
+    {
+      "power": "DEMISE",
+      "cs_class": "DemisePower",
+      "cs_line": 23,
+      "ported": true,
+      "rust": "hooks.rs:after_turn_end (Demise arm)",
+      "reason": null
+    },
+    {
+      "power": "DEMON_FORM",
+      "cs_class": "DemonFormPower",
+      "cs_line": 25,
+      "ported": true,
+      "rust": "hooks.rs:after_side_turn_start",
+      "reason": null
+    },
+    {
+      "power": "ECHO_FORM",
+      "cs_class": "EchoFormPower",
+      "cs_line": 32,
+      "ported": true,
+      "rust": "combat_loop.rs:finish_card_play",
+      "reason": null
+    },
+    {
+      "power": "FASTEN",
+      "cs_class": "FastenPower",
+      "cs_line": 39,
+      "ported": true,
+      "rust": "card_effects.rs:gain_block_player_with_props",
+      "reason": null
+    },
+    {
+      "power": "FERAL",
+      "cs_class": "FeralPower",
+      "cs_line": 60,
+      "ported": true,
+      "rust": "combat_loop.rs:finish_card_play + combat_loop.rs:finish_auto_played_card",
+      "reason": null
+    },
+    {
+      "power": "FLUTTER",
+      "cs_class": "FlutterPower",
+      "cs_line": 51,
+      "ported": true,
+      "rust": "hooks.rs:tick_flutter_and_maybe_stun",
+      "reason": null
+    },
+    {
+      "power": "GENESIS",
+      "cs_class": "GenesisPower",
+      "cs_line": 18,
+      "ported": true,
+      "rust": "hooks.rs:after_energy_reset",
+      "reason": null
+    },
+    {
+      "power": "GRAVITY",
+      "cs_class": "GravityPower",
+      "cs_line": 58,
+      "ported": false,
+      "rust": null,
+      "reason": "Apparently unreachable: nothing in the v0.107.1 decomp references GravityPower outside its own file and the AbstractModelSubtypes type registry — no card, relic, potion, or monster ever applies it. Confirmed by an exhaustive grep of the whole decompiled tree for `GravityPower`, not just this file's neighbors. Rust has no PowerKind::Gravity match arm anywhere either, consistent with a dead class on both sides."
+    },
+    {
+      "power": "HAILSTORM",
+      "cs_class": "HailstormPower",
+      "cs_line": 37,
+      "ported": true,
+      "rust": "hooks.rs:before_turn_end",
+      "reason": null
+    },
+    {
+      "power": "HARD_TO_KILL",
+      "cs_class": "HardToKillPower",
+      "cs_line": 25,
+      "ported": true,
+      "rust": "damage.rs:flash_damage_amount_modifiers (hooks.rs:damage_amount_flashes)",
+      "reason": null
+    },
+    {
+      "power": "HARDENED_SHELL",
+      "cs_class": "HardenedShellPower",
+      "cs_line": 47,
+      "ported": true,
+      "rust": "damage.rs:flash_hardened_shell_on_target",
+      "reason": null
+    },
+    {
+      "power": "HELLO_WORLD",
+      "cs_class": "HelloWorldPower",
+      "cs_line": 24,
+      "ported": true,
+      "rust": "hooks.rs:dispatch_before_hand_draw_powers",
+      "reason": null
+    },
+    {
+      "power": "HIGH_VOLTAGE",
+      "cs_class": "HighVoltagePower",
+      "cs_line": 25,
+      "ported": true,
+      "rust": "hooks.rs:after_turn_end (HighVoltage arm)",
+      "reason": null
+    },
+    {
+      "power": "IMBALANCED",
+      "cs_class": "ImbalancedPower",
+      "cs_line": 21,
+      "ported": true,
+      "rust": "hooks.rs:dispatch_after_damage_given (Imbalanced reaction)",
+      "reason": null
+    },
+    {
+      "power": "INFINITE_BLADES",
+      "cs_class": "InfiniteBladesPower",
+      "cs_line": 24,
+      "ported": true,
+      "rust": "hooks.rs:dispatch_before_hand_draw_powers",
+      "reason": null
+    },
+    {
+      "power": "INTANGIBLE",
+      "cs_class": "IntangiblePower",
+      "cs_line": 37,
+      "ported": true,
+      "rust": "damage.rs:flash_intangible_on_target",
+      "reason": null
+    },
+    {
+      "power": "INTANGIBLE",
+      "cs_class": "IntangiblePower",
+      "cs_line": 61,
+      "ported": true,
+      "rust": "damage.rs:flash_damage_amount_modifiers (hooks.rs:damage_amount_flashes)",
+      "reason": null
+    },
+    {
+      "power": "ITERATION",
+      "cs_class": "IterationPower",
+      "cs_line": 25,
+      "ported": true,
+      "rust": "lib.rs:CombatState::invoke_card_drawn_for_newly_drawn",
+      "reason": null
+    },
+    {
+      "power": "JUGGERNAUT",
+      "cs_class": "JuggernautPower",
+      "cs_line": 25,
+      "ported": true,
+      "rust": "hooks.rs:dispatch_after_block_gained",
+      "reason": null
+    },
+    {
+      "power": "JUGGLING",
+      "cs_class": "JugglingPower",
+      "cs_line": 45,
+      "ported": true,
+      "rust": "hooks.rs:dispatch_after_card_played",
+      "reason": null
+    },
+    {
+      "power": "MAGIC_BOMB",
+      "cs_class": "MagicBombPower",
+      "cs_line": 25,
+      "ported": false,
+      "rust": null,
+      "reason": "Apparently unreachable: nothing in the v0.107.1 decomp references MagicBombPower outside its own file and the AbstractModelSubtypes type registry — no card, relic, potion, or monster ever applies it. Confirmed by an exhaustive grep of the whole decompiled tree for `MagicBombPower`, not just this file's neighbors. Rust's only reference is the generic affliction-classification table (afflictions.rs), which classifies every PowerKind whether or not it is ever instantiated."
+    },
+    {
+      "power": "MASTER_PLANNER",
+      "cs_class": "MasterPlannerPower",
+      "cs_line": 25,
+      "ported": true,
+      "rust": "hooks.rs:master_planner_after_card_played",
+      "reason": null
+    },
+    {
+      "power": "MIND_ROT",
+      "cs_class": "MindRotPower",
+      "cs_line": 25,
+      "ported": true,
+      "rust": "combat_loop.rs (Step 7 hand-draw setup)",
+      "reason": null
+    },
+    {
+      "power": "MONOLOGUE",
+      "cs_class": "MonologuePower",
+      "cs_line": 74,
+      "ported": true,
+      "rust": "hooks.rs:dispatch_after_card_played",
+      "reason": null
+    },
+    {
+      "power": "NEMESIS",
+      "cs_class": "NemesisPower",
+      "cs_line": 27,
+      "ported": true,
+      "rust": "hooks.rs:after_turn_end (Nemesis arm)",
+      "reason": null
+    },
+    {
+      "power": "NO_DRAW",
+      "cs_class": "NoDrawPower",
+      "cs_line": 29,
+      "ported": true,
+      "rust": "cards.rs:draw_via_state + lib.rs:CombatState::draw_into_hand_card_effect",
+      "reason": null
+    },
+    {
+      "power": "NO_ENERGY_GAIN",
+      "cs_class": "NoEnergyGainPower",
+      "cs_line": 30,
+      "ported": true,
+      "rust": "lib.rs:CombatState::gain_energy",
+      "reason": null
+    },
+    {
+      "power": "NOSTALGIA",
+      "cs_class": "NostalgiaPower",
+      "cs_line": 56,
+      "ported": true,
+      "rust": "combat_loop.rs (card-result-pile routing, Nostalgia redirect branch)",
+      "reason": null
+    },
+    {
+      "power": "NOXIOUS_FUMES",
+      "cs_class": "NoxiousFumesPower",
+      "cs_line": 32,
+      "ported": true,
+      "rust": "hooks.rs:after_side_turn_start",
+      "reason": null
+    },
+    {
+      "power": "OBLIVION",
+      "cs_class": "OblivionPower",
+      "cs_line": 52,
+      "ported": true,
+      "rust": "hooks.rs (Oblivion Doom-grant post-walk)",
+      "reason": null
+    },
+    {
+      "power": "ORBIT",
+      "cs_class": "OrbitPower",
+      "cs_line": 47,
+      "ported": true,
+      "rust": "hooks.rs:dispatch_after_energy_spent",
+      "reason": null
+    },
+    {
+      "power": "OUTBREAK",
+      "cs_class": "OutbreakPower",
+      "cs_line": 46,
+      "ported": true,
+      "rust": "hooks.rs:dispatch_after_power_applied",
+      "reason": null
+    },
+    {
+      "power": "PAGESTORM",
+      "cs_class": "PagestormPower",
+      "cs_line": 23,
+      "ported": true,
+      "rust": "lib.rs (per-card-drawn loop, pagestorm_flashes)",
+      "reason": null
+    },
+    {
+      "power": "PAINFUL_STABS",
+      "cs_class": "PainfulStabsPower",
+      "cs_line": 66,
+      "ported": true,
+      "rust": "hooks.rs (dispatch_after_damage_given, PainfulStabs branch)",
+      "reason": null
+    },
+    {
+      "power": "PALE_BLUE_DOT",
+      "cs_class": "PaleBlueDotPower",
+      "cs_line": 41,
+      "ported": true,
+      "rust": "combat_loop.rs (Step 7 hand-draw setup)",
+      "reason": null
+    },
+    {
+      "power": "PILLAR_OF_CREATION",
+      "cs_class": "PillarOfCreationPower",
+      "cs_line": 23,
+      "ported": true,
+      "rust": "card_effects.rs:fire_pillar_of_creation_block_on_card_generation",
+      "reason": null
+    },
+    {
+      "power": "PLATING",
+      "cs_class": "PlatingPower",
+      "cs_line": 65,
+      "ported": true,
+      "rust": "hooks.rs:before_turn_end",
+      "reason": null
+    },
+    {
+      "power": "PLOW",
+      "cs_class": "PlowPower",
+      "cs_line": 34,
+      "ported": true,
+      "rust": "monsters/act1_overgrowth.rs:plow_after_damage",
+      "reason": null
+    },
+    {
+      "power": "RAVENOUS",
+      "cs_class": "RavenousPower",
+      "cs_line": 28,
+      "ported": true,
+      "rust": "hooks.rs:after_death (Ravenous arm)",
+      "reason": null
+    },
+    {
+      "power": "REBOUND",
+      "cs_class": "ReboundPower",
+      "cs_line": 36,
+      "ported": true,
+      "rust": "combat_loop.rs:consume_rebound_stack",
+      "reason": null
+    },
+    {
+      "power": "REGEN",
+      "cs_class": "RegenPower",
+      "cs_line": 24,
+      "ported": true,
+      "rust": "hooks.rs:after_turn_end (Regen arm)",
+      "reason": null
+    },
+    {
+      "power": "RINGING",
+      "cs_class": "RingingPower",
+      "cs_line": 46,
+      "ported": true,
+      "rust": "hooks.rs:after_turn_end (Ringing arm)",
+      "reason": null
+    },
+    {
+      "power": "RITUAL",
+      "cs_class": "RitualPower",
+      "cs_line": 54,
+      "ported": true,
+      "rust": "hooks.rs:after_turn_end (Ritual arm)",
+      "reason": null
+    },
+    {
+      "power": "ROLLING_BOULDER",
+      "cs_class": "RollingBoulderPower",
+      "cs_line": 36,
+      "ported": true,
+      "rust": "combat_loop.rs (AfterPlayerTurnStart RollingBoulder arm)",
+      "reason": null
+    },
+    {
+      "power": "SHRIEK",
+      "cs_class": "ShriekPower",
+      "cs_line": 29,
+      "ported": true,
+      "rust": "hooks.rs:shriek_stun_below_threshold",
+      "reason": null
+    },
+    {
+      "power": "SLEIGHT_OF_FLESH",
+      "cs_class": "SleightOfFleshPower",
+      "cs_line": 25,
+      "ported": true,
+      "rust": "hooks.rs (SleightOfFlesh AfterPowerAmountChanged reaction)",
+      "reason": null
+    },
+    {
+      "power": "SLIPPERY",
+      "cs_class": "SlipperyPower",
+      "cs_line": 36,
+      "ported": true,
+      "rust": "hooks.rs (Slippery post-walk reaction)",
+      "reason": null
+    },
+    {
+      "power": "SLOW",
+      "cs_class": "SlowPower",
+      "cs_line": 48,
+      "ported": true,
+      "rust": "damage.rs:flash_damage_amount_modifiers (hooks.rs:damage_amount_flashes)",
+      "reason": null
+    },
+    {
+      "power": "SMOGGY",
+      "cs_class": "SmoggyPower",
+      "cs_line": 28,
+      "ported": true,
+      "rust": "monster_power_effects.rs:smoggy_after_card_played",
+      "reason": null
+    },
+    {
+      "power": "SMOKESTACK",
+      "cs_class": "SmokestackPower",
+      "cs_line": 21,
+      "ported": true,
+      "rust": "card_effects.rs:fire_smokestack_on_status_generation",
+      "reason": null
+    },
+    {
+      "power": "SNEAKY",
+      "cs_class": "SneakyPower",
+      "cs_line": 24,
+      "ported": false,
+      "rust": null,
+      "reason": "Multiplayer-only by construction, so the guard is false for every reachable single-player state — there is nothing to flash. C# `SneakyPower.AfterCardPlayed` fires only when `cardPlay.Card.Owner.Creature != base.Owner`, and `CardModel.Owner` is a `Player` (`CardModel.cs:334`), not a `Creature`: monsters own no cards, so the `!=` means \"a DIFFERENT PLAYER played an Attack\", never \"a monster attacked\". `Sneaky.cs:19` sets `MultiplayerConstraint => MultiplayerOnly` (C# `CardFactory.FilterForPlayerCount` drops it from single-player pools; Rust mirrors that in `spec_index::is_multiplayer_only`), `Sneaky.cs:30` is the only site that applies the power, and Rust has no allies in production — every `state.allies.push` sits inside a `#[cfg(test)]` block, so there is no second card owner to compare against. Porting it would add an unreachable branch and a `Flash()` that could never fire. The C# oracle agrees the Rust no-op is faithful: the `card:SNEAKY_CARD` coverage trial is clean. Pinned by `sts2-content/tests/sneaky_is_multiplayer_only.rs`. GH #638."
+    },
+    {
+      "power": "SPECTRUM_SHIFT",
+      "cs_class": "SpectrumShiftPower",
+      "cs_line": 27,
+      "ported": true,
+      "rust": "hooks.rs:dispatch_before_hand_draw_powers",
+      "reason": null
+    },
+    {
+      "power": "STORM",
+      "cs_class": "StormPower",
+      "cs_line": 57,
+      "ported": true,
+      "rust": "hooks.rs:dispatch_after_card_played",
+      "reason": null
+    },
+    {
+      "power": "STRANGLE",
+      "cs_class": "StranglePower",
+      "cs_line": 54,
+      "ported": true,
+      "rust": "hooks.rs:dispatch_after_card_played",
+      "reason": null
+    },
+    {
+      "power": "STRATAGEM",
+      "cs_class": "StratagemPower",
+      "cs_line": 23,
+      "ported": true,
+      "rust": "hooks.rs:after_shuffle_stratagem_post_walk",
+      "reason": null
+    },
+    {
+      "power": "SUBROUTINE",
+      "cs_class": "SubroutinePower",
+      "cs_line": 49,
+      "ported": true,
+      "rust": "hooks.rs:dispatch_after_card_played",
+      "reason": null
+    },
+    {
+      "power": "SUCK",
+      "cs_class": "SuckPower",
+      "cs_line": 44,
+      "ported": true,
+      "rust": "combat_loop.rs:apply_suck_strength",
+      "reason": null
+    },
+    {
+      "power": "TAINTED",
+      "cs_class": "TaintedPower",
+      "cs_line": 35,
+      "ported": true,
+      "rust": "hooks.rs:after_turn_end (Tainted arm)",
+      "reason": null
+    },
+    {
+      "power": "TANGLED",
+      "cs_class": "TangledPower",
+      "cs_line": 44,
+      "ported": true,
+      "rust": "hooks.rs:after_turn_end (Tangled arm)",
+      "reason": null
+    },
+    {
+      "power": "TEMPORARY_DEXTERITY",
+      "cs_class": "TemporaryDexterityPower",
+      "cs_line": 173,
+      "ported": true,
+      "rust": "hooks.rs:after_turn_end (all 3 subclass arms: Anticipate, HelicalDart, SpeedPotion)",
+      "reason": null
+    },
+    {
+      "power": "TEMPORARY_FOCUS",
+      "cs_class": "TemporaryFocusPower",
+      "cs_line": 173,
+      "ported": true,
+      "rust": "hooks.rs:after_turn_end (all 3 subclass arms: FocusedStrike, Hotfix, Synchronize)",
+      "reason": null
+    },
+    {
+      "power": "TEMPORARY_STRENGTH",
+      "cs_class": "TemporaryStrengthPower",
+      "cs_line": 177,
+      "ported": true,
+      "rust": "hooks.rs:after_turn_end (all 13 subclass arms: Coordinate, CrushUnder, DarkShackles, DyingStar, EnfeeblingTouch, FeedingFrenzy, FlexPotion, ManglePower, MonarchsGazeStrengthDown, PiercingWail, ReptileTrinket, SetupStrike, ShacklingPotion)",
+      "reason": null
+    },
+    {
+      "power": "TENDER",
+      "cs_class": "TenderPower",
+      "cs_line": 49,
+      "ported": true,
+      "rust": "hooks.rs (dispatch_after_card_played Tender drain)",
+      "reason": null
+    },
+    {
+      "power": "TERRITORIAL",
+      "cs_class": "TerritorialPower",
+      "cs_line": 25,
+      "ported": true,
+      "rust": "hooks.rs:after_turn_end (Territorial arm)",
+      "reason": null
+    },
+    {
+      "power": "THE_BOMB",
+      "cs_class": "TheBombPower",
+      "cs_line": 50,
+      "ported": true,
+      "rust": "hooks.rs:before_turn_end (TheBomb detonate branch)",
+      "reason": null
+    },
+    {
+      "power": "THE_GAMBIT",
+      "cs_class": "TheGambitPower",
+      "cs_line": 21,
+      "ported": true,
+      "rust": "hooks.rs (TheGambit post-walk reaction)",
+      "reason": null
+    },
+    {
+      "power": "THE_SEALED_THRONE",
+      "cs_class": "TheSealedThronePower",
+      "cs_line": 18,
+      "ported": true,
+      "rust": "hooks.rs:dispatch_before_card_played_powers",
+      "reason": null
+    },
+    {
+      "power": "THORNS",
+      "cs_class": "ThornsPower",
+      "cs_line": 21,
+      "ported": true,
+      "rust": "hooks.rs:before_damage_received",
+      "reason": null
+    },
+    {
+      "power": "THUNDER",
+      "cs_class": "ThunderPower",
+      "cs_line": 31,
+      "ported": true,
+      "rust": "hooks.rs:dispatch_after_orb_evoked",
+      "reason": null
+    },
+    {
+      "power": "TORIC_TOUGHNESS",
+      "cs_class": "ToricToughnessPower",
+      "cs_line": 39,
+      "ported": true,
+      "rust": "hooks.rs:after_block_cleared (ToricToughness arm)",
+      "reason": null
+    },
+    {
+      "power": "TRASH_TO_TREASURE",
+      "cs_class": "TrashToTreasurePower",
+      "cs_line": 20,
+      "ported": true,
+      "rust": "card_effects.rs:fire_trash_to_treasure_orbs_on_status_generation",
+      "reason": null
+    },
+    {
+      "power": "VICIOUS",
+      "cs_class": "ViciousPower",
+      "cs_line": 23,
+      "ported": true,
+      "rust": "hooks.rs:dispatch_after_power_applied",
+      "reason": null
+    },
+    {
+      "power": "VITAL_SPARK",
+      "cs_class": "VitalSparkPower",
+      "cs_line": 53,
+      "ported": true,
+      "rust": "hooks.rs:vital_spark_after_card_played",
+      "reason": null
+    },
+    {
+      "power": "WITHERING_PRESENCE",
+      "cs_class": "WitheringPresencePower",
+      "cs_line": 56,
+      "ported": true,
+      "rust": "hooks.rs:withering_presence_after_card_played",
+      "reason": null
+    },
+    {
+      "power": "WRAITH_FORM",
+      "cs_class": "WraithFormPower",
+      "cs_line": 25,
+      "ported": true,
+      "rust": "hooks.rs:after_side_turn_start",
+      "reason": null
+    }
+  ]
+}

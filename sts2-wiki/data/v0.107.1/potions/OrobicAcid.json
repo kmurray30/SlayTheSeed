@@ -1,0 +1,9 @@
+{
+  "class_name": "OrobicAcid",
+  "title": "Orobic Acid",
+  "rarity": "Rare",
+  "usage": "Drink",
+  "target": "Self",
+  "description": "Add a random Attack, Skill, and Power into your [gold]Hand[/gold]. They're free to play this turn.",
+  "notes": "Combat-only potion. Generates exactly one random card from each of the three card types (Attack, Skill, Power) and adds all three to your hand."
+}

@@ -1,0 +1,17 @@
+{
+  "class_name": "SlimesWeak",
+  "title": "Group of Slimes",
+  "room_type": "Monster",
+  "is_weak": true,
+  "monsters": [
+    "LeafSlimeS",
+    "TwigSlimeS",
+    "LeafSlimeM",
+    "TwigSlimeM"
+  ],
+  "total_monsters": 3,
+  "tags": [
+    "Slimes"
+  ],
+  "notes": "Encounter randomly selects one each of the two small slime types (LeafSlimeS and TwigSlimeS) and one random medium slime (LeafSlimeM or TwigSlimeM)."
+}

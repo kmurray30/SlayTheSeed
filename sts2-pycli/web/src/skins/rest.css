@@ -1,0 +1,345 @@
+/* ============================================================================
+   .gs-rest — campfire rest-site screen skin (RestSite.tsx).
+   Scoped under .gs-rest. Rides on the shared .gs-scene primitive for the
+   backdrop / vignette / bottom scrim; this file only adds the in-scene
+   sprite layers (seated hero, fire pit, logs, firelight) and the illustrated
+   option plaques. Rendering-only — no layout of surrounding chrome.
+
+   Art layers (served via assetUrl):
+     rooms/rest_sites/<region>/  bg + fire pit + l/r logs   (flat sprites)
+     character_rigs/<char>/                                 (seated hero, Spine)
+     ui/rest_site/option_<id>.png                           (option plaques)
+     ui/rest_site/option_outline.png                        (selected frame mask)
+   The extracted *_highlight / *_light / fire_light files are WHITE ALPHA
+   MASKS (the game tints them in-engine); instead of shipping a mask pipeline
+   the flame + firelight are drawn here as screen-blended CSS gradients keyed
+   off --rest-flame (per-region hue set by RestSite.tsx).
+
+   SCENE SCALE. The game frame (1922x1083) draws the 1920x900 backdrop at
+   ~1.20x (cover); this pane (~1600x773) draws it at ~0.86x, so a world-
+   accurate sprite here is 0.71x its on-screen size in the ref. Sizes below
+   are the ref's frame fractions x0.71 x1.4 — a deliberate, modest push-in
+   (round 3 was ~1.6x world scale, which cropped the clearing and turned the
+   two logs into mirrored bookends against the frame edges). Positions are
+   the ref's frame percentages directly: both frames letterbox the backdrop
+   with zero vertical overflow, so y% maps 1:1.
+   ============================================================================ */
+
+/* The raw PCK backdrop is authored very dark (the game adds lighting passes).
+   .gs-scene::before already lifts it a little; round 3 lifted it to 1.45,
+   which pushed the clearing to rgb(83,104,30) against the ref's (52,68,19) —
+   an oversaturated wash. The clearing is meant to be DARK with one bright
+   point in it, so the lift is small and the contrast comes from the fire. */
+.gs-rest.gs-scene::before {
+  filter: brightness(1.2) saturate(1.04);
+}
+/* Warm elliptical falloff centred on the fire, replacing the shared scrim's
+   rectangular cold-blue darkening (ref corners are rgb(4,6,2), a warm
+   near-black; round 3 rendered (14,18,26), a cold one). */
+.gs-rest.gs-scene::after {
+  background:
+    linear-gradient(to bottom, rgba(2, 4, 1, 0.34), transparent 17%,
+      transparent 56%, rgba(3, 5, 2, 0.42) 88%, rgba(3, 5, 2, 0.66)),
+    radial-gradient(80% 98% at 50% 72%,
+      transparent 24%, rgba(2, 4, 1, 0.42) 72%, rgba(2, 4, 1, 0.84));
+  box-shadow: inset 0 0 120px 30px rgba(2, 4, 1, 0.5),
+    inset 0 0 0 2px oklch(72% 0.15 80 / 0.14);
+}
+
+/* ---- scenery: sprite layers under the vignette --------------------------- */
+/* .gs-scene > * raises children above the ::after vignette; the scenery must
+   stay UNDER it so the scene's light falloff also grades the sprites — and it
+   must NOT open a stacking context (z-index auto), so the screen-blended glow
+   layers inside it can blend against the ::before backdrop. */
+.gs-rest .gs-rest-scenery {
+  position: absolute; inset: 0; z-index: auto; pointer-events: none;
+}
+
+/* ambient firelight pooled on the clearing floor, centred on the fire pit.
+   Always-on (the flicker only modulates the halo), so it reads with reduced
+   motion. Deliberately weak: in the ref the lit ground next to the pit is
+   only rgb(38,50,14) — the fire reads bright by CONTRAST, not by washing the
+   floor green. */
+.gs-rest-lightpool {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(20% 22% at 50% 75%,
+      color-mix(in oklab, var(--rest-flame, #8efa14) 30%, transparent),
+      transparent 76%),
+    radial-gradient(60% 52% at 50% 76%,
+      color-mix(in oklab, var(--rest-flame, #8efa14) 13%, transparent),
+      transparent 84%);
+  mix-blend-mode: screen;
+  opacity: 0.9;
+}
+
+/* ---- the hero at the fire ------------------------------------------------ */
+/* Drawn AFTER both logs in RestSite.tsx, so the figure paints OVER the left
+   log's near edge — the game ref's reading, where the seated hero occludes the
+   log's left half and only its far end shows past them. It used to be drawn
+   BEFORE the log, with a bottom fade meant to hide the standing legs of
+   `relaxed_loop` (the shipped combat rig has no seated clip — see REST_CLIP in
+   RestSite.tsx) in the log's shadow. That never read as "seated": it read as
+   the character being BEHIND the scenery and dissolving into it, and the wider
+   silhouettes made it plain — Regent brings a throne (its rig carries
+   `throne_top`/`throne_bottom` attachments), so the screen showed a grey slab
+   hovering behind the log with a fox peeking over the top.
+   The rig box is bottom-anchored at the feet (SpineSprite), so `top` is the
+   ground line: it sits just in front of the log's near edge, at the ref hero's
+   position relative to the log (centre slightly left of the log's centre). No
+   mask — a figure drawn in front of the log has nothing to hide, and fading it
+   out was the whole reason it read as sunk into the background. */
+.gs-rest-hero {
+  position: absolute; left: 32.5%; top: 83%;
+  transform: translate(-50%, -100%);
+  filter: brightness(1.12) saturate(1.08)
+    drop-shadow(0 0 16px color-mix(in oklab, var(--rest-flame, #8efa14) 26%, transparent))
+    drop-shadow(0 5px 7px rgba(0, 0, 0, 0.5));
+}
+
+.gs-rest-log {
+  position: absolute; transform: translate(-50%, -50%);
+  filter: brightness(1.2) saturate(1.02) drop-shadow(0 6px 9px rgba(0, 0, 0, 0.55));
+}
+.gs-rest-log-l { left: 34%; top: 65.5%; width: 19%; min-width: 150px; }
+.gs-rest-log-r { left: 65.5%; top: 62%; width: 18.5%; min-width: 145px; }
+
+/* ---- fire pit: extracted pit sprite + painted flame + firelight ---------- */
+/* The pit sprite is 419x277 with a grass halo; its stone ring is ~81% of that
+   width. Ref ring = 8.1% of the frame → the sprite is ~10% of the frame,
+   x1.4 scene zoom → 12.5% here (round 3 drew it at 15% AND blurred it, which
+   is why the ring read as "barely visible"). */
+.gs-rest-firepit {
+  position: absolute; left: 50%; top: 75%;
+  width: clamp(120px, 12.5%, 230px); transform: translate(-50%, -50%);
+}
+/* the pit is authored unlit; lift it hard so the individual stones separate,
+   and warm the top edge where the flame would rim-light them */
+.gs-rest-firepit-img {
+  display: block; width: 100%;
+  filter: brightness(1.85) saturate(1.12) contrast(1.14);
+}
+/* halo around the flame — screen-blended so it lights the pit stones AND
+   spills far enough left to rim the seated hero (the ref's fire is the only
+   light source in the clearing) */
+.gs-rest-fireglow {
+  position: absolute; left: 50%; top: 8%;
+  width: 185%; aspect-ratio: 1.3; transform: translate(-50%, -50%);
+  background: radial-gradient(50% 50% at 50% 50%,
+      color-mix(in oklab, var(--rest-flame, #8efa14) 46%, transparent),
+      color-mix(in oklab, var(--rest-flame, #8efa14) 14%, transparent) 46%,
+      transparent 72%);
+  mix-blend-mode: screen;
+  opacity: 0.5;
+  animation: gs-rest-glowpulse 2.8s ease-in-out infinite;
+}
+/* the flame itself: no flame sprite was extracted (in-game it is a tinted
+   particle system), so it is painted here as a teardrop with a white-hot core.
+   Ref measurements: 85x100px over a 191px-wide pit sprite, base sunk ~15px
+   into the ring. Colours sampled off the ref: core rgb(249,249,141), body
+   rgb(107,142,40), tip rgb(142,255,3). */
+.gs-rest-flame {
+  position: absolute; left: 50%; bottom: 62%;
+  width: 38.5%; aspect-ratio: 0.745; transform: translateX(-50%);
+  transform-origin: 50% 100%;
+  /* cel bands, not a soft bloom: the ref flame is three hard-edged steps —
+     acid rim, yellow-green body, pale-yellow core. */
+  background:
+    radial-gradient(32% 16% at 50% 72%, #fdfbcc 0 72%, rgba(253, 251, 204, 0) 76%),
+    radial-gradient(52% 29% at 50% 67%,
+      color-mix(in oklab, var(--rest-flame, #8efa14) 16%, #f2ff62) 0 76%,
+      rgba(242, 255, 98, 0) 80%),
+    var(--rest-flame, #8efa14);
+  /* a lumpy cone with the ref's hooked tongue — border-radius can only make
+     ellipses, and an ellipse is exactly the "green blob" round 3 was marked
+     down for. Clipped AFTER the blur, so the silhouette stays hard-edged. */
+  clip-path: polygon(47% 0%, 37% 7%, 31% 15%, 44% 18%, 54% 13%, 59% 21%,
+    57% 31%, 68% 40%, 80% 53%, 86% 68%, 82% 83%, 68% 95%, 50% 100%,
+    32% 95%, 18% 83%, 14% 68%, 20% 53%, 32% 40%, 40% 30%, 38% 20%, 41% 9%);
+  filter: blur(0.9px) saturate(1.18);
+  animation: gs-rest-flicker 1.7s ease-in-out infinite;
+}
+/* faint smoke wisp above the flame (the ref still catches one) */
+.gs-rest-smoke {
+  position: absolute; left: 49%; bottom: 96%;
+  width: 13%; height: 34%; transform: translateX(-50%);
+  background: linear-gradient(to top,
+    color-mix(in oklab, var(--rest-flame, #8efa14) 22%, transparent), transparent 82%);
+  filter: blur(5px);
+  opacity: 0.6;
+  animation: gs-rest-smoke 5.2s ease-in-out infinite;
+}
+/* embers: three specks drifting up out of the flame */
+.gs-rest-embers { position: absolute; inset: 0; }
+.gs-rest-embers i {
+  position: absolute; left: 50%; bottom: 62%;
+  width: 3px; height: 3px; border-radius: 50%;
+  background: color-mix(in oklab, var(--rest-flame, #8efa14) 60%, #fffce0);
+  box-shadow: 0 0 5px color-mix(in oklab, var(--rest-flame, #8efa14) 80%, transparent);
+  opacity: 0;
+  animation: gs-rest-ember 3.6s linear infinite;
+}
+.gs-rest-embers i:nth-child(1) { margin-left: -9px; animation-delay: 0s; }
+.gs-rest-embers i:nth-child(2) { margin-left: 4px; animation-delay: 1.3s; animation-duration: 4.3s; }
+.gs-rest-embers i:nth-child(3) { margin-left: 12px; animation-delay: 2.4s; animation-duration: 3.1s; }
+
+@keyframes gs-rest-glowpulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.4; }
+}
+@keyframes gs-rest-flicker {
+  0%, 100% { transform: translateX(-50%) scale(1, 1); }
+  38% { transform: translateX(-50%) scale(1.07, 0.92); }
+  72% { transform: translateX(-50%) scale(0.94, 1.06); }
+}
+@keyframes gs-rest-smoke {
+  0%, 100% { opacity: 0.5; transform: translateX(-50%) scaleY(1); }
+  50% { opacity: 0.75; transform: translateX(-52%) scaleY(1.2); }
+}
+@keyframes gs-rest-ember {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.7); }
+  14% { opacity: 0.95; }
+  70% { opacity: 0.7; }
+  100% { opacity: 0; transform: translate(9px, -110px) scale(0.4); }
+}
+
+/* ---- content column ------------------------------------------------------ */
+/* The HUD band overhangs the scene by ~17px of torn stone; the top padding
+   clears it. No screen-name eyebrow: the real screen has none (it lives in
+   the container's aria-label instead). */
+.gs-rest-content {
+  display: flex; flex-direction: column; align-items: center;
+  gap: clamp(10px, 2.2vh, 22px);
+  padding: clamp(26px, 6vh, 58px) 24px 24px;
+}
+.gs-rest-prompt {
+  margin: 0; font-weight: 700;
+  font-size: clamp(22px, 3vw, 34px); letter-spacing: 0.02em;
+  color: #f6ead0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.85), 0 0 18px rgba(0, 0, 0, 0.6);
+}
+
+/* ---- illustrated option plaques ------------------------------------------ */
+.gs-rest-options {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: clamp(18px, 3.4vw, 52px);
+  align-items: flex-start;
+  margin-top: clamp(4px, 1.5vh, 14px);
+}
+.gs-rest-option {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 6px; margin: 0;
+  background: none; border: none; cursor: pointer;
+  font-family: var(--game-font); color: #f6ead0;
+  transition: transform 0.14s ease;
+}
+/* theme.css's global `button:disabled { opacity: .5 }` would stack a second
+   washout on top of the per-state filters below (is-dim / is-locked carry the
+   intended dimming); replay-inert options must stay near-full color. */
+.gs-rest-option:disabled { cursor: default; opacity: 1; }
+.gs-rest-plaque { position: relative; display: block; line-height: 0; }
+.gs-rest-plaque > img {
+  position: relative; z-index: 1;
+  display: block; width: clamp(150px, 15.5vw, 236px);
+  filter: brightness(1.04) drop-shadow(0 5px 10px rgba(0, 0, 0, 0.55));
+  transition: filter 0.14s ease;
+}
+/* hover / focus: gold glow hugging the plaque's torn silhouette (drop-shadow
+   follows the alpha edge, so no rectangular CSS ring), consistent with
+   --glow-gold's oklch(72% 0.15 80) hue */
+.gs-rest-option:not(:disabled):hover,
+.gs-rest-option:not(:disabled):focus-visible {
+  transform: translateY(-3px) scale(1.03);
+}
+.gs-rest-option:not(:disabled):hover .gs-rest-plaque > img,
+.gs-rest-option:not(:disabled):focus-visible .gs-rest-plaque > img {
+  filter: brightness(1.14)
+    drop-shadow(0 0 5px oklch(72% 0.15 80 / 0.85))
+    drop-shadow(0 0 16px oklch(72% 0.15 80 / 0.45));
+}
+.gs-rest-option:focus-visible { outline: none; }
+
+/* chosen option (replay-review keeper) — the GAME's selection language: its
+   own option_outline.png (a white alpha mask of the plaque silhouette, 4px
+   proud of the art) masked over gold and drawn behind the plaque, so the gold
+   shows only along the torn edge as a welded frame. Round 3's soft outer
+   box-shadow glow + floating circular checkbox were web affordances. */
+.gs-rest-chosenframe {
+  position: absolute; z-index: 0;
+  left: -3.1%; right: -3.1%; top: -4.7%; bottom: -4.7%;
+  background: linear-gradient(#f9e69f 0%, #dcaf42 42%, #b0801f 74%, #8b6015 100%);
+  -webkit-mask-image: var(--rest-outline);
+  mask-image: var(--rest-outline);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  filter: drop-shadow(0 3px 7px rgba(0, 0, 0, 0.6));
+}
+/* a small stamped seal riding ON the frame's lower-right corner (not floating
+   off the card) so the committed choice is still unmistakable at 25% size */
+.gs-rest-chosenseal {
+  position: absolute; z-index: 2; right: -4%; bottom: -7%;
+  width: 11%; aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, #ffeeb4, #d8a83f 52%, #7a5214);
+  box-shadow: inset 0 0 0 1.5px #4a3210, inset 0 -2px 3px rgba(0, 0, 0, 0.35),
+    0 2px 5px rgba(0, 0, 0, 0.7);
+}
+.gs-rest-chosenseal::after {
+  content: ""; position: absolute; left: 32%; top: 22%;
+  width: 26%; height: 46%;
+  border-right: 2.5px solid #46300c; border-bottom: 2.5px solid #46300c;
+  transform: rotate(40deg);
+}
+.gs-rest-option.is-chosen .gs-rest-plaque > img {
+  filter: brightness(1.1) drop-shadow(0 5px 10px rgba(0, 0, 0, 0.55));
+}
+.gs-rest-option.is-chosen .gs-rest-plaque-fallback {
+  border-color: #b0801f;
+  box-shadow: inset 0 0 0 2px #dcaf42, 0 5px 10px rgba(0, 0, 0, 0.55);
+}
+/* replay-inert options stay near-full color (the chosen frame differentiates);
+   locked (in-game unavailable) options dim hard */
+.gs-rest-option.is-dim .gs-rest-plaque > img,
+.gs-rest-option.is-dim .gs-rest-plaque-fallback {
+  filter: grayscale(0.12) brightness(0.94) drop-shadow(0 5px 10px rgba(0, 0, 0, 0.55));
+}
+.gs-rest-option.is-dim .gs-rest-caption { color: #c9ab54; }
+.gs-rest-option.is-locked .gs-rest-plaque > img,
+.gs-rest-option.is-locked .gs-rest-plaque-fallback {
+  filter: grayscale(0.7) brightness(0.68) drop-shadow(0 5px 10px rgba(0, 0, 0, 0.55));
+}
+.gs-rest-option.is-locked { color: oklch(78% 0.02 95 / 0.5); }
+.gs-rest-option.is-locked .gs-rest-caption { color: #9a8a58; }
+/* the game sets option labels in gold, not cream */
+.gs-rest-caption {
+  font-size: clamp(16px, 1.7vw, 22px); font-weight: 700; letter-spacing: 0.02em;
+  line-height: 1.25; max-width: 240px; color: #d4b65b;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.95), 0 0 12px rgba(0, 0, 0, 0.75);
+}
+.gs-rest-option.is-chosen .gs-rest-caption { color: #f0d485; }
+/* art-less option (unknown/modded id, or the image 404s): a dark stone plaque
+   in the same footprint carrying the name — a local stand-in, not web chrome */
+.gs-rest-plaque-fallback {
+  display: grid; place-items: center;
+  width: clamp(150px, 15.5vw, 236px); aspect-ratio: 256 / 169;
+  padding: 10px 14px; box-sizing: border-box;
+  border-radius: 10px; line-height: 1.3;
+  font-size: clamp(15px, 1.5vw, 19px); font-weight: 700; color: #e8d9ad;
+  text-shadow: 0 1px 2px #000;
+  background:
+    radial-gradient(120% 90% at 30% 12%, rgba(255, 246, 226, 0.08), transparent 55%),
+    linear-gradient(#3a4038, #1a201b 78%);
+  border: 2px solid #0a0d0a;
+  box-shadow: inset 0 0 0 1px rgba(255, 246, 226, 0.14), 0 5px 10px rgba(0, 0, 0, 0.55);
+}
+.gs-rest-empty {
+  color: oklch(80% 0.03 95 / 0.6);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-rest-flame, .gs-rest-fireglow, .gs-rest-smoke { animation: none; }
+  .gs-rest-embers { display: none; }
+  .gs-rest-option { transition: none; }
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "SerpentFormPower",
+  "title": "Serpent Form",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever you play a card, deal 4 damage to a random enemy.",
+  "smart_description": "Whenever you play a card, deal {Amount} damage to a random enemy.",
+  "notes": "Tracks individual card plays to avoid triggering on cards that started play before the power was applied, and prevents duplicate triggers on multiple plays of the same card instance."
+}

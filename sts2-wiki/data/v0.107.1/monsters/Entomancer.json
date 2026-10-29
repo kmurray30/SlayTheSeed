@@ -1,0 +1,55 @@
+{
+  "class_name": "Entomancer",
+  "title": "Entomancer",
+  "min_hp": 155,
+  "max_hp": 155,
+  "min_hp_base": 145,
+  "max_hp_base": 145,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "BEES_MOVE",
+      "title": "Beeeees!",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 3,
+          "hits": 8,
+          "hits_base": 7,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 3 damage", "7/8 hits"]
+    },
+    {
+      "id": "SPEAR_MOVE",
+      "title": "Spear!",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 20,
+          "damage_base": 18,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 18/20 damage"]
+    },
+    {
+      "id": "PHEROMONE_SPIT_MOVE",
+      "title": "Pheromone Spit",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "If PersonalHive < 3: Apply 1 PersonalHive, Apply 1 Strength",
+        "If PersonalHive ≥ 3: Apply 2 Strength"
+      ]
+    }
+  ],
+  "move_pattern": "Cycles: Beeeees! → Spear! → Pheromone Spit",
+  "powers_on_spawn": ["PersonalHive"],
+  "notes": "Pheromone Spit has conditional scaling based on PersonalHive stacks. When PersonalHive is below 3 stacks, it applies 1 PersonalHive and 1 Strength, allowing the monster to build up stacks. Once PersonalHive reaches 3 or higher, it applies 2 Strength instead, preventing further Hive accumulation and transitioning to pure Strength scaling."
+}

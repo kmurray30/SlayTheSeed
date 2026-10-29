@@ -1,0 +1,9 @@
+{
+  "class_name": "FeralPower",
+  "title": "Feral",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "The first time you play a 0-energy Attack each turn, return it to your [gold]Hand[/gold].",
+  "smart_description": "The first [blue][amount][/blue] times you play a 0-energy Attack each turn, return it to your [gold]Hand[/gold].",
+  "notes": "Stack counter resets at the start of each turn."
+}

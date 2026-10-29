@@ -1,0 +1,9 @@
+{
+  "class_name": "BufferPower",
+  "title": "Buffer",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Prevent the next time you would lose HP.",
+  "smart_description": "Prevent the next X time(s) you would lose HP, where X is the current stack count. (Displays as 'time' when X=1, '[blue]X[/blue] times' when X>1)",
+  "notes": "Counter-type buff that prevents HP loss. Each time the owner would lose HP, the damage is prevented and the stack decrements by 1. Uses Late timing so other damage reduction effects trigger first. In multiplayer, scales damage prevention based on player count: amount_prevented = (player_count - 1) × 2 + 1."
+}

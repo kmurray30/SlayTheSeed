@@ -1,0 +1,2318 @@
+{
+  "ABRASIVE": {
+    "title": "Abrasive",
+    "description": "Sly.\nGain 1 Dexterity.\nGain 4 Thorns."
+  },
+  "ACCELERANT": {
+    "title": "Accelerant",
+    "description": "Poison is triggered 1 additional time."
+  },
+  "ACCURACY": {
+    "title": "Accuracy",
+    "description": "Shivs deal 4 additional damage."
+  },
+  "ACROBATICS": {
+    "title": "Acrobatics",
+    "description": "Draw 3 cards.\nDiscard 1 card."
+  },
+  "ADAPTIVE_STRIKE": {
+    "title": "Adaptive Strike",
+    "description": "Deal 18 damage.\nAdd a 0 Energy copy of this card into your Discard Pile."
+  },
+  "ADRENALINE": {
+    "title": "Adrenaline",
+    "description": "Gain 1 Energy.\nDraw 2 cards.\nExhaust."
+  },
+  "AFTERIMAGE": {
+    "title": "Afterimage",
+    "description": "Whenever you play a card, gain 1 Block."
+  },
+  "AFTERLIFE": {
+    "title": "Afterlife",
+    "description": "Summon 6.\nExhaust."
+  },
+  "AGGRESSION": {
+    "title": "Aggression",
+    "description": "At the start of your turn, put a random Attack from your Discard Pile into your Hand and Upgrade it."
+  },
+  "ALCHEMIZE": {
+    "title": "Alchemize",
+    "description": "Procure a random potion.\nExhaust."
+  },
+  "ALIGNMENT": {
+    "title": "Alignment",
+    "description": "Gain 2 Energy."
+  },
+  "ALL_FOR_ONE": {
+    "title": "All for One",
+    "description": "Deal 10 damage.\nPut ALL 0 Energy cards from your Discard Pile into your Hand."
+  },
+  "ANGER": {
+    "title": "Anger",
+    "description": "Deal 6 damage.\nAdd a copy of this card into your Discard Pile."
+  },
+  "ANOINTED": {
+    "title": "Anointed",
+    "description": "Put every Rare card from your Draw Pile into your Hand.\nExhaust."
+  },
+  "ANTICIPATE": {
+    "title": "Anticipate",
+    "description": "Gain 2 Dexterity this turn."
+  },
+  "APOTHEOSIS": {
+    "title": "Apotheosis",
+    "description": "Innate.\nUpgrade ALL your cards.\nExhaust."
+  },
+  "APPARITION": {
+    "title": "Apparition",
+    "description": "Ethereal.\nGain 1 Intangible.\nExhaust."
+  },
+  "ARMAMENTS": {
+    "title": "Armaments",
+    "description": "Gain 5 Block.\nUpgrade a card in your Hand."
+  },
+  "ARSENAL": {
+    "title": "Arsenal",
+    "description": "Whenever you create a card, gain 1 Strength."
+  },
+  "ASCENDERS_BANE": {
+    "title": "Ascender's Bane",
+    "description": "Unplayable.\nEthereal.\nEternal."
+  },
+  "ASHEN_STRIKE": {
+    "title": "Ashen Strike",
+    "description": "Deal 6 damage.\nDeals 3 additional damage for each card in your Exhaust Pile."
+  },
+  "ASSASSINATE": {
+    "title": "Assassinate",
+    "description": "Innate.\nDeal 10 damage.\nApply 1 Vulnerable.\nExhaust."
+  },
+  "ASTRAL_PULSE": {
+    "title": "Astral Pulse",
+    "description": "Deal 6 damage to ALL enemies twice."
+  },
+  "AUTOMATION": {
+    "title": "Automation",
+    "description": "Every 10 cards you draw, gain 1 Energy."
+  },
+  "BACKFLIP": {
+    "title": "Backflip",
+    "description": "Gain 5 Block.\nDraw 2 cards."
+  },
+  "BACKSTAB": {
+    "title": "Backstab",
+    "description": "Innate.\nDeal 11 damage.\nExhaust."
+  },
+  "BAD_LUCK": {
+    "title": "Bad Luck",
+    "description": "Unplayable.\nAt the end of your turn, if this is in your Hand, lose 13 HP.\nEternal."
+  },
+  "BALL_LIGHTNING": {
+    "title": "Ball Lightning",
+    "description": "Deal 7 damage.\nChannel 1 Lightning."
+  },
+  "BANSHEES_CRY": {
+    "title": "Banshee's Cry",
+    "description": "Deal 33 damage to ALL enemies.\nCosts 2 Energy less for each Ethereal card played this combat."
+  },
+  "BARRAGE": {
+    "title": "Barrage",
+    "description": "Deal 5 damage for each Channeled Orb."
+  },
+  "BARRICADE": {
+    "title": "Barricade",
+    "description": "Block is not removed at the start of your turn."
+  },
+  "BASH": {
+    "title": "Bash",
+    "description": "Deal 8 damage.\nApply 2 Vulnerable."
+  },
+  "BATTLE_TRANCE": {
+    "title": "Battle Trance",
+    "description": "Draw 3 cards.\nYou cannot draw additional cards this turn."
+  },
+  "BEACON_OF_HOPE": {
+    "title": "Beacon of Hope",
+    "description": "Whenever you gain Block on your turn, other players gain half that much Block."
+  },
+  "BEAM_CELL": {
+    "title": "Beam Cell",
+    "description": "Deal 3 damage.\nApply 1 Vulnerable."
+  },
+  "BEAT_DOWN": {
+    "title": "Beat Down",
+    "description": "Play 3 random Attacks from your Discard Pile."
+  },
+  "BEAT_INTO_SHAPE": {
+    "title": "Beat into Shape",
+    "description": "Deal 5 damage.\nForge 5.\nForges an additional 5 for every other time you've hit the enemy this turn."
+  },
+  "BECKON": {
+    "title": "Beckon",
+    "description": "At the end of your turn, if this is in your Hand,\n lose 6 HP."
+  },
+  "BEGONE": {
+    "title": "BEGONE!",
+    "description": "Choose a card in your Hand to Transform into Minion Strike."
+  },
+  "BELIEVE_IN_YOU": {
+    "title": "Believe in You",
+    "description": "Another player gains 2 Energy."
+  },
+  "BIASED_COGNITION": {
+    "title": "Biased Cognition",
+    "description": "Gain 4 Focus.\nAt the start of your turn, lose 1 Focus."
+  },
+  "BIG_BANG": {
+    "title": "Big Bang",
+    "description": "Draw 1 card.\nGain 1 Energy.\nGain 1 Stars.\nForge 5.\nExhaust."
+  },
+  "BLACK_HOLE": {
+    "title": "Black Hole",
+    "description": "Whenever you spend or gain ★, deal 3 damage to ALL enemies."
+  },
+  "BLADE_DANCE": {
+    "title": "Blade Dance",
+    "description": "Add 3 Shivs into your Hand.\nExhaust."
+  },
+  "BLADE_OF_INK": {
+    "title": "Blade of Ink",
+    "description": "Add 2 Inky Shivs into your Hand."
+  },
+  "BLIGHT_STRIKE": {
+    "title": "Blight Strike",
+    "description": "Deal 8 damage.\nApply Doom equal to damage dealt."
+  },
+  "BLOOD_WALL": {
+    "title": "Blood Wall",
+    "description": "Lose 2 HP.\nGain 16 Block."
+  },
+  "BLOODLETTING": {
+    "title": "Bloodletting",
+    "description": "Lose 3 HP.\nGain 2 Energy."
+  },
+  "BLUDGEON": {
+    "title": "Bludgeon",
+    "description": "Deal 32 damage."
+  },
+  "BLUR": {
+    "title": "Blur",
+    "description": "Gain 5 Block.\nBlock is not removed at the start of your next turn."
+  },
+  "BODY_SLAM": {
+    "title": "Body Slam",
+    "description": "Deal damage equal to your Block."
+  },
+  "BODYGUARD": {
+    "title": "Bodyguard",
+    "description": "Summon 5."
+  },
+  "BOLAS": {
+    "title": "Bolas",
+    "description": "Deal 3 damage.\nAt the start of your next turn, return this to your Hand."
+  },
+  "BOMBARDMENT": {
+    "title": "Bombardment",
+    "description": "Deal 18 damage.\nAt the start of your turn, if this is in your Exhaust Pile, play it.\nExhaust."
+  },
+  "BONE_SHARDS": {
+    "title": "Bone Shards",
+    "description": "If Osty is alive, he deals 9 damage to ALL enemies and you gain 9 Block.\nOsty dies."
+  },
+  "BOOST_AWAY": {
+    "title": "Boost Away",
+    "description": "Gain 6 Block.\nAdd a Dazed into your Discard Pile."
+  },
+  "BOOT_SEQUENCE": {
+    "title": "Boot Sequence",
+    "description": "Innate.\nGain 10 Block.\nExhaust."
+  },
+  "BORROWED_TIME": {
+    "title": "Borrowed Time",
+    "description": "Gain 4 Energy.\nCards cost an additional Energy this turn."
+  },
+  "BOUNCING_FLASK": {
+    "title": "Bouncing Flask",
+    "description": "Apply 3 Poison to a random enemy 3 times."
+  },
+  "BRAND": {
+    "title": "Brand",
+    "description": "Lose 1 HP.\nExhaust 1 card.\nGain 1 Strength."
+  },
+  "BREAK": {
+    "title": "Break",
+    "description": "Deal 20 damage.\nApply 5 Vulnerable."
+  },
+  "BREAKTHROUGH": {
+    "title": "Breakthrough",
+    "description": "Lose 1 HP.\nDeal 9 damage to ALL enemies."
+  },
+  "BRIGHTEST_FLAME": {
+    "title": "Brightest Flame",
+    "description": "Gain 2 Energy.\nDraw 2 cards.\nLose 1 Max HP."
+  },
+  "BUBBLE_BUBBLE": {
+    "title": "Bubble Bubble",
+    "description": "If the enemy has Poison, apply 9 Poison."
+  },
+  "BUFFER": {
+    "title": "Buffer",
+    "description": "Prevent the next time you would lose HP."
+  },
+  "BULK_UP": {
+    "title": "Bulk Up",
+    "description": "Lose 1 Orb Slot.\nGain 2 Strength.\nGain 2 Dexterity."
+  },
+  "BULLET_TIME": {
+    "title": "Bullet Time",
+    "description": "You cannot draw additional cards this turn. ALL cards in your Hand are free to play this turn."
+  },
+  "BULLY": {
+    "title": "Bully",
+    "description": "Deal 4 damage.\nDeals 2 additional damage for each Vulnerable on the enemy."
+  },
+  "BULWARK": {
+    "title": "Bulwark",
+    "description": "Gain 12 Block.\nForge 10."
+  },
+  "BUNDLE_OF_JOY": {
+    "title": "Bundle of Joy",
+    "description": "Add 3 random Colorless cards into your Hand.\nExhaust."
+  },
+  "BURN": {
+    "title": "Burn",
+    "description": "Unplayable.\nAt the end of your turn, if this is in your Hand, take 2 damage."
+  },
+  "BURNING_PACT": {
+    "title": "Burning Pact",
+    "description": "Exhaust 1 card.\nDraw 2 cards."
+  },
+  "BURST": {
+    "title": "Burst",
+    "description": "This turn, your next Skill is played an extra time."
+  },
+  "BURY": {
+    "title": "Bury",
+    "description": "Deal 52 damage."
+  },
+  "BYRD_SWOOP": {
+    "title": "Byrd Swoop",
+    "description": "Deal 14 damage."
+  },
+  "BYRDONIS_EGG": {
+    "title": "Byrdonis Egg",
+    "description": "Unplayable.\nCan be hatched at a Rest Site."
+  },
+  "CALAMITY": {
+    "title": "Calamity",
+    "description": "Whenever you play an Attack, add a random Attack into your Hand."
+  },
+  "CALCIFY": {
+    "title": "Calcify",
+    "description": "Osty's attacks deal 4 additional damage."
+  },
+  "CALCULATED_GAMBLE": {
+    "title": "Calculated Gamble",
+    "description": "Discard your Hand,\nthen draw that many cards.\nExhaust."
+  },
+  "CALL_OF_THE_VOID": {
+    "title": "Call of the Void",
+    "description": "At the start of your turn, add 1 random card into your Hand. It gains Ethereal."
+  },
+  "CALTROPS": {
+    "title": "Caltrops",
+    "description": "Whenever you are attacked, deal 3 damage back."
+  },
+  "CAPACITOR": {
+    "title": "Capacitor",
+    "description": "Gain 2 Orb Slots."
+  },
+  "CAPTURE_SPIRIT": {
+    "title": "Capture Spirit",
+    "description": "Enemy loses 3 HP.\nAdd 3 Souls into your Draw Pile."
+  },
+  "CASCADE": {
+    "title": "Cascade",
+    "description": "Play the top X cards of your Draw Pile."
+  },
+  "CATASTROPHE": {
+    "title": "Catastrophe",
+    "description": "Play 2 random cards from your Draw Pile."
+  },
+  "CELESTIAL_MIGHT": {
+    "title": "Celestial Might",
+    "description": "Deal 6 damage 3 times."
+  },
+  "CHAOS": {
+    "title": "Chaos",
+    "description": "Channel 1 random Orb."
+  },
+  "CHARGE": {
+    "title": "CHARGE!!",
+    "description": "Choose 2 cards in your Draw Pile to Transform into\nMinion Dive Bombs."
+  },
+  "CHARGE_BATTERY": {
+    "title": "Charge Battery",
+    "description": "Gain 7 Block.\nNext turn, gain 1 Energy."
+  },
+  "CHILD_OF_THE_STARS": {
+    "title": "Child of the Stars",
+    "description": "Whenever you spend ★, gain 2 Block for each ★ spent."
+  },
+  "CHILL": {
+    "title": "Chill",
+    "description": "Channel 1 Frost for each enemy.\nExhaust."
+  },
+  "CINDER": {
+    "title": "Cinder",
+    "description": "Deal 18 damage.\nExhaust 1 card at random."
+  },
+  "CLASH": {
+    "title": "Clash",
+    "description": "Can only be played if every card in your Hand is an Attack.\nDeal 14 damage."
+  },
+  "CLAW": {
+    "title": "Claw",
+    "description": "Deal 3 damage.\nIncrease the damage of ALL Claw cards by 2 this combat."
+  },
+  "CLEANSE": {
+    "title": "Cleanse",
+    "description": "Summon 3.\nExhaust 1 card from your Draw Pile."
+  },
+  "CLOAK_AND_DAGGER": {
+    "title": "Cloak and Dagger",
+    "description": "Gain 6 Block.\nAdd 1 Shiv into your Hand."
+  },
+  "CLOAK_OF_STARS": {
+    "title": "Cloak of Stars",
+    "description": "Gain 7 Block."
+  },
+  "CLUMSY": {
+    "title": "Clumsy",
+    "description": "Unplayable.\nEthereal."
+  },
+  "COLD_SNAP": {
+    "title": "Cold Snap",
+    "description": "Deal 6 damage.\nChannel 1 Frost."
+  },
+  "COLLISION_COURSE": {
+    "title": "Collision Course",
+    "description": "Deal 11 damage.\nAdd a Debris into your Hand."
+  },
+  "COLOSSUS": {
+    "title": "Colossus",
+    "description": "Gain 5 Block.\nYou receive 50% less damage from Vulnerable enemies this turn."
+  },
+  "COMET": {
+    "title": "Comet",
+    "description": "Deal 33 damage.\nApply 3 Weak.\nApply 3 Vulnerable."
+  },
+  "COMPACT": {
+    "title": "Compact",
+    "description": "Gain 6 Block.\nTransform all Status cards in your Hand into Fuel."
+  },
+  "COMPILE_DRIVER": {
+    "title": "Compile Driver",
+    "description": "Deal 7 damage.\nDraw 1 card for each unique Orb you have."
+  },
+  "CONFLAGRATION": {
+    "title": "Conflagration",
+    "description": "Deal 2 damage to ALL enemies 4 times."
+  },
+  "CONQUEROR": {
+    "title": "Conqueror",
+    "description": "Forge 3.\nSovereign Blade deals double damage to the enemy this turn."
+  },
+  "CONSUMING_SHADOW": {
+    "title": "Consuming Shadow",
+    "description": "Channel 2 Dark.\nAt the end of your turn, Evoke your leftmost Orb."
+  },
+  "CONVERGENCE": {
+    "title": "Convergence",
+    "description": "Next turn,\ngain 1 Energy and 1 Stars.\nRetain your Hand this turn."
+  },
+  "COOLANT": {
+    "title": "Coolant",
+    "description": "At the start of your turn, gain 2 Block for each unique Orb you have."
+  },
+  "COOLHEADED": {
+    "title": "Coolheaded",
+    "description": "Channel 1 Frost.\nDraw 1 card."
+  },
+  "COORDINATE": {
+    "title": "Coordinate",
+    "description": "Give another player 5 Strength this turn."
+  },
+  "CORROSIVE_WAVE": {
+    "title": "Corrosive Wave",
+    "description": "Whenever you draw a card this turn, apply 2 Poison to ALL enemies."
+  },
+  "CORRUPTION": {
+    "title": "Corruption",
+    "description": "Skills cost 0  Energy.\nWhenever you play a Skill, Exhaust it."
+  },
+  "COSMIC_INDIFFERENCE": {
+    "title": "Cosmic Indifference",
+    "description": "Gain 6 Block.\nPut a card from your Discard Pile on top of your Draw Pile."
+  },
+  "COUNTDOWN": {
+    "title": "Countdown",
+    "description": "At the start of your turn, apply 6 Doom to a random enemy."
+  },
+  "CRASH_LANDING": {
+    "title": "Crash Landing",
+    "description": "Deal 21 damage to ALL enemies.\nFill your Hand with Debris."
+  },
+  "CREATIVE_AI": {
+    "title": "Creative AI",
+    "description": "At the start of your turn, add a random Power into your Hand."
+  },
+  "CRESCENT_SPEAR": {
+    "title": "Crescent Spear",
+    "description": "Deal 8 damage.\nDeals 2 additional damage for ALL your cards that have a ★ cost."
+  },
+  "CRIMSON_MANTLE": {
+    "title": "Crimson Mantle",
+    "description": "At the start of your turn, lose 1 HP and gain 8 Block."
+  },
+  "CRUELTY": {
+    "title": "Cruelty",
+    "description": "Vulnerable enemies take an additional 25% damage."
+  },
+  "CRUSH_UNDER": {
+    "title": "Crush Under",
+    "description": "Deal 7 damage to ALL enemies. All enemies lose 1 Strength this turn."
+  },
+  "CURSE_OF_THE_BELL": {
+    "title": "Curse of the Bell",
+    "description": "Unplayable.\nEternal."
+  },
+  "DAGGER_SPRAY": {
+    "title": "Dagger Spray",
+    "description": "Deal 4 damage to ALL enemies twice."
+  },
+  "DAGGER_THROW": {
+    "title": "Dagger Throw",
+    "description": "Deal 9 damage.\nDraw 1 card.\nDiscard 1 card."
+  },
+  "DANSE_MACABRE": {
+    "title": "Danse Macabre",
+    "description": "Whenever you play a card that costs 2 Energy or more, gain 4 Block."
+  },
+  "DARK_EMBRACE": {
+    "title": "Dark Embrace",
+    "description": "Whenever a card is Exhausted,\ndraw 1 card."
+  },
+  "DARK_SHACKLES": {
+    "title": "Dark Shackles",
+    "description": "Enemy loses 9 Strength this turn.\nExhaust."
+  },
+  "DARKNESS": {
+    "title": "Darkness",
+    "description": "Channel 1 Dark.\nTrigger the passive ability of all Dark Orbs."
+  },
+  "DASH": {
+    "title": "Dash",
+    "description": "Gain 10 Block.\nDeal 10 damage."
+  },
+  "DAZED": {
+    "title": "Dazed",
+    "description": "Unplayable.\nEthereal."
+  },
+  "DEADLY_POISON": {
+    "title": "Deadly Poison",
+    "description": "Apply 5 Poison."
+  },
+  "DEATH_MARCH": {
+    "title": "Death March",
+    "description": "Deal 8 damage.\nDeals 4 additional damage for each card drawn during your turn."
+  },
+  "DEATHBRINGER": {
+    "title": "Deathbringer",
+    "description": "Apply 21 Doom and 1 Weak to ALL enemies."
+  },
+  "DEATHS_DOOR": {
+    "title": "Death's Door",
+    "description": "Gain 6 Block.\nIf you applied Doom this turn, gain Block 2 additional times."
+  },
+  "DEBILITATE": {
+    "title": "Debilitate",
+    "description": "Deal 10 damage.\nVulnerable and Weak are twice as effective against the enemy for the next 2 turns."
+  },
+  "DEBRIS": {
+    "title": "Debris",
+    "description": "Exhaust."
+  },
+  "DEBT": {
+    "title": "Debt",
+    "description": "Unplayable.\nAt the end of your turn, if this is in your Hand, lose 10 Gold."
+  },
+  "DECAY": {
+    "title": "Decay",
+    "description": "Unplayable.\nAt the end of your turn, if this is in your Hand, take 2 damage."
+  },
+  "DECISIONS_DECISIONS": {
+    "title": "Decisions, Decisions",
+    "description": "Draw 3 cards.\nChoose a Skill in your Hand and play it 3 times.\nExhaust."
+  },
+  "DEFEND_DEFECT": {
+    "title": "Defend",
+    "description": "Gain 5 Block."
+  },
+  "DEFEND_IRONCLAD": {
+    "title": "Defend",
+    "description": "Gain 5 Block."
+  },
+  "DEFEND_NECROBINDER": {
+    "title": "Defend",
+    "description": "Gain 5 Block."
+  },
+  "DEFEND_REGENT": {
+    "title": "Defend",
+    "description": "Gain 5 Block."
+  },
+  "DEFEND_SILENT": {
+    "title": "Defend",
+    "description": "Gain 5 Block."
+  },
+  "DEFILE": {
+    "title": "Defile",
+    "description": "Ethereal.\nDeal 13 damage."
+  },
+  "DEFLECT": {
+    "title": "Deflect",
+    "description": "Gain 4 Block."
+  },
+  "DEFRAGMENT": {
+    "title": "Defragment",
+    "description": "Gain 1 Focus."
+  },
+  "DEFY": {
+    "title": "Defy",
+    "description": "Ethereal.\nGain 6 Block.\nApply 1 Weak."
+  },
+  "DELAY": {
+    "title": "Delay",
+    "description": "Gain 11 Block.\nNext turn,\ngain 1 Energy."
+  },
+  "DEMESNE": {
+    "title": "Demesne",
+    "description": "Ethereal.\nAt the start of your turn, gain 1 Energy and draw 1 additional card."
+  },
+  "DEMON_FORM": {
+    "title": "Demon Form",
+    "description": "At the start of your turn, gain 2 Strength."
+  },
+  "DEMONIC_SHIELD": {
+    "title": "Demonic Shield",
+    "description": "Lose 1 HP.\nGive another player Block equal to your Block.\nExhaust."
+  },
+  "DEVASTATE": {
+    "title": "Devastate",
+    "description": "Deal 30 damage."
+  },
+  "DEVOUR_LIFE": {
+    "title": "Devour Life",
+    "description": "Whenever you play a Soul, Summon 1."
+  },
+  "DIRGE": {
+    "title": "Dirge",
+    "description": "Summon 3 X times.\nAdd X Souls into your Draw Pile.\nExhaust."
+  },
+  "DISCOVERY": {
+    "title": "Discovery",
+    "description": "Choose 1 of 3 random cards to add into your Hand. It's free to play this turn.\nExhaust."
+  },
+  "DISINTEGRATION": {
+    "title": "Disintegration",
+    "description": "At the end of your turn, take 6 damage."
+  },
+  "DISMANTLE": {
+    "title": "Dismantle",
+    "description": "Deal 8 damage.\nIf the enemy is Vulnerable, hits twice."
+  },
+  "DISTRACTION": {
+    "title": "Distraction",
+    "description": "Add a random Skill into your Hand. It's free to play this turn.\nExhaust."
+  },
+  "DODGE_AND_ROLL": {
+    "title": "Dodge and Roll",
+    "description": "Gain 4 Block.\nNext turn, gain 4 Block."
+  },
+  "DOMINATE": {
+    "title": "Dominate",
+    "description": "Apply 1 Vulnerable.\nGain 1 Strength for each Vulnerable on the enemy.\nExhaust."
+  },
+  "DOUBLE_ENERGY": {
+    "title": "Double Energy",
+    "description": "Double your Energy.\nExhaust."
+  },
+  "DOUBT": {
+    "title": "Doubt",
+    "description": "Unplayable.\nAt the end of your turn, if this is in your Hand, gain 1 Weak."
+  },
+  "DRAIN_POWER": {
+    "title": "Drain Power",
+    "description": "Deal 10 damage.\nUpgrade 2 random cards in your Discard Pile."
+  },
+  "DRAMATIC_ENTRANCE": {
+    "title": "Dramatic Entrance",
+    "description": "Innate.\nDeal 11 damage to ALL enemies.\nExhaust."
+  },
+  "DREDGE": {
+    "title": "Dredge",
+    "description": "Put 3 cards from your Discard Pile into your Hand.\nExhaust."
+  },
+  "DRUM_OF_BATTLE": {
+    "title": "Drum of Battle",
+    "description": "Draw 2 cards.\nWhen this card is Exhausted, gain 2 Energy."
+  },
+  "DUAL_WIELD": {
+    "title": "Dual Wield",
+    "description": "Choose an Attack or Power card. Add a copy of that card into your Hand."
+  },
+  "DUALCAST": {
+    "title": "Dualcast",
+    "description": "Evoke your rightmost Orb twice."
+  },
+  "DYING_STAR": {
+    "title": "Dying Star",
+    "description": "Ethereal.\nDeal 9 damage to ALL enemies. ALL enemies lose 9 Strength this turn."
+  },
+  "ECHO_FORM": {
+    "title": "Echo Form",
+    "description": "Ethereal.\nThe first card you play each turn is played an extra time."
+  },
+  "ECHOING_SLASH": {
+    "title": "Echoing Slash",
+    "description": "Deal 10 damage to ALL enemies.\nRepeat this effect for each enemy killed."
+  },
+  "EIDOLON": {
+    "title": "Eidolon",
+    "description": "Exhaust your Hand.\nIf 9 cards were Exhausted this way, gain 1 Intangible."
+  },
+  "END_OF_DAYS": {
+    "title": "End of Days",
+    "description": "Apply 29 Doom to ALL enemies.\nKill enemies with at least as much Doom as HP."
+  },
+  "ENERGY_SURGE": {
+    "title": "Energy Surge",
+    "description": "ALL players gain 2 Energy.\nExhaust."
+  },
+  "ENFEEBLING_TOUCH": {
+    "title": "Enfeebling Touch",
+    "description": "Ethereal.\nEnemy loses 8 Strength this turn."
+  },
+  "ENLIGHTENMENT": {
+    "title": "Enlightenment",
+    "description": "Reduce the cost of ALL cards in your Hand to 1 this turn.\nExhaust."
+  },
+  "ENTHRALLED": {
+    "title": "Enthralled",
+    "description": "If this is in your Hand, it must be played before other cards.\nEternal."
+  },
+  "ENTRENCH": {
+    "title": "Entrench",
+    "description": "Double your Block."
+  },
+  "ENTROPY": {
+    "title": "Entropy",
+    "description": "At the start of your turn, Transform 1 card in your Hand."
+  },
+  "ENVENOM": {
+    "title": "Envenom",
+    "description": "Whenever an Attack deals unblocked damage, apply 1 Poison."
+  },
+  "EQUILIBRIUM": {
+    "title": "Equilibrium",
+    "description": "Gain 13 Block.\nRetain your Hand this turn."
+  },
+  "ERADICATE": {
+    "title": "Eradicate",
+    "description": "Retain.\nDeal 11 damage X times."
+  },
+  "ESCAPE_PLAN": {
+    "title": "Escape Plan",
+    "description": "Draw 1 card.\nIf you draw a Skill, gain 3 Block."
+  },
+  "ETERNAL_ARMOR": {
+    "title": "Eternal Armor",
+    "description": "Gain 9 Plating."
+  },
+  "EVIL_EYE": {
+    "title": "Evil Eye",
+    "description": "Gain 8 Block.\nGain another 8 Block if you have Exhausted a card this turn."
+  },
+  "EXPECT_A_FIGHT": {
+    "title": "Expect a Fight",
+    "description": "Gain  Energy for each Attack in your Hand.\nYou cannot gain\nadditional  Energy this turn."
+  },
+  "EXPERTISE": {
+    "title": "Expertise",
+    "description": "Draw cards until you have 6 in your Hand."
+  },
+  "EXPOSE": {
+    "title": "Expose",
+    "description": "Remove all Artifact and Block from the enemy.\nApply 2 Vulnerable.\nExhaust."
+  },
+  "EXTERMINATE": {
+    "title": "Exterminate",
+    "description": "Deal 3 damage to ALL enemies 4 times."
+  },
+  "FALLING_STAR": {
+    "title": "Falling Star",
+    "description": "Deal 8 damage.\nApply 1 Weak.\nApply 1 Vulnerable."
+  },
+  "FAN_OF_KNIVES": {
+    "title": "Fan of Knives",
+    "description": "Shivs now hit ALL enemies.\nAdd 4 Shivs into your Hand."
+  },
+  "FASTEN": {
+    "title": "Fasten",
+    "description": "Gain an additional 4 Block from Defend cards."
+  },
+  "FEAR": {
+    "title": "Fear",
+    "description": "Ethereal.\nDeal 7 damage.\nApply 1 Vulnerable."
+  },
+  "FEED": {
+    "title": "Feed",
+    "description": "Deal 10 damage.\nIf Fatal, raise your Max HP by 3.\nExhaust."
+  },
+  "FEEDING_FRENZY": {
+    "title": "Feeding Frenzy",
+    "description": "Gain 5 Strength this turn."
+  },
+  "FEEL_NO_PAIN": {
+    "title": "Feel No Pain",
+    "description": "Whenever a card is Exhausted, gain 3 Block."
+  },
+  "FERAL": {
+    "title": "Feral",
+    "description": "The first time you play a\n0 Energy Attack each turn,\nreturn it to your Hand."
+  },
+  "FETCH": {
+    "title": "Fetch",
+    "description": "Osty deals 3 damage.\nIf this is the first time this card has been played this turn, draw 1 card."
+  },
+  "FIEND_FIRE": {
+    "title": "Fiend Fire",
+    "description": "Exhaust your Hand.\nDeal 7 damage for each card Exhausted.\nExhaust."
+  },
+  "FIGHT_ME": {
+    "title": "Fight Me!",
+    "description": "Deal 5 damage twice.\nGain 3 Strength.\nThe enemy gains 1 Strength."
+  },
+  "FIGHT_THROUGH": {
+    "title": "Fight Through",
+    "description": "Gain 13 Block.\nAdd 2 Wounds into your Discard Pile."
+  },
+  "FINESSE": {
+    "title": "Finesse",
+    "description": "Gain 4 Block.\nDraw 1 card."
+  },
+  "FINISHER": {
+    "title": "Finisher",
+    "description": "Deal 6 damage for each Attack already played this turn."
+  },
+  "FISTICUFFS": {
+    "title": "Fisticuffs",
+    "description": "Deal 7 damage.\nGain Block equal to damage dealt."
+  },
+  "FLAK_CANNON": {
+    "title": "Flak Cannon",
+    "description": "Exhaust ALL your Status cards.\nDeal 8 damage to a random enemy for each card Exhausted."
+  },
+  "FLAME_BARRIER": {
+    "title": "Flame Barrier",
+    "description": "Gain 12 Block.\nWhenever you are attacked this turn, deal 4 damage back."
+  },
+  "FLANKING": {
+    "title": "Flanking",
+    "description": "The enemy takes double attack damage from other players this turn."
+  },
+  "FLASH_OF_STEEL": {
+    "title": "Flash of Steel",
+    "description": "Deal 5 damage.\nDraw 1 card."
+  },
+  "FLATTEN": {
+    "title": "Flatten",
+    "description": "Osty deals 12 damage.\nThis card costs 0  Energy if Osty has attacked this turn."
+  },
+  "FLECHETTES": {
+    "title": "Flechettes",
+    "description": "Deal 5 damage for each Skill in your Hand."
+  },
+  "FLICK_FLACK": {
+    "title": "Flick-Flack",
+    "description": "Sly.\nDeal 6 damage to ALL enemies."
+  },
+  "FOCUSED_STRIKE": {
+    "title": "Focused Strike",
+    "description": "Deal 9 damage.\nGain 1 Focus this turn."
+  },
+  "FOLLOW_THROUGH": {
+    "title": "Follow Through",
+    "description": "Deal 7 damage.\nIf you have 5 or more other cards in your Hand, hits an additional time."
+  },
+  "FOLLY": {
+    "title": "Folly",
+    "description": "Unplayable.\nInnate.\nEthereal.\nEternal."
+  },
+  "FOOTWORK": {
+    "title": "Footwork",
+    "description": "Gain 2 Dexterity."
+  },
+  "FORBIDDEN_GRIMOIRE": {
+    "title": "Forbidden Grimoire",
+    "description": "At the end of combat, you may remove a card from your Deck.\nEternal."
+  },
+  "FOREGONE_CONCLUSION": {
+    "title": "Foregone Conclusion",
+    "description": "Next turn, put 2 cards from your Draw Pile into your Hand."
+  },
+  "FORGOTTEN_RITUAL": {
+    "title": "Forgotten Ritual",
+    "description": "If you Exhausted a card this turn, gain 3 Energy.\nExhaust."
+  },
+  "FRANTIC_ESCAPE": {
+    "title": "Frantic Escape",
+    "description": "Get farther away.\nIncrease Sandpit by 1.\nIncrease the cost of this card by 1."
+  },
+  "FRIENDSHIP": {
+    "title": "Friendship",
+    "description": "Lose 2 Strength.\nGain 1 Energy at the start of each turn."
+  },
+  "FTL": {
+    "title": "FTL",
+    "description": "Deal 5 damage.\nIf you have played fewer than 3 cards this turn, draw 1 card."
+  },
+  "FUEL": {
+    "title": "Fuel",
+    "description": "Gain 1 Energy.\nDraw 1 card.\nExhaust."
+  },
+  "FURNACE": {
+    "title": "Furnace",
+    "description": "At the start of your turn, Forge 5."
+  },
+  "FUSION": {
+    "title": "Fusion",
+    "description": "Channel 1 Plasma.\nExhaust."
+  },
+  "GAMMA_BLAST": {
+    "title": "Gamma Blast",
+    "description": "Deal 13 damage.\nApply 2 Weak.\nApply 2 Vulnerable."
+  },
+  "GANG_UP": {
+    "title": "Gang Up",
+    "description": "Deal 5 damage.\nDeals 5 additional damage for each time another player has attacked the enemy this turn."
+  },
+  "GATHER_LIGHT": {
+    "title": "Gather Light",
+    "description": "Gain 8 Block.\nGain 1 Stars."
+  },
+  "GENESIS": {
+    "title": "Genesis",
+    "description": "At the start of your turn, gain 2 Stars."
+  },
+  "GENETIC_ALGORITHM": {
+    "title": "Genetic Algorithm",
+    "description": "Gain 1 Block.\nPermanently increase this card's Block by 3.\nExhaust."
+  },
+  "GIANT_ROCK": {
+    "title": "Giant Rock",
+    "description": "Deal 16 damage."
+  },
+  "GLACIER": {
+    "title": "Glacier",
+    "description": "Gain 6 Block.\nChannel 2 Frost."
+  },
+  "GLASSWORK": {
+    "title": "Glasswork",
+    "description": "Gain 5 Block.\nChannel 1 Glass."
+  },
+  "GLIMMER": {
+    "title": "Glimmer",
+    "description": "Draw 3 cards.\nPut 1 card from your Hand on top of your Draw Pile."
+  },
+  "GLIMPSE_BEYOND": {
+    "title": "Glimpse Beyond",
+    "description": "ALL players add 3 Souls into their Draw Pile.\nExhaust."
+  },
+  "GLITTERSTREAM": {
+    "title": "Glitterstream",
+    "description": "Gain 11 Block.\nNext turn, gain 5 Block."
+  },
+  "GLOW": {
+    "title": "Glow",
+    "description": "Gain 1 Stars.\nDraw 1 card.\nNext turn, draw 1 card."
+  },
+  "GO_FOR_THE_EYES": {
+    "title": "Go for the Eyes",
+    "description": "Deal 3 damage.\nIf the enemy intends to attack, apply 1 Weak."
+  },
+  "GOLD_AXE": {
+    "title": "Gold Axe",
+    "description": "Deal damage equal to the number of cards played this combat."
+  },
+  "GRAND_FINALE": {
+    "title": "Grand Finale",
+    "description": "Can only be played if there are no cards in your Draw Pile. Deal 60 damage to ALL enemies."
+  },
+  "GRAPPLE": {
+    "title": "Grapple",
+    "description": "Deal 7 damage.\nWhenever you gain Block this turn, deal 5 damage to the enemy."
+  },
+  "GRAVE_WARDEN": {
+    "title": "Grave Warden",
+    "description": "Gain 8 Block.\nAdd a Soul into your Draw Pile."
+  },
+  "GRAVEBLAST": {
+    "title": "Graveblast",
+    "description": "Deal 4 damage.\nPut a card from your Discard Pile into your Hand.\nExhaust."
+  },
+  "GREED": {
+    "title": "Greed",
+    "description": "Unplayable.\nEternal."
+  },
+  "GUARDS": {
+    "title": "GUARDS!!!",
+    "description": "Transform any number of cards in your Hand into Minion Sacrifice.\nExhaust."
+  },
+  "GUIDING_STAR": {
+    "title": "Guiding Star",
+    "description": "Deal 12 damage.\nDraw 2 cards."
+  },
+  "GUILTY": {
+    "title": "Guilty",
+    "description": "Unplayable.\nRemoved from your Deck after 5 combats."
+  },
+  "GUNK_UP": {
+    "title": "Gunk Up",
+    "description": "Deal 4 damage 3 times.\nAdd a Slimed into your Discard Pile."
+  },
+  "HAILSTORM": {
+    "title": "Hailstorm",
+    "description": "At the end of your turn, if you have Frost, deal 6 damage to ALL enemies."
+  },
+  "HAMMER_TIME": {
+    "title": "Hammer Time",
+    "description": "Whenever you Forge, all allies Forge as well."
+  },
+  "HAND_OF_GREED": {
+    "title": "Hand of Greed",
+    "description": "Deal 20 damage.\nIf Fatal, gain 20 Gold."
+  },
+  "HAND_TRICK": {
+    "title": "Hand Trick",
+    "description": "Gain 7 Block.\nAdd Sly to a Skill in your Hand this turn."
+  },
+  "HANG": {
+    "title": "Hang",
+    "description": "Deal 10 damage.\nDouble the damage ALL Hang cards deal to this enemy."
+  },
+  "HAUNT": {
+    "title": "Haunt",
+    "description": "Whenever you play a Soul, a random enemy loses 6 HP."
+  },
+  "HAVOC": {
+    "title": "Havoc",
+    "description": "Play the top card of your Draw Pile and Exhaust it."
+  },
+  "HAZE": {
+    "title": "Haze",
+    "description": "Sly.\nApply 4 Poison to ALL enemies."
+  },
+  "HEADBUTT": {
+    "title": "Headbutt",
+    "description": "Deal 9 damage.\nPut a card from your Discard Pile on top of your Draw Pile."
+  },
+  "HEAVENLY_DRILL": {
+    "title": "Heavenly Drill",
+    "description": "Deal 8 damage X times.\nDouble X if it's 4 or more."
+  },
+  "HEGEMONY": {
+    "title": "Hegemony",
+    "description": "Deal 15 damage.\nNext turn, gain 2 Energy."
+  },
+  "HEIRLOOM_HAMMER": {
+    "title": "Heirloom Hammer",
+    "description": "Deal 20 damage.\nChoose a Colorless card in your Hand. Add a copy of that card into your Hand."
+  },
+  "HELIX_DRILL": {
+    "title": "Helix Drill",
+    "description": "Deal 3 damage for each  Energy previously spent this turn."
+  },
+  "HELLO_WORLD": {
+    "title": "Hello World",
+    "description": "At the start of your turn, add a random Common card into your Hand."
+  },
+  "HELLRAISER": {
+    "title": "Hellraiser",
+    "description": "Whenever you draw a card containing “Strike”, it is played against a random enemy."
+  },
+  "HEMOKINESIS": {
+    "title": "Hemokinesis",
+    "description": "Lose 2 HP.\nDeal 15 damage."
+  },
+  "HIDDEN_CACHE": {
+    "title": "Hidden Cache",
+    "description": "Gain 1 Stars.\nNext turn, gain 3 Stars."
+  },
+  "HIDDEN_DAGGERS": {
+    "title": "Hidden Daggers",
+    "description": "Discard 2 cards.\nAdd 2 Shivs into your Hand."
+  },
+  "HIDDEN_GEM": {
+    "title": "Hidden Gem",
+    "description": "A random card without Replay in your Draw Pile gains Replay 2."
+  },
+  "HIGH_FIVE": {
+    "title": "High Five",
+    "description": "Osty deals 11 damage\nand applies 2 Vulnerable\nto ALL enemies."
+  },
+  "HOLOGRAM": {
+    "title": "Hologram",
+    "description": "Gain 3 Block.\nPut a card from your Discard Pile into your Hand.\nExhaust."
+  },
+  "HOTFIX": {
+    "title": "Hotfix",
+    "description": "Gain 2 Focus this turn.\nExhaust."
+  },
+  "HOWL_FROM_BEYOND": {
+    "title": "Howl from Beyond",
+    "description": "Deal 16 damage to ALL enemies.\nAt the end of your turn, if this is in your Exhaust Pile, play it."
+  },
+  "HUDDLE_UP": {
+    "title": "Huddle Up",
+    "description": "ALL players draw 2 cards.\nExhaust."
+  },
+  "HYPERBEAM": {
+    "title": "Hyperbeam",
+    "description": "Deal 28 damage to ALL enemies.\nLose 3 Focus."
+  },
+  "I_AM_INVINCIBLE": {
+    "title": "I Am Invincible",
+    "description": "Gain 10 Block.\nAt the end of your turn, if this is on top of your Draw Pile, play it."
+  },
+  "ICE_LANCE": {
+    "title": "Ice Lance",
+    "description": "Deal 19 damage.\nChannel 3 Frost."
+  },
+  "IGNITION": {
+    "title": "Ignition",
+    "description": "Another player Channels Plasma.\nExhaust."
+  },
+  "IMPATIENCE": {
+    "title": "Impatience",
+    "description": "If you have no Attacks in your Hand, draw 2 cards."
+  },
+  "IMPERVIOUS": {
+    "title": "Impervious",
+    "description": "Gain 30 Block.\nExhaust."
+  },
+  "INFECTION": {
+    "title": "Infection",
+    "description": "Unplayable.\nAt the end of your turn, if this is in your Hand, take 3 damage."
+  },
+  "INFERNAL_BLADE": {
+    "title": "Infernal Blade",
+    "description": "Add a random Attack into your Hand. It's free to play this turn.\nExhaust."
+  },
+  "INFERNO": {
+    "title": "Inferno",
+    "description": "At the start of your turn, lose 1 HP.\nWhenever you lose HP on your turn, deal 6 damage to ALL enemies."
+  },
+  "INFINITE_BLADES": {
+    "title": "Infinite Blades",
+    "description": "At the start of your turn, add 1 Shiv into your Hand."
+  },
+  "INFLAME": {
+    "title": "Inflame",
+    "description": "Gain 2 Strength."
+  },
+  "INJURY": {
+    "title": "Injury",
+    "description": "Unplayable."
+  },
+  "INTERCEPT": {
+    "title": "Intercept",
+    "description": "Gain 9 Block.\nRedirect all incoming attacks that would be dealt to another player this turn to you."
+  },
+  "INVOKE": {
+    "title": "Invoke",
+    "description": "Next turn, Summon 2 and gain 2 Energy."
+  },
+  "IRON_WAVE": {
+    "title": "Iron Wave",
+    "description": "Gain 5 Block.\nDeal 5 damage."
+  },
+  "ITERATION": {
+    "title": "Iteration",
+    "description": "The first time you draw a Status each turn, draw 2 cards."
+  },
+  "JACK_OF_ALL_TRADES": {
+    "title": "Jack of All Trades",
+    "description": "Add 1 random Colorless card into your Hand.\nExhaust."
+  },
+  "JACKPOT": {
+    "title": "Jackpot",
+    "description": "Deal 25 damage.\nAdd 3 random 0 Energy cards into your Hand."
+  },
+  "JUGGERNAUT": {
+    "title": "Juggernaut",
+    "description": "Whenever you gain Block, deal 6 damage to a random enemy."
+  },
+  "JUGGLING": {
+    "title": "Juggling",
+    "description": "Add a copy of the third Attack you play each turn into your Hand."
+  },
+  "KINGLY_KICK": {
+    "title": "Kingly Kick",
+    "description": "Deal 27 damage.\nWhenever you draw this card, reduce its cost by 1."
+  },
+  "KINGLY_PUNCH": {
+    "title": "Kingly Punch",
+    "description": "Deal 8 damage.\nWhenever you draw this card, increase its damage by 4 this combat."
+  },
+  "KNIFE_TRAP": {
+    "title": "Knife Trap",
+    "description": "Play every Shiv in your Exhaust Pile on the enemy."
+  },
+  "KNOCKDOWN": {
+    "title": "Knockdown",
+    "description": "Deal 10 damage.\nThe enemy takes double damage from other players this turn."
+  },
+  "KNOCKOUT_BLOW": {
+    "title": "Knockout Blow",
+    "description": "Deal 30 damage.\nIf this kills an enemy, gain 5 Stars."
+  },
+  "KNOW_THY_PLACE": {
+    "title": "Know Thy Place",
+    "description": "Apply 1 Weak.\nApply 1 Vulnerable.\nExhaust."
+  },
+  "LANTERN_KEY": {
+    "title": "Lantern Key",
+    "description": "Unplayable.\nUnlocks a special event in the next Act."
+  },
+  "LARGESSE": {
+    "title": "Largesse",
+    "description": "Another player adds 1 random Colorless card to their Hand."
+  },
+  "LEADING_STRIKE": {
+    "title": "Leading Strike",
+    "description": "Deal 3 damage.\nAdd 2 Shivs into your Hand."
+  },
+  "LEAP": {
+    "title": "Leap",
+    "description": "Gain 9 Block."
+  },
+  "LEG_SWEEP": {
+    "title": "Leg Sweep",
+    "description": "Apply 2 Weak.\nGain 11 Block."
+  },
+  "LEGION_OF_BONE": {
+    "title": "Legion of Bone",
+    "description": "ALL players Summon 6.\nExhaust."
+  },
+  "LETHALITY": {
+    "title": "Lethality",
+    "description": "Ethereal.\nThe first Attack each turn deals 50% additional damage."
+  },
+  "LIFT": {
+    "title": "Lift",
+    "description": "Give another player 11 Block."
+  },
+  "LIGHTNING_ROD": {
+    "title": "Lightning Rod",
+    "description": "Gain 4 Block.\nAt the start of the next 2 turns, Channel 1 Lightning."
+  },
+  "LOOP": {
+    "title": "Loop",
+    "description": "At the start of your turn, trigger the passive ability of your rightmost Orb."
+  },
+  "LUMINESCE": {
+    "title": "Luminesce",
+    "description": "Retain.\nGain 2 Energy.\nExhaust."
+  },
+  "LUNAR_BLAST": {
+    "title": "Lunar Blast",
+    "description": "Deal 4 damage for each Skill already played this turn."
+  },
+  "MACHINE_LEARNING": {
+    "title": "Machine Learning",
+    "description": "At the start of your turn, draw 1 additional card."
+  },
+  "MAKE_IT_SO": {
+    "title": "Make It So",
+    "description": "Deal 6 damage.\nEvery 3 Skills you play in a turn, put this into your Hand."
+  },
+  "MALAISE": {
+    "title": "Malaise",
+    "description": "Enemy loses X Strength. Apply X Weak.\nExhaust."
+  },
+  "MANGLE": {
+    "title": "Mangle",
+    "description": "Deal 15 damage.\nEnemy loses 10 Strength this turn."
+  },
+  "MANIFEST_AUTHORITY": {
+    "title": "Manifest Authority",
+    "description": "Gain 7 Block.\nAdd 1 random Colorless card into your Hand."
+  },
+  "MASTER_OF_STRATEGY": {
+    "title": "Master of Strategy",
+    "description": "Draw 3 cards.\nExhaust."
+  },
+  "MASTER_PLANNER": {
+    "title": "Master Planner",
+    "description": "When you play a Skill, it gains Sly."
+  },
+  "MAUL": {
+    "title": "Maul",
+    "description": "Deal 5 damage twice.\nIncrease the damage of ALL Maul cards by 1 this combat."
+  },
+  "MAYHEM": {
+    "title": "Mayhem",
+    "description": "At the start of your turn, play the top card of your Draw Pile."
+  },
+  "MELANCHOLY": {
+    "title": "Melancholy",
+    "description": "Gain 13 Block.\nReduce this card's cost by 1 Energy whenever ANYONE dies."
+  },
+  "MEMENTO_MORI": {
+    "title": "Memento Mori",
+    "description": "Deal 9 damage.\nDeals 4 additional damage for each card discarded this turn."
+  },
+  "METAMORPHOSIS": {
+    "title": "Metamorphosis",
+    "description": "Add 3 random Attacks into your Draw Pile. They're free to play this combat.\nExhaust."
+  },
+  "METEOR_SHOWER": {
+    "title": "Meteor Shower",
+    "description": "Deal 14 damage to ALL enemies.\nApply 2 Weak and Vulnerable to ALL enemies."
+  },
+  "METEOR_STRIKE": {
+    "title": "Meteor Strike",
+    "description": "Deal 24 damage.\nChannel 3 Plasma."
+  },
+  "MIMIC": {
+    "title": "Mimic",
+    "description": "Gain Block equal to the Block on another player.\nExhaust."
+  },
+  "MIND_BLAST": {
+    "title": "Mind Blast",
+    "description": "Innate.\nDeal damage equal to the number of cards in your Draw Pile."
+  },
+  "MIND_ROT": {
+    "title": "Mind Rot",
+    "description": "Draw 1 fewer card each turn."
+  },
+  "MINION_DIVE_BOMB": {
+    "title": "Minion Dive Bomb",
+    "description": "Deal 13 damage.\nExhaust."
+  },
+  "MINION_SACRIFICE": {
+    "title": "Minion Sacrifice",
+    "description": "Gain 8 Block.\nExhaust."
+  },
+  "MINION_STRIKE": {
+    "title": "Minion Strike",
+    "description": "Deal 6 damage.\nDraw 1 card.\nExhaust."
+  },
+  "MIRAGE": {
+    "title": "Mirage",
+    "description": "Gain Block equal to Poison on ALL enemies.\nExhaust."
+  },
+  "MISERY": {
+    "title": "Misery",
+    "description": "Deal 7 damage.\nApply any debuffs on the enemy to ALL other enemies."
+  },
+  "MODDED": {
+    "title": "Modded",
+    "description": "Gain 1 Orb Slot.\nDraw 1 card. Increase this card's cost by 1."
+  },
+  "MOLTEN_FIST": {
+    "title": "Molten Fist",
+    "description": "Deal 10 damage.\nDouble the enemy's Vulnerable.\nExhaust."
+  },
+  "MOMENTUM_STRIKE": {
+    "title": "Momentum Strike",
+    "description": "Deal 10 damage.\nReduce this card's cost to 0  Energy."
+  },
+  "MONARCHS_GAZE": {
+    "title": "Monarch's Gaze",
+    "description": "Whenever you attack an enemy, it loses 1 Strength this turn."
+  },
+  "MONOLOGUE": {
+    "title": "Monologue",
+    "description": "Whenever you play a card this turn, gain 1 Strength this turn."
+  },
+  "MULTI_CAST": {
+    "title": "Multi-Cast",
+    "description": "Evoke your rightmost Orb X times."
+  },
+  "MURDER": {
+    "title": "Murder",
+    "description": "Deal 1 damage.\nDeals 1 additional damage for each card drawn this combat."
+  },
+  "NECRO_MASTERY": {
+    "title": "Necro Mastery",
+    "description": "Summon 5.\nWhenever Osty loses HP,\nALL enemies lose that much HP as well."
+  },
+  "NEGATIVE_PULSE": {
+    "title": "Negative Pulse",
+    "description": "Gain 5 Block.\nApply 7 Doom to ALL enemies."
+  },
+  "NEOWS_FURY": {
+    "title": "Neow's Fury",
+    "description": "Deal 10 damage.\nPut up to 2 cards from your Discard Pile into your Hand.\nExhaust."
+  },
+  "NEUROSURGE": {
+    "title": "Neurosurge",
+    "description": "Gain 3 Energy.\nDraw 2 cards.\nAt the start of your turn, apply 3 Doom to yourself."
+  },
+  "NEUTRALIZE": {
+    "title": "Neutralize",
+    "description": "Deal 3 damage.\nApply 1 Weak."
+  },
+  "NEUTRON_AEGIS": {
+    "title": "Neutron Aegis",
+    "description": "Gain 8 Plating."
+  },
+  "NIGHTMARE": {
+    "title": "Nightmare",
+    "description": "Choose a card.\nNext turn, add 3 copies of that card into your Hand.\nExhaust."
+  },
+  "NO_ESCAPE": {
+    "title": "No Escape",
+    "description": "Apply 10 Doom, plus an additional 5 Doom for every 10 Doom already on this enemy."
+  },
+  "NORMALITY": {
+    "title": "Normality",
+    "description": "Unplayable.\nYou cannot play more than 3 cards this turn."
+  },
+  "NOSTALGIA": {
+    "title": "Nostalgia",
+    "description": "The first Attack or Skill you play each turn is placed on top of your Draw Pile."
+  },
+  "NOXIOUS_FUMES": {
+    "title": "Noxious Fumes",
+    "description": "At the start of your turn, apply 2 Poison to ALL enemies."
+  },
+  "NULL": {
+    "title": "Null",
+    "description": "Deal 10 damage.\nApply 2 Weak.\nChannel 1 Dark."
+  },
+  "OBLIVION": {
+    "title": "Oblivion",
+    "description": "Whenever you play a card this turn, apply 3 Doom to the enemy."
+  },
+  "OFFERING": {
+    "title": "Offering",
+    "description": "Lose 6 HP.\nGain 2 Energy.\nDraw 3 cards.\nExhaust."
+  },
+  "OMNISLICE": {
+    "title": "Omnislice",
+    "description": "Deal 8 damage.\nDamage ALL other enemies equal to the damage dealt."
+  },
+  "ONE_TWO_PUNCH": {
+    "title": "One-Two Punch",
+    "description": "This turn, your next Attack is played an extra time."
+  },
+  "ORBIT": {
+    "title": "Orbit",
+    "description": "Every  Energy you spend,\ngain 1 Energy."
+  },
+  "OUTBREAK": {
+    "title": "Outbreak",
+    "description": "Every 3 times you apply Poison, deal 11 damage to ALL enemies."
+  },
+  "OUTMANEUVER": {
+    "title": "Outmaneuver",
+    "description": "Next turn, gain 2 Energy."
+  },
+  "OVERCLOCK": {
+    "title": "Overclock",
+    "description": "Draw 2 cards.\nAdd a Burn into your Discard Pile."
+  },
+  "PACTS_END": {
+    "title": "Pact's End",
+    "description": "If you have 3 or more cards in your Exhaust Pile,\ndeal 17 damage to ALL enemies."
+  },
+  "PAGESTORM": {
+    "title": "Pagestorm",
+    "description": "Whenever you draw an Ethereal card, draw 1 card."
+  },
+  "PALE_BLUE_DOT": {
+    "title": "Pale Blue Dot",
+    "description": "If you play 5 or more cards in a turn, draw 1 card at the start of your next turn."
+  },
+  "PANACHE": {
+    "title": "Panache",
+    "description": "Every time you play 5 cards in a single turn, deal 10 damage to ALL enemies."
+  },
+  "PANIC_BUTTON": {
+    "title": "Panic Button",
+    "description": "Gain 30 Block.\nYou cannot gain Block from cards for 2 turns.\nExhaust."
+  },
+  "PARRY": {
+    "title": "Parry",
+    "description": "Sovereign Blade now gains 10 Block."
+  },
+  "PARSE": {
+    "title": "Parse",
+    "description": "Ethereal.\nDraw 3 cards."
+  },
+  "PARTICLE_WALL": {
+    "title": "Particle Wall",
+    "description": "Gain 9 Block.\nReturn this card to your Hand."
+  },
+  "PATTER": {
+    "title": "Patter",
+    "description": "Gain 8 Block.\nGain 2 Vigor."
+  },
+  "PECK": {
+    "title": "Peck",
+    "description": "Deal 2 damage 3 times."
+  },
+  "PERFECTED_STRIKE": {
+    "title": "Perfected Strike",
+    "description": "Deal 6 damage.\nDeals 2 additional damage for ALL your cards containing “Strike”."
+  },
+  "PHANTOM_BLADES": {
+    "title": "Phantom Blades",
+    "description": "Shivs gain Retain.\nThe first Shiv you play each turn deals 9 additional damage."
+  },
+  "PHOTON_CUT": {
+    "title": "Photon Cut",
+    "description": "Deal 10 damage.\nDraw 1 card.\nPut 1 card from your Hand on top of your Draw Pile."
+  },
+  "PIERCING_WAIL": {
+    "title": "Piercing Wail",
+    "description": "ALL enemies lose 6 Strength this turn.\nExhaust."
+  },
+  "PILLAGE": {
+    "title": "Pillage",
+    "description": "Deal 6 damage.\nDraw cards until you draw a non-Attack card."
+  },
+  "PILLAR_OF_CREATION": {
+    "title": "Pillar of Creation",
+    "description": "Whenever you create a card, gain 3 Block."
+  },
+  "PINPOINT": {
+    "title": "Pinpoint",
+    "description": "Deal 15 damage.\nCosts 1 less  Energy for each Skill played this turn."
+  },
+  "POISONED_STAB": {
+    "title": "Poisoned Stab",
+    "description": "Deal 6 damage.\nApply 3 Poison."
+  },
+  "POKE": {
+    "title": "Poke",
+    "description": "Osty deals 6 damage."
+  },
+  "POMMEL_STRIKE": {
+    "title": "Pommel Strike",
+    "description": "Deal 9 damage.\nDraw 1 card."
+  },
+  "POOR_SLEEP": {
+    "title": "Poor Sleep",
+    "description": "Unplayable.\nRetain."
+  },
+  "POUNCE": {
+    "title": "Pounce",
+    "description": "Deal 14 damage.\nThe next Skill you play costs 0  Energy."
+  },
+  "PRECISE_CUT": {
+    "title": "Precise Cut",
+    "description": "Deal 13 damage.\nDeals 2 less damage for each other card in your Hand."
+  },
+  "PREDATOR": {
+    "title": "Predator",
+    "description": "Deal 15 damage.\nNext turn, draw 2 cards."
+  },
+  "PREP_TIME": {
+    "title": "Prep Time",
+    "description": "At the start of your turn, gain 4 Vigor."
+  },
+  "PREPARED": {
+    "title": "Prepared",
+    "description": "Draw 1 card.\nDiscard 1 card."
+  },
+  "PRIMAL_FORCE": {
+    "title": "Primal Force",
+    "description": "Transform all Attacks in your Hand into Giant Rock."
+  },
+  "PRODUCTION": {
+    "title": "Production",
+    "description": "Gain 2 Energy.\nExhaust."
+  },
+  "PROLONG": {
+    "title": "Prolong",
+    "description": "Next turn, gain Block equal to your current Block.\nExhaust."
+  },
+  "PROPHESIZE": {
+    "title": "Prophesize",
+    "description": "Draw 6 cards."
+  },
+  "PROTECTOR": {
+    "title": "Protector",
+    "description": "Osty deals 10 damage.\nDeals additional damage equal to Osty's Max HP."
+  },
+  "PROWESS": {
+    "title": "Prowess",
+    "description": "Gain 1 Strength.\nGain 1 Dexterity."
+  },
+  "PULL_AGGRO": {
+    "title": "Pull Aggro",
+    "description": "Summon 4.\nGain 7 Block."
+  },
+  "PULL_FROM_BELOW": {
+    "title": "Pull from Below",
+    "description": "Deal 5 damage for each Ethereal card played this combat."
+  },
+  "PURITY": {
+    "title": "Purity",
+    "description": "Retain.\nExhaust up to 3 cards in your Hand.\nExhaust."
+  },
+  "PUTREFY": {
+    "title": "Putrefy",
+    "description": "Apply 2 Weak.\nApply 2 Vulnerable.\nExhaust."
+  },
+  "PYRE": {
+    "title": "Pyre",
+    "description": "Gain 1 Energy at the start of each turn."
+  },
+  "QUADCAST": {
+    "title": "Quadcast",
+    "description": "Evoke your rightmost Orb 4 times."
+  },
+  "QUASAR": {
+    "title": "Quasar",
+    "description": "Choose 1 of 3 random Colorless cards to add into your Hand."
+  },
+  "RADIATE": {
+    "title": "Radiate",
+    "description": "Deal 3 damage to ALL enemies for each 1 Stars gained this turn."
+  },
+  "RAGE": {
+    "title": "Rage",
+    "description": "Whenever you play an Attack this turn, gain 3 Block."
+  },
+  "RAINBOW": {
+    "title": "Rainbow",
+    "description": "Channel 1 Lightning.\nChannel 1 Frost.\nChannel 1 Dark.\nExhaust."
+  },
+  "RALLY": {
+    "title": "Rally",
+    "description": "ALL players gain 12 Block."
+  },
+  "RAMPAGE": {
+    "title": "Rampage",
+    "description": "Deal 9 damage.\nIncrease this card's damage by 5 this combat."
+  },
+  "RATTLE": {
+    "title": "Rattle",
+    "description": "Osty deals 7 damage.\nHits an additional time for each other time he has attacked this turn."
+  },
+  "REANIMATE": {
+    "title": "Reanimate",
+    "description": "Summon 20.\nExhaust."
+  },
+  "REAP": {
+    "title": "Reap",
+    "description": "Retain.\nDeal 27 damage."
+  },
+  "REAPER_FORM": {
+    "title": "Reaper Form",
+    "description": "Whenever Attacks deal damage, apply that much Doom."
+  },
+  "REAVE": {
+    "title": "Reave",
+    "description": "Deal 9 damage.\nAdd a Soul into your Draw Pile."
+  },
+  "REBOOT": {
+    "title": "Reboot",
+    "description": "Shuffle ALL your cards into your Draw Pile.\nDraw 4 cards.\nExhaust."
+  },
+  "REBOUND": {
+    "title": "Rebound",
+    "description": "Deal 9 damage.\nPut the next card you play this turn on top of your Draw Pile."
+  },
+  "REFINE_BLADE": {
+    "title": "Refine Blade",
+    "description": "Forge 9.\nNext turn, gain 1 Energy."
+  },
+  "REFLECT": {
+    "title": "Reflect",
+    "description": "Gain 15 Block.\nBlocked attack damage is reflected to your attacker this turn."
+  },
+  "REFLEX": {
+    "title": "Reflex",
+    "description": "Sly.\nDraw 2 cards."
+  },
+  "REFRACT": {
+    "title": "Refract",
+    "description": "Deal 9 damage twice.\nChannel 2 Glass."
+  },
+  "REGRET": {
+    "title": "Regret",
+    "description": "Unplayable.\nAt the end of your turn, if this is in your Hand, lose 1 HP for each card in your Hand."
+  },
+  "RELAX": {
+    "title": "Relax",
+    "description": "Gain 15 Block.\nNext turn, draw 2 cards and gain 2 Energy.\nExhaust."
+  },
+  "REND": {
+    "title": "Rend",
+    "description": "Deal 15 damage.\nDeals 5 additional damage for each unique debuff on the enemy."
+  },
+  "RESONANCE": {
+    "title": "Resonance",
+    "description": "Gain 1 Strength. ALL enemies lose 1 Strength."
+  },
+  "RESTLESSNESS": {
+    "title": "Restlessness",
+    "description": "Retain.\nIf your Hand is empty, draw 2 cards and gain 2 Energy."
+  },
+  "RICOCHET": {
+    "title": "Ricochet",
+    "description": "Sly.\nDeal 3 damage to a random enemy 4 times."
+  },
+  "RIGHT_HAND_HAND": {
+    "title": "Right Hand Hand",
+    "description": "Osty deals 4 damage.\nWhenever you play a card that costs 2 Energy or more, return this to your Hand from the Discard Pile."
+  },
+  "RIP_AND_TEAR": {
+    "title": "Rip and Tear",
+    "description": "Deal 7 damage to a random enemy twice."
+  },
+  "ROCKET_PUNCH": {
+    "title": "Rocket Punch",
+    "description": "Deal 13 damage.\nDraw 1 card.\nWhenever you create a Status, reduce this card's cost to 0  Energy until played."
+  },
+  "ROLLING_BOULDER": {
+    "title": "Rolling Boulder",
+    "description": "At the start of your turn, deal 5 damage to ALL enemies and increase this damage by 5."
+  },
+  "ROYAL_GAMBLE": {
+    "title": "Royal Gamble",
+    "description": "Gain 9 ★.\nExhaust."
+  },
+  "ROYALTIES": {
+    "title": "Royalties",
+    "description": "At the end of combat, gain 30 Gold."
+  },
+  "RUPTURE": {
+    "title": "Rupture",
+    "description": "Whenever you lose HP on your turn, gain 1 Strength."
+  },
+  "SACRIFICE": {
+    "title": "Sacrifice",
+    "description": "Retain.\nIf Osty is alive, he dies and you gain Block equal to double his Max HP."
+  },
+  "SALVO": {
+    "title": "Salvo",
+    "description": "Deal 12 damage.\nRetain your Hand this turn."
+  },
+  "SCAVENGE": {
+    "title": "Scavenge",
+    "description": "Exhaust a card.\nNext turn, gain 2 Energy."
+  },
+  "SCOURGE": {
+    "title": "Scourge",
+    "description": "Apply 13 Doom.\nDraw 1 card."
+  },
+  "SCRAPE": {
+    "title": "Scrape",
+    "description": "Deal 7 damage.\nDraw 4 cards.\nDiscard all cards drawn this way that do not cost 0  Energy."
+  },
+  "SCRAWL": {
+    "title": "Scrawl",
+    "description": "Draw cards until your Hand is full.\nExhaust."
+  },
+  "SCULPTING_STRIKE": {
+    "title": "Sculpting Strike",
+    "description": "Deal 9 damage.\nAdd Ethereal to a card in your Hand."
+  },
+  "SEANCE": {
+    "title": "Seance",
+    "description": "Ethereal.\nTransform a card in your Draw Pile into Soul."
+  },
+  "SECOND_WIND": {
+    "title": "Second Wind",
+    "description": "Exhaust all non-Attack cards in your Hand. Gain 5 Block for each card Exhausted."
+  },
+  "SECRET_TECHNIQUE": {
+    "title": "Secret Technique",
+    "description": "Put a Skill from your Draw Pile into your Hand.\nExhaust."
+  },
+  "SECRET_WEAPON": {
+    "title": "Secret Weapon",
+    "description": "Put an Attack from your Draw Pile into your Hand.\nExhaust."
+  },
+  "SEEKER_STRIKE": {
+    "title": "Seeker Strike",
+    "description": "Deal 9 damage.\nChoose 1 of 3 cards in your Draw Pile to add into your Hand."
+  },
+  "SEEKING_EDGE": {
+    "title": "Seeking Edge",
+    "description": "Forge 7.\nSovereign Blade now deals damage to ALL enemies."
+  },
+  "SENTRY_MODE": {
+    "title": "Sentry Mode",
+    "description": "At the start of your turn, add 1 Sweeping Gaze into your Hand."
+  },
+  "SERPENT_FORM": {
+    "title": "Serpent Form",
+    "description": "Whenever you play a card, deal 4 damage to a random enemy."
+  },
+  "SETUP_STRIKE": {
+    "title": "Setup Strike",
+    "description": "Deal 7 damage.\nGain 2 Strength this turn."
+  },
+  "SEVEN_STARS": {
+    "title": "Seven Stars",
+    "description": "Deal 7 damage to ALL enemies 7 times."
+  },
+  "SEVERANCE": {
+    "title": "Severance",
+    "description": "Deal 13 damage.\nAdd a Soul into your Draw Pile, Hand, and Discard Pile."
+  },
+  "SHADOW_SHIELD": {
+    "title": "Shadow Shield",
+    "description": "Gain 11 Block.\nChannel 1 Dark."
+  },
+  "SHADOW_STEP": {
+    "title": "Shadow Step",
+    "description": "Discard your Hand.\nNext turn, Attacks deal double damage."
+  },
+  "SHADOWMELD": {
+    "title": "Shadowmeld",
+    "description": "Double your Block gain this turn."
+  },
+  "SHAME": {
+    "title": "Shame",
+    "description": "Unplayable.\nAt the end of your turn, if this is in your Hand, gain 1 Frail."
+  },
+  "SHARED_FATE": {
+    "title": "Shared Fate",
+    "description": "Lose 2 Strength.\nEnemy loses 2 Strength.\nExhaust."
+  },
+  "SHATTER": {
+    "title": "Shatter",
+    "description": "Deal 7 damage to ALL enemies.\nEvoke all of your Orbs twice."
+  },
+  "SHINING_STRIKE": {
+    "title": "Shining Strike",
+    "description": "Deal 8 damage.\nGain 2 Stars.\nPut this card on top of your Draw Pile."
+  },
+  "SHIV": {
+    "title": "Shiv",
+    "description": "Deal 4 damage.\nExhaust."
+  },
+  "SHOCKWAVE": {
+    "title": "Shockwave",
+    "description": "Apply 3 Weak and Vulnerable to ALL enemies.\nExhaust."
+  },
+  "SHROUD": {
+    "title": "Shroud",
+    "description": "Whenever you apply Doom, gain 2 Block."
+  },
+  "SHRUG_IT_OFF": {
+    "title": "Shrug It Off",
+    "description": "Gain 8 Block.\nDraw 1 card."
+  },
+  "SIC_EM": {
+    "title": "Sic 'Em",
+    "description": "Osty deals 5 damage.\nWhenever Osty hits this enemy this turn, Summon 3."
+  },
+  "SIGNAL_BOOST": {
+    "title": "Signal Boost",
+    "description": "The next Power you play is played an additional time.\nExhaust."
+  },
+  "SKEWER": {
+    "title": "Skewer",
+    "description": "Deal 8 damage X times."
+  },
+  "SKIM": {
+    "title": "Skim",
+    "description": "Draw 3 cards."
+  },
+  "SLEIGHT_OF_FLESH": {
+    "title": "Sleight of Flesh",
+    "description": "Whenever you apply a debuff to an enemy, they take 9 damage."
+  },
+  "SLICE": {
+    "title": "Slice",
+    "description": "Deal 6 damage."
+  },
+  "SLIMED": {
+    "title": "Slimed",
+    "description": "Draw 1 card.\nExhaust."
+  },
+  "SLOTH": {
+    "title": "Sloth",
+    "description": "You cannot play more than 3 cards each turn."
+  },
+  "SMOKESTACK": {
+    "title": "Smokestack",
+    "description": "Whenever you create a Status, deal 5 damage to ALL enemies."
+  },
+  "SNAKEBITE": {
+    "title": "Snakebite",
+    "description": "Retain.\nApply 7 Poison."
+  },
+  "SNAP": {
+    "title": "Snap",
+    "description": "Osty deals 7 damage.\nAdd Retain to a card in your Hand."
+  },
+  "SNEAKY": {
+    "title": "Sneaky",
+    "description": "Sly.\nWhenever another player attacks an enemy, gain 1 Block."
+  },
+  "SOLAR_STRIKE": {
+    "title": "Solar Strike",
+    "description": "Deal 9 damage.\nGain 1 Stars."
+  },
+  "SOOT": {
+    "title": "Soot",
+    "description": "Unplayable."
+  },
+  "SOUL": {
+    "title": "Soul",
+    "description": "Draw 2 cards.\nExhaust."
+  },
+  "SOUL_STORM": {
+    "title": "Soul Storm",
+    "description": "Deal 9 damage.\nDeals 2 additional damage for each Soul in your Exhaust Pile."
+  },
+  "SOVEREIGN_BLADE": {
+    "title": "Sovereign Blade",
+    "description": "Retain.\nDeal 10 damage."
+  },
+  "SOW": {
+    "title": "Sow",
+    "description": "Retain.\nDeal 8 damage to ALL enemies."
+  },
+  "SPECTRUM_SHIFT": {
+    "title": "Spectrum Shift",
+    "description": "At the start of your turn, add 1 random Colorless card into your Hand."
+  },
+  "SPEEDSTER": {
+    "title": "Speedster",
+    "description": "Whenever you draw a card during your turn, deal 2 damage to ALL enemies."
+  },
+  "SPINNER": {
+    "title": "Spinner",
+    "description": "At the start of your turn, Channel 1 Glass."
+  },
+  "SPIRIT_OF_ASH": {
+    "title": "Spirit of Ash",
+    "description": "Whenever you play an Ethereal card, gain 4 Block."
+  },
+  "SPITE": {
+    "title": "Spite",
+    "description": "Deal 5 damage.\nIf you lost HP this turn,\nhits 2 times."
+  },
+  "SPLASH": {
+    "title": "Splash",
+    "description": "Choose 1 of 3 random Attacks from another character to add into your Hand. It's free to play this turn."
+  },
+  "SPOILS_MAP": {
+    "title": "Spoils Map",
+    "description": "Unplayable.\nMarks a site of 600 extra Gold in the next Act."
+  },
+  "SPOILS_OF_BATTLE": {
+    "title": "Spoils of Battle",
+    "description": "Forge 5.\nDraw 2 cards."
+  },
+  "SPORE_MIND": {
+    "title": "Spore Mind",
+    "description": "Exhaust."
+  },
+  "SPUR": {
+    "title": "Spur",
+    "description": "Retain.\nSummon 3.\nOsty heals 5 HP."
+  },
+  "SQUASH": {
+    "title": "Squash",
+    "description": "Deal 10 damage.\nApply 2 Vulnerable."
+  },
+  "SQUEEZE": {
+    "title": "Squeeze",
+    "description": "Osty deals 25 damage.\nDeals 5 additional damage for ALL your other Osty Attacks."
+  },
+  "STACK": {
+    "title": "Stack",
+    "description": "Gain Block equal to the number of cards in your Discard Pile."
+  },
+  "STAMPEDE": {
+    "title": "Stampede",
+    "description": "At the end of your turn, 1 random Attack in your Hand is played against a random enemy."
+  },
+  "STARDUST": {
+    "title": "Stardust",
+    "description": "Deal 5 damage to a random enemy X times."
+  },
+  "STOKE": {
+    "title": "Stoke",
+    "description": "Exhaust your Hand.\nAdd 1 random card into your Hand for each card Exhausted."
+  },
+  "STOMP": {
+    "title": "Stomp",
+    "description": "Deal 12 damage to ALL enemies.\nCosts 1 less  Energy for each Attack played this turn."
+  },
+  "STONE_ARMOR": {
+    "title": "Stone Armor",
+    "description": "Gain 4 Plating."
+  },
+  "STORM": {
+    "title": "Storm",
+    "description": "Whenever you play a Power, Channel 1 Lightning."
+  },
+  "STORM_OF_STEEL": {
+    "title": "Storm of Steel",
+    "description": "Discard your Hand.\nAdd 1 Shiv into your Hand for each card discarded."
+  },
+  "STRANGLE": {
+    "title": "Strangle",
+    "description": "Deal 8 damage.\nWhenever you play a card this turn, the enemy loses 2 HP."
+  },
+  "STRATAGEM": {
+    "title": "Stratagem",
+    "description": "Whenever you shuffle your Draw Pile, choose a card from it to put into your Hand."
+  },
+  "STRIKE_DEFECT": {
+    "title": "Strike",
+    "description": "Deal 6 damage."
+  },
+  "STRIKE_IRONCLAD": {
+    "title": "Strike",
+    "description": "Deal 6 damage."
+  },
+  "STRIKE_NECROBINDER": {
+    "title": "Strike",
+    "description": "Deal 6 damage."
+  },
+  "STRIKE_REGENT": {
+    "title": "Strike",
+    "description": "Deal 6 damage."
+  },
+  "STRIKE_SILENT": {
+    "title": "Strike",
+    "description": "Deal 6 damage."
+  },
+  "SUBROUTINE": {
+    "title": "Subroutine",
+    "description": "Whenever you play a Power, gain  Energy."
+  },
+  "SUCKER_PUNCH": {
+    "title": "Sucker Punch",
+    "description": "Deal 8 damage.\nApply 1 Weak."
+  },
+  "SUMMON_FORTH": {
+    "title": "Summon Forth",
+    "description": "Put Sovereign Blade into your Hand from anywhere.\nForge 8."
+  },
+  "SUNDER": {
+    "title": "Sunder",
+    "description": "Deal 24 damage.\nIf this kills an enemy, gain 3 Energy."
+  },
+  "SUPERCRITICAL": {
+    "title": "Supercritical",
+    "description": "Gain 4 Energy.\nExhaust."
+  },
+  "SUPERMASSIVE": {
+    "title": "Supermassive",
+    "description": "Deal 5 damage.\nDeals 3 additional damage for each card you created this combat."
+  },
+  "SUPPRESS": {
+    "title": "Suppress",
+    "description": "Innate.\nDeal 11 damage.\nApply 3 Weak."
+  },
+  "SURVIVOR": {
+    "title": "Survivor",
+    "description": "Gain 8 Block.\nDiscard 1 card."
+  },
+  "SWEEPING_BEAM": {
+    "title": "Sweeping Beam",
+    "description": "Deal 6 damage to ALL enemies.\nDraw 1 card."
+  },
+  "SWEEPING_GAZE": {
+    "title": "Sweeping Gaze",
+    "description": "Ethereal.\nOsty deals 10 damage to a random enemy.\nExhaust."
+  },
+  "SWORD_BOOMERANG": {
+    "title": "Sword Boomerang",
+    "description": "Deal 3 damage to a random enemy 3 times."
+  },
+  "SWORD_SAGE": {
+    "title": "Sword Sage",
+    "description": "Sovereign Blade gains Replay 1."
+  },
+  "SYNCHRONIZE": {
+    "title": "Synchronize",
+    "description": "Gain 2 Focus this turn for each unique Orb you have.\nExhaust."
+  },
+  "SYNTHESIS": {
+    "title": "Synthesis",
+    "description": "Deal 14 damage.\nThe next Power you play costs 0  Energy."
+  },
+  "TACTICIAN": {
+    "title": "Tactician",
+    "description": "Sly.\nGain 1 Energy."
+  },
+  "TAG_TEAM": {
+    "title": "Tag Team",
+    "description": "Deal 11 damage.\nThe next Attack another player plays on the enemy is played an extra time."
+  },
+  "TANK": {
+    "title": "Tank",
+    "description": "Take double damage from enemies.\nAllies take half damage from enemies."
+  },
+  "TAUNT": {
+    "title": "Taunt",
+    "description": "Gain 7 Block.\nApply 1 Vulnerable."
+  },
+  "TEAR_ASUNDER": {
+    "title": "Tear Asunder",
+    "description": "Deal 5 damage.\nHits an additional time for each time you lost HP this combat."
+  },
+  "TEMPEST": {
+    "title": "Tempest",
+    "description": "Channel X Lightning."
+  },
+  "TERRAFORMING": {
+    "title": "Terraforming",
+    "description": "Gain 6 Vigor."
+  },
+  "TESLA_COIL": {
+    "title": "Tesla Coil",
+    "description": "Deal 3 damage.\nTrigger all Lightning against the enemy."
+  },
+  "THE_BOMB": {
+    "title": "The Bomb",
+    "description": "At the end of 3 turns, deal 40 damage to ALL enemies."
+  },
+  "THE_GAMBIT": {
+    "title": "The Gambit",
+    "description": "Gain 50 Block.\nIf you take unblocked attack damage this combat, die."
+  },
+  "THE_HUNT": {
+    "title": "The Hunt",
+    "description": "Deal 10 damage.\nIf Fatal, gain an additional card reward.\nExhaust."
+  },
+  "THE_SCYTHE": {
+    "title": "The Scythe",
+    "description": "Deal 13 damage.\nPermanently increase this card's damage by 4.\nExhaust."
+  },
+  "THE_SEALED_THRONE": {
+    "title": "The Sealed Throne",
+    "description": "Whenever you play a card, gain ★."
+  },
+  "THE_SMITH": {
+    "title": "The Smith",
+    "description": "Forge 30."
+  },
+  "THINKING_AHEAD": {
+    "title": "Thinking Ahead",
+    "description": "Draw 2 cards.\nPut 1 card from your Hand on top of your Draw Pile.\nExhaust."
+  },
+  "THRASH": {
+    "title": "Thrash",
+    "description": "Deal 4 damage twice.\nExhaust a random Attack in your Hand and add its damage to this card."
+  },
+  "THRUMMING_HATCHET": {
+    "title": "Thrumming Hatchet",
+    "description": "Deal 11 damage.\nAt the start of your next turn, return this to your Hand."
+  },
+  "THUNDER": {
+    "title": "Thunder",
+    "description": "Whenever you Evoke Lightning, deal 6 damage to each enemy hit."
+  },
+  "THUNDERCLAP": {
+    "title": "Thunderclap",
+    "description": "Deal 4 damage and apply 1 Vulnerable to ALL enemies."
+  },
+  "TIMES_UP": {
+    "title": "Time's Up",
+    "description": "Deal damage equal to the enemy's Doom.\nExhaust."
+  },
+  "TOOLS_OF_THE_TRADE": {
+    "title": "Tools of the Trade",
+    "description": "At the start of your turn, draw 1 card and discard 1 card."
+  },
+  "TORIC_TOUGHNESS": {
+    "title": "Toric Toughness",
+    "description": "Gain 5 Block.\nGain 5 Block at the start of the next 2 turns."
+  },
+  "TOXIC": {
+    "title": "Toxic",
+    "description": "At the end of your turn, if this is in your Hand, take 5 damage.\nExhaust."
+  },
+  "TRACKING": {
+    "title": "Tracking",
+    "description": "Weak enemies take double damage from Attacks."
+  },
+  "TRANSFIGURE": {
+    "title": "Transfigure",
+    "description": "Add Replay to a card in your Hand.\nIt costs an extra 1 Energy.\nExhaust."
+  },
+  "TRASH_TO_TREASURE": {
+    "title": "Trash to Treasure",
+    "description": "Whenever you create a Status, Channel 1 random Orb."
+  },
+  "TREMBLE": {
+    "title": "Tremble",
+    "description": "Apply 3 Vulnerable.\nExhaust."
+  },
+  "TRUE_GRIT": {
+    "title": "True Grit",
+    "description": "Gain 7 Block.\nExhaust 1 card at random."
+  },
+  "TURBO": {
+    "title": "TURBO",
+    "description": "Gain 2 Energy.\nAdd a Void into your Discard Pile."
+  },
+  "TWIN_STRIKE": {
+    "title": "Twin Strike",
+    "description": "Deal 5 damage twice."
+  },
+  "TYRANNY": {
+    "title": "Tyranny",
+    "description": "At the start of your turn, draw 1 card and Exhaust 1 card from your Hand."
+  },
+  "ULTIMATE_DEFEND": {
+    "title": "Ultimate Defend",
+    "description": "Gain 11 Block."
+  },
+  "ULTIMATE_STRIKE": {
+    "title": "Ultimate Strike",
+    "description": "Deal 14 damage."
+  },
+  "UNDEATH": {
+    "title": "Undeath",
+    "description": "Gain 7 Block.\nAdd a copy of this card into your Discard Pile."
+  },
+  "UNLEASH": {
+    "title": "Unleash",
+    "description": "Osty deals 6 damage.\nDeals additional damage equal to Osty's current HP."
+  },
+  "UNMOVABLE": {
+    "title": "Unmovable",
+    "description": "The first time you gain Block from a card each turn, double the amount gained."
+  },
+  "UNRELENTING": {
+    "title": "Unrelenting",
+    "description": "Deal 14 damage.\nThe next Attack you play costs 0  Energy."
+  },
+  "UNTOUCHABLE": {
+    "title": "Untouchable",
+    "description": "Sly.\nGain 6 Block."
+  },
+  "UP_MY_SLEEVE": {
+    "title": "Up My Sleeve",
+    "description": "Add 3 Shivs into your Hand.\nReduce this card's cost by 1."
+  },
+  "UPPERCUT": {
+    "title": "Uppercut",
+    "description": "Deal 13 damage.\nApply 1 Weak.\nApply 1 Vulnerable."
+  },
+  "UPROAR": {
+    "title": "Uproar",
+    "description": "Deal 6 damage twice.\nPlay a random Attack from your Draw Pile."
+  },
+  "VEILPIERCER": {
+    "title": "Veilpiercer",
+    "description": "Deal 10 damage.\nThe next Ethereal card you play costs 0  Energy."
+  },
+  "VENERATE": {
+    "title": "Venerate",
+    "description": "Gain 2 Stars."
+  },
+  "VICIOUS": {
+    "title": "Vicious",
+    "description": "Whenever you apply Vulnerable, draw 1 card."
+  },
+  "VOID": {
+    "title": "Void",
+    "description": "Unplayable.\nEthereal.\nWhenever you draw this card, lose 1 Energy."
+  },
+  "VOID_FORM": {
+    "title": "Void Form",
+    "description": "Ethereal.\nEnd your turn.\nThe first 2 cards you play each turn are free to play."
+  },
+  "VOLLEY": {
+    "title": "Volley",
+    "description": "Deal 10 damage to a random enemy X times."
+  },
+  "VOLTAIC": {
+    "title": "Voltaic",
+    "description": "Channel Lightning equal to the Lightning already Channeled this combat.\nExhaust."
+  },
+  "WASTE_AWAY": {
+    "title": "Waste Away",
+    "description": "Gain 1 less  Energy per turn."
+  },
+  "WELL_LAID_PLANS": {
+    "title": "Well-Laid Plans",
+    "description": "At the end of your turn, Retain up to 1 card."
+  },
+  "WHIRLWIND": {
+    "title": "Whirlwind",
+    "description": "Deal 5 damage to ALL enemies X times."
+  },
+  "WHISTLE": {
+    "title": "Whistle",
+    "description": "Deal 33 damage.\nStun the enemy.\nExhaust."
+  },
+  "WHITE_NOISE": {
+    "title": "White Noise",
+    "description": "Add a random Power into your Hand. It's free to play this turn.\nExhaust."
+  },
+  "WISH": {
+    "title": "Wish",
+    "description": "Put a card from your Draw Pile into your Hand.\nExhaust."
+  },
+  "WISP": {
+    "title": "Wisp",
+    "description": "Gain 1 Energy.\nExhaust."
+  },
+  "WOUND": {
+    "title": "Wound",
+    "description": "Unplayable."
+  },
+  "WRAITH_FORM": {
+    "title": "Wraith Form",
+    "description": "Gain 2 Intangible.\nAt the start of your turn, lose 1 Dexterity."
+  },
+  "WRITHE": {
+    "title": "Writhe",
+    "description": "Unplayable.\nInnate."
+  },
+  "WROUGHT_IN_WAR": {
+    "title": "Wrought in War",
+    "description": "Deal 7 damage.\nForge 7."
+  },
+  "ZAP": {
+    "title": "Zap",
+    "description": "Channel 1 Lightning."
+  },
+  "PREPARE": {
+    "title": "Prepare",
+    "description": "Discard 2 cards.\nNext turn, gain 2 Energy."
+  },
+  "NOT_YET": {
+    "title": "Not Yet",
+    "description": "Heal 10 HP.\nExhaust."
+  },
+  "WITHER": {
+    "title": "Wither",
+    "description": "Unplayable.\nAt the end of your turn, if this is in your Hand, take 3 damage."
+  },
+  "SCARE": {
+    "title": "Scare",
+    "description": "Apply 1 Weak to ALL enemies.\nExhaust."
+  }
+}

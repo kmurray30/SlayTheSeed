@@ -1,0 +1,76 @@
+{
+  "class_name": "TheObscura",
+  "title": "The Obscura",
+  "min_hp": 129,
+  "max_hp": 129,
+  "min_hp_base": 123,
+  "max_hp_base": 123,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "ILLUSION_MOVE",
+      "title": "Illusion",
+      "intents": [
+        {
+          "type": "summon"
+        }
+      ],
+      "effects": [
+        "Add Parafright to combat"
+      ]
+    },
+    {
+      "id": "PIERCING_GAZE_MOVE",
+      "title": "Piercing Gaze",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 11,
+          "damage_base": 10,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 10/11 damage"
+      ]
+    },
+    {
+      "id": "SAIL_MOVE",
+      "title": "Sail",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Apply 3 Strength to all allies"
+      ]
+    },
+    {
+      "id": "HARDENING_STRIKE_MOVE",
+      "title": "Hardening Strike",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 7,
+          "damage_base": 6,
+          "ascension": 9
+        },
+        {
+          "type": "block",
+          "amount": 7,
+          "amount_base": 6,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 6/7 damage",
+        "Gain 6/7 Block"
+      ]
+    }
+  ],
+  "move_pattern": "Starts with Illusion, then enters a repeating random cycle between Piercing Gaze, Sail, and Hardening Strike, with each move preventing consecutive repetition of itself.",
+  "powers_on_spawn": [],
+  "notes": "Piercing Gaze is hidden from the bestiary display but still used in combat. The monster's animations and hit reactions change after Parafright is summoned by Illusion."
+}

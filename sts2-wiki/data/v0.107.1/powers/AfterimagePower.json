@@ -1,0 +1,9 @@
+{
+  "class_name": "AfterimagePower",
+  "title": "Afterimage",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever you play a card, gain [blue]1[/blue] [gold]Block[/gold].",
+  "smart_description": "Whenever you play a card, gain [blue]{Amount}[/blue] [gold]Block[/gold].",
+  "notes": "Tracks the power amount at the time each card is played, then grants block after the card is played. Prevents triggering on cards that started play before the power was applied."
+}

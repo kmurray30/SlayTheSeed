@@ -1,0 +1,25 @@
+{
+  "class_name": "LeadingStrike",
+  "title": "Leading Strike",
+  "character": "Ironclad",
+  "energy_cost": 1,
+  "type": "Attack",
+  "rarity": "Common",
+  "target": "Single",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 3,
+      "upgraded_value": 6
+    },
+    {
+      "type": "Cards",
+      "base_value": 2
+    }
+  ],
+  "description": "Deal 3 damage. Add 2 [gold]Shivs[/gold] into your [gold]Hand[/gold].",
+  "upgraded_description": "Deal 6 damage. Add 2 [gold]Shivs[/gold] into your [gold]Hand[/gold].",
+  "referenced_powers": [],
+  "notes": "Adds Shiv cards to your hand as part of the attack effect."
+}

@@ -1,0 +1,8 @@
+{
+  "class_name": "FanOfKnivesPower",
+  "title": "Fan of Knives",
+  "power_type": "Buff",
+  "stack_type": "Single",
+  "description": "[gold]Shivs[/gold] hit ALL enemies.",
+  "notes": "This power doesn't do anything on its own. The Shiv card checks for its existence and modifies its targeting to affect all enemies instead of a single target."
+}

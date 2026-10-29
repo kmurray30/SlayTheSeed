@@ -1,0 +1,9 @@
+{
+  "class_name": "VigorPower",
+  "title": "Vigor",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Your next Attack deals additional damage.",
+  "smart_description": "Your next Attack deals [blue]{Amount}[/blue] additional damage.",
+  "notes": "Counter-type buff that applies its stack value as bonus damage to the next powered Attack played, then decrements by that amount. Only applies to card-based powered attacks from the power's owner."
+}

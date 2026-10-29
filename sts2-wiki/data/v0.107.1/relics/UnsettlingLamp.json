@@ -1,0 +1,9 @@
+{
+  "class_name": "UnsettlingLamp",
+  "title": "Unsettling Lamp",
+  "rarity": "Rare",
+  "character": null,
+  "description": "Each combat, the first time you play a card that [gold]Debuffs[/gold] an enemy, double its effect.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "The relic doubles all debuff effects applied by the first debuff card played in combat. This effect applies to the card and all debuffs it applies. The relic includes protection against double-doubling: if a temporary power (like Piercing Wail) is doubled and then applies an internal debuff, that internal debuff will not be doubled again to avoid quadrupling the effect."
+}

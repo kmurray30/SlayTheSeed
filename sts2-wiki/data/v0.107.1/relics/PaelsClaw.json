@@ -1,0 +1,8 @@
+{
+  "class_name": "PaelsClaw",
+  "title": "Pael's Claw",
+  "rarity": "Ancient",
+  "description": "Upon pickup, Enchant all Defends with Goopy.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "Applies Goopy enchantment to all Defend cards in your starting deck. Goopy enchantment triggers when a card is played, reducing its cost by 1 for the rest of combat."
+}

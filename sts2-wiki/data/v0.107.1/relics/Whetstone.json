@@ -1,0 +1,8 @@
+{
+  "class_name": "Whetstone",
+  "title": "Whetstone",
+  "rarity": "Common",
+  "description": "Upon pickup, Upgrade 2 random Attacks.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Targets upgradable Attack cards only. If fewer than 2 upgradable Attacks exist in your deck, only the available ones will be upgraded."
+}

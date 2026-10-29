@@ -1,0 +1,9 @@
+{
+  "class_name": "FyshOil",
+  "title": "Fysh Oil",
+  "rarity": "Uncommon",
+  "usage": "Unknown",
+  "target": "AnyPlayer",
+  "description": "Gain [blue]1[/blue] [gold]Strength[/gold] and [blue]1[/blue] [gold]Dexterity[/gold].",
+  "notes": "Combat-only potion. Applies one stack each of Strength and Dexterity powers to the target player."
+}

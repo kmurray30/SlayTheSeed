@@ -1,0 +1,316 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Patch v0.101.0">
+  <div class="page-header">
+    <h1>v0.101.0 Balance Patch</h1>
+    <p class="subtitle">Changes from v0.100.0 &rarr; v0.101.0 &mdash; derived from decompiled game data</p>
+  </div>
+
+  <div style="max-width: 900px; margin: 0 auto;">
+
+    <p class="desc-text">
+      This patch features a complete Doormaker boss rework with new debuff mechanics, a Regent card balance pass,
+      Prepared replacing Prepare for Silent, monster nerfs to Skulking Colony and Haunted Ship, a relic rarity shuffle,
+      and Pendulum being completely reworked.
+    </p>
+
+    <!-- ═══════════════════════════════ -->
+    <!-- CARDS                           -->
+    <!-- ═══════════════════════════════ -->
+    <h2 class="section-heading" id="cards" style="margin-top: 2rem;">Card Changes</h2>
+
+    <h3 style="margin-top: 1.5rem; color: var(--green);">New Card</h3>
+    <table class="stat-table">
+      <thead><tr><th>Card</th><th>Character</th><th>Details</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href={`${base}cards/prepared/`}>Prepared</a></td>
+          <td class="char-silent">Silent</td>
+          <td>0-cost Common Skill. "Draw 1 card. Discard 1 card." Upgrade: Draw 2 / Discard 2. <em>Replaces Prepare.</em></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top: 1.5rem; color: var(--red-bright);">Removed Card</h3>
+    <table class="stat-table">
+      <thead><tr><th>Card</th><th>Character</th><th>Was</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Prepare</td>
+          <td class="char-silent">Silent</td>
+          <td>1-cost Common Skill. "Discard 2 cards. Next turn, gain 2 Energy." Upgrade: Gain 3 Energy.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Card Reworks -->
+    <h3 style="margin-top: 1.5rem; color: var(--accent);">Major Reworks</h3>
+    <table class="stat-table">
+      <thead><tr><th>Card</th><th>Character</th><th>Before</th><th>After</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href={`${base}cards/arsenal/`}>Arsenal</a></td>
+          <td class="char-regent">Regent</td>
+          <td>1-cost Power. "Whenever you play a Colorless card, gain 1/2 Strength."</td>
+          <td>1-cost Power. <strong>Innate</strong>. "Whenever you <strong>create a card</strong>, gain 1 Strength." Upgrade now adds Innate.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}cards/spoils-of-battle/`}>Spoils of Battle</a></td>
+          <td class="char-regent">Regent</td>
+          <td>1-cost Skill. "Forge 12/17."</td>
+          <td>1-cost Skill. "Forge 5/8. <strong>Draw 2 cards.</strong>"</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}cards/borrowed-time/`}>Borrowed Time</a></td>
+          <td class="char-necrobinder">Necrobinder</td>
+          <td>Apply 6 Doom. Gain 1 Energy. <em>(Upgrade: Doom reduced to 3)</em></td>
+          <td>Apply <strong>3</strong> Doom. Gain 1 Energy. <em>(Upgrade: <strong>Gain 2 Energy</strong>)</em></td>
+        </tr>
+        <tr>
+          <td><a href={`${base}cards/guiding-star/`}>Guiding Star</a></td>
+          <td class="char-regent">Regent</td>
+          <td>"Next turn, draw 2 cards."</td>
+          <td>"<strong>Draw 2 cards</strong>" (immediate, no longer delayed).</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}cards/cinder/`}>Cinder</a></td>
+          <td class="char-ironclad">Ironclad</td>
+          <td>"Exhaust the top card of your Draw Pile."</td>
+          <td>"Exhaust <strong>1 card at random</strong>."</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Stat Changes -->
+    <h3 style="margin-top: 1.5rem; color: var(--accent);">Stat Changes</h3>
+    <table class="stat-table">
+      <thead><tr><th>Card</th><th>Character</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href={`${base}cards/capture-spirit/`}>Capture Spirit</a></td>
+          <td class="char-necrobinder">Necrobinder</td>
+          <td>Damage: 2/3 &rarr; 3/4. Souls: 2/3 &rarr; 3/4.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}cards/celestial-might/`}>Celestial Might</a></td>
+          <td class="char-regent">Regent</td>
+          <td>Upgrade changed: was +2 damage (6&rarr;8, 3 hits) &rarr; now +1 hit (6 damage, 3&rarr;4 hits).</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}cards/falling-star/`}>Falling Star</a></td>
+          <td class="char-regent">Regent</td>
+          <td>Damage: 7/11 &rarr; 8/12.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}cards/glitterstream/`}>Glitterstream</a></td>
+          <td class="char-regent">Regent</td>
+          <td>Block-next-turn: 4/6 &rarr; 5/7. (Immediate Block unchanged.)</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}cards/parry/`}>Parry</a></td>
+          <td class="char-regent">Regent</td>
+          <td>Block: 8/11 &rarr; 10/14.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}cards/refine-blade/`}>Refine Blade</a></td>
+          <td class="char-regent">Regent</td>
+          <td>Forge: 6/10 &rarr; 9/13.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}cards/serpent-form/`}>Serpent Form</a></td>
+          <td class="char-silent">Silent</td>
+          <td>Upgraded damage: 5 &rarr; 6.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}cards/voltaic/`}>Voltaic</a></td>
+          <td class="char-defect">Defect</td>
+          <td>Energy cost: 2 &rarr; 3.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Keyword Changes -->
+    <h3 style="margin-top: 1.5rem; color: var(--accent);">Keyword Changes</h3>
+    <table class="stat-table">
+      <thead><tr><th>Card</th><th>Character</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href={`${base}cards/tremble/`}>Tremble</a></td>
+          <td class="char-ironclad">Ironclad</td>
+          <td>Added <strong>Exhaust</strong>.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}cards/sword-sage/`}>Sword Sage</a></td>
+          <td class="char-regent">Regent</td>
+          <td>No longer increases Sovereign Blade's cost by 1.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ═══════════════════════════════ -->
+    <!-- MONSTERS                        -->
+    <!-- ═══════════════════════════════ -->
+    <h2 class="section-heading" id="monsters" style="margin-top: 2rem;">Monster Changes</h2>
+
+    <h3 style="margin-top: 1.5rem; color: var(--accent);">Doormaker (Boss Rework)</h3>
+    <table class="stat-table">
+      <thead><tr><th>Move</th><th>Before</th><th>After</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Beam &rarr; Hunger</td>
+          <td>11 damage &times;3 hits</td>
+          <td>13 damage &times;2 hits + applies Hunger (cards played are Exhausted)</td>
+        </tr>
+        <tr>
+          <td>Chomp &rarr; Scrutiny</td>
+          <td>45 damage</td>
+          <td>35 damage + applies Scrutiny (can't draw extra cards)</td>
+        </tr>
+        <tr>
+          <td>Pulverize &rarr; Grasp</td>
+          <td>22 damage + 3 Strength</td>
+          <td>5 Strength (self) + applies Grasp (first card each turn costs +1 Energy)</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="desc-text" style="font-size: 0.85rem; margin-top: 0.5rem;">
+      Hunger of the Void power removed. Three new targeted debuffs replace the raw damage output.
+    </p>
+
+    <h3 style="margin-top: 1.5rem;">Other Monster Changes</h3>
+    <table class="stat-table">
+      <thead><tr><th>Monster</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href={`${base}monsters/haunted-ship/`}>Haunted Ship</a></td>
+          <td>Now starts with Haunt. Haunt reworked: no longer applies Weak/Frail/Vuln, now adds Dazed. Ramming Speed reworked: no longer adds Wound, now applies 1 Weak.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}monsters/skulking-colony/`}>Skulking Colony</a></td>
+          <td>Inertia: Strength 4&rarr;3, no longer adds Dazed. Smash: no longer adds Dazed. Zoom: damage 17&rarr;16.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}monsters/the-forgotten/`}>The Forgotten</a></td>
+          <td>Miasma: Dexterity gain 3&rarr;2.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}monsters/the-lost/`}>The Lost</a></td>
+          <td>Debilitating Smog: Strength gain 3&rarr;2.</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}monsters/waterfall-giant/`}>Waterfall Giant</a></td>
+          <td>HP: 260&rarr;250.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ═══════════════════════════════ -->
+    <!-- RELICS                          -->
+    <!-- ═══════════════════════════════ -->
+    <h2 class="section-heading" id="relics" style="margin-top: 2rem;">Relic Changes</h2>
+
+    <h3 style="margin-top: 1.5rem; color: var(--accent);">Rework</h3>
+    <table class="stat-table">
+      <thead><tr><th>Relic</th><th>Before</th><th>After</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href={`${base}relics/pendulum/`}>Pendulum</a></td>
+          <td>Whenever you shuffle your Draw Pile, draw a card.</td>
+          <td>Every 3 turns, draw 1 card.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top: 1.5rem; color: var(--accent);">Effect Changes</h3>
+    <table class="stat-table">
+      <thead><tr><th>Relic</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href={`${base}relics/tiny-mailbox/`}>Tiny Mailbox</a></td>
+          <td>Rest potions: 1&rarr;2. Rarity also changed Common&rarr;Uncommon.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top: 1.5rem; color: var(--accent);">Rarity Changes</h3>
+    <table class="stat-table">
+      <thead><tr><th>Relic</th><th>Before</th><th>After</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href={`${base}relics/bag-of-marbles/`}>Bag of Marbles</a></td>
+          <td>Uncommon</td><td>Common</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}relics/bellows/`}>Bellows</a></td>
+          <td>Uncommon</td><td>Rare</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}relics/lasting-candy/`}>Lasting Candy</a></td>
+          <td>Rare</td><td>Uncommon</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}relics/permafrost/`}>Permafrost</a></td>
+          <td>Common</td><td>Uncommon</td>
+        </tr>
+        <tr>
+          <td><a href={`${base}relics/red-mask/`}>Red Mask</a></td>
+          <td>Uncommon</td><td>Common</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ═══════════════════════════════ -->
+    <!-- POWERS                          -->
+    <!-- ═══════════════════════════════ -->
+    <h2 class="section-heading" id="powers" style="margin-top: 2rem;">Power Changes</h2>
+
+    <h3 style="margin-top: 1.5rem; color: var(--green);">New Powers</h3>
+    <table class="stat-table">
+      <thead><tr><th>Power</th><th>Type</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Grasp</td>
+          <td>Debuff</td>
+          <td>The first card you play each turn costs 1 additional Energy.</td>
+        </tr>
+        <tr>
+          <td>Hunger</td>
+          <td>Debuff</td>
+          <td>Whenever you play an Attack or Skill, it is Exhausted.</td>
+        </tr>
+        <tr>
+          <td>Scrutiny</td>
+          <td>Debuff</td>
+          <td>You cannot draw additional cards during your turn.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top: 1.5rem; color: var(--red-bright);">Removed Power</h3>
+    <table class="stat-table">
+      <thead><tr><th>Power</th><th>Was</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Hunger of the Void</td>
+          <td>Replaced by three new Doormaker debuffs above.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ═══════════════════════════════ -->
+    <!-- TEXT                            -->
+    <!-- ═══════════════════════════════ -->
+    <h2 class="section-heading" id="text" style="margin-top: 2rem;">Text Changes</h2>
+    <p class="desc-text">
+      "Costs 0 this turn" wording standardized to "free to play this turn" on
+      <a href={`${base}relics/crossbow/`}>Crossbow</a>,
+      <a href={`${base}relics/vexing-puzzlebox/`}>Vexing Puzzlebox</a>, and
+      <a href={`${base}potions/liquid-memories/`}>Liquid Memories</a>.
+    </p>
+
+  </div>
+</BaseLayout>

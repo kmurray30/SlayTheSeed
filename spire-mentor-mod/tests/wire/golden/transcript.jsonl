@@ -1,0 +1,765 @@
+{"scn":"","ev":"harness_config","platform_shim":true}
+{"scn":"00_pre_start","ev":"scenario","name":"00_pre_start","what":"API calls before Start(): no listener, no client"}
+{"scn":"00_pre_start","ev":"api","call":"IsClientConnected","args":null,"result":false,"exception":null,"timing":"returned"}
+{"scn":"00_pre_start","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"map_select\"}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"00_pre_start","ev":"api_start","id":"p0","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\"}","timeout_ms":1000,"token":"none"},"completed_on_return":true}
+{"scn":"00_pre_start","ev":"api_result","id":"p0","after":"no_client","result":null,"exception":null}
+{"scn":"00_pre_start","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\"}","label":"adv_pre"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"00_pre_start","ev":"api","call":"CancelAdviceRequest","args":{"requestId":"a999"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"00_pre_start","ev":"api_start","id":"p0w","call":"WaitForActionAsync","args":{"timeout_ms":1000,"token":"none"},"completed_on_return":false}
+{"scn":"00_pre_start","ev":"probe","id":"p0w","at":"t+150ms","state":"pending"}
+{"scn":"00_pre_start","ev":"api_result","id":"p0w","after":"timeout","result":null,"exception":null}
+{"scn":"01_start_connect","ev":"scenario","name":"01_start_connect","what":"Start, connect, no greeting/handshake, idempotent Start"}
+{"scn":"01_start_connect","ev":"api","call":"Start","args":{"port":"<PORT>"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"01_start_connect","ev":"client_connect","client":"A","port":"<PORT>","ok":true}
+{"scn":"01_start_connect","ev":"is_client_connected","expect":true,"observed":true,"ok":true}
+{"scn":"01_start_connect","ev":"s2c_none","client":"A"}
+{"scn":"01_start_connect","ev":"api","call":"IsClientConnected","args":null,"result":true,"exception":null,"timing":"returned"}
+{"scn":"01_start_connect","ev":"api","call":"Start","args":{"port":"<PORT>"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"01_start_connect","ev":"api","call":"Start","args":{"port":"<PORT2>"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"01_start_connect","ev":"client_connect","client":"X","port":"<PORT2>","ok":false,"error":"ConnectionRefused"}
+{"scn":"01_start_connect","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"01_start_connect","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"02_outbound_types","ev":"scenario","name":"02_outbound_types","what":"SendState passes every PROTOCOL.md outbound message type through as one line"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"combat_action\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"hand\":[{\"index\":0,\"id\":\"STRIKE_IRONCLAD\",\"cost\":1,\"playable\":true}],\"energy\":3,\"enemies\":[{\"index\":0,\"hp\":40}]}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"combat_action\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"hand\":[{\"index\":0,\"id\":\"STRIKE_IRONCLAD\",\"cost\":1,\"playable\":true}],\"energy\":3,\"enemies\":[{\"index\":0,\"hp\":40}]}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"map_select\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"nodes\":[{\"col\":1,\"row\":2,\"type\":\"monster\"}]}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"map_select\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"nodes\":[{\"col\":1,\"row\":2,\"type\":\"monster\"}]}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"card_select\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"cards\":[],\"min_count\":1,\"max_count\":1,\"min_select\":1,\"max_select\":1,\"cancelable\":false}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"card_select\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"cards\":[],\"min_count\":1,\"max_count\":1,\"min_select\":1,\"max_select\":1,\"cancelable\":false}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"card_reward\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"cards\":[{\"id\":\"BASH\"}],\"can_skip\":true}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"card_reward\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"cards\":[{\"id\":\"BASH\"}],\"can_skip\":true}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"card_bundle\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"bundles\":[[{\"id\":\"A\"}],[{\"id\":\"B\"}]]}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"card_bundle\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"bundles\":[[{\"id\":\"A\"}],[{\"id\":\"B\"}]]}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"crystal_sphere\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"options\":[]}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"crystal_sphere\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"options\":[]}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"rest_site\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"options\":[{\"id\":\"HEAL\"},{\"id\":\"SMITH\"}]}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"rest_site\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"options\":[{\"id\":\"HEAL\"},{\"id\":\"SMITH\"}]}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"shop\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"cards\":[],\"relics\":[],\"potions\":[],\"remove_cost\":75}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"shop\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"cards\":[],\"relics\":[],\"potions\":[],\"remove_cost\":75}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"event\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"event_id\":\"NEOW\",\"options\":[{\"index\":0,\"text\":\"Take it\"}]}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"event\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"event_id\":\"NEOW\",\"options\":[{\"index\":0,\"text\":\"Take it\"}]}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"treasure\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"options\":[]}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"treasure\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"options\":[]}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"boss_relic\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"relics\":[]}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"boss_relic\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"relics\":[]}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"reward_screen\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"rewards\":[{\"type\":\"gold\",\"amount\":15}]}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"reward_screen\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"rewards\":[{\"type\":\"gold\",\"amount\":15}]}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"game_over\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"victory\":false}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"game_over\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"victory\":false}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"combat_ended\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"victory\":true,\"round\":4,\"hp\":61,\"max_hp\":80,\"room_type\":\"Monster\"}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"combat_ended\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"victory\":true,\"round\":4,\"hp\":61,\"max_hp\":80,\"room_type\":\"Monster\"}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"run_complete\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"victory\":true}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"run_complete\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"victory\":true}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"run_config\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"characters\":[{\"id\":\"IRONCLAD\",\"name\":\"The Ironclad\"}],\"max_ascension\":10}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"run_config\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"characters\":[{\"id\":\"IRONCLAD\",\"name\":\"The Ironclad\"}],\"max_ascension\":10}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"error\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"error\":\"invalid_index\",\"detail\":\"index 9 out of range\"}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"error\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"error\":\"invalid_index\",\"detail\":\"index 9 out of range\"}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"advice_request\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"advice_for\":\"combat_action\",\"turn\":2}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"advice_request\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"advice_for\":\"combat_action\",\"turn\":2}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"human_action\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"action\":{\"action\":\"play\",\"card_index\":0}}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"human_action\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"action\":{\"action\":\"play\",\"card_index\":0}}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"human_action\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"decision_type\":\"combat_action\",\"action\":\"end_turn\",\"detail\":\"end turn\",\"advice_request_id\":\"a7\",\"position_id\":41,\"peeked\":false,\"card\":null,\"potion\":null,\"target_index\":null}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"human_action\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"decision_type\":\"combat_action\",\"action\":\"end_turn\",\"detail\":\"end turn\",\"advice_request_id\":\"a7\",\"position_id\":41,\"peeked\":false,\"card\":null,\"potion\":null,\"target_index\":null}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"human_action\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"decision_type\":\"card_reward\",\"action\":\"choose\",\"detail\":\"Inflame\",\"advice_request_id\":null,\"position_id\":41,\"peeked\":true,\"choice\":{\"index\":1,\"label\":\"Inflame\"}}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"human_action\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"decision_type\":\"card_reward\",\"action\":\"choose\",\"detail\":\"Inflame\",\"advice_request_id\":null,\"position_id\":41,\"peeked\":true,\"choice\":{\"index\":1,\"label\":\"Inflame\"}}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"human_action\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"decision_type\":\"card_reward\",\"action\":\"skip\",\"detail\":\"Skip\",\"advice_request_id\":\"a8\",\"position_id\":41,\"peeked\":false,\"choice\":{\"index\":null,\"label\":\"Skip\"}}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"human_action\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"decision_type\":\"card_reward\",\"action\":\"skip\",\"detail\":\"Skip\",\"advice_request_id\":\"a8\",\"position_id\":41,\"peeked\":false,\"choice\":{\"index\":null,\"label\":\"Skip\"}}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"snapshot_saved\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"snapshot_id\":\"s1\",\"seq\":1,\"post_combat\":false,\"run_start_time\":1,\"ts\":\"t\"}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"snapshot_saved\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"snapshot_id\":\"s1\",\"seq\":1,\"post_combat\":false,\"run_start_time\":1,\"ts\":\"t\"}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"snapshots\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"run_start_time\":1,\"snapshots\":[]}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"snapshots\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"run_start_time\":1,\"snapshots\":[]}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"snapshot_restored\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"snapshot_id\":\"s1\"}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"snapshot_restored\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"snapshot_id\":\"s1\"}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"combat_undone\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"turn\":2,\"tape_id\":null,\"replayed_events\":5}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"combat_undone\",\"seed\":\"ABC123\",\"act\":1,\"floor\":3,\"mod_version\":\"0.1.0\",\"state_id\":41,\"run_state\":{\"hp\":70,\"max_hp\":80,\"gold\":99},\"turn\":2,\"tape_id\":null,\"replayed_events\":5}"}
+{"scn":"02_outbound_types","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"pong\"}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"02_outbound_types","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"03_sendstate_framing","ev":"scenario","name":"03_sendstate_framing","what":"SendState framing: payload is written verbatim + \\n (no re-serialization, no validation)"}
+{"scn":"03_sendstate_framing","ev":"api","call":"SendState","args":{"stateJson":"{\n  \"type\": \"event\",\n  \"pretty\": true\n}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"03_sendstate_framing","ev":"s2c","client":"A","line":"{"}
+{"scn":"03_sendstate_framing","ev":"s2c","client":"A","line":"  \"type\": \"event\","}
+{"scn":"03_sendstate_framing","ev":"s2c","client":"A","line":"  \"pretty\": true"}
+{"scn":"03_sendstate_framing","ev":"s2c","client":"A","line":"}"}
+{"scn":"03_sendstate_framing","ev":"api","call":"SendState","args":{"stateJson":""},"result":null,"exception":null,"timing":"returned"}
+{"scn":"03_sendstate_framing","ev":"s2c","client":"A","line":""}
+{"scn":"03_sendstate_framing","ev":"api","call":"SendState","args":{"stateJson":"not json at all"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"03_sendstate_framing","ev":"s2c","client":"A","line":"not json at all"}
+{"scn":"03_sendstate_framing","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"x\"}\n"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"03_sendstate_framing","ev":"s2c","client":"A","line":"{\"type\":\"x\"}"}
+{"scn":"03_sendstate_framing","ev":"s2c","client":"A","line":""}
+{"scn":"03_sendstate_framing","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"x\"}\r\n"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"03_sendstate_framing","ev":"s2c","client":"A","line":"{\"type\":\"x\"}\r"}
+{"scn":"03_sendstate_framing","ev":"s2c","client":"A","line":""}
+{"scn":"03_sendstate_framing","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"event\",\"label\":\"Bash → Cultist <b>&amp;</b> 'q' \\\"dq\\\" é 日本 \uD83D\uDE00\",\"esc\":\"\\u00e9\\/\"}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"03_sendstate_framing","ev":"s2c","client":"A","line":"{\"type\":\"event\",\"label\":\"Bash → Cultist <b>&amp;</b> 'q' \\\"dq\\\" é 日本 \uD83D\uDE00\",\"esc\":\"\\u00e9\\/\"}"}
+{"scn":"03_sendstate_framing","ev":"api","call":"SendState","args":{"stateJson":"[1,2,3]"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"03_sendstate_framing","ev":"s2c","client":"A","line":"[1,2,3]"}
+{"scn":"04_request_id_injection","ev":"scenario","name":"04_request_id_injection","what":"SendStateAndWaitForActionAsync: request_id injection / re-serialization of the payload"}
+{"scn":"04_request_id_injection","ev":"api_start","id":"p4_0","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\",\"state_id\":7,\"hand\":[{\"id\":\"STRIKE\",\"cost\":1}],\"energy\":3}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"04_request_id_injection","ev":"s2c","client":"A","line":"{\"type\":\"combat_action\",\"state_id\":7,\"hand\":[{\"id\":\"STRIKE\",\"cost\":1}],\"energy\":3,\"request_id\":\"2\"}"}
+{"scn":"04_request_id_injection","ev":"probe","id":"p4_0","at":"after_request_seen","state":"pending"}
+{"scn":"04_request_id_injection","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"2\"}\n","note":null}
+{"scn":"04_request_id_injection","ev":"api_result","id":"p4_0","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"2\"}","exception":null}
+{"scn":"04_request_id_injection","ev":"api_start","id":"p4_1","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"map_select\",\"request_id\":\"999\",\"x\":1}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"04_request_id_injection","ev":"s2c","client":"A","line":"{\"type\":\"map_select\",\"request_id\":\"3\",\"x\":1}"}
+{"scn":"04_request_id_injection","ev":"probe","id":"p4_1","at":"after_request_seen","state":"pending"}
+{"scn":"04_request_id_injection","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"3\"}\n","note":null}
+{"scn":"04_request_id_injection","ev":"api_result","id":"p4_1","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"3\"}","exception":null}
+{"scn":"04_request_id_injection","ev":"api_start","id":"p4_2","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"request_id\":5,\"type\":\"event\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"04_request_id_injection","ev":"s2c","client":"A","line":"{\"request_id\":\"4\",\"type\":\"event\"}"}
+{"scn":"04_request_id_injection","ev":"probe","id":"p4_2","at":"after_request_seen","state":"pending"}
+{"scn":"04_request_id_injection","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"4\"}\n","note":null}
+{"scn":"04_request_id_injection","ev":"api_result","id":"p4_2","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"4\"}","exception":null}
+{"scn":"04_request_id_injection","ev":"api_start","id":"p4_3","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{ \"type\" : \"shop\",\n  \"gold\": 100 ,\"f\":1.50,\"e\":1e3,\"big\":12345678901234567890,\"neg\":-0.0,\"n\":null,\"t\":true,\"arr\":[ 1 , {\"k\":[]} ]}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"04_request_id_injection","ev":"s2c","client":"A","line":"{\"type\":\"shop\",\"gold\":100,\"f\":1.50,\"e\":1e3,\"big\":12345678901234567890,\"neg\":-0.0,\"n\":null,\"t\":true,\"arr\":[1,{\"k\":[]}],\"request_id\":\"5\"}"}
+{"scn":"04_request_id_injection","ev":"probe","id":"p4_3","at":"after_request_seen","state":"pending"}
+{"scn":"04_request_id_injection","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"5\"}\n","note":null}
+{"scn":"04_request_id_injection","ev":"api_result","id":"p4_3","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"5\"}","exception":null}
+{"scn":"04_request_id_injection","ev":"api_start","id":"p4_4","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"event\",\"label\":\"Bash → Cultist <b>&amp;</b> 'q' \\\"dq\\\" é 日本 \uD83D\uDE00\",\"esc\":\"\\u00e9\\/\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"04_request_id_injection","ev":"s2c","client":"A","line":"{\"type\":\"event\",\"label\":\"Bash \\u2192 Cultist \\u003Cb\\u003E\\u0026amp;\\u003C/b\\u003E \\u0027q\\u0027 \\u0022dq\\u0022 \\u00E9 \\u65E5\\u672C \\uD83D\\uDE00\",\"esc\":\"\\u00E9/\",\"request_id\":\"6\"}"}
+{"scn":"04_request_id_injection","ev":"probe","id":"p4_4","at":"after_request_seen","state":"pending"}
+{"scn":"04_request_id_injection","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"6\"}\n","note":null}
+{"scn":"04_request_id_injection","ev":"api_result","id":"p4_4","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"6\"}","exception":null}
+{"scn":"04_request_id_injection","ev":"api_start","id":"p4_5","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"a\",\"type\":\"b\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"04_request_id_injection","ev":"s2c","client":"A","line":"{\"type\":\"b\",\"request_id\":\"7\"}"}
+{"scn":"04_request_id_injection","ev":"probe","id":"p4_5","at":"after_request_seen","state":"pending"}
+{"scn":"04_request_id_injection","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"7\"}\n","note":null}
+{"scn":"04_request_id_injection","ev":"api_result","id":"p4_5","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"7\"}","exception":null}
+{"scn":"04_request_id_injection","ev":"api_start","id":"p4_6","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"04_request_id_injection","ev":"s2c","client":"A","line":"{\"request_id\":\"8\"}"}
+{"scn":"04_request_id_injection","ev":"probe","id":"p4_6","at":"after_request_seen","state":"pending"}
+{"scn":"04_request_id_injection","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"8\"}\n","note":null}
+{"scn":"04_request_id_injection","ev":"api_result","id":"p4_6","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"8\"}","exception":null}
+{"scn":"04_request_id_injection","ev":"api_start","id":"p4_7","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"null","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"04_request_id_injection","ev":"s2c","client":"A","line":"null"}
+{"scn":"04_request_id_injection","ev":"probe","id":"p4_7","at":"after_request_seen","state":"pending"}
+{"scn":"04_request_id_injection","ev":"note","text":"no string request_id on the wire; cannot correlate"}
+{"scn":"04_request_id_injection","ev":"api_result","id":"p4_7","after":"give_up","result":null,"exception":null}
+{"scn":"04_request_id_injection","ev":"api_start","id":"p4_8","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"[1,2,3]","timeout_ms":1000,"token":"none"},"completed_on_return":false}
+{"scn":"04_request_id_injection","ev":"s2c","client":"A","line":"[1,2,3]"}
+{"scn":"04_request_id_injection","ev":"probe","id":"p4_8","at":"after_request_seen","state":"pending"}
+{"scn":"04_request_id_injection","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0}\n","note":"uncorrelated reply"}
+{"scn":"04_request_id_injection","ev":"api_result","id":"p4_8","after":"timeout","result":null,"exception":null}
+{"scn":"04_request_id_injection","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"04_request_id_injection","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"04_request_id_injection","ev":"api_start","id":"p4_9","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"\"str\"","timeout_ms":1000,"token":"none"},"completed_on_return":false}
+{"scn":"04_request_id_injection","ev":"s2c","client":"A","line":"\"str\""}
+{"scn":"04_request_id_injection","ev":"probe","id":"p4_9","at":"after_request_seen","state":"pending"}
+{"scn":"04_request_id_injection","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0}\n","note":"uncorrelated reply"}
+{"scn":"04_request_id_injection","ev":"api_result","id":"p4_9","after":"timeout","result":null,"exception":null}
+{"scn":"04_request_id_injection","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"04_request_id_injection","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"04_request_id_injection","ev":"api_start","id":"p4_10","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"not json","timeout_ms":1000,"token":"none"},"completed_on_return":false}
+{"scn":"04_request_id_injection","ev":"s2c","client":"A","line":"not json"}
+{"scn":"04_request_id_injection","ev":"probe","id":"p4_10","at":"after_request_seen","state":"pending"}
+{"scn":"04_request_id_injection","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0}\n","note":"uncorrelated reply"}
+{"scn":"04_request_id_injection","ev":"api_result","id":"p4_10","after":"timeout","result":null,"exception":null}
+{"scn":"04_request_id_injection","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"04_request_id_injection","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"04_request_id_injection","ev":"api_start","id":"p4_11","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"","timeout_ms":1000,"token":"none"},"completed_on_return":false}
+{"scn":"04_request_id_injection","ev":"s2c","client":"A","line":""}
+{"scn":"04_request_id_injection","ev":"probe","id":"p4_11","at":"after_request_seen","state":"pending"}
+{"scn":"04_request_id_injection","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0}\n","note":"uncorrelated reply"}
+{"scn":"04_request_id_injection","ev":"api_result","id":"p4_11","after":"timeout","result":null,"exception":null}
+{"scn":"04_request_id_injection","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"04_request_id_injection","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"05_correlation","ev":"scenario","name":"05_correlation","what":"single pending slot: stale/missing/typed ids, supersede, cancel, timeout"}
+{"scn":"05_correlation","ev":"api_start","id":"p5a","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"card_reward\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"card_reward\",\"request_id\":\"14\"}"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":1,\"request_id\":\"424242\"}\n","note":"wrong id"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"05_correlation","ev":"probe","id":"p5a","at":"after_wrong_id","state":"pending"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":1}\n","note":"missing id"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"05_correlation","ev":"probe","id":"p5a","at":"after_missing_id","state":"pending"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":1,\"request_id\":14}\n","note":"numeric id"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"05_correlation","ev":"probe","id":"p5a","at":"after_numeric_id","state":"pending"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":\n","note":"malformed json"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"05_correlation","ev":"probe","id":"p5a","at":"after_malformed","state":"pending"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"ping\",\"request_id\":\"14\"}\n","note":null}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"05_correlation","ev":"probe","id":"p5a","at":"after_ping_with_id","state":"pending"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"advice\",\"request_id\":\"14\",\"advice\":{}}\n","note":null}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"05_correlation","ev":"probe","id":"p5a","at":"after_advice_with_autopilot_id","state":"pending"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"list_snapshots\"}\n","note":null}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"snapshots\",\"run_start_time\":-1,\"snapshots\":[]}"}
+{"scn":"05_correlation","ev":"probe","id":"p5a","at":"after_list_snapshots","state":"pending"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"   {\"action\":\"choose\",\"index\":2,\"request_id\":\"14\"}  \t\r\n","note":null}
+{"scn":"05_correlation","ev":"api_result","id":"p5a","after":"after_correct_reply","result":"{\"action\":\"choose\",\"index\":2,\"request_id\":\"14\"}","exception":null}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"14\"}\n","note":null}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"05_correlation","ev":"api_start","id":"p5f1","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"event\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"event\",\"request_id\":\"15\"}"}
+{"scn":"05_correlation","ev":"api_start","id":"p5f2","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"event\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"event\",\"request_id\":\"16\"}"}
+{"scn":"05_correlation","ev":"api_result","id":"p5f1","after":"after_second_request","result":null,"exception":null}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"15\"}\n","note":"reply to superseded id"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"05_correlation","ev":"probe","id":"p5f2","at":"after_reply_to_superseded","state":"pending"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"16\"}\n","note":null}
+{"scn":"05_correlation","ev":"api_result","id":"p5f2","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"16\"}","exception":null}
+{"scn":"05_correlation","ev":"api_start","id":"p5v_0","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"combat_action\",\"request_id\":\"17\"}"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"play\",\"card_index\":0,\"target_index\":1,\"state_id\":41,\"request_id\":\"17\"}\n","note":null}
+{"scn":"05_correlation","ev":"api_result","id":"p5v_0","after":"after_reply","result":"{\"action\":\"play\",\"card_index\":0,\"target_index\":1,\"state_id\":41,\"request_id\":\"17\"}","exception":null}
+{"scn":"05_correlation","ev":"api_start","id":"p5v_1","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"combat_action\",\"request_id\":\"18\"}"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"end_turn\",\"request_id\":\"18\"}\n","note":null}
+{"scn":"05_correlation","ev":"api_result","id":"p5v_1","after":"after_reply","result":"{\"action\":\"end_turn\",\"request_id\":\"18\"}","exception":null}
+{"scn":"05_correlation","ev":"api_start","id":"p5v_2","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"combat_action\",\"request_id\":\"19\"}"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"potion\",\"slot\":0,\"target_index\":0,\"discard\":false,\"request_id\":\"19\"}\n","note":null}
+{"scn":"05_correlation","ev":"api_result","id":"p5v_2","after":"after_reply","result":"{\"action\":\"potion\",\"slot\":0,\"target_index\":0,\"discard\":false,\"request_id\":\"19\"}","exception":null}
+{"scn":"05_correlation","ev":"api_start","id":"p5v_3","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"combat_action\",\"request_id\":\"20\"}"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"indices\":[0,2],\"request_id\":\"20\"}\n","note":null}
+{"scn":"05_correlation","ev":"api_result","id":"p5v_3","after":"after_reply","result":"{\"action\":\"choose\",\"indices\":[0,2],\"request_id\":\"20\"}","exception":null}
+{"scn":"05_correlation","ev":"api_start","id":"p5v_4","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"combat_action\",\"request_id\":\"21\"}"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"indexes\":[1],\"request_id\":\"21\"}\n","note":null}
+{"scn":"05_correlation","ev":"api_result","id":"p5v_4","after":"after_reply","result":"{\"action\":\"choose\",\"indexes\":[1],\"request_id\":\"21\"}","exception":null}
+{"scn":"05_correlation","ev":"api_start","id":"p5v_5","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"combat_action\",\"request_id\":\"22\"}"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"skip\",\"request_id\":\"22\"}\n","note":null}
+{"scn":"05_correlation","ev":"api_result","id":"p5v_5","after":"after_reply","result":"{\"action\":\"skip\",\"request_id\":\"22\"}","exception":null}
+{"scn":"05_correlation","ev":"api_start","id":"p5v_6","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"combat_action\",\"request_id\":\"23\"}"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"cancel\",\"request_id\":\"23\"}\n","note":null}
+{"scn":"05_correlation","ev":"api_result","id":"p5v_6","after":"after_reply","result":"{\"action\":\"cancel\",\"request_id\":\"23\"}","exception":null}
+{"scn":"05_correlation","ev":"api_start","id":"p5v_7","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"combat_action\",\"request_id\":\"24\"}"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"start_run\",\"character\":\"IRONCLAD\",\"ascension\":0,\"seed\":null,\"request_id\":\"24\"}\n","note":null}
+{"scn":"05_correlation","ev":"api_result","id":"p5v_7","after":"after_reply","result":"{\"action\":\"start_run\",\"character\":\"IRONCLAD\",\"ascension\":0,\"seed\":null,\"request_id\":\"24\"}","exception":null}
+{"scn":"05_correlation","ev":"api_start","id":"p5v_8","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"combat_action\",\"request_id\":\"25\"}"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"end_turn\",\"annotations\":{\"note\":\"é→\",\"arrows\":[1]},\"request_id\":\"25\"}\n","note":null}
+{"scn":"05_correlation","ev":"api_result","id":"p5v_8","after":"after_reply","result":"{\"action\":\"end_turn\",\"annotations\":{\"note\":\"é→\",\"arrows\":[1]},\"request_id\":\"25\"}","exception":null}
+{"scn":"05_correlation","ev":"api_start","id":"p5v_9","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"combat_action\",\"request_id\":\"26\"}"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"request_id\":\"26\",\"action\":\"PLAY\",\"card_index\":3}\n","note":null}
+{"scn":"05_correlation","ev":"api_result","id":"p5v_9","after":"after_reply","result":"{\"request_id\":\"26\",\"action\":\"PLAY\",\"card_index\":3}","exception":null}
+{"scn":"05_correlation","ev":"api_start","id":"p5v_10","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"combat_action\",\"request_id\":\"27\"}"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"request_id\":\"27\"}\n","note":null}
+{"scn":"05_correlation","ev":"api_result","id":"p5v_10","after":"after_reply","result":"{\"request_id\":\"27\"}","exception":null}
+{"scn":"05_correlation","ev":"api_start","id":"p5m","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"shop\"}","timeout_ms":5000,"token":"cancelled_later"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"shop\",\"request_id\":\"28\"}"}
+{"scn":"05_correlation","ev":"probe","id":"p5m","at":"before_cancel","state":"pending"}
+{"scn":"05_correlation","ev":"harness","action":"cancel_token"}
+{"scn":"05_correlation","ev":"api_result","id":"p5m","after":"after_cancel","result":null,"exception":null}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"28\"}\n","note":"late reply after cancel"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"05_correlation","ev":"api_start","id":"p5n","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"shop\"}","timeout_ms":1000,"token":"none"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"shop\",\"request_id\":\"29\"}"}
+{"scn":"05_correlation","ev":"probe","id":"p5n","at":"t+150ms","state":"pending"}
+{"scn":"05_correlation","ev":"api_result","id":"p5n","after":"timeout","result":null,"exception":null}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"29\"}\n","note":"late reply after timeout"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"05_correlation","ev":"api_start","id":"p5o","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"shop\"}","timeout_ms":0,"token":"none"},"completed_on_return":true}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"shop\",\"request_id\":\"30\"}"}
+{"scn":"05_correlation","ev":"api_result","id":"p5o","after":"zero_timeout","result":null,"exception":null}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"05_correlation","ev":"api_start","id":"p5o2","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"shop\"}","timeout_ms":-1,"token":"none"},"completed_on_return":false}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"shop\",\"request_id\":\"31\"}"}
+{"scn":"05_correlation","ev":"probe","id":"p5o2","at":"t+150ms","state":"pending"}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"31\"}\n","note":null}
+{"scn":"05_correlation","ev":"api_result","id":"p5o2","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"31\"}","exception":null}
+{"scn":"05_correlation","ev":"api_start","id":"p5p","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"shop\"}","timeout_ms":5000,"token":"pre_cancelled"},"completed_on_return":true}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"shop\",\"request_id\":\"32\"}"}
+{"scn":"05_correlation","ev":"api_result","id":"p5p","after":"pre_cancelled","result":null,"exception":null}
+{"scn":"05_correlation","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"05_correlation","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"06_wait_for_action","ev":"scenario","name":"06_wait_for_action","what":"WaitForActionAsync (uncorrelated): any line is delivered, specials are not"}
+{"scn":"06_wait_for_action","ev":"api_start","id":"p6","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"06_wait_for_action","ev":"c2s","client":"A","data":"{\"action\":\"end_turn\"}\n","note":null}
+{"scn":"06_wait_for_action","ev":"api_result","id":"p6","after":"after_line","result":"{\"action\":\"end_turn\"}","exception":null}
+{"scn":"06_wait_for_action","ev":"api_start","id":"p6","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"06_wait_for_action","ev":"c2s","client":"A","data":"{oops not json\n","note":null}
+{"scn":"06_wait_for_action","ev":"api_result","id":"p6","after":"after_line","result":"{oops not json","exception":null}
+{"scn":"06_wait_for_action","ev":"api_start","id":"p6","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"06_wait_for_action","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"zzz\"}\n","note":null}
+{"scn":"06_wait_for_action","ev":"api_result","id":"p6","after":"after_line","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"zzz\"}","exception":null}
+{"scn":"06_wait_for_action","ev":"api_start","id":"p6","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"06_wait_for_action","ev":"c2s","client":"A","data":"\"just a string\"\n","note":null}
+{"scn":"06_wait_for_action","ev":"api_result","id":"p6","after":"after_line","result":"\"just a string\"","exception":null}
+{"scn":"06_wait_for_action","ev":"api_start","id":"p6","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"06_wait_for_action","ev":"c2s","client":"A","data":"[1,2]\n","note":null}
+{"scn":"06_wait_for_action","ev":"api_result","id":"p6","after":"after_line","result":"[1,2]","exception":null}
+{"scn":"06_wait_for_action","ev":"api_start","id":"p6","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"06_wait_for_action","ev":"c2s","client":"A","data":"{\"action\":5}\n","note":null}
+{"scn":"06_wait_for_action","ev":"api_result","id":"p6","after":"after_line","result":"{\"action\":5}","exception":null}
+{"scn":"06_wait_for_action","ev":"api_start","id":"p6","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"06_wait_for_action","ev":"c2s","client":"A","data":"{\"action\":null,\"x\":1}\n","note":null}
+{"scn":"06_wait_for_action","ev":"api_result","id":"p6","after":"after_line","result":"{\"action\":null,\"x\":1}","exception":null}
+{"scn":"06_wait_for_action","ev":"api_start","id":"p6s","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"06_wait_for_action","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":null}
+{"scn":"06_wait_for_action","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"06_wait_for_action","ev":"c2s","client":"A","data":"{\"action\":\"advice\",\"request_id\":\"a12345\"}\n","note":null}
+{"scn":"06_wait_for_action","ev":"c2s","client":"A","data":"{\"action\":\"list_snapshots\"}\n","note":null}
+{"scn":"06_wait_for_action","ev":"s2c","client":"A","line":"{\"type\":\"snapshots\",\"run_start_time\":-1,\"snapshots\":[]}"}
+{"scn":"06_wait_for_action","ev":"c2s","client":"A","data":"\n\n   \n\r\n","note":null}
+{"scn":"06_wait_for_action","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"06_wait_for_action","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"06_wait_for_action","ev":"probe","id":"p6s","at":"after_specials_and_blank_lines","state":"pending"}
+{"scn":"06_wait_for_action","ev":"c2s","client":"A","data":"{\"action\":\"skip\"}\n","note":null}
+{"scn":"06_wait_for_action","ev":"api_result","id":"p6s","after":"after_real_line","result":"{\"action\":\"skip\"}","exception":null}
+{"scn":"06_wait_for_action","ev":"api_start","id":"p6t","call":"WaitForActionAsync","args":{"timeout_ms":1000,"token":"none"},"completed_on_return":false}
+{"scn":"06_wait_for_action","ev":"probe","id":"p6t","at":"t+150ms","state":"pending"}
+{"scn":"06_wait_for_action","ev":"api_result","id":"p6t","after":"timeout","result":null,"exception":null}
+{"scn":"06_wait_for_action","ev":"api_start","id":"p6x1","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"event\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"06_wait_for_action","ev":"s2c","client":"A","line":"{\"type\":\"event\",\"request_id\":\"33\"}"}
+{"scn":"06_wait_for_action","ev":"api_start","id":"p6x2","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"06_wait_for_action","ev":"api_result","id":"p6x1","after":"after_wait_for_action_started","result":null,"exception":null}
+{"scn":"06_wait_for_action","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"33\"}\n","note":null}
+{"scn":"06_wait_for_action","ev":"api_result","id":"p6x2","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"33\"}","exception":null}
+{"scn":"06_wait_for_action","ev":"api_start","id":"p6x3","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"06_wait_for_action","ev":"api_start","id":"p6x4","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"event\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"06_wait_for_action","ev":"s2c","client":"A","line":"{\"type\":\"event\",\"request_id\":\"34\"}"}
+{"scn":"06_wait_for_action","ev":"api_result","id":"p6x3","after":"after_send_and_wait_started","result":null,"exception":null}
+{"scn":"06_wait_for_action","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"34\"}\n","note":null}
+{"scn":"06_wait_for_action","ev":"api_result","id":"p6x4","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"34\"}","exception":null}
+{"scn":"07_no_handler","ev":"scenario","name":"07_no_handler","what":"client lines with nothing pending are discarded silently"}
+{"scn":"07_no_handler","ev":"c2s","client":"A","data":"{\"action\":\"end_turn\"}\n","note":null}
+{"scn":"07_no_handler","ev":"s2c_none","client":"A"}
+{"scn":"07_no_handler","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"7\"}\n","note":null}
+{"scn":"07_no_handler","ev":"s2c_none","client":"A"}
+{"scn":"07_no_handler","ev":"c2s","client":"A","data":"garbage\n","note":null}
+{"scn":"07_no_handler","ev":"s2c_none","client":"A"}
+{"scn":"07_no_handler","ev":"c2s","client":"A","data":"{\"action\":\"start_run\",\"character\":\"IRONCLAD\",\"ascension\":0}\n","note":null}
+{"scn":"07_no_handler","ev":"s2c_none","client":"A"}
+{"scn":"07_no_handler","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"07_no_handler","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"08_ping_variants","ev":"scenario","name":"08_ping_variants","what":"ping / PING spellings and near-misses"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"{\"action\":\"PING\"}\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"{\"action\":\"Ping\",\"x\":1}\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"{\"type\":\"PING\"}\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"{\"type\":\"ping\"}\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"{\"type\":\"Ping\"}\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"{\"type\":\"PING\",\"action\":\"play\"}\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"{\"action\":\"ping\",\"type\":\"x\"}\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"{\"action\":\"pingx\"}\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c_none","client":"A"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"{\"type\":\"pong\"}\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c_none","client":"A"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"{\"action\":5,\"type\":\"PING\"}\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"{\"action\":null,\"type\":\"PING\"}\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"{\"type\":5}\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c_none","client":"A"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"[]\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c_none","client":"A"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"\"ping\"\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c_none","client":"A"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"null\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c_none","client":"A"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"42\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c_none","client":"A"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\r{\"action\":\"ping\"}\n","note":null}
+{"scn":"08_ping_variants","ev":"s2c_none","client":"A"}
+{"scn":"08_ping_variants","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"08_ping_variants","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"09_rewind_lane","ev":"scenario","name":"09_rewind_lane","what":"list_snapshots / restore_snapshot / undo_turn routing"}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"list_snapshots\"}\n","note":null}
+{"scn":"09_rewind_lane","ev":"s2c","client":"A","line":"{\"type\":\"snapshots\",\"run_start_time\":-1,\"snapshots\":[]}"}
+{"scn":"09_rewind_lane","ev":"harness","seeded":2}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"list_snapshots\"}\n","note":null}
+{"scn":"09_rewind_lane","ev":"s2c","client":"A","line":"{\"type\":\"snapshots\",\"run_start_time\":1760000000,\"snapshots\":[{\"id\":\"1760000000_0001\",\"seq\":1,\"ts\":\"2026-01-02T03:04:05Z\",\"floor\":1,\"act\":1,\"post_combat\":false,\"has_tape\":false,\"num_reloads\":0},{\"id\":\"1760000000_0002\",\"seq\":2,\"ts\":\"2026-01-02T03:04:05Z\",\"floor\":1,\"act\":1,\"post_combat\":true,\"has_tape\":true,\"num_reloads\":1}]}"}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"LIST_SNAPSHOTS\",\"extra\":1}\n","note":null}
+{"scn":"09_rewind_lane","ev":"s2c","client":"A","line":"{\"type\":\"snapshots\",\"run_start_time\":1760000000,\"snapshots\":[{\"id\":\"1760000000_0001\",\"seq\":1,\"ts\":\"2026-01-02T03:04:05Z\",\"floor\":1,\"act\":1,\"post_combat\":false,\"has_tape\":false,\"num_reloads\":0},{\"id\":\"1760000000_0002\",\"seq\":2,\"ts\":\"2026-01-02T03:04:05Z\",\"floor\":1,\"act\":1,\"post_combat\":true,\"has_tape\":true,\"num_reloads\":1}]}"}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"restore_snapshot\",\"snapshot_id\":\"1760000000_0002\"}\n","note":null}
+{"scn":"09_rewind_lane","ev":"s2c_none","client":"A"}
+{"scn":"09_rewind_lane","ev":"hook","hook":"SimRestore.RequestRestore","snapshotId":"1760000000_0002"}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"Restore_Snapshot\",\"snapshot_id\":\"nope\"}\n","note":null}
+{"scn":"09_rewind_lane","ev":"s2c_none","client":"A"}
+{"scn":"09_rewind_lane","ev":"hook","hook":"SimRestore.RequestRestore","snapshotId":"nope"}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"restore_snapshot\"}\n","note":null}
+{"scn":"09_rewind_lane","ev":"s2c","client":"A","line":"{\"type\":\"error\",\"error\":\"snapshot_not_found\",\"detail\":\"missing snapshot_id\"}"}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"restore_snapshot\",\"snapshot_id\":\"\"}\n","note":null}
+{"scn":"09_rewind_lane","ev":"s2c","client":"A","line":"{\"type\":\"error\",\"error\":\"snapshot_not_found\",\"detail\":\"missing snapshot_id\"}"}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"restore_snapshot\",\"snapshot_id\":null}\n","note":null}
+{"scn":"09_rewind_lane","ev":"s2c","client":"A","line":"{\"type\":\"error\",\"error\":\"snapshot_not_found\",\"detail\":\"missing snapshot_id\"}"}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"restore_snapshot\",\"snapshot_id\":7}\n","note":null}
+{"scn":"09_rewind_lane","ev":"s2c","client":"A","line":"{\"type\":\"error\",\"error\":\"snapshot_not_found\",\"detail\":\"snapshot_id must be a string\"}"}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"undo_turn\"}\n","note":null}
+{"scn":"09_rewind_lane","ev":"s2c_none","client":"A"}
+{"scn":"09_rewind_lane","ev":"hook","hook":"SimCombatUndo.RequestUndoTurn","targetTurn":0,"tapeId":null}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"undo_turn\",\"turn\":3}\n","note":null}
+{"scn":"09_rewind_lane","ev":"s2c_none","client":"A"}
+{"scn":"09_rewind_lane","ev":"hook","hook":"SimCombatUndo.RequestUndoTurn","targetTurn":3,"tapeId":null}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"UNDO_TURN\",\"turn\":2,\"tape_id\":\"1760000000_0002\"}\n","note":null}
+{"scn":"09_rewind_lane","ev":"s2c_none","client":"A"}
+{"scn":"09_rewind_lane","ev":"hook","hook":"SimCombatUndo.RequestUndoTurn","targetTurn":2,"tapeId":"1760000000_0002"}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"undo_turn\",\"turn\":2.5}\n","note":null}
+{"scn":"09_rewind_lane","ev":"s2c_none","client":"A"}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"undo_turn\",\"turn\":\"3\"}\n","note":null}
+{"scn":"09_rewind_lane","ev":"s2c_none","client":"A"}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"undo_turn\",\"tape_id\":5}\n","note":null}
+{"scn":"09_rewind_lane","ev":"s2c_none","client":"A"}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"undo_turn\",\"turn\":-1,\"tape_id\":null}\n","note":null}
+{"scn":"09_rewind_lane","ev":"s2c_none","client":"A"}
+{"scn":"09_rewind_lane","ev":"hook","hook":"SimCombatUndo.RequestUndoTurn","targetTurn":-1,"tapeId":null}
+{"scn":"09_rewind_lane","ev":"api_start","id":"p9","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"rest_site\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"09_rewind_lane","ev":"s2c","client":"A","line":"{\"type\":\"rest_site\",\"request_id\":\"35\"}"}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"restore_snapshot\",\"snapshot_id\":\"1760000000_0001\"}\n","note":null}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"undo_turn\",\"turn\":1}\n","note":null}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"09_rewind_lane","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"09_rewind_lane","ev":"hook","hook":"SimRestore.RequestRestore","snapshotId":"1760000000_0001"}
+{"scn":"09_rewind_lane","ev":"hook","hook":"SimCombatUndo.RequestUndoTurn","targetTurn":1,"tapeId":null}
+{"scn":"09_rewind_lane","ev":"probe","id":"p9","at":"after_rewind_verbs","state":"pending"}
+{"scn":"09_rewind_lane","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"35\"}\n","note":null}
+{"scn":"09_rewind_lane","ev":"api_result","id":"p9","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"35\"}","exception":null}
+{"scn":"10_advice_lane","ev":"scenario","name":"10_advice_lane","what":"SendAdviceRequest / CancelAdviceRequest / advice replies"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"advice_for\":\"combat_action\",\"state_id\":3}","label":"adv1"},"result":"a2","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"{\"type\":\"advice_request\",\"advice_for\":\"combat_action\",\"state_id\":3,\"request_id\":\"a2\"}"}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"advice\",\"request_id\":\"a2\",\"state_id\":3,\"advice\":{\"note\":\"MCTS\",\"p_win\":0.73,\"best\":{\"label\":\"Bash → Cultist\"}}}\n","note":null}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"10_advice_lane","ev":"hook","hook":"advice_callback","label":"adv1","root":"{\"action\":\"advice\",\"request_id\":\"a2\",\"state_id\":3,\"advice\":{\"note\":\"MCTS\",\"p_win\":0.73,\"best\":{\"label\":\"Bash → Cultist\"}}}","thread":"server"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":2}","label":"adv2"},"result":"a3","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":3}","label":"adv3"},"result":"a4","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"{\"type\":\"advice_request\",\"n\":2,\"request_id\":\"a3\"}"}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"{\"type\":\"advice_request\",\"n\":3,\"request_id\":\"a4\"}"}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"advice\",\"request_id\":\"a4\",\"advice\":{}}\n{\"action\":\"ADVICE\",\"request_id\":\"a3\",\"advice\":{}}\n","note":null}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"10_advice_lane","ev":"hook","hook":"advice_callback","label":"adv3","root":"{\"action\":\"advice\",\"request_id\":\"a4\",\"advice\":{}}","thread":"server"}
+{"scn":"10_advice_lane","ev":"hook","hook":"advice_callback","label":"adv2","root":"{\"action\":\"ADVICE\",\"request_id\":\"a3\",\"advice\":{}}","thread":"server"}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"advice\",\"request_id\":\"a3\"}\n","note":null}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"advice\",\"request_id\":\"a999\"}\n","note":null}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"advice\"}\n","note":null}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"advice\",\"request_id\":4}\n","note":null}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":4}","label":"adv4"},"result":"a5","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"{\"type\":\"advice_request\",\"n\":4,\"request_id\":\"a5\"}"}
+{"scn":"10_advice_lane","ev":"api","call":"CancelAdviceRequest","args":{"requestId":"a5"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"CancelAdviceRequest","args":{"requestId":"a-never-existed"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"advice\",\"request_id\":\"a5\"}\n","note":null}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":5}","label":"adv5_throws"},"result":"a6","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"{\"type\":\"advice_request\",\"n\":5,\"request_id\":\"a6\"}"}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"advice\",\"request_id\":\"a6\"}\n","note":null}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"10_advice_lane","ev":"hook","hook":"advice_callback","label":"adv5_throws","root":"{\"action\":\"advice\",\"request_id\":\"a6\"}","thread":"server"}
+{"scn":"10_advice_lane","ev":"api_start","id":"p10","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"{\"type\":\"combat_action\",\"request_id\":\"36\"}"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":6}","label":"adv6"},"result":"a7","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"{\"type\":\"advice_request\",\"n\":6,\"request_id\":\"a7\"}"}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"advice\",\"request_id\":\"a7\"}\n","note":null}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"10_advice_lane","ev":"hook","hook":"advice_callback","label":"adv6","root":"{\"action\":\"advice\",\"request_id\":\"a7\"}","thread":"server"}
+{"scn":"10_advice_lane","ev":"probe","id":"p10","at":"after_advice_reply","state":"pending"}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"advice\",\"request_id\":\"36\"}\n","note":"advice verb with autopilot id"}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"10_advice_lane","ev":"probe","id":"p10","at":"after_advice_with_autopilot_id","state":"pending"}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"36\"}\n","note":null}
+{"scn":"10_advice_lane","ev":"api_result","id":"p10","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"36\"}","exception":null}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"[1,2]","label":"adv_nonobject"},"result":"a8","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"[1,2]"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"not json","label":"adv_notjson"},"result":"a9","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"not json"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":100}","label":"backlog0"},"result":"a10","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":101}","label":"backlog1"},"result":"a11","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":102}","label":"backlog2"},"result":"a12","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":103}","label":"backlog3"},"result":"a13","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":104}","label":"backlog4"},"result":"a14","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":105}","label":"backlog5"},"result":"a15","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":106}","label":"backlog6"},"result":"a16","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":107}","label":"backlog7"},"result":"a17","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":108}","label":"backlog8"},"result":"a18","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":109}","label":"backlog9"},"result":"a19","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":110}","label":"backlog10"},"result":"a20","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":111}","label":"backlog11"},"result":"a21","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":112}","label":"backlog12"},"result":"a22","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":113}","label":"backlog13"},"result":"a23","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":114}","label":"backlog14"},"result":"a24","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":115}","label":"backlog15"},"result":"a25","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":116}","label":"backlog16"},"result":"a26","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":117}","label":"backlog17"},"result":"a27","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":118}","label":"backlog18"},"result":"a28","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":119}","label":"backlog19"},"result":"a29","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":120}","label":"backlog20"},"result":"a30","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":121}","label":"backlog21"},"result":"a31","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":122}","label":"backlog22"},"result":"a32","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":123}","label":"backlog23"},"result":"a33","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":124}","label":"backlog24"},"result":"a34","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":125}","label":"backlog25"},"result":"a35","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":126}","label":"backlog26"},"result":"a36","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":127}","label":"backlog27"},"result":"a37","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":128}","label":"backlog28"},"result":"a38","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":129}","label":"backlog29"},"result":"a39","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":130}","label":"backlog30"},"result":"a40","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":131}","label":"backlog31"},"result":"a41","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":132}","label":"backlog32"},"result":"a42","exception":null,"timing":"returned"}
+{"scn":"10_advice_lane","ev":"burst_summary","client":"A","expected":33,"got":33,"rids":["a10","a11","a12","a13","a14","a15","a16","a17","a18","a19","a20","a21","a22","a23","a24","a25","a26","a27","a28","a29","a30","a31","a32","a33","a34","a35","a36","a37","a38","a39","a40","a41","a42"]}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"advice\",\"request_id\":\"a10\"}\n","note":"oldest backlog entry"}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"advice\",\"request_id\":\"a41\"}\n","note":"32nd backlog entry"}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"advice\",\"request_id\":\"a42\"}\n","note":"newest backlog entry"}
+{"scn":"10_advice_lane","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"10_advice_lane","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"10_advice_lane","ev":"hook","hook":"advice_callback","label":"backlog31","root":"{\"action\":\"advice\",\"request_id\":\"a41\"}","thread":"server"}
+{"scn":"10_advice_lane","ev":"hook","hook":"advice_callback","label":"backlog32","root":"{\"action\":\"advice\",\"request_id\":\"a42\"}","thread":"server"}
+{"scn":"11_framing","ev":"scenario","name":"11_framing","what":"partial lines, coalesced lines, CRLF, blank lines, UTF-8 split, invalid bytes"}
+{"scn":"11_framing","ev":"c2s_chunks","client":"A","note":"no newline yet","gap":"separate_segments","chunks":[{"utf8":"{\"act","len":5,"hex":null},{"utf8":"ion\":\"pi","len":8,"hex":null},{"utf8":"ng\"}","len":4,"hex":null}]}
+{"scn":"11_framing","ev":"s2c_none","client":"A"}
+{"scn":"11_framing","ev":"c2s_chunks","client":"A","note":"newline completes it","gap":"separate_segments","chunks":[{"utf8":"\n","len":1,"hex":null}]}
+{"scn":"11_framing","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"11_framing","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n{\"action\":\"PING\"}\n{\"type\":\"PING\"}\n{\"action\":\"list_snapshots\"}\n","note":"4 messages in one write"}
+{"scn":"11_framing","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"11_framing","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"11_framing","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"11_framing","ev":"s2c","client":"A","line":"{\"type\":\"snapshots\",\"run_start_time\":1760000000,\"snapshots\":[{\"id\":\"1760000000_0001\",\"seq\":1,\"ts\":\"2026-01-02T03:04:05Z\",\"floor\":1,\"act\":1,\"post_combat\":false,\"has_tape\":false,\"num_reloads\":0},{\"id\":\"1760000000_0002\",\"seq\":2,\"ts\":\"2026-01-02T03:04:05Z\",\"floor\":1,\"act\":1,\"post_combat\":true,\"has_tape\":true,\"num_reloads\":1}]}"}
+{"scn":"11_framing","ev":"c2s_chunks","client":"A","note":"boundary inside 2nd message","gap":"separate_segments","chunks":[{"utf8":"{\"action\":\"ping\"}\n{\"act","len":23,"hex":null},{"utf8":"ion\":\"ping\"}\n","len":13,"hex":null}]}
+{"scn":"11_framing","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"11_framing","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"11_framing","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\r\n\r\n\n   \n\t{\"action\":\"ping\"}   \r\n","note":"CRLF + blank lines + padding"}
+{"scn":"11_framing","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"11_framing","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"11_framing","ev":"s2c_none","client":"A"}
+{"scn":"11_framing","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n{\"action\":\"ping\"}\n","note":"50 pings in one write"}
+{"scn":"11_framing","ev":"burst_summary","client":"A","expected":50,"got":50,"distinct":["{\"type\":\"pong\"}"]}
+{"scn":"11_framing","ev":"s2c_none","client":"A"}
+{"scn":"11_framing","ev":"api_start","id":"p11u","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"11_framing","ev":"c2s_chunks","client":"A","note":"split inside U+2192","gap":"separate_segments","chunks":[{"utf8":"{\"action\":\"choose\",\"label\":\"�","len":29,"hex":"7B22616374696F6E223A2263686F6F7365222C226C6162656C223A22E2"},{"utf8":"��é\"}\n","len":7,"hex":"8692C3A9227D0A"}]}
+{"scn":"11_framing","ev":"api_result","id":"p11u","after":"after_line","result":"{\"action\":\"choose\",\"label\":\"→é\"}","exception":null}
+{"scn":"11_framing","ev":"api_start","id":"p11u2","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"11_framing","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"label\":\"→é\"}\n","note":"same, one segment (control)"}
+{"scn":"11_framing","ev":"api_result","id":"p11u2","after":"after_line","result":"{\"action\":\"choose\",\"label\":\"→é\"}","exception":null}
+{"scn":"11_framing","ev":"api_start","id":"p11b","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"11_framing","ev":"c2s","client":"A","bytes":"invalid utf-8 bytes FF FE inside string","len":24}
+{"scn":"11_framing","ev":"api_result","id":"p11b","after":"after_line","result":"{\"action\":\"x\",\"b\":\"��\"}","exception":null}
+{"scn":"11_framing","ev":"api_start","id":"p11n","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"11_framing","ev":"c2s","client":"A","bytes":"NUL before newline","len":16}
+{"scn":"11_framing","ev":"api_result","id":"p11n","after":"after_line","result":"{\"action\":\"x\"}\u0000","exception":null}
+{"scn":"11_framing","ev":"api_start","id":"p11s","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"event\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"11_framing","ev":"s2c","client":"A","line":"{\"type\":\"event\",\"request_id\":\"37\"}"}
+{"scn":"11_framing","ev":"c2s_chunks","client":"A","note":"reply in 3 segments","gap":"separate_segments","chunks":[{"utf8":"{\"act","len":5,"hex":null},{"utf8":"ion\":\"choose\",\"","len":15,"hex":null},{"utf8":"index\":0,\"request_id\":\"37\"}\n","len":28,"hex":null}]}
+{"scn":"11_framing","ev":"api_result","id":"p11s","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"37\"}","exception":null}
+{"scn":"11_framing","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"11_framing","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"12_oversized","ev":"scenario","name":"12_oversized","what":"very long lines in both directions"}
+{"scn":"12_oversized","ev":"api_start","id":"p12a","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"12_oversized","ev":"c2s","client":"A","data":{"len":65563,"sha256":"f340a6dc3f8c1a43329b0f6372dd88dbb53b378aaa28c945fbbf06527704b0bb","head":"{\"action\":\"play\",\"pad\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","tail":"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"}\n"},"note":"64 KiB line"}
+{"scn":"12_oversized","ev":"api_result","id":"p12a","after":"after_line","result":{"len":65562,"sha256":"82bbb8940ebeffe7702f0e5f9ccac760dc3726766fbcdb6f5d6f3785e9eddf72","head":"{\"action\":\"play\",\"pad\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","tail":"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"}"},"exception":null}
+{"scn":"12_oversized","ev":"api_start","id":"p12b","call":"WaitForActionAsync","args":{"timeout_ms":15000,"token":"none"},"completed_on_return":false}
+{"scn":"12_oversized","ev":"c2s","client":"A","data":{"len":1048603,"sha256":"a930ae381e970a223fd990e498e47f641481ccadd5f3a39683d7695c15c7c5eb","head":"{\"action\":\"play\",\"pad\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","tail":"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"}\n"},"note":"1 MiB line"}
+{"scn":"12_oversized","ev":"api_result","id":"p12b","after":"after_line","result":{"len":1048602,"sha256":"63782ec108b147aff00d58377627f61df86cf36baf8c0e678d3da180f21659a0","head":"{\"action\":\"play\",\"pad\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","tail":"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"}"},"exception":null}
+{"scn":"12_oversized","ev":"c2s","client":"A","data":{"len":1048603,"sha256":"6a1f2eb1cd1601842335f637842dcd268c63daee84a91e6c58cd471a6555cb01","head":"{\"action\":\"ping\",\"pad\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","tail":"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"}\n"},"note":"1 MiB ping"}
+{"scn":"12_oversized","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"12_oversized","ev":"api","call":"SendState","args":{"stateJson":{"len":1048599,"sha256":"04f55d378d912587d13ece716b706c9ff302eed4ff4a6e71f28bdf205281305f","head":"{\"type\":\"big\",\"pad\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","tail":"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"}"}},"result":null,"exception":null,"timing":"returned"}
+{"scn":"12_oversized","ev":"s2c","client":"A","line":{"len":1048599,"sha256":"04f55d378d912587d13ece716b706c9ff302eed4ff4a6e71f28bdf205281305f","head":"{\"type\":\"big\",\"pad\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","tail":"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"}"}}
+{"scn":"12_oversized","ev":"api_start","id":"p12c","call":"SendStateAndWaitForActionAsync","args":{"stateJson":{"len":262167,"sha256":"8879790831172c46d332ab2650875cb19d0a5b069553656bd0d5eb37f1c2bdac","head":"{\"type\":\"big\",\"pad\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","tail":"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"}"},"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"12_oversized","ev":"s2c","client":"A","line":{"len":262185,"sha256":"3a7139bf49a5251f90f42d7cbe3a3a2c943e017054b785e30132e5b5a70a2c3e","head":"{\"type\":\"big\",\"pad\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx","tail":"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\",\"request_id\":\"38\"}"}}
+{"scn":"12_oversized","ev":"c2s","client":"A","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"38\"}\n","note":null}
+{"scn":"12_oversized","ev":"api_result","id":"p12c","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"38\"}","exception":null}
+{"scn":"12_oversized","ev":"c2s","client":"A","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"12_oversized","ev":"s2c","client":"A","line":"{\"type\":\"pong\"}"}
+{"scn":"13_concurrent_send","ev":"scenario","name":"13_concurrent_send","what":"8 threads x 25 SendState: lines never interleave"}
+{"scn":"13_concurrent_send","ev":"burst_summary","client":"A","expected":200,"got":200,"intact":200,"distinct":200,"perThreadOrdered":true}
+{"scn":"13_concurrent_send","ev":"s2c_none","client":"A"}
+{"scn":"14_disconnect_reconnect","ev":"scenario","name":"14_disconnect_reconnect","what":"client disconnects mid-request, no-agent behaviour, reconnect"}
+{"scn":"14_disconnect_reconnect","ev":"api_start","id":"p14a","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"map_select\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"14_disconnect_reconnect","ev":"s2c","client":"A","line":"{\"type\":\"map_select\",\"request_id\":\"39\"}"}
+{"scn":"14_disconnect_reconnect","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":14}","label":"adv14"},"result":"a43","exception":null,"timing":"returned"}
+{"scn":"14_disconnect_reconnect","ev":"s2c","client":"A","line":"{\"type\":\"advice_request\",\"n\":14,\"request_id\":\"a43\"}"}
+{"scn":"14_disconnect_reconnect","ev":"probe","id":"p14a","at":"before_disconnect","state":"pending"}
+{"scn":"14_disconnect_reconnect","ev":"client_close","client":"A"}
+{"scn":"14_disconnect_reconnect","ev":"api_result","id":"p14a","after":"after_client_close","result":null,"exception":null}
+{"scn":"14_disconnect_reconnect","ev":"is_client_connected","expect":false,"observed":false,"ok":true}
+{"scn":"14_disconnect_reconnect","ev":"api","call":"IsClientConnected","args":null,"result":false,"exception":null,"timing":"returned"}
+{"scn":"14_disconnect_reconnect","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"lost\"}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"14_disconnect_reconnect","ev":"api_start","id":"p14b","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"map_select\"}","timeout_ms":1000,"token":"none"},"completed_on_return":true}
+{"scn":"14_disconnect_reconnect","ev":"api_result","id":"p14b","after":"no_client","result":null,"exception":null}
+{"scn":"14_disconnect_reconnect","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\"}","label":"adv14_noclient"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"14_disconnect_reconnect","ev":"api_start","id":"p14c","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"14_disconnect_reconnect","ev":"probe","id":"p14c","at":"no_client_yet","state":"pending"}
+{"scn":"14_disconnect_reconnect","ev":"client_connect","client":"A2","port":"<PORT>","ok":true}
+{"scn":"14_disconnect_reconnect","ev":"is_client_connected","expect":true,"observed":true,"ok":true}
+{"scn":"14_disconnect_reconnect","ev":"s2c_none","client":"A2"}
+{"scn":"14_disconnect_reconnect","ev":"c2s","client":"A2","data":"{\"action\":\"end_turn\"}\n","note":null}
+{"scn":"14_disconnect_reconnect","ev":"api_result","id":"p14c","after":"after_line_from_new_client","result":"{\"action\":\"end_turn\"}","exception":null}
+{"scn":"14_disconnect_reconnect","ev":"c2s","client":"A2","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"39\"}\n","note":"reply to request from previous connection"}
+{"scn":"14_disconnect_reconnect","ev":"c2s","client":"A2","data":"{\"action\":\"advice\",\"request_id\":\"a43\"}\n","note":"advice for request from previous connection"}
+{"scn":"14_disconnect_reconnect","ev":"c2s","client":"A2","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"14_disconnect_reconnect","ev":"s2c","client":"A2","line":"{\"type\":\"pong\"}"}
+{"scn":"14_disconnect_reconnect","ev":"api_start","id":"p14d","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"map_select\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"14_disconnect_reconnect","ev":"s2c","client":"A2","line":"{\"type\":\"map_select\",\"request_id\":\"41\"}"}
+{"scn":"14_disconnect_reconnect","ev":"client_reset","client":"A2"}
+{"scn":"14_disconnect_reconnect","ev":"api_result","id":"p14d","after":"after_client_reset","result":null,"exception":null}
+{"scn":"14_disconnect_reconnect","ev":"is_client_connected","expect":false,"observed":false,"ok":true}
+{"scn":"14_disconnect_reconnect","ev":"client_connect","client":"A3","port":"<PORT>","ok":true}
+{"scn":"14_disconnect_reconnect","ev":"is_client_connected","expect":true,"observed":true,"ok":true}
+{"scn":"14_disconnect_reconnect","ev":"api_start","id":"p14e","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"map_select\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"14_disconnect_reconnect","ev":"s2c","client":"A3","line":"{\"type\":\"map_select\",\"request_id\":\"42\"}"}
+{"scn":"14_disconnect_reconnect","ev":"client_shutdown_send","client":"A3"}
+{"scn":"14_disconnect_reconnect","ev":"api_result","id":"p14e","after":"after_client_half_close","result":null,"exception":null}
+{"scn":"14_disconnect_reconnect","ev":"s2c_eof","client":"A3"}
+{"scn":"14_disconnect_reconnect","ev":"is_client_connected","expect":false,"observed":false,"ok":true}
+{"scn":"14_disconnect_reconnect","ev":"client_connect","client":"A4","port":"<PORT>","ok":true}
+{"scn":"14_disconnect_reconnect","ev":"is_client_connected","expect":true,"observed":true,"ok":true}
+{"scn":"14_disconnect_reconnect","ev":"api_start","id":"p14f","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"14_disconnect_reconnect","ev":"c2s","client":"A4","data":"{\"action\":\"end_turn\"}","note":"no trailing newline"}
+{"scn":"14_disconnect_reconnect","ev":"s2c_none","client":"A4"}
+{"scn":"14_disconnect_reconnect","ev":"probe","id":"p14f","at":"before_close","state":"pending"}
+{"scn":"14_disconnect_reconnect","ev":"client_close","client":"A4"}
+{"scn":"14_disconnect_reconnect","ev":"api_result","id":"p14f","after":"after_close","result":null,"exception":null}
+{"scn":"14_disconnect_reconnect","ev":"is_client_connected","expect":false,"observed":false,"ok":true}
+{"scn":"14_disconnect_reconnect","ev":"client_connect","client":"A5","port":"<PORT>","ok":true}
+{"scn":"14_disconnect_reconnect","ev":"is_client_connected","expect":true,"observed":true,"ok":true}
+{"scn":"14_disconnect_reconnect","ev":"c2s","client":"A5","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"14_disconnect_reconnect","ev":"s2c","client":"A5","line":"{\"type\":\"pong\"}"}
+{"scn":"15_second_client","ev":"scenario","name":"15_second_client","what":"one client at a time; a second connection queues until the first leaves"}
+{"scn":"15_second_client","ev":"client_connect","client":"B","port":"<PORT>","ok":true}
+{"scn":"15_second_client","ev":"c2s","client":"B","data":"{\"action\":\"ping\"}\n","note":"queued ping"}
+{"scn":"15_second_client","ev":"s2c_none","client":"B"}
+{"scn":"15_second_client","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"probe\",\"n\":1}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"15_second_client","ev":"s2c","client":"A5","line":"{\"type\":\"probe\",\"n\":1}"}
+{"scn":"15_second_client","ev":"s2c_none","client":"B"}
+{"scn":"15_second_client","ev":"c2s","client":"A5","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"15_second_client","ev":"s2c","client":"A5","line":"{\"type\":\"pong\"}"}
+{"scn":"15_second_client","ev":"client_close","client":"A5"}
+{"scn":"15_second_client","ev":"s2c","client":"B","line":"{\"type\":\"pong\"}"}
+{"scn":"15_second_client","ev":"is_client_connected","expect":true,"observed":true,"ok":true}
+{"scn":"15_second_client","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"probe\",\"n\":2}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"15_second_client","ev":"s2c","client":"B","line":"{\"type\":\"probe\",\"n\":2}"}
+{"scn":"15_second_client","ev":"client_connect","client":"C","port":"<PORT>","ok":true}
+{"scn":"15_second_client","ev":"client_close","client":"C"}
+{"scn":"15_second_client","ev":"client_close","client":"B"}
+{"scn":"15_second_client","ev":"is_client_connected","expect":false,"observed":false,"ok":true}
+{"scn":"15_second_client","ev":"client_connect","client":"D","port":"<PORT>","ok":true}
+{"scn":"15_second_client","ev":"is_client_connected","expect":true,"observed":true,"ok":true}
+{"scn":"15_second_client","ev":"c2s","client":"D","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"15_second_client","ev":"s2c","client":"D","line":"{\"type\":\"pong\"}"}
+{"scn":"16_stop_pending","ev":"scenario","name":"16_stop_pending","what":"Stop() while a request and an advice request are pending"}
+{"scn":"16_stop_pending","ev":"api_start","id":"p16","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"16_stop_pending","ev":"s2c","client":"D","line":"{\"type\":\"combat_action\",\"request_id\":\"43\"}"}
+{"scn":"16_stop_pending","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\",\"n\":16}","label":"adv16"},"result":"a45","exception":null,"timing":"returned"}
+{"scn":"16_stop_pending","ev":"s2c","client":"D","line":"{\"type\":\"advice_request\",\"n\":16,\"request_id\":\"a45\"}"}
+{"scn":"16_stop_pending","ev":"api_start","id":"p16w","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"16_stop_pending","ev":"api_result","id":"p16","after":"after_wait_for_action_superseded_it","result":null,"exception":null}
+{"scn":"16_stop_pending","ev":"api_start","id":"p16b","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"16_stop_pending","ev":"s2c","client":"D","line":"{\"type\":\"combat_action\",\"request_id\":\"44\"}"}
+{"scn":"16_stop_pending","ev":"api_result","id":"p16w","after":"after_send_and_wait_superseded_it","result":null,"exception":null}
+{"scn":"16_stop_pending","ev":"api","call":"Stop","args":null,"result":null,"exception":null,"timing":"returned"}
+{"scn":"16_stop_pending","ev":"api_result","id":"p16b","after":"after_stop","result":null,"exception":null}
+{"scn":"16_stop_pending","ev":"s2c_eof","client":"D"}
+{"scn":"16_stop_pending","ev":"is_client_connected","expect":false,"observed":false,"ok":true}
+{"scn":"16_stop_pending","ev":"api","call":"IsClientConnected","args":null,"result":false,"exception":null,"timing":"returned"}
+{"scn":"16_stop_pending","ev":"client_connect","client":"Z","port":"<PORT>","ok":false,"error":"ConnectionRefused"}
+{"scn":"16_stop_pending","ev":"api","call":"SendState","args":{"stateJson":"{\"type\":\"after_stop\"}"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"16_stop_pending","ev":"api_start","id":"p16c","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"x\"}","timeout_ms":1000,"token":"none"},"completed_on_return":true}
+{"scn":"16_stop_pending","ev":"api_result","id":"p16c","after":"stopped","result":null,"exception":null}
+{"scn":"16_stop_pending","ev":"api","call":"SendAdviceRequest","args":{"stateJson":"{\"type\":\"advice_request\"}","label":"adv_after_stop"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"16_stop_pending","ev":"api_start","id":"p16d","call":"WaitForActionAsync","args":{"timeout_ms":1000,"token":"none"},"completed_on_return":false}
+{"scn":"16_stop_pending","ev":"api_result","id":"p16d","after":"stopped","result":null,"exception":null}
+{"scn":"16_stop_pending","ev":"api","call":"Stop","args":null,"result":null,"exception":null,"timing":"returned"}
+{"scn":"17_restart_after_stop","ev":"scenario","name":"17_restart_after_stop","what":"Start() again on a new port after Stop()"}
+{"scn":"17_restart_after_stop","ev":"api","call":"Start","args":{"port":"<PORT3>"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"17_restart_after_stop","ev":"client_connect","client":"E","port":"<PORT3>","ok":true}
+{"scn":"17_restart_after_stop","ev":"is_client_connected","expect":true,"observed":true,"ok":true}
+{"scn":"17_restart_after_stop","ev":"c2s","client":"E","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"17_restart_after_stop","ev":"s2c","client":"E","line":"{\"type\":\"pong\"}"}
+{"scn":"17_restart_after_stop","ev":"api_start","id":"p17","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"event\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"17_restart_after_stop","ev":"s2c","client":"E","line":"{\"type\":\"event\",\"request_id\":\"46\"}"}
+{"scn":"17_restart_after_stop","ev":"c2s","client":"E","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"46\"}\n","note":null}
+{"scn":"17_restart_after_stop","ev":"api_result","id":"p17","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"46\"}","exception":null}
+{"scn":"17_restart_after_stop","ev":"client_close","client":"E"}
+{"scn":"17_restart_after_stop","ev":"is_client_connected","expect":false,"observed":false,"ok":true}
+{"scn":"17_restart_after_stop","ev":"api","call":"Stop","args":null,"result":null,"exception":null,"timing":"returned"}
+{"scn":"18_start_busy_port","ev":"scenario","name":"18_start_busy_port","what":"Start() on a port already bound, then Start() on a free one"}
+{"scn":"18_start_busy_port","ev":"api","call":"Start","args":{"port":"<BUSY>"},"result":null,"exception":{"type":"SocketException","socket_error":"AddressAlreadyInUse"},"timing":"returned"}
+{"scn":"18_start_busy_port","ev":"api","call":"IsClientConnected","args":null,"result":false,"exception":null,"timing":"returned"}
+{"scn":"18_start_busy_port","ev":"api","call":"Start","args":{"port":"<PORT5>"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"18_start_busy_port","ev":"client_connect","client":"F","port":"<PORT5>","ok":true}
+{"scn":"18_start_busy_port","ev":"c2s","client":"F","data":"{\"action\":\"ping\"}\n","note":null}
+{"scn":"18_start_busy_port","ev":"s2c","client":"F","line":"{\"type\":\"pong\"}"}
+{"scn":"18_start_busy_port","ev":"api","call":"Stop","args":null,"result":null,"exception":null,"timing":"returned"}
+{"scn":"19_hostile_clients","ev":"scenario","name":"19_hostile_clients","what":"a browser-style HTTP request and an endless unterminated line are dropped; the server keeps serving"}
+{"scn":"19_hostile_clients","ev":"api","call":"Start","args":{"port":"<PORT6>"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"19_hostile_clients","ev":"client_connect","client":"H","port":"<PORT6>","ok":true}
+{"scn":"19_hostile_clients","ev":"is_client_connected","expect":true,"observed":true,"ok":true}
+{"scn":"19_hostile_clients","ev":"c2s","client":"H","data":"POST / HTTP/1.1\r\nHost: 127.0.0.1\r\nOrigin: https://evil.example\r\nContent-Type: text/plain\r\nContent-Length: 62\r\n\r\n{\"action\":\"restore_snapshot\",\"snapshot_id\":\"1760000000_0001\"}\n","note":"cross-site HTTP POST carrying a rewind verb"}
+{"scn":"19_hostile_clients","ev":"s2c_eof","client":"H"}
+{"scn":"19_hostile_clients","ev":"is_client_connected","expect":false,"observed":false,"ok":true}
+{"scn":"19_hostile_clients","ev":"client_connect","client":"J","port":"<PORT6>","ok":true}
+{"scn":"19_hostile_clients","ev":"is_client_connected","expect":true,"observed":true,"ok":true}
+{"scn":"19_hostile_clients","ev":"c2s","client":"J","data":"{\"action\":\"ping\"}\n","note":null}
+{"scn":"19_hostile_clients","ev":"s2c","client":"J","line":"{\"type\":\"pong\"}"}
+{"scn":"19_hostile_clients","ev":"c2s","client":"J","bytes":"1 MiB chunk 1/9, no newline","len":1048600}
+{"scn":"19_hostile_clients","ev":"c2s","client":"J","bytes":"1 MiB chunk 2/9, no newline","len":1048576}
+{"scn":"19_hostile_clients","ev":"c2s","client":"J","bytes":"1 MiB chunk 3/9, no newline","len":1048576}
+{"scn":"19_hostile_clients","ev":"c2s","client":"J","bytes":"1 MiB chunk 4/9, no newline","len":1048576}
+{"scn":"19_hostile_clients","ev":"c2s","client":"J","bytes":"1 MiB chunk 5/9, no newline","len":1048576}
+{"scn":"19_hostile_clients","ev":"c2s","client":"J","bytes":"1 MiB chunk 6/9, no newline","len":1048576}
+{"scn":"19_hostile_clients","ev":"c2s","client":"J","bytes":"1 MiB chunk 7/9, no newline","len":1048576}
+{"scn":"19_hostile_clients","ev":"c2s","client":"J","bytes":"1 MiB chunk 8/9, no newline","len":1048576}
+{"scn":"19_hostile_clients","ev":"c2s","client":"J","bytes":"1 MiB chunk 9/9, no newline","len":1048576}
+{"scn":"19_hostile_clients","ev":"s2c_closed","client":"J","how":"eof_or_reset"}
+{"scn":"19_hostile_clients","ev":"is_client_connected","expect":false,"observed":false,"ok":true}
+{"scn":"19_hostile_clients","ev":"client_connect","client":"L","port":"<PORT6>","ok":true}
+{"scn":"19_hostile_clients","ev":"is_client_connected","expect":true,"observed":true,"ok":true}
+{"scn":"19_hostile_clients","ev":"c2s","client":"L","data":"{\"action\":\"ping\"}\n","note":null}
+{"scn":"19_hostile_clients","ev":"s2c","client":"L","line":"{\"type\":\"pong\"}"}
+{"scn":"19_hostile_clients","ev":"client_close","client":"L"}
+{"scn":"19_hostile_clients","ev":"is_client_connected","expect":false,"observed":false,"ok":true}
+{"scn":"19_hostile_clients","ev":"api","call":"Stop","args":null,"result":null,"exception":null,"timing":"returned"}
+{"scn":"20_coach_lane","ev":"scenario","name":"20_coach_lane","what":"inbound coach messages raise CoachReceived and never touch the pending autopilot slot"}
+{"scn":"20_coach_lane","ev":"api","call":"Start","args":{"port":"<PORT7>"},"result":null,"exception":null,"timing":"returned"}
+{"scn":"20_coach_lane","ev":"client_connect","client":"M","port":"<PORT7>","ok":true}
+{"scn":"20_coach_lane","ev":"is_client_connected","expect":true,"observed":true,"ok":true}
+{"scn":"20_coach_lane","ev":"api_start","id":"p20w","call":"WaitForActionAsync","args":{"timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"20_coach_lane","ev":"c2s","client":"M","data":"{\"action\":\"coach\",\"request_id\":null,\"state_id\":null,\"coach\":{\"kind\":\"turn\",\"id\":\"turn:n4\",\"node_id\":\"n4\",\"turn\":1,\"floor\":2,\"verdict\":\"blunder\",\"you\":[\"end turn\"],\"ai\":[\"Bash → Cultist\",\"end turn\"],\"hp_drop\":9.0,\"win_before\":0.97,\"win_after\":0.9,\"peeked\":false,\"ungraded_actions\":0}}\n","note":"coach while an uncorrelated wait is pending"}
+{"scn":"20_coach_lane","ev":"c2s","client":"M","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"20_coach_lane","ev":"s2c","client":"M","line":"{\"type\":\"pong\"}"}
+{"scn":"20_coach_lane","ev":"hook","hook":"coach_received","coach":"{\"kind\":\"turn\",\"id\":\"turn:n4\",\"node_id\":\"n4\",\"turn\":1,\"floor\":2,\"verdict\":\"blunder\",\"you\":[\"end turn\"],\"ai\":[\"Bash → Cultist\",\"end turn\"],\"hp_drop\":9.0,\"win_before\":0.97,\"win_after\":0.9,\"peeked\":false,\"ungraded_actions\":0}","thread":"server"}
+{"scn":"20_coach_lane","ev":"probe","id":"p20w","at":"after_coach","state":"pending"}
+{"scn":"20_coach_lane","ev":"c2s","client":"M","data":"{\"action\":\"end_turn\"}\n","note":"the wait's own reply"}
+{"scn":"20_coach_lane","ev":"api_result","id":"p20w","after":"after_reply","result":"{\"action\":\"end_turn\"}","exception":null}
+{"scn":"20_coach_lane","ev":"api_start","id":"p20","call":"SendStateAndWaitForActionAsync","args":{"stateJson":"{\"type\":\"combat_action\"}","timeout_ms":5000,"token":"none"},"completed_on_return":false}
+{"scn":"20_coach_lane","ev":"s2c","client":"M","line":"{\"type\":\"combat_action\",\"request_id\":\"47\"}"}
+{"scn":"20_coach_lane","ev":"c2s","client":"M","data":"{\"action\":\"coach\",\"request_id\":null,\"state_id\":null,\"coach\":{\"kind\":\"recap\",\"id\":\"recap:n2\",\"node_id\":\"n2\",\"log_name\":\"run.jsonl\",\"log_idx\":3,\"floor\":2,\"room_type\":\"Monster\",\"hp_start\":80,\"hp_end\":61,\"hp_lost\":19,\"ai_hp_lost\":8.5,\"turns\":4,\"turns_graded\":3,\"turns_ungraded\":1,\"unfinished_turns\":1,\"costliest\":[{\"kind\":\"turn\",\"id\":\"turn:n4\",\"node_id\":\"n4\",\"turn\":1,\"floor\":2,\"verdict\":\"blunder\",\"you\":[\"end turn\"],\"ai\":[\"Bash → Cultist\",\"end turn\"],\"hp_drop\":9.0,\"win_before\":0.97,\"win_after\":0.9,\"peeked\":false,\"ungraded_actions\":0}]}}\n","note":"recap record"}
+{"scn":"20_coach_lane","ev":"c2s","client":"M","data":"{\"action\":\"coach\",\"request_id\":null,\"state_id\":null,\"coach\":{\"kind\":\"autopsy\",\"id\":\"autopsy:ABC\",\"log_name\":\"run.jsonl\",\"floor\":9,\"act\":1,\"items\":[{\"kind\":\"turn\",\"record\":{\"kind\":\"turn\",\"id\":\"turn:n4\",\"node_id\":\"n4\",\"turn\":1,\"floor\":2,\"verdict\":\"blunder\",\"you\":[\"end turn\"],\"ai\":[\"Bash → Cultist\",\"end turn\"],\"hp_drop\":9.0,\"win_before\":0.97,\"win_after\":0.9,\"peeked\":false,\"ungraded_actions\":0}}],\"turns_ungraded\":2,\"decisions_graded\":14}}\n","note":"autopsy record"}
+{"scn":"20_coach_lane","ev":"c2s","client":"M","data":"{\"action\":\"COACH\",\"request_id\":null,\"state_id\":null,\"coach\":{\"kind\":\"withdraw\",\"ids\":[\"turn:n4\"]}}\n","note":"withdraw, verb case-insensitive"}
+{"scn":"20_coach_lane","ev":"c2s","client":"M","data":"{\"action\":\"coach\",\"request_id\":null,\"coach\":\"not an object\"}\n","note":"coach field not an object: dropped"}
+{"scn":"20_coach_lane","ev":"c2s","client":"M","data":"{\"action\":\"coach\"}\n","note":"no coach field: dropped"}
+{"scn":"20_coach_lane","ev":"c2s","client":"M","data":"{\"action\":\"ping\"}\n","note":"barrier"}
+{"scn":"20_coach_lane","ev":"s2c","client":"M","line":"{\"type\":\"pong\"}"}
+{"scn":"20_coach_lane","ev":"hook","hook":"coach_received","coach":"{\"kind\":\"recap\",\"id\":\"recap:n2\",\"node_id\":\"n2\",\"log_name\":\"run.jsonl\",\"log_idx\":3,\"floor\":2,\"room_type\":\"Monster\",\"hp_start\":80,\"hp_end\":61,\"hp_lost\":19,\"ai_hp_lost\":8.5,\"turns\":4,\"turns_graded\":3,\"turns_ungraded\":1,\"unfinished_turns\":1,\"costliest\":[{\"kind\":\"turn\",\"id\":\"turn:n4\",\"node_id\":\"n4\",\"turn\":1,\"floor\":2,\"verdict\":\"blunder\",\"you\":[\"end turn\"],\"ai\":[\"Bash → Cultist\",\"end turn\"],\"hp_drop\":9.0,\"win_before\":0.97,\"win_after\":0.9,\"peeked\":false,\"ungraded_actions\":0}]}","thread":"server"}
+{"scn":"20_coach_lane","ev":"hook","hook":"coach_received","coach":"{\"kind\":\"autopsy\",\"id\":\"autopsy:ABC\",\"log_name\":\"run.jsonl\",\"floor\":9,\"act\":1,\"items\":[{\"kind\":\"turn\",\"record\":{\"kind\":\"turn\",\"id\":\"turn:n4\",\"node_id\":\"n4\",\"turn\":1,\"floor\":2,\"verdict\":\"blunder\",\"you\":[\"end turn\"],\"ai\":[\"Bash → Cultist\",\"end turn\"],\"hp_drop\":9.0,\"win_before\":0.97,\"win_after\":0.9,\"peeked\":false,\"ungraded_actions\":0}}],\"turns_ungraded\":2,\"decisions_graded\":14}","thread":"server"}
+{"scn":"20_coach_lane","ev":"hook","hook":"coach_received","coach":"{\"kind\":\"withdraw\",\"ids\":[\"turn:n4\"]}","thread":"server"}
+{"scn":"20_coach_lane","ev":"probe","id":"p20","at":"after_coach_lines","state":"pending"}
+{"scn":"20_coach_lane","ev":"c2s","client":"M","data":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"47\"}\n","note":null}
+{"scn":"20_coach_lane","ev":"api_result","id":"p20","after":"after_reply","result":"{\"action\":\"choose\",\"index\":0,\"request_id\":\"47\"}","exception":null}
+{"scn":"20_coach_lane","ev":"client_close","client":"M"}
+{"scn":"20_coach_lane","ev":"is_client_connected","expect":false,"observed":false,"ok":true}
+{"scn":"20_coach_lane","ev":"api","call":"Stop","args":null,"result":null,"exception":null,"timing":"returned"}
+{"scn":"99_end","ev":"scenario","name":"99_end","what":"done"}

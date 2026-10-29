@@ -1,0 +1,13 @@
+{
+  "class_name": "ByrdonisEgg",
+  "title": "Byrdonis Egg",
+  "character": "Quest",
+  "energy_cost": -1,
+  "type": "Quest",
+  "rarity": "Quest",
+  "target": "None",
+  "keywords": ["Unplayable"],
+  "vars": [],
+  "description": "Can be hatched at a [gold]Rest Site[/gold].",
+  "notes": "Special quest card that can only be interacted with at rest sites via the hatch option. Not playable in combat."
+}

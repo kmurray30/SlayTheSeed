@@ -1,0 +1,9 @@
+{
+  "class_name": "ImprovementPower",
+  "title": "Improvement",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the end of combat, [gold]Upgrade[/gold] a random card.",
+  "smart_description": "At the end of combat, [gold]Upgrade[/gold] [blue]N[/blue] random cards, where N equals the number of stacks.",
+  "notes": "This power upgrades N cards from the deck at the end of combat, where N is determined by the stack counter. Cards are selected randomly from those that are upgradable. If fewer upgradable cards remain than the stack count, all remaining cards are upgraded."
+}

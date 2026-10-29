@@ -1,0 +1,66 @@
+{
+  "class_name": "OwlMagistrate",
+  "title": "Owl Magistrate",
+  "min_hp": 247,
+  "max_hp": 247,
+  "min_hp_base": 231,
+  "max_hp_base": 231,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "MAGISTRATE_SCRUTINY",
+      "title": "Magistrate Scrutiny",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 17,
+          "damage_base": 16,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 16/17 damage"]
+    },
+    {
+      "id": "PECK_ASSAULT",
+      "title": "Peck Assault",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 4,
+          "hits": 6
+        }
+      ],
+      "effects": ["Deal 4 damage", "6 hits"]
+    },
+    {
+      "id": "JUDICIAL_FLIGHT",
+      "title": "Judicial Flight",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Apply 1 Soar"]
+    },
+    {
+      "id": "VERDICT",
+      "title": "Verdict",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 36,
+          "damage_base": 33,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": ["Deal 33/36 damage", "Apply 4 Vulnerable"]
+    }
+  ],
+  "move_pattern": "Cycles: Magistrate Scrutiny → Peck Assault → Judicial Flight → Verdict",
+  "powers_on_spawn": [],
+  "notes": "Judicial Flight applies Soar and puts the Owl Magistrate in a flying state, changing animations and sound effects. Verdict deals damage and applies 4 stacks of Vulnerable to the player, removing the Soar effect before returning to ground state."
+}

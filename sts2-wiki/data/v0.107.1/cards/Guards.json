@@ -1,0 +1,15 @@
+{
+  "class_name": "Guards",
+  "title": "GUARDS!!!",
+  "character": "Ironclad",
+  "energy_cost": 2,
+  "type": "Skill",
+  "rarity": "Rare",
+  "target": "Self",
+  "keywords": ["Exhaust"],
+  "vars": [],
+  "description": "[gold]Transform[/gold] any number of cards in your [gold]Hand[/gold] into [gold]Minion Sacrifice[/gold].",
+  "upgraded_description": "[gold]Transform[/gold] any number of cards in your [gold]Hand[/gold] into [gold]Minion Sacrifice+[/gold].",
+  "referenced_powers": [],
+  "notes": "Interactive card that allows selecting any number of cards from hand to transform into Minion Sacrifice tokens. When upgraded, transforms cards into Minion Sacrifice+ instead."
+}

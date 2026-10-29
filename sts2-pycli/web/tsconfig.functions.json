@@ -1,0 +1,13 @@
+{
+  // The Cloudflare Pages Functions (functions/**): the bug-report endpoint.
+  // Workers runtime = web-platform globals (Request, Response, crypto) with no
+  // DOM, so WebWorker's lib is the honest one, like the engine worker.
+  // functions/env.d.ts hand-types the bindings; see the comment there.
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.functions.tsbuildinfo",
+    "lib": ["ES2020", "WebWorker"]
+  },
+  "include": ["functions"],
+  "exclude": []
+}

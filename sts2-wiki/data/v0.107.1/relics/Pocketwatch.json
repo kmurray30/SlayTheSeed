@@ -1,0 +1,8 @@
+{
+  "class_name": "Pocketwatch",
+  "title": "Pocketwatch",
+  "rarity": "Rare",
+  "description": "Whenever you play 3 or fewer cards during your turn, draw 3 additional cards at the start of your next turn.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Tracks cards played each turn. Compares against the previous turn's count at hand draw time. Does not trigger on turn 1. Shows a counter displaying cards played this turn (displayed when in combat). Status indicator shows Active when cards played this turn ≤ 3."
+}

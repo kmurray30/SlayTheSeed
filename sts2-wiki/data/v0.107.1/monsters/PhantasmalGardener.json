@@ -1,0 +1,59 @@
+{
+  "class_name": "PhantasmalGardener",
+  "title": "Phantasmal Gardener",
+  "min_hp": 27,
+  "max_hp": 32,
+  "min_hp_base": 26,
+  "max_hp_base": 31,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "BITE_MOVE",
+      "title": "Bite",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 5
+        }
+      ],
+      "effects": ["Deal 5 damage"]
+    },
+    {
+      "id": "LASH_MOVE",
+      "title": "Lash",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 7
+        }
+      ],
+      "effects": ["Deal 7 damage"]
+    },
+    {
+      "id": "FLAIL_MOVE",
+      "title": "Flail",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 1,
+          "hits": 3
+        }
+      ],
+      "effects": ["Deal 1 damage", "3 hits"]
+    },
+    {
+      "id": "ENLARGE_MOVE",
+      "title": "Enlarge",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Apply 2/3 Strength", "Increase size"]
+    }
+  ],
+  "move_pattern": "Each copy starts with a different move based on slot position (1st: Flail, 2nd: Bite, 3rd: Lash, 4th: Enlarge), then all cycle through: Bite → Lash → Flail → Enlarge",
+  "powers_on_spawn": ["Skittish"],
+  "notes": "Appears in groups of up to four instances (one per slot). Each instance follows the same action cycle but starts with a different move based on its slot position. Each time Enlarge is used, the creature gains Strength and physically scales up proportionally. Skittish power gained on spawn grants block when receiving damage."
+}

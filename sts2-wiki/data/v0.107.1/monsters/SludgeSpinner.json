@@ -1,0 +1,68 @@
+{
+  "class_name": "SludgeSpinner",
+  "title": "Sludge Spinner",
+  "min_hp": 41,
+  "max_hp": 42,
+  "min_hp_base": 37,
+  "max_hp_base": 39,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "OIL_SPRAY_MOVE",
+      "title": "Oil Spray",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 9,
+          "damage_base": 8,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": [
+        "Deal 8/9 damage",
+        "Apply 1 Weak"
+      ]
+    },
+    {
+      "id": "SLAM_MOVE",
+      "title": "Slam",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 12,
+          "damage_base": 11,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 11/12 damage"
+      ]
+    },
+    {
+      "id": "RAGE_MOVE",
+      "title": "Rage",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 7,
+          "damage_base": 6,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Deal 6/7 damage",
+        "Apply 3 Strength"
+      ]
+    }
+  ],
+  "move_pattern": "Starts with Oil Spray. Then cycles randomly through Oil Spray, Slam, and Rage without repeating the same move consecutively.",
+  "powers_on_spawn": [],
+  "notes": "Damage scales at A9, HP scales at A8. Strength buffs itself, gradually becoming more dangerous. Weak reduces player's damage output. Note: The Rage move is hidden from the bestiary display but still used during combat."
+}
