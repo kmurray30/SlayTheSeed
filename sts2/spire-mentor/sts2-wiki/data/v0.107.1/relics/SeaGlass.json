@@ -1,0 +1,8 @@
+{
+  "class_name": "SeaGlass",
+  "title": "Sea Glass",
+  "rarity": "Ancient",
+  "description": "See 15 blue cards from another character. Choose any number of them to add to your Deck.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "Upon pickup, displays 15 cards from the selected character's pool (5 Common, 5 Uncommon, 5 Rare). The player can select any number of these cards to add to their deck. Each character has a character-specific title variant (Demon Glass for Ironclad, Venom Glass for Silent, Gear Glass for Defect, Lich Glass for Necrobinder, Noble Glass for Regent)."
+}

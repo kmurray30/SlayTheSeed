@@ -1,0 +1,67 @@
+{
+  "class_name": "Seapunk",
+  "title": "Seapunk",
+  "min_hp": 47,
+  "max_hp": 49,
+  "min_hp_base": 44,
+  "max_hp_base": 46,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "SEA_KICK_MOVE",
+      "title": "Sea Kick",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 13,
+          "damage_base": 11,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 11/13 damage"
+      ]
+    },
+    {
+      "id": "SPINNING_KICK_MOVE",
+      "title": "Spinning Kick",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 2,
+          "hits": 4
+        }
+      ],
+      "effects": [
+        "Deal 2 damage",
+        "4 hits"
+      ]
+    },
+    {
+      "id": "BUBBLE_BURP_MOVE",
+      "title": "Bubble Burp",
+      "intents": [
+        {
+          "type": "buff",
+          "amount": 2,
+          "amount_base": 1,
+          "ascension": 9
+        },
+        {
+          "type": "block",
+          "amount": 8,
+          "amount_base": 7,
+          "ascension": 8
+        }
+      ],
+      "effects": [
+        "Apply 1/2 Strength",
+        "Gain 7/8 Block"
+      ]
+    }
+  ],
+  "move_pattern": "Cycles: Sea Kick → Spinning Kick → Bubble Burp",
+  "powers_on_spawn": [],
+  "notes": "Each use of Bubble Burp applies 2 Strength to the Seapunk, increasing the damage of all subsequent attacks."
+}

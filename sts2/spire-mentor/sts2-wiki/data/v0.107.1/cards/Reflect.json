@@ -1,0 +1,27 @@
+{
+  "class_name": "Reflect",
+  "title": "Reflect",
+  "character": "Colorless",
+  "energy_cost": 1,
+  "type": "Skill",
+  "rarity": "Uncommon",
+  "target": "Self",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Block",
+      "base_value": 15,
+      "upgraded_value": 20
+    }
+  ],
+  "description": "Gain 15 [gold]Block[/gold].\nBlocked attack damage is reflected to your attacker this turn.",
+  "upgraded_description": "Gain 20 [gold]Block[/gold].\nBlocked attack damage is reflected to your attacker this turn.",
+  "star_cost": 3,
+  "x_cost": false,
+  "referenced_powers": [
+    {
+      "class_name": "ReflectPower",
+      "title": "Reflect"
+    }
+  ]
+}

@@ -1,0 +1,364 @@
+{
+ "autoplayed": 11,
+ "diff": {
+  "autoplayed": 11,
+  "deck": {
+   "added": [],
+   "removed": [],
+   "upgraded": []
+  },
+  "deck_size": 11,
+  "from_floor": null,
+  "gold": 119,
+  "gold_delta": null,
+  "hp": 61,
+  "hp_delta": null,
+  "lines": [
+   "HP 61/80",
+   "Gold 119",
+   "11 decisions auto-played"
+  ],
+  "max_hp": 80,
+  "potions_gained": [],
+  "potions_lost": [],
+  "relics_gained": [],
+  "relics_lost": [],
+  "to_floor": 2
+ },
+ "error": null,
+ "over": false,
+ "step": {
+  "action_label": "",
+  "assets_base": "https://assets.test",
+  "chosen_action": null,
+  "decision": "card_reward",
+  "idx": 0,
+  "meta": {
+   "act": 1,
+   "act_name": "Overgrowth",
+   "bg_col": 0,
+   "bg_row": 2,
+   "bg_seed": 1,
+   "floor": 2,
+   "step_no": 0,
+   "turn": null
+  },
+  "pv": null,
+  "scores": [],
+  "source": "live",
+  "state": {
+   "act": 1,
+   "act1": "overgrowth",
+   "act_name": "Overgrowth",
+   "ascension": 0,
+   "bg_col": 0,
+   "bg_row": 2,
+   "bg_seed": 1,
+   "can_skip": true,
+   "cards": [
+    {
+     "color": "red",
+     "cost": 2,
+     "description": "Gain 12 Block.\nWhenever you are attacked this turn, deal 4 damage back.",
+     "description_rich": "Gain 12 Block.\nWhenever you are attacked this turn, deal 4 damage back.",
+     "id": "FLAME_BARRIER",
+     "image": "https://assets.test/card_atlas/ironclad/flame_barrier.png",
+     "index": 0,
+     "name": "Flame Barrier",
+     "rarity": "Uncommon",
+     "type": "Skill"
+    },
+    {
+     "color": "red",
+     "cost": 1,
+     "description": "Gain 8 Block.\nDraw 1 card.",
+     "description_rich": "Gain 8 Block.\nDraw 1 card.",
+     "id": "SHRUG_IT_OFF",
+     "image": "https://assets.test/card_atlas/ironclad/shrug_it_off.png",
+     "index": 1,
+     "name": "Shrug It Off",
+     "rarity": "Common",
+     "type": "Skill"
+    },
+    {
+     "color": "red",
+     "cost": 1,
+     "description": "Deal 3 damage to a random enemy 3 times.",
+     "description_rich": "Deal 3 damage to a random enemy 3 times.",
+     "id": "SWORD_BOOMERANG",
+     "image": "https://assets.test/card_atlas/ironclad/sword_boomerang.png",
+     "index": 2,
+     "name": "Sword Boomerang",
+     "rarity": "Common",
+     "type": "Attack"
+    }
+   ],
+   "decision": "card_reward",
+   "floor": 2,
+   "mcts": {
+    "actions": [
+     {
+      "action": {
+       "action": "play",
+       "card_index": 0,
+       "target_index": 0
+      },
+      "bucket": "likely-win",
+      "hp_n": 4,
+      "hp_sd": 0.0,
+      "is_best": true,
+      "losses": 0,
+      "low_confidence": false,
+      "mean_final_hp": 61.0,
+      "p_loss": 0.0,
+      "p_tie": 0.0,
+      "p_win": 1.0,
+      "q": 1.2177,
+      "q_saturated": false,
+      "ties": 0,
+      "value": 1.0,
+      "value_sum": 4.8707,
+      "visits": 4,
+      "wins": 4
+     },
+     {
+      "action": {
+       "action": "end_turn"
+      },
+      "bucket": "likely-win",
+      "hp_n": 4,
+      "hp_sd": 0.0,
+      "is_best": false,
+      "losses": 0,
+      "low_confidence": false,
+      "mean_final_hp": 48.0,
+      "p_loss": 0.0,
+      "p_tie": 0.0,
+      "p_win": 1.0,
+      "q": 1.1712,
+      "q_saturated": false,
+      "ties": 0,
+      "value": 1.0,
+      "value_sum": 4.6849,
+      "visits": 4,
+      "wins": 4
+     }
+    ],
+    "recommended": {
+     "action": "play",
+     "card_index": 0,
+     "target_index": 0
+    }
+   },
+   "options": [
+    {
+     "action": "select_card_reward",
+     "args": {
+      "card_index": 0
+     },
+     "enabled": true,
+     "label": "FLAME_BARRIER.title"
+    },
+    {
+     "action": "select_card_reward",
+     "args": {
+      "card_index": 1
+     },
+     "enabled": true,
+     "label": "SHRUG_IT_OFF.title"
+    },
+    {
+     "action": "select_card_reward",
+     "args": {
+      "card_index": 2
+     },
+     "enabled": true,
+     "label": "SWORD_BOOMERANG.title"
+    },
+    {
+     "action": "skip_card_reward",
+     "args": {},
+     "enabled": true,
+     "label": "Skip"
+    }
+   ],
+   "player": {
+    "block": 0,
+    "deck": [
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Deal 6 damage.",
+      "description_rich": "Deal 6 damage.",
+      "id": "STRIKE_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/strike_ironclad.png",
+      "index": 0,
+      "name": "Strike",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Deal 6 damage.",
+      "description_rich": "Deal 6 damage.",
+      "id": "STRIKE_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/strike_ironclad.png",
+      "index": 1,
+      "name": "Strike",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Deal 6 damage.",
+      "description_rich": "Deal 6 damage.",
+      "id": "STRIKE_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/strike_ironclad.png",
+      "index": 2,
+      "name": "Strike",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Deal 6 damage.",
+      "description_rich": "Deal 6 damage.",
+      "id": "STRIKE_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/strike_ironclad.png",
+      "index": 3,
+      "name": "Strike",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Deal 6 damage.",
+      "description_rich": "Deal 6 damage.",
+      "id": "STRIKE_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/strike_ironclad.png",
+      "index": 4,
+      "name": "Strike",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Gain 5 Block.",
+      "description_rich": "Gain 5 Block.",
+      "id": "DEFEND_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/defend_ironclad.png",
+      "index": 5,
+      "name": "Defend",
+      "rarity": "Basic",
+      "type": "Skill",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Gain 5 Block.",
+      "description_rich": "Gain 5 Block.",
+      "id": "DEFEND_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/defend_ironclad.png",
+      "index": 6,
+      "name": "Defend",
+      "rarity": "Basic",
+      "type": "Skill",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Gain 5 Block.",
+      "description_rich": "Gain 5 Block.",
+      "id": "DEFEND_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/defend_ironclad.png",
+      "index": 7,
+      "name": "Defend",
+      "rarity": "Basic",
+      "type": "Skill",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Gain 5 Block.",
+      "description_rich": "Gain 5 Block.",
+      "id": "DEFEND_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/defend_ironclad.png",
+      "index": 8,
+      "name": "Defend",
+      "rarity": "Basic",
+      "type": "Skill",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 2,
+      "description": "Deal 8 damage.\nApply 2 Vulnerable.",
+      "description_rich": "Deal 8 damage.\nApply 2 Vulnerable.",
+      "id": "BASH",
+      "image": "https://assets.test/card_atlas/ironclad/bash.png",
+      "index": 9,
+      "name": "Bash",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 2,
+      "description": "Lose 2 HP.\nGain 16 Block.",
+      "description_rich": "Lose 2 HP.\nGain 16 Block.",
+      "id": "BLOOD_WALL",
+      "image": "https://assets.test/card_atlas/ironclad/blood_wall.png",
+      "index": 10,
+      "name": "Blood Wall",
+      "rarity": "Common",
+      "type": "Skill",
+      "upgraded": false
+     }
+    ],
+    "gold": 119,
+    "hp": 61,
+    "max_hp": 80,
+    "name": "Ironclad",
+    "potion_slots": 3,
+    "potions": [
+     {
+      "description": "Deal 20 damage.",
+      "id": "FIRE_POTION",
+      "image": "https://assets.test/potion_atlas/fire_potion.png",
+      "name": "Fire Potion"
+     }
+    ],
+    "relics": [
+     {
+      "description": "At the end of combat, heal 6 HP.",
+      "id": "BURNING_BLOOD",
+      "image": "https://assets.test/relic_atlas/burning_blood.png",
+      "name": "Burning Blood"
+     },
+     {
+      "description": "At the start of Elite combats, draw 2 additional cards and gain 1 Energy.",
+      "id": "BOOMING_CONCH",
+      "image": "https://assets.test/relic_atlas/booming_conch.png",
+      "name": "Booming Conch"
+     }
+    ]
+   }
+  }
+ },
+ "stopped": true,
+ "won": false
+}

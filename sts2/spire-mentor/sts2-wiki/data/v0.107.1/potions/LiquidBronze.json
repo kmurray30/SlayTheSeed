@@ -1,0 +1,9 @@
+{
+  "class_name": "LiquidBronze",
+  "title": "Liquid Bronze",
+  "rarity": "Uncommon",
+  "usage": "Drink",
+  "target": "Self",
+  "description": "Gain [blue]3[/blue] [gold]Thorns[/gold].",
+  "notes": "Grants 3 Thorns power when consumed during combat."
+}

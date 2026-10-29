@@ -1,0 +1,22 @@
+{
+  "class_name": "Uproar",
+  "title": "Uproar",
+  "character": "Ironclad",
+  "energy_cost": 2,
+  "type": "Attack",
+  "rarity": "Common",
+  "target": "Single",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 6,
+      "upgraded_value": 8
+    }
+  ],
+  "description": "Deal 6 damage twice.\nPlay a random Attack from your [gold]Draw Pile[/gold].",
+  "upgraded_description": "Deal 8 damage twice.\nPlay a random Attack from your [gold]Draw Pile[/gold].",
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "Plays a random Attack card from your Draw Pile, preferring non-Unplayable Attacks if available."
+}

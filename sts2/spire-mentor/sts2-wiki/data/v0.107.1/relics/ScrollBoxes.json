@@ -1,0 +1,8 @@
+{
+  "class_name": "ScrollBoxes",
+  "title": "Scroll Boxes",
+  "rarity": "Ancient",
+  "description": "Upon pickup, choose [blue]1[/blue] of [blue]2[/blue] packs of cards to add to your [gold]Deck[/gold].",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Generates 2 random card bundles on pickup. Each bundle contains 2 Commons and 1 Uncommon. For Defect, each bundle has a 1% chance to generate 3x Claw instead. Requires at least 4 unlocked Common cards and 2 unlocked Uncommon cards to be available at Neow."
+}

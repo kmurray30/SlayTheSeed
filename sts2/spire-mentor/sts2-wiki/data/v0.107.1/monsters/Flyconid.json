@@ -1,0 +1,61 @@
+{
+  "class_name": "Flyconid",
+  "title": "Flyconid",
+  "min_hp": 51,
+  "min_hp_base": 47,
+  "max_hp": 53,
+  "max_hp_base": 49,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "VULNERABLE_SPORES_MOVE",
+      "title": "Vulnerable Spores",
+      "intents": [
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": [
+        "Apply 2 Vulnerable"
+      ]
+    },
+    {
+      "id": "FRAIL_SPORES_MOVE",
+      "title": "Frail Spores",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 9,
+          "damage_base": 8,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": [
+        "Deal 8/9 damage",
+        "Apply 2 Frail"
+      ]
+    },
+    {
+      "id": "SMASH_MOVE",
+      "title": "Smash",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 12,
+          "damage_base": 11,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 11/12 damage"
+      ]
+    }
+  ],
+  "move_pattern": "Starts with either Frail Spores or Smash (random). Then cycles through all three moves in random order (Vulnerable Spores most common, then Frail Spores, then Smash), never repeating the same move on consecutive turns.",
+  "powers_on_spawn": [],
+  "notes": "Vulnerable Spores is unavailable on the very first turn (not in the INITIAL branch). From turn two onward it is the most likely move (weight 3 vs 2 and 1). No move can repeat consecutively."
+}

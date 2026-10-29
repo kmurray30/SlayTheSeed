@@ -1,0 +1,9 @@
+{
+  "class_name": "HardToKillPower",
+  "title": "Hard to Kill",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Reduce all damage taken and HP lost by [gold]Exoskeleton[/gold] to [blue]9[/blue].",
+  "smart_description": "Reduce all damage taken and HP lost by [gold]{OwnerName}[/gold] to [blue]{Amount}[/blue].",
+  "notes": "Caps all damage taken by the owner to the power's Amount value (minimum). Triggers a visual flash effect each time damage is modified. Stack type Counter allows the amount to change dynamically."
+}

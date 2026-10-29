@@ -1,0 +1,11 @@
+{
+ "agreed": true,
+ "available": true,
+ "band": "matched",
+ "brain": "ppo",
+ "champion_label": "Take Snakebite",
+ "champion_prob": 0.9999,
+ "margin": 0.0,
+ "your_label": "Take Snakebite",
+ "your_prob": 0.9999
+}

@@ -1,0 +1,10 @@
+{
+  "class_name": "DenseVegetationEventEncounter",
+  "title": "Wrigglers",
+  "room_type": "Monster",
+  "is_weak": false,
+  "monsters": ["Wriggler"],
+  "total_monsters": 4,
+  "tags": [],
+  "notes": "Spawns 4 Wrigglers in separate slots (wriggler1–4), each starting unstunned."
+}

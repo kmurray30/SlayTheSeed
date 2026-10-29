@@ -1,0 +1,52 @@
+{
+  "class_name": "Exoskeleton",
+  "title": "Exoskeleton",
+  "min_hp": 25,
+  "min_hp_base": 24,
+  "max_hp": 29,
+  "max_hp_base": 28,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "SKITTER_MOVE",
+      "title": "Skitter",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 1,
+          "hits": 4,
+          "hits_base": 3,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 1 damage", "3/4 hits"]
+    },
+    {
+      "id": "MANDIBLES_MOVE",
+      "title": "Mandibles",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 9,
+          "damage_base": 8,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 8/9 damage"]
+    },
+    {
+      "id": "ENRAGE_MOVE",
+      "title": "Enrage",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Apply 2 Strength"]
+    }
+  ],
+  "move_pattern": "Moves depend on creature slot position. Slot 1 starts with Skitter, Slot 2 with Mandibles, Slot 3 with Enrage, Slot 4 with random selection. After initial move, follows cycle: Mandibles → Enrage → random (Skitter/Mandibles), with Skitter → random.",
+  "powers_on_spawn": ["HardToKill (9)"],
+  "notes": "Behavior varies based on creature slot in multi-enemy encounters. Multiple Exoskeletons will have different opening moves depending on their slot position, but all eventually cycle through similar patterns."
+}

@@ -1,0 +1,8 @@
+{
+  "class_name": "MealTicket",
+  "title": "Meal Ticket",
+  "rarity": "Common",
+  "description": "Whenever you enter a shop room, heal 15 HP.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "Triggers when entering a shop room (MerchantRoom) if the player is alive. Only available before Act 3."
+}

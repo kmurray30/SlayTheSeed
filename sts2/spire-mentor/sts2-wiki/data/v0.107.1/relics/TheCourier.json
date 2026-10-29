@@ -1,0 +1,8 @@
+{
+  "class_name": "TheCourier",
+  "title": "The Courier",
+  "rarity": "Rare",
+  "description": "The merchant no longer runs out of cards, relics, or potions and his prices are reduced by 20%.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Non-purchasable relic. Merchant inventory refills indefinitely and all prices are discounted by 20% when this relic is owned."
+}

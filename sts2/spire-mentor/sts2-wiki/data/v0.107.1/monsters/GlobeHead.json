@@ -1,0 +1,61 @@
+{
+  "class_name": "GlobeHead",
+  "title": "Globe Head",
+  "min_hp": 158,
+  "max_hp": 158,
+  "min_hp_base": 148,
+  "max_hp_base": 148,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "SHOCKING_SLAP",
+      "title": "Shocking Slap",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 14,
+          "damage_base": 13,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": ["Deal 13/14 damage", "Apply 2 Frail"]
+    },
+    {
+      "id": "THUNDER_STRIKE",
+      "title": "Channel Lightning",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 7,
+          "damage_base": 6,
+          "hits": 3,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 6/7 damage", "3 hits"]
+    },
+    {
+      "id": "GALVANIC_BURST",
+      "title": "Galvanic Burst",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 17,
+          "damage_base": 16,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Deal 16/17 damage", "Gain 2 Strength"]
+    }
+  ],
+  "move_pattern": "Cycles: Shocking Slap → Channel Lightning → Galvanic Burst",
+  "powers_on_spawn": ["Galvanic Power (6)"],
+  "notes": "Galvanic Burst is hidden from the bestiary despite being part of the combat rotation. The monster buffs itself with Strength while debuffing the player with Frail."
+}

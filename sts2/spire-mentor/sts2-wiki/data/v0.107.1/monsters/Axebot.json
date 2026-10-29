@@ -1,0 +1,71 @@
+{
+  "class_name": "Axebot",
+  "title": "Axebot",
+  "min_hp": 76,
+  "max_hp": 86,
+  "min_hp_base": 70,
+  "max_hp_base": 78,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "BOOT_UP",
+      "title": "Boot Up",
+      "intents": [
+        {
+          "type": "block",
+          "amount": 15,
+          "amount_base": 10,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Gain 10/15 Block",
+        "Apply 0 Strength (with default stock)"
+      ]
+    },
+    {
+      "id": "ONE_TWO",
+      "title": "The One-Two",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 10,
+          "damage_base": 9,
+          "hits": 2,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 9/10 damage",
+        "2 hits"
+      ]
+    },
+    {
+      "id": "HAMMER_UPPERCUT",
+      "title": "Hammer Uppercut",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 14,
+          "damage_base": 12,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": [
+        "Deal 12/14 damage",
+        "Apply 2 Weak",
+        "Apply 2 Frail"
+      ]
+    }
+  ],
+  "move_pattern": "Alternates between Hammer Uppercut and The One-Two. If stock is configured, starts with Boot Up; otherwise starts directly with Hammer Uppercut.",
+  "powers_on_spawn": ["Stock"],
+  "notes": "Enters combat with Stock Power (default amount 2). Boot Up's Strength application scales based on remaining stock using the formula 3/4 × (2 - stock) at A9. With the default stock of 2, this results in 0 Strength applied. The move sequence begins with Boot Up only if stock is explicitly configured; otherwise, the cycle begins with Hammer Uppercut."
+}

@@ -1,0 +1,10 @@
+{
+  "class_name": "ScrollsOfBitingWeak",
+  "title": "Scrolls of Biting",
+  "room_type": "Monster",
+  "is_weak": true,
+  "monsters": ["ScrollOfBiting"],
+  "total_monsters": 3,
+  "tags": ["Scrolls"],
+  "notes": "Spawns three ScrollOfBiting monsters with differentiated starter moves. Each scroll's starter move index is randomized (first scroll uses RNG, second is first+1 mod 3, third is first+2 mod 3), ensuring all three move types are distributed."
+}

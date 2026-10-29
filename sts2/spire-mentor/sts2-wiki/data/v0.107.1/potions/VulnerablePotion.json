@@ -1,0 +1,9 @@
+{
+  "class_name": "VulnerablePotion",
+  "title": "Vulnerable Potion",
+  "rarity": "Common",
+  "usage": "Apply",
+  "target": "AnyEnemy",
+  "description": "Apply 3 stacks of Vulnerable to a single enemy.",
+  "notes": "Plays a pink splash VFX effect on the target when used."
+}

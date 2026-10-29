@@ -1,0 +1,9 @@
+{
+  "class_name": "CreativeAiPower",
+  "title": "Creative AI",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the start of your turn, add a random Power into your [gold]Hand[/gold].",
+  "smart_description": "At the start of your turn, add {Amount:plural:a random Power|[blue]{}[/blue] random Powers} into your [gold]Hand[/gold].",
+  "notes": "Counter-type power that adds one or more random Power cards to your hand at the start of each turn. The number of powers added increases with each stack of this power."
+}

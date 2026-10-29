@@ -1,0 +1,38 @@
+{
+  "class_name": "FuzzyWurmCrawler",
+  "title": "Fuzzy Wurm Crawler",
+  "min_hp": 58,
+  "max_hp": 59,
+  "min_hp_base": 55,
+  "max_hp_base": 57,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "ACID_GOOP",
+      "title": "Acid Goop",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 6,
+          "damage_base": 4,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 4/6 damage"]
+    },
+    {
+      "id": "INHALE",
+      "title": "Inhale",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Apply 7 Strength to self"]
+    }
+  ],
+  "move_pattern": "Alternates: Acid Goop → Inhale → Acid Goop (repeats). Inhale applies Strength and causes the monster to puff up.",
+  "powers_on_spawn": [],
+  "notes": "The monster has two visual states: normal and puffed. It becomes puffed after Inhale and returns to normal after Acid Goop. These are cosmetic animation changes and do not affect the move pattern or damage values."
+}

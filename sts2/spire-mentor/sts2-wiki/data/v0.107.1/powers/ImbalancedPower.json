@@ -1,0 +1,9 @@
+{
+  "class_name": "ImbalancedPower",
+  "title": "Imbalanced",
+  "power_type": "Debuff",
+  "stack_type": "Single",
+  "description": "If this creature's attacks are fully blocked by any player, it becomes [gold]Stunned[/gold].",
+  "smart_description": "If [gold]the creature's[/gold] attacks are fully blocked, it becomes [gold]Stunned[/gold].",
+  "notes": "Triggers when this creature deals damage that is fully blocked. The creature then becomes Stunned on its next turn. Special case: If the owner is a BowlbugRock monster, it sets IsOffBalance instead of becoming Stunned."
+}

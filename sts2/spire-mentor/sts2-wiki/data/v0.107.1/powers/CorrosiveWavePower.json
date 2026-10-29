@@ -1,0 +1,9 @@
+{
+  "class_name": "CorrosiveWavePower",
+  "title": "Corrosive Wave",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever you draw a card this turn, apply [blue]2[/blue] [gold]Poison[/gold] to ALL enemies.",
+  "smart_description": "Whenever you draw a card this turn, apply [blue]2[/blue] [gold]Poison[/gold] to ALL enemies.",
+  "notes": "Removed at the end of the player's turn. The power tracks the number of times a card is drawn (Counter stack type). Applies Poison to all hittable enemies whenever the player draws a card, including cards drawn from hand draws and other sources."
+}

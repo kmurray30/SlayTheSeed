@@ -1,0 +1,26 @@
+{
+  "class_name": "Nimble",
+  "title": "Nimble",
+  "description": "Increases [gold]Block[/gold] gained from this card by [blue]2[/blue].",
+  "card_type": "Skill",
+  "restrictions": [
+    "Only applies to cards that gain block"
+  ],
+  "stackable": false,
+  "show_amount": true,
+  "sources": [
+    {
+      "type": "event",
+      "class_name": "SelfHelpBook",
+      "title": "Self-Help Book",
+      "amount": 2
+    },
+    {
+      "type": "relic",
+      "class_name": "FresnelLens",
+      "title": "Fresnel Lens",
+      "amount": 2
+    }
+  ],
+  "notes": "Enchantment adds a flat amount of Block to the enchanted card. The amount varies by source but is consistently 2."
+}

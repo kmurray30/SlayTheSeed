@@ -1,0 +1,9 @@
+{
+  "class_name": "FruitJuice",
+  "title": "Fruit Juice",
+  "rarity": "Rare",
+  "usage": "Drink",
+  "target": "AnyPlayer",
+  "description": "Gain [blue]5[/blue] Max HP.",
+  "notes": "Cannot be generated during combat encounters. Can be used on any player character."
+}

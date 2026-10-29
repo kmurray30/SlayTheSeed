@@ -1,0 +1,27 @@
+{
+ "error": null,
+ "impl": "rust",
+ "options": [
+  {
+   "action": "choose_option",
+   "args": {
+    "option_index": 0
+   },
+   "is_best": true,
+   "label": "Choose: Consume",
+   "prob": 0.9997
+  },
+  {
+   "action": "choose_option",
+   "args": {
+    "option_index": 1
+   },
+   "is_best": false,
+   "label": "Choose: Plant and Nourish",
+   "prob": 0.0003
+  }
+ ],
+ "ppo_available": true,
+ "surface": "event",
+ "value": 0.905
+}

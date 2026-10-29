@@ -1,0 +1,10 @@
+{
+  "class_name": "PunchOffEventEncounter",
+  "title": "Punch Constructs",
+  "room_type": "Monster",
+  "is_weak": false,
+  "monsters": ["PunchConstruct"],
+  "total_monsters": 2,
+  "tags": [],
+  "notes": "Event encounter with two PunchConstruct monsters. The first construct starts with a fast punch ability. Both constructs have variable HP reduction (2-10) determined by RNG at encounter generation."
+}

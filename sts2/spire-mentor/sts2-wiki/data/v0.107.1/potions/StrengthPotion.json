@@ -1,0 +1,9 @@
+{
+  "class_name": "StrengthPotion",
+  "title": "Strength Potion",
+  "rarity": "Common",
+  "usage": "Drink",
+  "target": "Single",
+  "description": "Gain [blue]2[/blue] [gold]Strength[/gold].",
+  "notes": "Can only be used during combat. Targets a single player (self or ally)."
+}

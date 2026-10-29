@@ -1,0 +1,103 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- Pin to the .NET 9 runtime family. The vendored Harmony (0Harmony.dll /
+         MonoMod) cannot install detours on CoreCLR 10+ ("CoreCLR version 10.0.8
+         is not supported"), so under the previous `LatestMajor` roll-forward a
+         machine with .NET 10 installed would silently run the oracle with EVERY
+         Harmony patch disabled — Cmd.Wait timers never fire, VFX-node-deref NREs
+         in card OnPlay handlers abort mid-play, etc. — degrading the whole C#
+         reference. `LatestMinor` keeps us on the highest installed 9.x patch and
+         never rolls to a major where the patches break. (A .NET-10-only host
+         would fail to launch rather than degrade silently — the correct signal,
+         since Harmony support is what makes the headless oracle correct.) -->
+    <RollForward>LatestMinor</RollForward>
+  </PropertyGroup>
+
+  <!-- Which game build this oracle links against (GH #789). One source tree,
+       one build per version:
+
+         dotnet build Sts2Headless.csproj                          (v0.107.1)
+         dotnet build Sts2Headless.csproj -p:GameVersion=v0.111.0
+
+       The version picks the game DLLs (`lib/<version>/`), the output tree
+       (`bin/<version>/<Configuration>/net9.0/`, `obj/<version>/…` so the two
+       builds never share incremental state), a compile-time constant for the
+       API drift between builds (`GAME_V0111`), and the `GameVersion` assembly
+       metadata `Program.cs` reads at run time to find `lib/<version>/`. -->
+  <PropertyGroup>
+    <GameVersion Condition="'$(GameVersion)' == ''">v0.107.1</GameVersion>
+    <GameLibDir>$(MSBuildThisFileDirectory)..\..\lib\$(GameVersion)\</GameLibDir>
+    <!-- Compatibility fallback for a pre-#789 checkout whose DLLs still sit
+         flat in lib/ (only ever v0.107.1). The `_WarnLegacyGameLib` target
+         below says so on every build. -->
+    <_GameLibIsLegacy>false</_GameLibIsLegacy>
+    <_GameLibIsLegacy Condition="'$(GameVersion)' == 'v0.107.1' And !Exists('$(GameLibDir)sts2.dll') And Exists('$(MSBuildThisFileDirectory)..\..\lib\sts2.dll')">true</_GameLibIsLegacy>
+    <GameLibDir Condition="'$(_GameLibIsLegacy)' == 'true'">$(MSBuildThisFileDirectory)..\..\lib\</GameLibDir>
+    <OutputPath>bin\$(GameVersion)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(GameVersion)\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants Condition="'$(GameVersion)' == 'v0.111.0'">$(DefineConstants);GAME_V0111</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>GameVersion</_Parameter1>
+      <_Parameter2>$(GameVersion)</_Parameter2>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <Target Name="_CheckGameVersion" BeforeTargets="ResolveAssemblyReferences">
+    <Error Condition="'$(GameVersion)' != 'v0.107.1' And '$(GameVersion)' != 'v0.111.0'"
+           Text="Unsupported GameVersion '$(GameVersion)' (supported: v0.107.1, v0.111.0)." />
+    <Error Condition="!Exists('$(GameLibDir)sts2.dll')"
+           Text="No game DLLs for $(GameVersion): $(GameLibDir)sts2.dll is missing. Stage them with `python scripts/setup_oracle.py --version $(GameVersion) &lt;data_sts2_* dir&gt;` (docs/bring-your-own-game.md)." />
+    <Warning Condition="'$(_GameLibIsLegacy)' == 'true'"
+             Text="Using the legacy flat lib/ layout for $(GameVersion); move the DLLs to lib/$(GameVersion)/ (GH #789). This fallback will be removed." />
+  </Target>
+
+  <ItemGroup>
+    <!-- Our GodotStubs (outputs as GodotSharp.dll to satisfy sts2.dll references).
+         Version-independent, so GameVersion is not forwarded to it: both oracle
+         builds share one stub build instead of fighting over its output dir. -->
+    <ProjectReference Include="..\GodotStubs\GodotStubs.csproj" GlobalPropertiesToRemove="GameVersion" />
+  </ItemGroup>
+
+  <!-- Reference game DLL and its non-Godot dependencies -->
+  <ItemGroup>
+    <Reference Include="sts2">
+      <HintPath>$(GameLibDir)sts2.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="SmartFormat">
+      <HintPath>$(GameLibDir)SmartFormat.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="SmartFormat.ZString">
+      <HintPath>$(GameLibDir)SmartFormat.ZString.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Sentry">
+      <HintPath>$(GameLibDir)Sentry.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Steamworks.NET">
+      <HintPath>$(GameLibDir)Steamworks.NET.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="MonoMod.Backports">
+      <HintPath>$(GameLibDir)MonoMod.Backports.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="MonoMod.ILHelpers">
+      <HintPath>$(GameLibDir)MonoMod.ILHelpers.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(GameLibDir)0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+</Project>

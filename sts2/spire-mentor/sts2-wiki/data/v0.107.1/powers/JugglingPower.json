@@ -1,0 +1,9 @@
+{
+  "class_name": "JugglingPower",
+  "title": "Juggling",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Add a copy of the third Attack you play each turn into your [gold]Hand[/gold].",
+  "smart_description": "Add [blue]X[/blue] copies of the third Attack you play each turn into your [gold]Hand[/gold]. (where X = stack count)",
+  "notes": "Tracks the number of Attacks played each turn. When the third Attack is played, creates copies of that Attack equal to this power's stack amount and adds them to hand. Counter resets at the end of each turn."
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "VitalSparkPower",
+  "title": "Vital Spark",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "ALL [gold]Skills[/gold] are [gold]Tainted[/gold] [blue]2[/blue].",
+  "smart_description": "ALL [gold]Skills[/gold] are [gold]Tainted[/gold] [blue]{Amount}[/blue].",
+  "notes": "When Vital Spark is applied, all Skills currently in hand are afflicted with Tainted at the power's stack level. Any Skill that enters combat while this power is active also becomes Tainted. When a Tainted Skill is played, it applies the Tainted power to the owner. The affliction level updates on all affected Skills whenever the power's amount changes."
+}

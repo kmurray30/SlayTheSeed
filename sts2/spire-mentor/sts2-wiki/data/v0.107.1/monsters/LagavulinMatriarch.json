@@ -1,0 +1,99 @@
+{
+  "class_name": "LagavulinMatriarch",
+  "title": "Lagavulin Matriarch",
+  "min_hp": 233,
+  "max_hp": 233,
+  "min_hp_base": 222,
+  "max_hp_base": 222,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "SLEEP_MOVE",
+      "title": "Sleep",
+      "intents": [
+        {
+          "type": "sleep"
+        }
+      ],
+      "effects": []
+    },
+    {
+      "id": "SLASH_MOVE",
+      "title": "Slash",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 21,
+          "damage_base": 19,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 21/19 damage"
+      ]
+    },
+    {
+      "id": "SLASH2_MOVE",
+      "title": "Slash & Block",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 14,
+          "damage_base": 12,
+          "ascension": 9
+        },
+        {
+          "type": "block",
+          "amount": 14,
+          "amount_base": 12,
+          "ascension": 8
+        }
+      ],
+      "effects": [
+        "Deal 14/12 damage",
+        "Gain 14/12 Block"
+      ]
+    },
+    {
+      "id": "DISEMBOWEL_MOVE",
+      "title": "Disembowel",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 10,
+          "damage_base": 9,
+          "hits": 2,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 10/9 damage",
+        "2 hits"
+      ]
+    },
+    {
+      "id": "SOUL_SIPHON_MOVE",
+      "title": "Soul Siphon",
+      "intents": [
+        {
+          "type": "debuff"
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Apply 2 Weakness",
+        "Apply 2 Frail",
+        "Gain 2 Strength"
+      ]
+    }
+  ],
+  "move_pattern": "Begins asleep. While the Asleep power is active, loops the Sleep move. Once awakened, cycles through: Slash → Disembowel → Slash & Block → Soul Siphon, repeating.",
+  "powers_on_spawn": [
+    "Plating 12",
+    "Asleep 3"
+  ],
+  "notes": "This monster enters combat asleep with the Asleep power (lasts 3 turns) and Plating (12). While asleep, it repeats the Sleep move and does not attack. Once the Asleep power expires, the monster enters a four-move attack cycle. Soul Siphon applies Weakness and Frail to the player while granting the monster Strength."
+}

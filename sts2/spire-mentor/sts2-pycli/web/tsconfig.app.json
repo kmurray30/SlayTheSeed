@@ -1,0 +1,74 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    // Final review finding 5 (2026-08-23, feat/workbench-game-sounds): with
+    // no `types` field, every @types/* package in node_modules (in
+    // particular @types/node, added for sfxMapCoverage.test.ts's
+    // node:fs/node:path use) is ambient across the WHOLE app, not just the
+    // one test that needs it -- proven by appending
+    // `export const leak = process.env.HOME ?? __dirname;` to browser code
+    // (src/sound/types.ts) and getting a clean `tsc -b --force`. That's a
+    // silent runtime ReferenceError waiting to ship: vite.config.ts already
+    // hand-declares `declare const process` rather than relying on
+    // @types/node, which is direct evidence this project previously avoided
+    // exactly this. `[]` here scopes Node globals back out of `src`.
+    //
+    // sfxMapCoverage.test.ts (the one file that needs node:fs/node:path) is
+    // carved out via `exclude` below rather than a triple-slash
+    // `/// <reference types="node" />` in that file: @types/node's globals
+    // (process, __dirname, ...) are declared via `declare global { ... }`,
+    // which TypeScript merges across the WHOLE PROGRAM once any file in it
+    // references the package -- a triple-slash directive does not scope a
+    // `declare global` augmentation to just the referencing file (confirmed:
+    // adding it back here re-leaked the same `leak` line clean). See
+    // tsconfig.node-tests.json, a separate project scoped to exactly that
+    // file, referenced from tsconfig.json alongside this one so `tsc -b`
+    // still typechecks it.
+    "types": [],
+
+    /* Bundler mode */
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    /* Nothing else catches this: typescript-eslint switches ESLint's
+       `no-unreachable` OFF and defers to tsc, and tsc stays quiet unless this
+       is explicitly false. Two statements sat after a `return` in loadRun for
+       months, so a stale regret review carried across every run load. */
+    "allowUnreachableCode": false
+  },
+  "include": ["src"],
+  // Carved out into tsconfig.node-tests.json — see the "types" comment above.
+  // src/worker/** is the engine Web Worker (lib WebWorker, not DOM): its own
+  // project, tsconfig.worker.json, the same way.
+  "exclude": [
+    "src/worker/**",
+    "src/sound/__tests__/sfxMapCoverage.test.ts",
+    "src/skins/__tests__/shopMerchantAnchor.test.ts",
+    "src/components/__tests__/arenaForegroundZIndex.test.ts",
+    "src/components/__tests__/arenaRoomGrade.test.ts",
+    "src/components/__tests__/gameSkinDying.test.ts",
+    "src/effects/__tests__/manifestShape.test.ts",
+    "src/effects/__tests__/crabRigEvents.test.ts",
+    "src/effects/__tests__/bindingsRealTable.test.ts",
+    "src/effects/__tests__/spineVfxSelection.test.ts",
+    "src/effects/particles/__tests__/simulateManifestCoverage.test.ts",
+    "src/effects/particles/__tests__/composite.test.ts",
+    "src/effects/particles/__tests__/shaders.test.ts",
+    "src/coach/coachRank.test.ts"
+  ]
+}

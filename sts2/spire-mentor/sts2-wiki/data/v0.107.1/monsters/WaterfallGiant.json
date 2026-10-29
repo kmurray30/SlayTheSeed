@@ -1,0 +1,153 @@
+{
+  "class_name": "WaterfallGiant",
+  "title": "Waterfall Giant",
+  "min_hp": 250,
+  "max_hp": 250,
+  "min_hp_base": 240,
+  "max_hp_base": 240,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "PRESSURIZE_MOVE",
+      "title": "Pressurize",
+      "intents": [
+        {
+          "type": "buff",
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Apply 15/20 Steam Eruption"
+      ]
+    },
+    {
+      "id": "STOMP_MOVE",
+      "title": "Stomp",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 16,
+          "damage_base": 15,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Deal 15/16 damage",
+        "Apply 1 Weak to all players",
+        "Apply 3 Steam Eruption"
+      ]
+    },
+    {
+      "id": "RAM_MOVE",
+      "title": "Ram",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 11,
+          "damage_base": 10,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Deal 10/11 damage",
+        "Apply 3 Steam Eruption"
+      ]
+    },
+    {
+      "id": "SIPHON_MOVE",
+      "title": "Siphon",
+      "intents": [
+        {
+          "type": "heal",
+          "amount": 15,
+          "amount_base": 10,
+          "ascension": 8
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Heal 10/15 per player",
+        "Apply 3 Steam Eruption"
+      ]
+    },
+    {
+      "id": "PRESSURE_GUN_MOVE",
+      "title": "Pressure Gun",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 23,
+          "damage_base": 20,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Deal 20/23 damage, increases by 5 each turn",
+        "Apply 3 Steam Eruption"
+      ]
+    },
+    {
+      "id": "PRESSURE_UP_MOVE",
+      "title": "Pressure Up",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 14,
+          "damage_base": 13,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Deal 13/14 damage",
+        "Apply 3 Steam Eruption"
+      ]
+    },
+    {
+      "id": "ABOUT_TO_BLOW_MOVE",
+      "title": "About to Blow",
+      "intents": [
+        {
+          "type": "stun"
+        }
+      ],
+      "effects": [
+        "Apply Stun to itself",
+        "Remove Steam Eruption power"
+      ]
+    },
+    {
+      "id": "EXPLODE_MOVE",
+      "title": "Explode",
+      "intents": [
+        {
+          "type": "death_blow"
+        }
+      ],
+      "effects": [
+        "Deal damage equal to current Steam Eruption stacks",
+        "Kill the creature"
+      ]
+    }
+  ],
+  "move_pattern": "Starts with Pressurize. Then cycles: Stomp → Ram → Siphon → Pressure Gun → Pressure Up → back to Stomp. When triggered to blow (external condition), transitions to About to Blow (stuns itself, removes accumulated power) → Explode (deals damage equal to accumulated Steam Eruption stacks and kills).",
+  "powers_on_spawn": [],
+  "notes": "This monster features a unique escalation mechanic centered around the <color=0d99ff>Steam Eruption</color> power, which it applies in quantities of 15/20 stacks via Pressurize and 3 stacks via other moves (including Pressure Gun which also increases its damage by 5 per use). The accumulated Steam Eruption power is eventually discharged as massive damage via the Explode move, which triggers when an external condition calls TriggerAboutToBlowState(). Siphon is hidden from the bestiary and heals for each player in multiplayer runs (single-player: 10/15 HP per cast). The creature has special death behavior: if killed while Steam Eruption power remains, it does not fade from the arena. During the About to Blow → Explode phase, the monster is visually and mechanically transformed (stun animation, infinite display HP)."
+}

@@ -1,0 +1,8 @@
+{
+ "action": "select_cards",
+ "args": {
+  "indices": "12"
+ },
+ "fallback": true,
+ "policy": "ppo"
+}

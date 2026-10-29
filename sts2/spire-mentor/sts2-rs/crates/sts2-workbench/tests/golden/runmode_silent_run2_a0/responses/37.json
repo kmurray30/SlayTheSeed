@@ -1,0 +1,7 @@
+{
+ "action": "choose_option",
+ "args": {
+  "option_index": 0
+ },
+ "policy": "ppo"
+}

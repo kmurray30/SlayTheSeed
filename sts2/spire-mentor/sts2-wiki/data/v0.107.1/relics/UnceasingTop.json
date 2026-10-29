@@ -1,0 +1,8 @@
+{
+  "class_name": "UnceasingTop",
+  "title": "Unceasing Top",
+  "rarity": "Rare",
+  "description": "Whenever you have no cards in [gold]Hand[/gold] during your turn, draw a card.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Triggers during valid turn phases (Play and related turn action phases). Does not trigger before hand draw or after hand flush to avoid always drawing due to the hand being empty in those phases."
+}

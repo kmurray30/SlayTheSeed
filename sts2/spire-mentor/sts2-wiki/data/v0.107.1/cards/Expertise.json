@@ -1,0 +1,22 @@
+{
+  "class_name": "Expertise",
+  "title": "Expertise",
+  "character": "Ironclad",
+  "energy_cost": 1,
+  "type": "Skill",
+  "rarity": "Uncommon",
+  "target": "Self",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Cards",
+      "base_value": 6,
+      "upgraded_value": 7
+    }
+  ],
+  "description": "Draw cards until you have 6 in your [gold]Hand[/gold].",
+  "upgraded_description": "Draw cards until you have 7 in your [gold]Hand[/gold].",
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "Draws enough cards to reach the target hand size. If you already have that many cards, draws nothing."
+}

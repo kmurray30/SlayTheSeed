@@ -1,0 +1,108 @@
+{
+  "class_name": "MadScience",
+  "title": "Mad Science",
+  "character": "Event",
+  "energy_cost": 1,
+  "type": "Attack",
+  "rarity": "Event",
+  "target": "Single",
+  "keywords": [],
+  "upgraded_keywords": ["Innate"],
+  "vars": [
+    {
+      "name": "Damage",
+      "type": "Damage",
+      "base_value": 12
+    },
+    {
+      "name": "Block",
+      "type": "Block",
+      "base_value": 8
+    },
+    {
+      "name": "SappingWeak",
+      "type": "Magic",
+      "base_value": 2
+    },
+    {
+      "name": "SappingVulnerable",
+      "type": "Magic",
+      "base_value": 2
+    },
+    {
+      "name": "ViolenceHits",
+      "type": "Repeat",
+      "base_value": 3
+    },
+    {
+      "name": "ChokingDamage",
+      "type": "Damage",
+      "base_value": 6
+    },
+    {
+      "name": "EnergizedEnergy",
+      "type": "Energy",
+      "base_value": 2
+    },
+    {
+      "name": "WisdomCards",
+      "type": "Cards",
+      "base_value": 3
+    },
+    {
+      "name": "ExpertiseStrength",
+      "type": "Magic",
+      "base_value": 2
+    },
+    {
+      "name": "ExpertiseDexterity",
+      "type": "Magic",
+      "base_value": 2
+    },
+    {
+      "name": "CuriousReduction",
+      "type": "Energy",
+      "base_value": 1
+    }
+  ],
+  "description": "This card's type and effects are dynamically determined by TinkerTime mechanics. Its base effect depends on which type it becomes: [Attack] Deal 12 damage, [Skill] Gain 8 [gold]Block[/gold], or [Power] Apply a class-specific effect. Additionally, it may have a rider effect that applies one of these additional mechanics: [Sapping] Apply 2 [gold]Weak[/gold] and 2 [gold]Vulnerable[/gold], [Choking] Whenever you play a card this turn, the enemy loses 6 HP, [Energized] Gain 2 [gold]Energy[/gold], [Wisdom] Draw 3 cards, [Chaos] Add a random card into your [gold]Hand[/gold] (free to play this turn), [Expertise] Gain 2 [gold]Strength[/gold] and 2 [gold]Dexterity[/gold], [Curious] Powers cost 1 [gold]Energy[/gold] less, or [Improvement] At the end of combat, [gold]Upgrade[/gold] a random card. If the Attack type has the Violence rider, it deals 12 damage 3 times.",
+  "upgraded_description": "[gold]Innate[/gold]. This card's type and effects are dynamically determined by TinkerTime mechanics. Its base effect depends on which type it becomes: [Attack] Deal 12 damage, [Skill] Gain 8 [gold]Block[/gold], or [Power] Apply a class-specific effect. Additionally, it may have a rider effect that applies one of these additional mechanics: [Sapping] Apply 2 [gold]Weak[/gold] and 2 [gold]Vulnerable[/gold], [Choking] Whenever you play a card this turn, the enemy loses 6 HP, [Energized] Gain 2 [gold]Energy[/gold], [Wisdom] Draw 3 cards, [Chaos] Add a random card into your [gold]Hand[/gold] (free to play this turn), [Expertise] Gain 2 [gold]Strength[/gold] and 2 [gold]Dexterity[/gold], [Curious] Powers cost 1 [gold]Energy[/gold] less, or [Improvement] At the end of combat, [gold]Upgrade[/gold] a random card. If the Attack type has the Violence rider, it deals 12 damage 3 times.",
+  "referenced_powers": [
+    {
+      "class_name": "WeakPower",
+      "title": "Weak",
+      "slug": "weak"
+    },
+    {
+      "class_name": "VulnerablePower",
+      "title": "Vulnerable",
+      "slug": "vulnerable"
+    },
+    {
+      "class_name": "StranglePower",
+      "title": "Strangle",
+      "slug": "strangle"
+    },
+    {
+      "class_name": "StrengthPower",
+      "title": "Strength",
+      "slug": "strength"
+    },
+    {
+      "class_name": "DexterityPower",
+      "title": "Dexterity",
+      "slug": "dexterity"
+    },
+    {
+      "class_name": "CuriousPower",
+      "title": "Curious",
+      "slug": "curious"
+    },
+    {
+      "class_name": "ImprovementPower",
+      "title": "Improvement",
+      "slug": "improvement"
+    }
+  ],
+  "notes": "Special event card with TinkerTime mechanics. The card dynamically transforms between Attack, Skill, and Power types at runtime via the TinkerTimeType property. Target also varies based on type: Single (Attack) or Self (Skill/Power). The TinkerTimeRider property determines which, if any, of 8 possible rider effects are applied. Not shown in the card library (shouldShowInCardLibrary: false). When upgraded, adds Innate keyword allowing the card to be drawn at the start of combat."
+}

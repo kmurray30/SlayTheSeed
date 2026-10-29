@@ -1,0 +1,9 @@
+{
+  "class_name": "OneTwoPunchPower",
+  "title": "One-Two Punch",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Your next Attack is played an extra time this turn.",
+  "smart_description": "Your next {Amount:plural:Attack is|[blue]{Amount}[/blue] Attacks are} played an extra time this turn.",
+  "notes": "Counter-type power that decrements by 1 each time an Attack card is played. Displays 'Your next Attack is played an extra time this turn.' when stack is 1, and shows the count when stack is 2+. Automatically removed at the end of the player's turn."
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "LethalityPower",
+  "title": "Lethality",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "The first Attack each turn deals 50% additional damage.",
+  "smart_description": "The first Attack each turn deals [blue]{Amount}%[/blue] additional damage.",
+  "notes": "Stacks as a Counter (tracks applications). Only applies to the first Attack played in the play pile each turn; subsequent Attacks in the same turn receive no bonus. The damage multiplier is multiplicative: (1 + Amount/100)."
+}

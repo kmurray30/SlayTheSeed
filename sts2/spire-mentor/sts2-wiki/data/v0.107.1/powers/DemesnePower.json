@@ -1,0 +1,9 @@
+{
+  "class_name": "DemesnePower",
+  "title": "Demesne",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the start of your turn, gain [blue]1[/blue] [gold]Energy[/gold] and draw [blue]1[/blue] additional card.",
+  "smart_description": "At the start of your turn, gain Energy and draw additional cards. (Effect scales with stack count.)",
+  "notes": "Counter power: Each stack increments the effect. For each stack, gain that much Energy and draw that many additional cards at turn start."
+}

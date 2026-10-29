@@ -1,0 +1,29 @@
+{
+  "class_name": "DarkShackles",
+  "title": "Dark Shackles",
+  "character": "Silent",
+  "energy_cost": 0,
+  "type": "Skill",
+  "rarity": "Uncommon",
+  "target": "Single",
+  "keywords": [
+    "Exhaust"
+  ],
+  "vars": [
+    {
+      "type": "StrengthLoss",
+      "base_value": 9,
+      "upgraded_value": 15
+    }
+  ],
+  "description": "Enemy loses 9 [gold]Strength[/gold] this turn.",
+  "upgraded_description": "Enemy loses 15 [gold]Strength[/gold] this turn.",
+  "referenced_powers": [
+    {
+      "class_name": "DarkShacklesPower",
+      "title": "Dark Shackles",
+      "slug": "dark-shackles"
+    }
+  ],
+  "notes": "Applies Dark Shackles power to target enemy, reducing their strength for the current turn."
+}

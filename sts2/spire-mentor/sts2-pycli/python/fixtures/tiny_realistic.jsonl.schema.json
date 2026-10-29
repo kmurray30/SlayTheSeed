@@ -1,0 +1,16 @@
+{
+  "schema_id": "surrogate-gate-test-v1",
+  "engine": "test-engine-fixture",
+  "context_dim": 10,
+  "n_cards": 3,
+  "n_relics": 2,
+  "scalar_names": ["hp", "ascension"],
+  "n_scalars": 2,
+  "n_encounters": 3,
+  "encounters": [
+    {"idx": 0, "id": "ENC_A", "act": 1, "tier": "normal"},
+    {"idx": 1, "id": "ENC_B", "act": 1, "tier": "elite"},
+    {"idx": 2, "id": "ENC_C", "act": 2, "tier": "boss"}
+  ],
+  "layout": "x = [deck(count,upg) per card_idx (2*n_cards)] ++ [relic count per relic_idx (n_relics)] ++ [scalars]"
+}

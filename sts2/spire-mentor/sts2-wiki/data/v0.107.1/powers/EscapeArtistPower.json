@@ -1,0 +1,9 @@
+{
+  "class_name": "EscapeArtistPower",
+  "title": "Escape Artist",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Exits the combat after 4 turns.",
+  "smart_description": "Tries to escape the combat {Amount:plural:this turn|after [blue]{}[/blue] turns}.",
+  "notes": "Visual timer for ThievingHopper's escape. Decrements at the end of each side turn. Pulses visually when 1 turn remains."
+}

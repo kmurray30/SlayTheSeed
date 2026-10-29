@@ -1,0 +1,18 @@
+{
+  "class_name": "PaelsLegion",
+  "title": "Pael's Legion",
+  "min_hp": 9999,
+  "max_hp": 9999,
+  "is_companion": true,
+  "moves": [
+    {
+      "id": "NOTHING_MOVE",
+      "title": "Nothing",
+      "intents": [],
+      "effects": []
+    }
+  ],
+  "move_pattern": "Does nothing every turn",
+  "powers_on_spawn": [],
+  "notes": "Pael's Legion is a companion that fights alongside the player. It has a fixed 9999 HP (health bar hidden from display), but takes no active combat actions each turn. The companion's skin appearance is determined by the PaelsLegion relic the player carries. Has animation triggers for blocking, sleeping, and waking up behavior."
+}

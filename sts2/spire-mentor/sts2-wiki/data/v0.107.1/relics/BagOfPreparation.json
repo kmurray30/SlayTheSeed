@@ -1,0 +1,8 @@
+{
+  "class_name": "BagOfPreparation",
+  "title": "Bag of Preparation",
+  "rarity": "Common",
+  "description": "At the start of each combat, draw 2 additional cards.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "Effect only applies at the start of combat (turn 1), not throughout combat."
+}

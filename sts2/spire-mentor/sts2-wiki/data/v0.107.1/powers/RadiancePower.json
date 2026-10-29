@@ -1,0 +1,9 @@
+{
+  "class_name": "RadiancePower",
+  "title": "Radiance",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Gain an additional Energy next turn.",
+  "smart_description": "Gain additional 1 Energy {Amount:plural:next turn|for the next [blue]{Amount}[/blue] turns}.",
+  "notes": "This is a countdown power. Each turn during the Energy reset phase, it grants 1 energy and decrements the counter by 1. The counter determines how many more turns this effect applies."
+}

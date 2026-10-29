@@ -1,0 +1,9 @@
+{
+  "class_name": "BorrowedTimePower",
+  "title": "Borrowed Time",
+  "power_type": "Debuff",
+  "stack_type": "Counter",
+  "description": "Cards cost an additional Energy this turn.",
+  "smart_description": "Cards cost an additional {Amount:energyIcons()} this turn.",
+  "notes": "This debuff increases the energy cost of cards played by the affected creature. It automatically removes itself at the end of the turn."
+}

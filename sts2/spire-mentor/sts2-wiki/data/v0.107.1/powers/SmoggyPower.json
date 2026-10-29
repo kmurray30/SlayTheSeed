@@ -1,0 +1,9 @@
+{
+  "class_name": "SmoggyPower",
+  "title": "Smoggy",
+  "power_type": "Debuff",
+  "stack_type": "None",
+  "description": "You can only play [blue]1[/blue] Skill per turn.",
+  "smart_description": "You can only play [blue]1[/blue] Skill per turn.",
+  "notes": "After playing a Skill, all other Skills in hand are afflicted with Smog, preventing them from being played. Smog is cleared at the end of the player's turn."
+}

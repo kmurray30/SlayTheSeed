@@ -1,0 +1,9 @@
+{
+  "class_name": "DoomPower",
+  "title": "Doom",
+  "power_type": "Debuff",
+  "stack_type": "Counter",
+  "description": "At the end of the enemy turn, if it has at least as much Doom as HP, it dies.",
+  "smart_description": "At the end of the {OnPlayer:player|enemy} turn, if [gold]{OwnerName}[/gold] has [blue]{Amount}[/blue] or less HP, it dies.",
+  "notes": "Doom is a Counter-type debuff that increments with each application. At the end of each turn, the power checks if the owner's current HP is less than or equal to the Doom amount—if so, the owner is killed instantly. The smartDescription uses template variables that resolve at runtime: {OnPlayer:player|enemy} displays 'player' or 'enemy' based on owner type, {OwnerName} is the creature's name, and {Amount} is the current Doom stack value."
+}

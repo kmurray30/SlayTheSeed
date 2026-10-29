@@ -1,0 +1,22 @@
+{
+  "class_name": "FlakCannon",
+  "title": "Flak Cannon",
+  "character": "Defect",
+  "energy_cost": 2,
+  "type": "Attack",
+  "rarity": "Rare",
+  "target": "Single",
+  "keywords": ["Exhaust"],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 8,
+      "upgraded_value": 11
+    }
+  ],
+  "description": "[gold]Exhaust[/gold] ALL your Status cards. Deal 8 damage to a random enemy for each card [gold]Exhausted[/gold].",
+  "upgraded_description": "[gold]Exhaust[/gold] ALL your Status cards. Deal 11 damage to a random enemy for each card [gold]Exhausted[/gold].",
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "The card exhausts all Status cards in your hand (excluding those already in the Exhaust pile) and deals damage to a random enemy equal to the base damage multiplied by the number of cards exhausted."
+}

@@ -1,0 +1,8 @@
+{
+  "class_name": "PhialHolster",
+  "title": "Phial Holster",
+  "rarity": "Ancient",
+  "description": "Upon pickup, gain [blue]1[/blue] potion slot and procure [blue]2[/blue] random potions.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Upon pickup, increases your maximum potion slots by 1 and grants you 2 random potions."
+}

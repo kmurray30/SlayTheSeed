@@ -1,0 +1,9 @@
+{
+  "class_name": "VulnerablePower",
+  "title": "Vulnerable",
+  "power_type": "Debuff",
+  "stack_type": "Counter",
+  "description": "Vulnerable creatures take [blue]50%[/blue] more damage from Attacks.",
+  "smart_description": "Receive [blue]50%[/blue] more damage from Attacks for [blue]{Amount}[/blue] turns.",
+  "notes": "Multiplies all damage received by 1.5x (50% increase) when struck by powered Attacks. The counter ticks down at the end of each enemy turn. Damage multiplier can be modified by the PaperPhrog relic, Cruelty power (attacker's side), and Debilitate power (defender's side)."
+}

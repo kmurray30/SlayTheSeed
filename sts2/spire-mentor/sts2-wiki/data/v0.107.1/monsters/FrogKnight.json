@@ -1,0 +1,78 @@
+{
+  "class_name": "FrogKnight",
+  "title": "Frog Knight",
+  "min_hp": 199,
+  "max_hp": 199,
+  "min_hp_base": 191,
+  "max_hp_base": 191,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "TONGUE_LASH",
+      "title": "Tongue Lash",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 14,
+          "damage_base": 13,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": [
+        "Deal 13/14 damage",
+        "Apply 2 Frail"
+      ]
+    },
+    {
+      "id": "STRIKE_DOWN_EVIL",
+      "title": "Strike Down Evil",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 23,
+          "damage_base": 21,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 21/23 damage"
+      ]
+    },
+    {
+      "id": "FOR_THE_QUEEN",
+      "title": "For the Queen",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Apply 5 Strength"
+      ]
+    },
+    {
+      "id": "BEETLE_CHARGE",
+      "title": "Beetle Charge",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 40,
+          "damage_base": 35,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 35/40 damage"
+      ]
+    }
+  ],
+  "move_pattern": "Cycles: Tongue Lash → Strike Down Evil → For the Queen → Tongue Lash. When HP drops below 50%, uses Beetle Charge instead of Tongue Lash at the conditional point (only once). After Beetle Charge, returns to the normal cycle.",
+  "powers_on_spawn": [
+    "Plating"
+  ],
+  "notes": "Beetle Charge is only used once when HP first drops below 50%. After it's used, the monster returns to its normal move cycle. Plating amount scales with Ascension: 15 at base, 19 at A8+."
+}

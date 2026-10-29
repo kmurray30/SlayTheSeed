@@ -1,0 +1,24 @@
+{
+  "_provenance": "logs/realgame/20260711T000030Z.jsonl step 75 (real SimBridge v2 run_complete capture)",
+  "state": {
+    "type": "run_complete",
+    "result": "defeat",
+    "seed": "",
+    "act": 1,
+    "floor": 0,
+    "mod_version": "0.1.0",
+    "run_state": {
+      "gold": 0,
+      "hp": 0,
+      "max_hp": 0,
+      "potions": [],
+      "potion_slot_count": 0,
+      "relics": [],
+      "master_deck": [],
+      "ascension": 0,
+      "character": null
+    },
+    "state_id": 75
+  },
+  "recorded_action": null
+}

@@ -1,0 +1,98 @@
+"""Tests for the parity-fuzz scenario generator (Task 6)."""
+
+from parity_fuzz_scenario import (
+    ACT1_ENCOUNTERS,
+    ALL_COLORLESS_CARDS,
+    ALL_ENCOUNTERS,
+    ALL_IC_CARDS,
+    ALL_POTIONS,
+    ALL_RELICS,
+    IC_CARDS,
+    SAFE_RELICS,
+    Scenario,
+    generate,
+    generate_v2,
+)
+
+
+def test_generate_is_deterministic():
+    a = generate(42)
+    b = generate(42)
+    assert a == b
+
+
+def test_generate_returns_ironclad_v1():
+    assert generate(7).character == "Ironclad"
+
+
+def test_deck_size_in_band():
+    for seed in range(20):
+        s = generate(seed)
+        assert 8 <= len(s.deck) <= 15
+
+
+def test_relics_in_band():
+    # generate() draws 0..min(3, len(SAFE_RELICS)) relics; the band was
+    # widened from 2 to 3 when SAFE_RELICS grew past its v1 single entry.
+    for seed in range(20):
+        assert 0 <= len(generate(seed).relics) <= 3
+
+
+def test_encounter_in_act1_set():
+    for seed in range(20):
+        assert generate(seed).encounter in ACT1_ENCOUNTERS
+
+
+def test_hp_in_band():
+    for seed in range(20):
+        s = generate(seed)
+        assert 20 <= s.hp <= s.max_hp
+
+
+def test_scenario_is_frozen():
+    s = generate(0)
+    assert isinstance(s, Scenario)
+    try:
+        s.character = "Other"  # type: ignore[misc]
+    except Exception:
+        return
+    raise AssertionError("Scenario should be frozen")
+
+
+def test_all_deck_cards_in_ic_pool():
+    for seed in range(20):
+        s = generate(seed)
+        for c in s.deck:
+            assert c in IC_CARDS
+
+
+def test_all_relics_in_safe_pool():
+    for seed in range(20):
+        for r in generate(seed).relics:
+            assert r in SAFE_RELICS
+
+
+def test_generate_v2_deterministic() -> None:
+    assert generate_v2(123) == generate_v2(123)
+
+
+def test_generate_v2_full_pools() -> None:
+    pool = set(ALL_IC_CARDS + ALL_COLORLESS_CARDS)
+    encounters, relics_seen, upgraded_seen = set(), set(), False
+    for seed in range(300):
+        s = generate_v2(seed)
+        assert 8 <= len(s.deck) <= 20
+        assert 0 <= len(s.relics) <= 4
+        assert 0 <= len(s.potions) <= 3
+        for c in s.deck:
+            base = c.removesuffix("+1")
+            assert base in pool, c
+            upgraded_seen = upgraded_seen or c.endswith("+1")
+        assert set(s.relics) <= set(ALL_RELICS)
+        assert set(s.potions) <= set(ALL_POTIONS)
+        assert s.encounter in ALL_ENCOUNTERS
+        encounters.add(s.encounter)
+        relics_seen.update(s.relics)
+    assert upgraded_seen, "25% upgrade rate must show in 300 seeds"
+    assert len(encounters) > 20, "fuzz must reach beyond act1"
+    assert len(relics_seen) > 30, "fuzz must actually vary relics now"

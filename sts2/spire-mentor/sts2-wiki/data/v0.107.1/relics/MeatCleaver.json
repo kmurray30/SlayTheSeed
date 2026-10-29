@@ -1,0 +1,8 @@
+{
+  "class_name": "MeatCleaver",
+  "title": "Meat Cleaver",
+  "rarity": "Ancient",
+  "description": "You may [gold]Cook[/gold] at Rest Sites.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Adds a 'Cook' option to Rest Sites. This mechanic allows the player to interact with a cooking system during rest events."
+}

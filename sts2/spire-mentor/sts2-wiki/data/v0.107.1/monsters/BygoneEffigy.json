@@ -1,0 +1,58 @@
+{
+  "class_name": "BygoneEffigy",
+  "title": "Bygone Effigy",
+  "min_hp": 132,
+  "max_hp": 132,
+  "min_hp_base": 127,
+  "max_hp_base": 127,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "SLEEP_MOVE",
+      "title": "Sleep",
+      "intents": [
+        {
+          "type": "sleep"
+        }
+      ],
+      "effects": ["Speaks flavor text"]
+    },
+    {
+      "id": "WAKE_MOVE",
+      "title": "Wake",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Apply 10 Strength"]
+    },
+    {
+      "id": "SLEEP_MOVE_2",
+      "title": "Sleep",
+      "intents": [
+        {
+          "type": "sleep"
+        }
+      ],
+      "effects": []
+    },
+    {
+      "id": "SLASHES_MOVE",
+      "title": "Slashes",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 15,
+          "damage_base": 13,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 13/15 damage"]
+    }
+  ],
+  "move_pattern": "Starts with Sleep (flavor text), then wakes and applies 10 Strength, then repeatedly uses Slashes",
+  "powers_on_spawn": ["Slow 1"],
+  "notes": "Bygone Effigy enters combat asleep. After the initial turn, it wakes and grants itself a massive 10 Strength buff, enabling its slashing attacks to scale significantly for the remainder of the fight."
+}

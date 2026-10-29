@@ -1,0 +1,8 @@
+{
+  "class_name": "Cauldron",
+  "title": "Cauldron",
+  "rarity": "Shop",
+  "description": "Upon pickup, brews 5 random potions.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "When obtained, presents an interactive reward screen offering 5 random potion selections."
+}

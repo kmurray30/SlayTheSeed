@@ -1,0 +1,8 @@
+{
+  "class_name": "RegalPillow",
+  "title": "Regal Pillow",
+  "rarity": "Common",
+  "description": "Whenever you [gold]Rest[/gold], heal an additional [blue]15[/blue] HP.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Applies the additional healing to the player and any pets they own. The relic becomes Active while in a Rest Site room, displaying the additional healing text in the rest site interface."
+}

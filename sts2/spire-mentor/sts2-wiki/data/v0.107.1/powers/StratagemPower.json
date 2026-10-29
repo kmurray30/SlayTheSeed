@@ -1,0 +1,9 @@
+{
+  "class_name": "StratagemPower",
+  "title": "Stratagem",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever you shuffle your [gold]Draw Pile[/gold], choose [blue]1[/blue] card from it to put into your [gold]Hand[/gold].",
+  "smart_description": "Whenever you shuffle your [gold]Draw Pile[/gold], choose [blue]cards[/blue] from it to put into your [gold]Hand[/gold]. The number you can choose equals your current stack count.",
+  "notes": "Counter-type power that scales with each additional stack. Each stack allows you to choose one additional card from the Draw Pile when it shuffles."
+}

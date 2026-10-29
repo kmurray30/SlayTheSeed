@@ -1,0 +1,298 @@
+/* ============================================================================
+   Run-end skin (GameOver.tsx + RunEnded.tsx). Scoped under .gs-runend.
+   Mirrors the game's death/victory summary: a near-black room with one dim
+   warm core and a lit floor plane, parchment ribbon banner, epitaph line,
+   score-tally rows with the genuine game_over_screen icons, the fallen hero
+   bedded into the floor LEFT of centre, and one large parchment plate
+   anchored bottom-right (the game's "Proceed!" beat). game-skin.css is not
+   touched — the plate/vignette material is replicated locally.
+
+   Stacking inside .gs-runend-frame:
+     0  .gs-runend-field   floor plane + smoke + grain + corner vignette
+     1  .gs-runend-body    the hero sprite (+ its ground smudge)
+     3  banner / epitaph / tally / secondary actions
+     4  .gs-runend-cta, .gs-runend-meta
+   ============================================================================ */
+
+/* ---- scene ground: the game's darkest, warmest room ----------------------
+   Near-black at every edge with a single dim ember core off-centre-left, plus
+   a warm plane where the floor catches that light. */
+.gs-scene.gs-runend {
+  display: flex; flex-direction: column;
+  background:
+    radial-gradient(40% 15% at 37% 88%, rgba(140, 62, 38, 0.46), transparent 76%),
+    radial-gradient(36% 27% at 47% 44%, rgba(140, 46, 28, 0.3), rgba(78, 22, 15, 0.13) 58%, transparent 80%),
+    radial-gradient(105% 78% at 48% 46%, #230a09, #130404 42%, #070202 74%, #030101);
+}
+.gs-runend-frame {
+  position: relative;
+  flex: 1; min-height: 500px;
+  display: flex; flex-direction: column; align-items: center;
+  /* the game leaves a deep dark gap between the HUD band and the ribbon */
+  padding: clamp(46px, 8%, 88px) 24px 18px;
+}
+/* everything readable rides above the field and the body art */
+.gs-runend-frame > * { position: relative; z-index: 3; }
+
+/* ---- the field: grain, smoke and a hard corner vignette ------------------
+   ::before is a static haze (no animation — a run-end screen should settle);
+   ::after paints the grain UNDER the vignette so the corners stay clean
+   black the way the reference's do. */
+.gs-runend-field {
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none; overflow: hidden;
+}
+.gs-runend-field::before {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(40% 22% at 24% 34%, rgba(126, 56, 36, 0.13), transparent 72%),
+    radial-gradient(46% 26% at 76% 60%, rgba(108, 42, 28, 0.11), transparent 74%),
+    radial-gradient(60% 18% at 46% 82%, rgba(132, 60, 36, 0.12), transparent 76%);
+}
+.gs-runend-field::after {
+  content: ""; position: absolute; inset: 0;
+  /* fractalNoise film grain, then the vignette on the same stack so the grain
+     is swallowed by the dark corners rather than sparkling in them */
+  background-image:
+    radial-gradient(70% 58% at 47% 45%, transparent 26%, rgba(0, 0, 0, 0.58) 70%, rgba(0, 0, 0, 0.95) 100%),
+    url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+  background-size: 100% 100%, 180px 180px;
+  background-repeat: no-repeat, repeat;
+}
+
+/* ---- parchment ribbon banner + stroked headline --------------------------- */
+.gs-runend-banner {
+  position: relative;
+  width: min(620px, 92%);
+  display: grid; place-items: center;
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.55));
+}
+.gs-runend-banner > img { width: 100%; height: auto; display: block; }
+.gs-runend-title {
+  position: absolute;
+  margin: 0; padding-bottom: 0.35em; /* optical center of the ribbon's upper bow */
+  font-family: var(--game-font);
+  font-weight: 700;
+  font-size: clamp(26px, 4.2vw, 42px);
+  letter-spacing: 0.02em;
+  color: #fdf4dd;
+  -webkit-text-stroke: 6px #4a2c15;
+  paint-order: stroke fill;
+  text-shadow: 0 2px 3px rgba(46, 24, 8, 0.85);
+}
+.gs-runend-title--victory { color: #ffe9a8; }
+
+/* ---- epitaph: dark-red line under the banner, like the game's ------------- */
+.gs-runend-epitaph {
+  margin-top: 2px;
+  font-family: var(--game-font);
+  font-style: italic;
+  font-size: 17px;
+  color: #c08a76;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* ---- score tally ----------------------------------------------------------
+   Real values only (this is a debugging tool). The game's "Label: N" colon,
+   a dim dotted leader so the eye is carried across instead of dropped into a
+   hole, and a right-aligned numeral column with the unit typeset down. */
+.gs-runend-tally {
+  margin-top: clamp(26px, 6.5vh, 74px);
+  width: min(320px, 86%);
+  display: flex; flex-direction: column; gap: 9px;
+  font-family: var(--game-font);
+  font-variant-numeric: tabular-nums;
+}
+.gs-runend-row {
+  display: grid; grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center; column-gap: 11px;
+  font-size: 19px; font-weight: 700; line-height: 1.15;
+  color: #f6ead0;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.8);
+}
+.gs-runend-row > img {
+  width: 27px; height: 27px; object-fit: contain;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.65));
+}
+.gs-runend-rowlabel {
+  display: flex; align-items: baseline; gap: 9px;
+  white-space: nowrap; overflow: hidden;
+}
+.gs-runend-rowlabel::after {
+  content: ""; flex: 1 1 auto; height: 0;
+  border-bottom: 2px dotted rgba(238, 214, 172, 0.34);
+  transform: translateY(-4px);
+}
+.gs-runend-rowvalue {
+  position: relative;
+  text-align: right; color: #fdf4dd; white-space: nowrap;
+}
+/* the unit hangs OUTSIDE the numeral column so every value still lands on the
+   same right edge (the one thing this block does better than the game) */
+.gs-runend-rowunit {
+  position: absolute; left: 100%; bottom: 0.1em;
+  margin-left: 0.36em;
+  font-size: 0.66em; font-weight: 600; letter-spacing: 0.03em;
+  color: #c4a97e;
+}
+
+/* staggered settle-in, echoing the game's tally count-up */
+@keyframes gs-runend-rise {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: none; }
+}
+.gs-runend-row { animation: gs-runend-rise 0.45s ease-out backwards; }
+.gs-runend-row:nth-child(2) { animation-delay: 0.08s; }
+.gs-runend-row:nth-child(3) { animation-delay: 0.16s; }
+.gs-runend-row:nth-child(4) { animation-delay: 0.24s; }
+.gs-runend-row:nth-child(5) { animation-delay: 0.32s; }
+
+/* ---- actions --------------------------------------------------------------
+   Primary = a large warm parchment plate anchored bottom-right, where the
+   game puts "Proceed!". Secondary = modest dark plates under the tally. */
+.gs-runend-cta {
+  position: absolute; z-index: 4;
+  right: clamp(18px, 3%, 58px);
+  bottom: clamp(40px, 13%, 128px);
+  animation: gs-runend-cta-in 0.5s ease-out 0.3s backwards;
+}
+@keyframes gs-runend-cta-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.gs-runend-actions { margin-top: clamp(22px, 5vh, 44px); display: flex; gap: 16px; }
+.gs-runend-btn {
+  font-family: var(--game-font);
+  border: none; padding: 2px; cursor: pointer;
+  background: linear-gradient(#c9a457, #6d4f22);
+  clip-path: polygon(7% 0, 93% 0, 100% 50%, 93% 100%, 7% 100%, 0 50%);
+  filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.55));
+}
+.gs-runend-btn .gs-runend-btnface {
+  display: block; padding: 11px 34px 12px; line-height: 1;
+  font-weight: 700; font-size: 17px; letter-spacing: 0.04em;
+  color: #f3e2b8; text-shadow: 0 2px 2px #000;
+  background: linear-gradient(#7c241a, #4a120c 70%, #350c07);
+  clip-path: polygon(7% 0, 93% 0, 100% 50%, 93% 100%, 7% 100%, 0 50%);
+}
+.gs-runend-btn:active { transform: translateY(2px); }
+
+/* the big one: chamfered gold frame over a parchment face, lit from above */
+.gs-runend-btn--primary {
+  padding: 4px;
+  /* dark tooled frame, lit from above — the plate's metal edge */
+  background: linear-gradient(#a5803a, #6a4a1c 46%, #40290f);
+  clip-path: polygon(
+    14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px),
+    calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px);
+  filter:
+    drop-shadow(0 10px 20px rgba(0, 0, 0, 0.62))
+    drop-shadow(0 0 30px rgba(214, 150, 60, 0.22));
+}
+.gs-runend-btn--primary .gs-runend-btnface {
+  padding: 16px clamp(38px, 4vw, 62px) 17px;
+  font-size: clamp(20px, 1.7vw, 26px); letter-spacing: 0.05em;
+  color: #3d2008; text-shadow: 0 1px 0 rgba(255, 244, 214, 0.55);
+  background-image:
+    url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23p)' opacity='0.45'/%3E%3C/svg%3E"),
+    linear-gradient(#f4e2b6, #dcbe84 40%, #bd9455 76%, #a0763a);
+  background-blend-mode: overlay, normal;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 249, 226, 0.7),
+    inset 0 -4px 7px rgba(88, 50, 12, 0.45),
+    inset 0 0 0 1px rgba(96, 60, 20, 0.35);
+  clip-path: polygon(
+    12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px),
+    calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+}
+.gs-runend-btn--primary:hover { background: linear-gradient(#c9a052, #86612a 46%, #513617); }
+.gs-runend-btn--primary:hover .gs-runend-btnface {
+  background-image:
+    url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23p)' opacity='0.45'/%3E%3C/svg%3E"),
+    linear-gradient(#fdf0cb, #ecd096 40%, #cea766 76%, #b28a4a);
+}
+.gs-runend-btn--primary:focus-visible {
+  outline: 3px solid #ffe6ad; outline-offset: 4px;
+}
+
+.gs-runend-btn--secondary { background: linear-gradient(#8e7742, #4a361a); }
+.gs-runend-btn--secondary .gs-runend-btnface {
+  padding: 9px 26px 10px; font-size: 15px;
+  background: linear-gradient(#3d3327, #241c12 70%, #170f08);
+  color: #dcc9a0;
+}
+.gs-runend-btn--secondary:hover .gs-runend-btnface {
+  background: linear-gradient(#4e4232, #2f251a 70%, #1d130a);
+}
+.gs-runend-btn--secondary:focus-visible { outline: 2px solid #e8d3a4; outline-offset: 3px; }
+
+/* ---- run-metadata caption (kept: it is a debugging tool) ------------------
+   Parked in the frame's top-right corner the way the game stamps its build
+   there — small, warm, in the house face, and never over the body. */
+.gs-runend-meta {
+  position: absolute; z-index: 4;
+  top: 10px; right: 16px; max-width: 46%;
+  display: flex; gap: 7px; flex-wrap: wrap; justify-content: flex-end;
+  font-family: var(--game-font);
+  font-size: 13px; letter-spacing: 0.03em;
+  font-variant-numeric: tabular-nums;
+  color: #bd9a86;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+}
+
+/* ---- the fallen (or standing) hero: left of centre, bedded into the floor -- */
+.gs-runend-body {
+  position: absolute; left: 37%; bottom: 0; z-index: 1;
+  width: clamp(190px, 25vw, 278px);
+  transform: translateX(-50%);
+  pointer-events: none; user-select: none;
+}
+.gs-runend-body > img {
+  position: relative; z-index: 1;
+  width: 100%; height: auto; display: block;
+}
+/* a wide diffuse smudge so the body sits IN the floor, not on the gradient */
+.gs-runend-body::before {
+  content: ""; position: absolute; left: 50%; bottom: 6%;
+  width: 168%; height: 22%; transform: translateX(-50%);
+  background: radial-gradient(50% 50% at 50% 50%,
+    rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.3) 48%, transparent 74%);
+  filter: blur(9px);
+}
+/* defeat: laid low — warm-brown graded, soft-edged, swallowed by the dark.
+   The rotation lives on the <img> so the ground smudge stays flat. */
+.gs-runend-body--defeat { bottom: 3%; }
+.gs-runend-body--defeat > img {
+  transform: rotate(87deg);
+  transform-origin: 50% 50%;
+  filter: sepia(0.85) saturate(2) hue-rotate(-20deg)
+    brightness(0.48) contrast(0.74) blur(2.2px);
+  opacity: 0.78;
+}
+.gs-runend-body--defeat::before {
+  bottom: auto; top: 50%;
+  width: 215%; height: 34%;
+  transform: translate(-50%, -18%);
+  background: radial-gradient(50% 50% at 50% 50%,
+    rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.45) 44%, transparent 74%);
+  filter: blur(12px);
+}
+/* victory / abandoned: still standing, dim, sunk into the bottom edge so the
+   tally and the plate keep their halves of the frame */
+.gs-runend-body--victory,
+.gs-runend-body--ended { bottom: max(-14%, -90px); }
+.gs-runend-body--victory > img,
+.gs-runend-body--ended > img {
+  filter: sepia(0.5) saturate(1.3) hue-rotate(-12deg) brightness(0.5) blur(1.1px);
+  opacity: 0.8;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0.3));
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0.3));
+}
+.gs-runend-body--victory > img {
+  filter: sepia(0.35) saturate(1.2) brightness(0.66) blur(0.8px)
+    drop-shadow(0 0 26px rgba(255, 205, 112, 0.22));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-runend-row, .gs-runend-cta { animation: none; }
+}

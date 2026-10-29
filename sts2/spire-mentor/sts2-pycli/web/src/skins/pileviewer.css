@@ -1,0 +1,158 @@
+/* ============================================================================
+   Pile-viewer skin (PileViewer.tsx). Scoped under .gs-pileview.
+   Mirrors the game's pile screen: a takeover of the GAME SCENE — the scene
+   under the drawn HUD band goes near-black, one centered row-grid of
+   full-size legible cards seated below the frame's middle, a red/gold return
+   pennant at the lower left, and a two-line caption bottom-center (large
+   white sentence over a gold parenthetical). No panel, no monospace, no web
+   chrome. (game-skin.css is not touched; shared look is replicated locally.)
+
+   SCOPE: the geometry (top/left/width/height) is measured in PileViewer.tsx
+   off the HUD band + the screen host below it and set inline, so the scrim
+   covers ONLY the game viewport — the HUD band above it, the tool column to
+   its right and the scrubber below it all stay at full brightness, exactly as
+   the real client leaves its status bar lit above the dim. The rules here
+   fall back to the whole window when nothing was measured (gallery, tests).
+   ============================================================================ */
+
+/* ---- the takeover itself: the game scene goes near-black ------------------ */
+.gs-pileview {
+  position: fixed; z-index: 50;
+  top: 0; left: 0; width: 100vw; height: 100vh; /* measured overrides inline */
+  --gs-pv-h: 100vh; /* scene height — the anchors below are fractions of it */
+  font-family: var(--game-font, "Kreon", Georgia, serif);
+  /* Measured off the reference frame: the game kills the scene to a mean of
+     ~8/6/3 RGB. Anything lighter reads as brown mush with the battlefield
+     still legible through it (round-3 tell #5 measured 2x too bright), so
+     this is an almost-opaque neutral black with only a whisper of warmth. */
+  background:
+    radial-gradient(58% 46% at 50% 40%, rgba(40, 33, 22, 0.05), transparent 72%),
+    rgba(6, 5, 4, 0.982);
+}
+
+/* ---- scrolling card field (scrolls INSIDE the overlay) --------------------- */
+.gs-pileview-scroll {
+  position: absolute; inset: 0; z-index: 1;
+  display: flex; /* the grid centers with `margin:auto` — safe under overflow */
+  overflow-y: auto; overflow-x: hidden;
+  /* Row anchor. The reference seats the row's center at ~37-38% of the scene
+     height, i.e. BELOW the top gutter and well above the caption, so the
+     empty band above (~19%) and below (~40%) balance. margin:auto centering
+     with an asymmetric pad lands it there: center = h/2 + (pad-top − pad-
+     bottom)/2. Round 3 centered on the whole 1920px window, ~160px right of
+     the scene, and rode 12% too high. */
+  padding: calc(var(--gs-pv-h) * 0.06) 40px calc(var(--gs-pv-h) * 0.30);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(214, 178, 118, 0.35) transparent;
+}
+.gs-pileview-grid {
+  display: flex; flex-wrap: wrap; justify-content: center; align-content: center;
+  gap: 30px 24px;
+  max-width: 1400px; margin: auto;
+}
+/* game-size cards, each softly grounded on the darkness */
+.gs-pileview-cardslot {
+  flex: 0 0 auto;
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.65));
+}
+@keyframes gs-pileview-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+.gs-pileview-grid { animation: gs-pileview-rise 0.22s ease-out backwards; }
+
+.gs-pileview-empty {
+  margin: auto; text-align: center;
+  font-size: 22px;
+  color: #b9a888; text-shadow: 0 2px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* ---- bottom furniture ground: keeps the caption legible while rows scroll
+       under it (sits above the scroll field, below the furniture) ------------ */
+.gs-pileview::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0;
+  height: calc(var(--gs-pv-h) * 0.3);
+  z-index: 2; pointer-events: none;
+  /* strong enough that a SECOND row of cards scrolled under the caption still
+     reads as darkness behind the text (a 12-card deck does exactly that) */
+  background: linear-gradient(rgba(6, 5, 4, 0), rgba(6, 5, 4, 0.5) 34%, rgba(6, 5, 4, 0.98) 74%);
+}
+
+/* ---- caption, bottom-center — the game's two screen-explainer lines -------
+   The reference's hierarchy: a LARGE warm-white sentence (sampled #d7cfbe,
+   ~25px at 1080p) over a slightly smaller gold parenthetical (#d7b449), same
+   family, no italics, no keyboard hint painted on the scene. Round 3 had this
+   upside down (gold bold headline + a 70%-size gold italic subline). */
+.gs-pileview-caption {
+  position: absolute; left: 50%; bottom: calc(var(--gs-pv-h) * 0.025);
+  transform: translateX(-50%);
+  z-index: 3; pointer-events: none;
+  width: min(1000px, 92%);
+  text-align: center; line-height: 1.3;
+}
+.gs-pileview-line1 {
+  font-size: clamp(23px, 1.65vw, 31px); font-weight: 300; letter-spacing: 0.2px;
+  color: #efe6d4;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95), 0 0 20px rgba(0, 0, 0, 0.7);
+}
+/* the epistemics keeper — the game's own gold parenthetical line, carrying
+   the pile size and the honest "sorted, order hidden" caveat */
+.gs-pileview-line2 {
+  margin-top: 3px;
+  font-size: clamp(19px, 1.32vw, 25px); font-weight: 400;
+  color: #dab556;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95);
+}
+
+/* ---- return pennant, lower left — the game's dark-red flag with the hard
+       gold rim and the painted cream back-arrow. Sampled off the reference:
+       rim #f2b601 (flat, ~3% of the flag height, NO glow), field #7b1b15
+       with a lit upper/lower lip, notched swallowtail right edge. ---------- */
+.gs-pileview-return {
+  position: absolute; left: 0; bottom: 25%; /* ref: flag foot at 75% of scene */
+  z-index: 3;
+  border: none; padding: 0; margin: 0; cursor: pointer;
+  background: none; -webkit-appearance: none; appearance: none;
+  /* reference flag: 1.5 : 1, a tenth of the scene tall */
+  width: calc(var(--gs-pv-h) * 0.157); height: calc(var(--gs-pv-h) * 0.1);
+  min-width: 104px; min-height: 66px;
+  transform: rotate(-1.5deg); transform-origin: 0 100%;
+  /* a cast shadow only — the round-3 orange bloom was the loudest CSS tell */
+  filter: drop-shadow(3px 5px 7px rgba(0, 0, 0, 0.75));
+  transition: filter 0.12s ease-out, transform 0.12s ease-out;
+}
+/* gold rim layer — flat, saturated, hard-edged, with a torn top/bottom lip */
+.gs-pileview-return::before {
+  content: ""; position: absolute; inset: 0;
+  background: #f2b601;
+  clip-path: polygon(0 3%, 21% 1%, 40% 4%, 62% 0, 87% 3%, 100% 7%,
+    83% 50%, 100% 93%, 88% 97%, 63% 100%, 41% 96%, 20% 99%, 0 97%);
+}
+/* red painted face, inset from the rim: mottled, lit along both lips, and
+   darkened behind the glyph the way the reference's paint is */
+.gs-pileview-return::after {
+  content: ""; position: absolute; inset: 3px 4px 3px 0;
+  background:
+    radial-gradient(58% 74% at 34% 52%, rgba(30, 6, 4, 0.55), transparent 68%),
+    linear-gradient(#a03a20 0 6%, #7b1b15 14% 86%, #a03a20 96% 100%),
+    repeating-linear-gradient(72deg, rgba(255, 176, 120, 0.05) 0 7px, transparent 7px 21px),
+    #7b1b15;
+  clip-path: polygon(0 3%, 21% 1%, 40% 4%, 62% 0, 87% 3%, 100% 7%,
+    83% 50%, 100% 93%, 88% 97%, 63% 100%, 41% 96%, 20% 99%, 0 97%);
+}
+.gs-pileview-return > svg {
+  position: relative; z-index: 1;
+  width: 66%; height: 66%; margin-right: 24%;
+}
+.gs-pileview-return:hover { filter: drop-shadow(3px 5px 7px rgba(0, 0, 0, 0.75))
+    brightness(1.12); }
+.gs-pileview-return:active { transform: rotate(-1.5deg) translateY(2px); }
+.gs-pileview-return:focus-visible {
+  outline: 3px solid #ffd677; outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-pileview-grid { animation: none; }
+  .gs-pileview-return { transition: none; }
+  .gs-pileview-return:active { transform: rotate(-1.5deg); }
+}

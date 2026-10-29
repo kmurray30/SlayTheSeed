@@ -1,0 +1,832 @@
+/* ============================================================================
+   .gs-shop — merchant tent shop screen skin (Shop.tsx).
+   Scoped under .gs-shop. Rides the shared .gs-scene primitive (game-skin.css)
+   for the vignette + bottom scrim; this file adds the tent backdrop crop, the
+   warm lamplit grade, and the diegetic shop furniture: a painted merchant
+   sign, cards on an arced display rack with hanging price tags, relics/potions
+   as physical items on the shop rug, the card-removal medallion signboard and
+   the painted Leave arrow. Rendering-only — all interactions live in Shop.tsx.
+
+   Depth stack, back to front (round 5 — see the backdrop block below for the
+   measurements that motivated it):
+     .gs-scene::before   the tent painting, blurred + graded DOWN to a dark bed
+     .gs-shop-drape      fabric dressing where the painting runs out
+     .gs-shop-haze       cool low-contrast wash over the far half only
+     .gs-shop-lightpool  the room's actual lighting, aimed at the wares
+     .gs-shop-merchant   the figure, in the room's shadow
+     .gs-shop-content    z1 — sign, rack, rug, services (the lit subjects)
+     .gs-shop-motes      z5 — dust drifting between the viewer and the wares
+     .gs-shop-grade      z6 — corner + edge crush, multiplied over everything
+     .gs-shop-warm       z7 — the lamps spilling back over the props
+     .gs-shop-grain      z8 — one filtering pass shared by every plane
+     .gs-shop-fg         z9 — the unlit near plane the room is seen past
+
+   Art (served via assetUrl):
+     scene_bgs/merchant_room/bottom/shop_merchant_bottom.png
+        — ATLAS PAGE: the real tent interior lives in the bottom band
+          (y 792..1693 of 1693); the top strip is loose sprite parts. The
+          painting is itself vignetted: its right 12% (x>1680) measures a mean
+          channel sum of 0.5/765 — literally black — so a 100%-wide crop puts a
+          flat void at the frame's right edge. Cropped instead to source
+          x 0..1699 / y 896..1693 (background-size 113% x 212.4% anchored
+          `0% 100%`), which keeps the source aspect within 2.5% and lifts the
+          right margin from ~0 to ~14/765, i.e. matching the left margin. The
+          residual falloff at both edges is dressed as tent fabric by
+          `.gs-shop-drape` below rather than left as missing art.
+     rooms/merchant_room/shop_rug.png            — the wares rug (squashed
+          vertically for a floor-perspective mat under the relic/potion row).
+          Mid-value GREEN cloth, mean RGB 78,114,100 at luminance 105 — the
+          same cloth the game unfurls full-frame as its inventory panel
+          (refs/game-shop-2.png). Grade its VALUE, never its hue.
+     room_rigs/shop_merchant_top/*               — the merchant's Spine rig
+          (.skel/.atlas/.png), rendered live by SpineSprite
+     rooms/merchant_room/shop_sales_tag.png      — red % tag, rug decor
+     rooms/merchant_room/card_removal_00/04.png  — removal medallion
+                                                   (00 = open, 04 = crossed)
+     rooms/merchant_room/card_removal_02.png     — the medallion's post
+     ui/common_ui/submenu_panel_short.png        — parchment panel material
+                                                   (sign + removal plaque)
+     ui/sprite_fonts/gold_icon.png               — the coin glyph (authored
+          near-white; warmed with the same sepia filter the HUD band uses)
+
+   The merchant is on that list as a RIG rather than as a picture, and that is
+   the point. He used to be three CSS crops of `scene_bgs/merchant_room/top/shop_merchant_top.png`
+   plus a mirrored arm off `.../hand/merchanthand.png` — hood at x 201..378 /
+   y 204..342, robe drape at x 3..313 / y 1081..1274, sleeve at x 3..250 /
+   y 592..822, each `background-position`-cropped and then `rotate()`d into
+   pose the way the event screen crops Neow.
+
+   That works for Neow because her art is ONE finished picture. This file is
+   not: it is a Spine atlas PAGE, a sheet of loose hoods, robes, sleeves and
+   hands that only becomes a merchant once his skeleton assembles them. No
+   arrangement of crop + rotate recovers a pose the packer threw away, and the
+   result read as exactly what it was — a floating hood over a disembodied
+   arm, with no body between them. He is now his own rig, drawn by SpineSprite
+   like the treasure chest and every monster (see `.gs-shop-merchant`).
+   ============================================================================ */
+
+/* Blend group root: the scenery's screen-blended lamp pools and the grade
+   layers below must composite against this element's own painted ground, not
+   punch through to the workbench chrome behind the viewport. */
+.gs-shop { isolation: isolate; }
+
+/* ---- backdrop: crop the atlas page to the tent band, LOWER the bed -------
+   ROUND 5 — the depth diagnosis. Measured against the reference frames, the
+   r4 build did not lack a vignette (its corner/centre ratio was 0.556 against
+   the reference's 0.973 — it had a STRONGER one). What it lacked was a dark
+   bed to be far away in:
+
+     region                      median lum   frac<35   frac>140
+     game refs (shop / rest)        21-24     .81-.91    .003-.030
+     workbench r4                     56        .33        .058
+
+   Every reference scene keeps ~85% of the frame under luminance 35 and spends
+   its whole light budget on two or three small focal islands; r4's bare tent
+   floor measured 72-100, i.e. brighter than the brightest object in the
+   reference (the lit character, 46). The focal hierarchy was inverted — the
+   brightest thing in frame was empty paint — so no amount of extra darkening
+   layered on top could buy depth. Rounds 3-4 kept raising this filter
+   (1.42x) to make the dark PCK art legible, and that is the thing to undo:
+   the light comes back below through the lamp pools ONLY, aimed at the wares.
+   The blur is the other half of the P1 "layers don't share a filtering pass"
+   — the backdrop was soft next to crisp sprites, so make the softness read as
+   distance instead of as a stretched JPEG. `scale` covers the blur's bleed. */
+.gs-shop.gs-scene::before {
+  /* source x 0..1699 / y 896..1693 — the lit tent interior, black margin
+     cropped off the right (see header notes) */
+  background-size: 113% 212.4%;
+  background-position: 0% 100%;
+  filter: brightness(0.76) saturate(0.88) contrast(1.08) sepia(0.07) blur(1.1px);
+  transform: scale(1.04);
+  transform-origin: 0 100%;
+}
+
+/* ---- edge dressing: tent fabric where the painting runs out --------------
+   Screen-blended so it LIFTS the near-black margins into warm shadowed cloth
+   with fold striping, instead of stacking more darkness on darkness. Masked
+   so it dies out well before the lit centre of the room. */
+.gs-shop-drape {
+  position: absolute; top: 0; bottom: 0; pointer-events: none;
+  mix-blend-mode: screen;
+}
+/* r5: halved. On the r4 bed these had to lift a near-black margin into cloth;
+   on the r5 bed the margins are SUPPOSED to fall away — that is where the
+   near-plane tent poles (.gs-shop-fg) now stand. Enough fold striping to say
+   "fabric", not enough to flatten the edge back out. */
+.gs-shop-drape.is-right {
+  right: 0; width: 26%;
+  background:
+    repeating-linear-gradient(96deg,
+      rgba(126, 46, 38, 0) 0 13px,
+      rgba(138, 52, 40, 0.15) 13px 29px,
+      rgba(74, 24, 24, 0.05) 29px 50px),
+    linear-gradient(101deg,
+      rgba(84, 26, 26, 0) 6%, rgba(102, 34, 28, 0.22) 56%, rgba(80, 26, 26, 0.28));
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 58%);
+  mask-image: linear-gradient(to right, transparent, #000 58%);
+}
+/* the left margin only needs lifting, not fabric — the painted teal curtain is
+   already there, it just falls away into black at the very edge */
+.gs-shop-drape.is-left {
+  left: 0; width: 11%;
+  background: linear-gradient(-100deg,
+    rgba(40, 74, 84, 0) 14%, rgba(50, 84, 92, 0.15) 62%, rgba(44, 74, 82, 0.20));
+  -webkit-mask-image: linear-gradient(to left, transparent, #000 66%);
+  mask-image: linear-gradient(to left, transparent, #000 66%);
+}
+
+/* ---- aerial perspective: the far half of the room ------------------------
+   In every reference frame the FAR plane is not darker than the near one — it
+   is flatter and cooler. Measured on game-shop-1.png the chroma spread runs
+   9.8 (far canopy) -> 22.1 (near ground) while luminance barely moves; the r4
+   build had 24.1 -> 31.6 with every plane the same warm red, so all planes
+   read as one sheet of paint. This is a low-alpha cool screen wash over the
+   top of the room only: it lifts the far blacks, kills their contrast and
+   pulls the hue toward the tent's cold outside light. Screen-blended, so it
+   composites against the backdrop rather than greying the whole frame. */
+.gs-shop-haze {
+  position: absolute; left: 0; right: 0; top: 0; height: 64%;
+  pointer-events: none;
+  background: linear-gradient(to bottom,
+    rgba(96, 116, 134, 0.05) 0%,
+    rgba(100, 120, 138, 0.17) 26%,
+    rgba(84, 104, 122, 0.12) 58%,
+    rgba(70, 90, 108, 0) 100%);
+  mix-blend-mode: screen;
+}
+
+/* ---- scenery: light + props UNDER the .gs-scene::after vignette ----------
+   z-index:auto (not the .gs-scene > * default of 1) keeps these below the
+   vignette so the scene's light falloff grades them too, and avoids opening
+   a stacking context so the screen-blended pools blend against ::before. */
+.gs-shop .gs-shop-scenery {
+  position: absolute; inset: 0; z-index: auto; pointer-events: none;
+}
+
+/* warm lamplight pools: one over the rug/floor centre, one at the chest
+   lantern baked into the backdrop art (right side), a faint ambient wash */
+/* r5: these are no longer "a bit of extra warmth on an already-lit room" —
+   with the bed down at reference level they ARE the room's lighting, so they
+   are tighter and aimed: one pool on the card rack, one on the wares rug, one
+   at the chest lantern baked into the backdrop art, and a wide dim ambient. */
+.gs-shop-lightpool {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(34% 26% at 44% 32%, rgba(255, 196, 116, 0.36), transparent 78%),
+    radial-gradient(30% 22% at 30% 82%, rgba(255, 184, 100, 0.30), transparent 78%),
+    radial-gradient(20% 17% at 79% 62%, rgba(255, 156, 74, 0.38), transparent 80%),
+    /* the ambient bounce: wide and weak, but it has to reach the far left or
+       that quarter of the room reads as a hole rather than as a dark corner */
+    radial-gradient(86% 78% at 34% 44%, rgba(236, 136, 84, 0.17), transparent 86%);
+  mix-blend-mode: screen;
+  opacity: 0.95;
+}
+/* soft breathing on the lantern pool only (legible when static too) */
+.gs-shop-lanternglow {
+  position: absolute; left: 70%; top: 48%; width: 22%; aspect-ratio: 1.2;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(255, 170, 80, 0.30),
+    rgba(255, 150, 70, 0.10) 60%, transparent 78%);
+  mix-blend-mode: screen;
+  animation: gs-shop-lantern 3.2s ease-in-out infinite;
+}
+@keyframes gs-shop-lantern {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.62; }
+}
+
+/* ---- the merchant --------------------------------------------------------
+   His own Spine rig (`room_rigs/shop_merchant_top`), rendered by SpineSprite
+   exactly like the treasure chest and every monster.
+
+   He used to be four rotated crops of that rig's ATLAS PAGE — a hood, a robe
+   drape "swung upright into a hanging body", a sleeve, and a mirrored arm off
+   a second page. An atlas page is not a picture of a merchant: it is a sheet
+   of loose limbs the skeleton assembles at runtime, and no arrangement of
+   `background-position` + `rotate()` recovers the pose. On screen it read as
+   what it was — a floating hood over a disembodied arm, and no body.
+
+   The rig sits where the game puts him (`merchant_room.tscn`: MerchantButton
+   at centre +246/-72, i.e. right of frame, seated at the wares) and keeps the
+   grade the crops had, because that part was doing real work: the rig art is
+   painted at full UI brightness and would otherwise read as a sticker on the
+   room instead of a figure sitting in its shadow.
+
+   HE SITS ON THE PAINTED RUG. That rug is not `.gs-shop-rug` (the wares mat
+   down on the floor row) — it is baked into the backdrop art, and it is the
+   one the reference frame seats him on. `top: 10%; right: 2.5%` put him a
+   third of a frame ABOVE it and off its right edge: a hooded figure levitating
+   in the corner of the tent, which is what the bug report showed.
+
+   A percentage anchor is exact here, not an approximation. The backdrop is
+   drawn with PERCENTAGE sizing off the bottom-left corner (`background-size:
+   113% 212.4%; background-position: 0% 100%`, then `scale(1.04)` about that
+   same corner — see `.gs-shop.gs-scene::before`), so every painted prop lands
+   on a FIXED percentage box no matter the viewport's size or aspect. Masking
+   the green cloth in a screenshot of the UNFILTERED backdrop puts the rug at
+   x 62.2..79.0%, y 44.6..72.0% (the erosion that drops its sparse chevron edge
+   clips the faded right end with it; by eye the weave reaches ~82%), and every
+   frame size and aspect measured lands on the same box, as predicted.
+
+   Placed the way `refs/game-shop-1.png` places him against that rug: his seat
+   two thirds of the way down the weave, his mass over its right third, the
+   wares laid out on the near half. Anchored by his BOTTOM and his CENTRE
+   because those are the contact points — his height is a px constant
+   (MERCHANT_H, which SpineSprite bakes into the rig's world scale), so an
+   anchor on his top edge would slide his seat off the rug at other frame
+   heights. */
+.gs-shop-merchant {
+  position: absolute; left: 75.5%; bottom: 36.6%; transform: translateX(-50%);
+  pointer-events: none;
+  /* he is sitting in the room's shadow, not in front of a lamp */
+  filter: brightness(0.82) saturate(0.84) sepia(0.16)
+    drop-shadow(9px 13px 15px rgba(0, 0, 0, 0.62));
+}
+/* SpineSprite paints into a <canvas> it sizes itself; this only has to stop
+   the canvas from imposing its own inline-baseline gap. */
+.gs-shop-merchant canvas,
+.gs-shop-merchant img { display: block; }
+
+/* ---- content column ------------------------------------------------------ */
+.gs-shop-content {
+  display: flex; flex-direction: column; min-height: 100%;
+  /* the extra bottom padding is the near plane's standing room: the sacking in
+     .gs-shop-fg heaps into the bottom ~5% of the frame, and nothing live may
+     sit in it */
+  padding: clamp(12px, 2.4vh, 26px) clamp(16px, 2.4vw, 34px) clamp(26px, 4.4vh, 46px);
+  gap: clamp(8px, 1.6vh, 18px);
+  color: #f6ead0;
+}
+
+/* ---- header: painted merchant sign + purse + workbench tooling ----------- */
+.gs-shop-header { display: flex; align-items: flex-start; gap: 18px; }
+/* hanging parchment sign — panel art squashed to a signboard, slight tilt */
+.gs-shop-sign {
+  position: relative; display: inline-flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2px;
+  min-width: 218px; padding: 14px 30px 16px;
+  background-image: var(--gs-shop-panel, none);
+  background-size: 100% 100%; background-repeat: no-repeat;
+  transform: rotate(-1.6deg);
+  filter: drop-shadow(0 6px 9px rgba(0, 0, 0, 0.55));
+}
+/* two dark nails pinning the sign */
+.gs-shop-sign::before, .gs-shop-sign::after {
+  content: ""; position: absolute; top: 9px; width: 7px; height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #6b6258, #211c15 75%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.gs-shop-sign::before { left: 16px; }
+.gs-shop-sign::after { right: 16px; }
+.gs-shop-signtitle {
+  font-weight: 700; font-size: clamp(22px, 2.4vw, 30px); line-height: 1;
+  letter-spacing: 0.04em; color: #3a2812;
+  text-shadow: 0 1px 0 rgba(255, 246, 226, 0.35);
+}
+/* the player's purse on the sign's lower lip: coin glyph + gold numerals */
+.gs-shop-purse {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-weight: 700; font-size: 15px; color: #7a5210;
+  font-variant-numeric: tabular-nums;
+}
+.gs-shop-purse img { width: 17px; height: 17px; display: block;
+  filter: sepia(1) saturate(3.4) hue-rotate(-8deg) brightness(0.9); }
+
+/* workbench tooling voice (advisor button/status): quiet chips on a scrim,
+   deliberately NOT fused onto the game surfaces */
+.gs-shop-tools { margin-left: auto; display: flex; flex-direction: column;
+  align-items: flex-end; gap: 6px; }
+.gs-shop-toolscrim {
+  background: rgba(6, 8, 10, 0.55); border-radius: 8px; padding: 4px 8px;
+  box-shadow: inset 0 0 0 1px rgba(255, 246, 226, 0.10);
+}
+.gs-shop-toolstatus:empty { display: none; }
+.gs-shop-toolstatus { max-width: 420px; }
+
+/* ---- the card display row ------------------------------------------------ */
+/* The right inset is the merchant's standing room: without it the row centres
+   over him and the last card cuts across his hood. */
+.gs-shop-cardrow {
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end;
+  gap: 16px 14px;
+  padding: clamp(6px, 1.4vh, 16px) clamp(64px, 9vw, 150px) 6px 8px;
+}
+/* one card stand: the framed card, its ground-contact shadow, the price tag.
+   The rack arc + hash-seeded scatter (Shop.tsx) ride the transform rather than
+   the flex gap, so the rack LOOKS hand-arranged while layout and hit targets
+   stay on a uniform grid. --gs-scale carries the per-card depth: the cards at
+   the ends of the arc are further from the lamp, so they are smaller, lower
+   and (via the inline z-index) painted behind their neighbours. Hover keeps
+   the card's own arc pose and only lifts it forward. */
+.gs-shop-cardstand {
+  position: relative; display: flex; flex-direction: column; align-items: center;
+  gap: 7px;
+  transform: translate(var(--gs-nudge, 0px), var(--gs-drop, 0px))
+    rotate(var(--gs-tilt, 0deg)) scale(var(--gs-scale, 1));
+  transform-origin: 50% 88%;
+  z-index: var(--gs-z, 1);
+  transition: transform 0.14s ease;
+}
+.gs-shop-cardstand:hover {
+  transform: translate(var(--gs-nudge, 0px), calc(var(--gs-drop, 0px) - 7px))
+    rotate(var(--gs-tilt, 0deg)) scale(calc(var(--gs-scale, 1) + 0.03));
+  z-index: 20;
+}
+/* The card itself: the house drop-shadow, re-cast with a horizontal offset so
+   it agrees with the tent's lamp (left-of-centre) instead of falling straight
+   down, plus a light knock-down so the card reads as lit by the room rather
+   than by the browser. Scales off --cw like the rule it replaces. */
+.gs-shop-cardstand .gs-card {
+  filter: brightness(0.95) saturate(0.95)
+    drop-shadow(calc(var(--cw) * 0.014) calc(var(--cw) * 0.03)
+      calc(var(--cw) * 0.045) rgba(0, 0, 0, 0.55));
+}
+.gs-shop-cardstand:hover .gs-card {
+  filter: brightness(1.05)
+    drop-shadow(calc(var(--cw) * 0.014) calc(var(--cw) * 0.055)
+      calc(var(--cw) * 0.07) rgba(0, 0, 0, 0.6));
+}
+/* The "%" tag on the discounted card. merchant_card.tscn pins its SaleVisual
+   Sprite2D at (146.298, -153.154) with scale 0.780665 on the 300x422 frame
+   whose origin is its CENTRE — i.e. centred on 98.77% of the card width and
+   13.71% of its height, drawn at 0.398x the card width (the texture is
+   153x148). Expressed against --gs-cardh so it tracks the rack's card size. */
+.gs-shop-cardsale {
+  --gs-cardw: calc(var(--gs-cardh, 232px) * 300 / 422);
+  position: absolute; z-index: 3; pointer-events: none;
+  width: calc(var(--gs-cardw) * 0.398);
+  left: calc(50% + var(--gs-cardw) * 0.4877);
+  top: calc(var(--gs-cardh, 232px) * 0.1371);
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.55));
+}
+/* soft contact shadow pooling under the card's lower edge; a card that sits
+   lower gets a tighter, darker pool (--gs-shadow, set per card) */
+.gs-shop-cardshadow {
+  position: absolute; left: 50%; top: calc(var(--gs-cardh, 211px) - 6px);
+  transform: translateX(-50%);
+  width: 92%; height: 19px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side,
+    rgba(0, 0, 0, var(--gs-shadow, 0.55)), transparent 78%);
+}
+/* the occlusion the card casts on the stall BEHIND it. The r4 critique was
+   that nothing on this screen darkened anything else — every prop floated a
+   millimetre off a background image. This is a soft dark slab a little larger
+   than the card, offset along the tent lamp's direction and painted behind it;
+   it is what makes the rack read as being in front of the backdrop rather than
+   printed on it. */
+.gs-shop-cardstand::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  left: -7%; right: -7%; top: 4%; height: calc(var(--gs-cardh, 211px) * 1.02);
+  transform: translate(9px, 14px);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.42);
+  filter: blur(17px);
+}
+.gs-shop-cardstand.is-soldout { opacity: 0.38; filter: grayscale(0.7); }
+/* (no is-unaffordable rule here on purpose — see the item note below) */
+
+/* ---- price tags: coin glyph + gold Kreon numerals on a leather tag ------- */
+.gs-shop-pricetag {
+  position: relative; display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--game-font);
+  padding: 3px 11px 4px 14px; line-height: 1;
+  background: linear-gradient(#4a3821, #2b1f10 80%);
+  clip-path: polygon(0 50%, 10px 0, 100% 0, 100% 100%, 10px 100%);
+  box-shadow: inset 0 0 0 1px rgba(214, 178, 110, 0.35),
+    inset 0 1px 0 rgba(255, 246, 226, 0.14);
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.55));
+  border: none; border-radius: 0;
+}
+/* the tag's string hole */
+.gs-shop-pricetag::before {
+  content: ""; position: absolute; left: 6px; top: 50%;
+  width: 4px; height: 4px; border-radius: 50%; transform: translateY(-50%);
+  background: #0c0906; box-shadow: 0 1px 0 rgba(255, 246, 226, 0.18);
+}
+.gs-shop-pricetag img { width: 15px; height: 15px; display: block;
+  filter: sepia(1) saturate(3.4) hue-rotate(-8deg) brightness(1.02)
+    drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6)); }
+.gs-shop-pricenum {
+  font-weight: 700; font-size: 15px; color: #f4d67a;
+  font-variant-numeric: tabular-nums;
+  -webkit-text-stroke: 2.5px #2b1d05; paint-order: stroke fill;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+/* on sale: `NMerchantCard.UpdateVisual` paints the cost label StsColors.green
+   (#7FFF00 — chartreuse, not a UI green) whenever the purse CAN cover it. */
+.gs-shop-pricetag.is-onsale .gs-shop-pricenum,
+.is-onsale .gs-shop-pricenum {
+  color: #7fff00; -webkit-text-stroke-color: #1f2b05;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85), 0 0 7px rgba(127, 255, 0, 0.3);
+}
+/* can't afford: the game keeps the tag but paints the numerals red */
+.is-unaffordable .gs-shop-pricenum,
+.gs-shop-pricetag.is-unaffordable .gs-shop-pricenum {
+  color: #ff5f47; -webkit-text-stroke-color: #2b0503;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85), 0 0 6px rgba(216, 68, 58, 0.35);
+}
+/* a tag that IS the buy button */
+button.gs-shop-pricetag { cursor: pointer; transition: filter 0.12s ease; }
+button.gs-shop-pricetag:not(:disabled):hover {
+  filter: drop-shadow(0 0 6px oklch(72% 0.15 80 / 0.8))
+    drop-shadow(0 2px 3px rgba(0, 0, 0, 0.55));
+}
+button.gs-shop-pricetag:disabled { cursor: default; }
+
+/* ---- the shop floor: rug with wares, services column on the right -------- */
+.gs-shop-floor {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: clamp(16px, 3vw, 44px);
+  margin-top: auto; padding-top: 8px;
+}
+
+/* Replay renders every purchase control disabled (read-only) — the theme's
+   global `button:disabled { opacity: .5 }` would wash the whole scene out.
+   The shop's own is-soldout / is-unaffordable classes carry the dimming. */
+.gs-shop-item:disabled, .gs-shop-removal:disabled,
+button.gs-shop-pricetag:disabled { opacity: 1; }
+
+/* the wares rug: the real rug art squashed to a floor-perspective mat.
+   r5 frame hygiene — the mat used to run 108% wide out of a flush-left
+   container, so its left end AND the first ware (the sold-out slot) were
+   sliced off by the viewport border. Inset the mat and pull the art back
+   inside it; what still overhangs is covered by the near-plane tent pole
+   (.gs-shop-fg), which turns the remaining crop into occlusion. */
+.gs-shop-rugmat { position: relative; flex: 1 1 auto; max-width: 780px;
+  min-height: 150px; margin-left: clamp(10px, 1.8vw, 34px); }
+.gs-shop-rug {
+  position: absolute; left: 50%; bottom: -4px; transform: translateX(-50%) rotate(-0.8deg);
+  width: 100%; height: 82%; object-fit: fill;
+  /* The tent is a dim lamplit interior, so the rug has to come DOWN in value:
+     r4 shipped it at brightness(1.05) and a 700px slab became the
+     second-brightest thing in frame after the cards — a floor mat outranking
+     the merchandise.
+
+     But the r5 correction went through the hue as well (`saturate(0.6)
+     sepia(0.42)`) on the premise that the art is "cool teal and near-white in
+     value". Measured, it is neither: mean RGB 78,114,100 at luminance 105 —
+     a mid-value GREEN cloth, and the greenest thing the shop owns. Both
+     reference frames read green (it is the same cloth the game unfurls as the
+     inventory panel in refs/game-shop-2.png, yellow chevrons and all), and
+     sepia turned ours beige. Keep the value correction, drop the hue one. */
+  filter: brightness(0.62) saturate(0.95) hue-rotate(-4deg)
+    drop-shadow(0 8px 14px rgba(0, 0, 0, 0.62));
+  pointer-events: none;
+}
+/* `shop_sales_tag.png` used to lie on the rug as decor. It is not decor: it is
+   merchant_card.tscn's SaleVisual, the badge the game pins to the ONE
+   discounted card (see .gs-shop-cardsale). The room's own painted "%" signpost
+   is already in the backdrop art, so the loose tag was a second, meaningless
+   one — and the card that was actually half price wore no mark at all. */
+/* items laid out ON the rug */
+.gs-shop-wares {
+  position: relative; display: flex; flex-wrap: wrap; align-items: flex-end;
+  justify-content: center; gap: 6px 18px;
+  padding: 26px 34px 14px 42px;
+}
+/* hash-seeded scatter, same idea as the card row: wares were set down by hand */
+.gs-shop-itemwrap {
+  display: flex; flex-direction: column; align-items: center;
+  transform: translate(var(--gs-nudge, 0px), var(--gs-drop, 0px))
+    rotate(var(--gs-tilt, 0deg));
+}
+
+/* one physical item: sprite standing on the rug, price tag, name on hover */
+.gs-shop-item {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  background: none; border: none; border-radius: 8px; padding: 4px 2px;
+  font-family: var(--game-font); color: #f6ead0; cursor: pointer;
+  transition: transform 0.14s ease;
+}
+.gs-shop-item:disabled { cursor: default; }
+.gs-shop-item:not(:disabled):hover,
+.gs-shop-item:not(:disabled):focus-visible { transform: translateY(-4px); }
+.gs-shop-item:focus-visible { outline: none; }
+.gs-shop-itemart { position: relative; line-height: 0; }
+/* elliptical contact shadow under the sprite */
+.gs-shop-itemart::before {
+  content: ""; position: absolute; left: 52%; bottom: -6px;
+  transform: translateX(-50%);
+  width: 92%; height: 14px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.58), transparent 74%);
+}
+/* cast shadow offset to agree with the tent lamp (left of centre) */
+.gs-shop-itemart img { position: relative; object-fit: contain; display: block;
+  filter: drop-shadow(3px 5px 6px rgba(0, 0, 0, 0.6)); transition: filter 0.14s ease; }
+.gs-shop-item.is-relic .gs-shop-itemart img { width: 60px; height: 60px; }
+.gs-shop-item.is-potion .gs-shop-itemart img { width: 48px; height: 48px; }
+.gs-shop-item:not(:disabled):hover .gs-shop-itemart img,
+.gs-shop-item:not(:disabled):focus-visible .gs-shop-itemart img {
+  filter: brightness(1.12) drop-shadow(0 0 6px oklch(72% 0.15 80 / 0.85))
+    drop-shadow(3px 5px 6px rgba(0, 0, 0, 0.6));
+}
+/* art-less item: a small dark medallion with the item's initial */
+.gs-shop-itemart .gs-shop-noart {
+  position: relative; display: grid; place-items: center;
+  width: 52px; height: 52px; border-radius: 50%;
+  font-weight: 700; font-size: 22px; color: #e8d9ad; text-shadow: 0 1px 2px #000;
+  background: radial-gradient(circle at 38% 30%, #3a4038, #14181a 80%);
+  box-shadow: inset 0 0 0 1px rgba(255, 246, 226, 0.16), 0 4px 5px rgba(0, 0, 0, 0.5);
+}
+/* The hover card the merchant turns over when you pick something up: the
+   hanging name tag, and under it what the item DOES. Shown on hover/focus, not
+   a permanent product listing. It stays in the DOM (and the a11y tree —
+   `opacity` doesn't remove it) so the button's accessible name is the whole
+   pitch, "<name> <effect> <price> gold". Prices stay on always.
+
+   The effect text is why this is a card and not just the tag it used to be: a
+   relic on the rug is a 60px sprite with a price, and until the description
+   landed on the wire the only way to know what you were buying was to already
+   know. Width is capped so a long relic line wraps to 2-3 readable rows
+   instead of spanning the rug and covering its neighbours. */
+.gs-shop-itemtip {
+  position: absolute; left: 50%; bottom: calc(100% - 2px);
+  transform: translateX(-50%) rotate(-1.5deg);
+  display: flex; flex-direction: column; align-items: center;
+  width: max-content; max-width: 210px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.12s ease;
+  z-index: 3;
+}
+/* A hovered ware's card must sit over its neighbours, not under the next
+   ware's sprite — the wares overlap by design (hash scatter + flex gap). */
+.gs-shop-item:hover, .gs-shop-item:focus-visible { z-index: 4; }
+.gs-shop-item:hover .gs-shop-itemtip,
+.gs-shop-item:focus-visible .gs-shop-itemtip { opacity: 1; }
+.gs-shop-itemname {
+  position: relative; z-index: 1;
+  max-width: 100%; width: max-content;
+  font-size: 12px; font-weight: 700; line-height: 1.2;
+  text-align: center; color: #f4e6c6;
+  padding: 3px 10px 4px 13px;
+  background: linear-gradient(#4a3821, #2b1f10 80%);
+  clip-path: polygon(0 50%, 9px 0, 100% 0, 100% 100%, 9px 100%);
+  box-shadow: inset 0 0 0 1px rgba(214, 178, 110, 0.35),
+    inset 0 1px 0 rgba(255, 246, 226, 0.14);
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.6));
+  text-shadow: 0 1px 2px #000;
+}
+/* the merchant's own scrawl on the back of the tag: darker than the tag, one
+   step down in weight, so the name still reads first */
+.gs-shop-itemdesc {
+  max-width: 100%;
+  margin-top: -3px; padding: 7px 11px 8px;
+  font-size: 11px; font-weight: 600; line-height: 1.34;
+  text-align: center; color: #e3d2ae;
+  background: linear-gradient(#2c2416, #17110a 88%);
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px rgba(214, 178, 110, 0.3),
+    0 4px 8px rgba(0, 0, 0, 0.62);
+  text-shadow: 0 1px 2px #000;
+  white-space: pre-line;
+}
+/* Unaffordable wares are NOT dimmed. refs/game-shop-2.png is the whole rule:
+   gold 30 against six red price tags, and every ware on the sheet is painted
+   at full brightness. The red numerals (tag rule above) carry it alone —
+   greying the art on top said "gone", which is a different fact. */
+.gs-shop-item.is-soldout { opacity: 0.45; filter: grayscale(0.75); }
+/* a small tilted SOLD strip across the ghosted sprite (decor; the button's
+   title carries the accessible "sold out") */
+.gs-shop-item.is-soldout .gs-shop-itemart::after,
+.gs-shop-cardstand.is-soldout .gs-shop-cardshadow::after {
+  content: "Sold"; position: absolute; left: 50%; top: 40%;
+  transform: translate(-50%, -50%) rotate(-9deg);
+  font-family: var(--game-font); font-weight: 700; font-size: 13px;
+  line-height: 1; padding: 2px 10px 3px; color: #f6ead0;
+  background: linear-gradient(#8c241e, #5c130f);
+  box-shadow: inset 0 0 0 1px rgba(255, 246, 226, 0.25), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+/* the card variant rides the (always-present) shadow span, centered on the card */
+.gs-shop-cardstand.is-soldout .gs-shop-cardshadow::after {
+  top: calc(var(--gs-cardh, 211px) * -0.5); font-size: 17px; padding: 3px 14px 4px;
+}
+
+/* nothing on a shelf: a small parchment note, not web text */
+.gs-shop-empty {
+  align-self: center; padding: 8px 18px;
+  font-size: 13.5px; font-weight: 700; color: #4a3417;
+  background-image: var(--gs-shop-panel, none);
+  background-size: 100% 100%; background-repeat: no-repeat;
+  transform: rotate(-1deg);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+}
+
+/* ---- services column: removal signboard + leave plate --------------------- */
+.gs-shop-service {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 14px; padding-bottom: 6px; padding-right: clamp(4px, 1.6vw, 26px);
+  flex: 0 0 auto; margin-left: auto;
+}
+
+/* card-removal signboard: gold medallion on its post, parchment plaque */
+.gs-shop-removal {
+  position: relative; display: flex; flex-direction: column; align-items: center;
+  background: none; border: none; padding: 0 0 10px; cursor: pointer;
+  font-family: var(--game-font); color: #3a2812;
+  transition: transform 0.14s ease;
+}
+.gs-shop-removal:disabled { cursor: default; }
+/* the signboard's contact shadow: the post is planted in the floor, and until
+   r5 it was the one large prop in the scene with nothing pooling under it */
+.gs-shop-removal::after {
+  content: ""; position: absolute; left: 50%; bottom: -6px;
+  transform: translateX(-50%);
+  width: 96px; height: 17px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.62), transparent 76%);
+}
+.gs-shop-removal:not(:disabled):hover,
+.gs-shop-removal:not(:disabled):focus-visible { transform: translateY(-3px); }
+.gs-shop-removal:focus-visible { outline: none; }
+/* the post, poking out under the plaque to the ground (painted UNDER the
+   plaque: the plaque opens z-index 1 below, the post stays at auto) */
+.gs-shop-removal-post {
+  position: absolute; left: 50%; bottom: -12px; transform: translateX(-50%);
+  width: 40px; height: 118px; object-fit: cover; object-position: center 30%;
+  filter: brightness(1.05) drop-shadow(0 4px 4px rgba(0, 0, 0, 0.5));
+}
+.gs-shop-removal-medal {
+  position: relative; z-index: 1; width: 84px; margin-bottom: -16px;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.55));
+  transition: filter 0.14s ease;
+}
+.gs-shop-removal:not(:disabled):hover .gs-shop-removal-medal,
+.gs-shop-removal:not(:disabled):focus-visible .gs-shop-removal-medal {
+  filter: brightness(1.1) drop-shadow(0 0 7px oklch(72% 0.15 80 / 0.85))
+    drop-shadow(0 4px 6px rgba(0, 0, 0, 0.55));
+}
+.gs-shop-removal-plaque {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 5px; width: 148px; padding: 20px 12px 14px;
+  background-image: var(--gs-shop-panel, none);
+  background-size: 100% 100%; background-repeat: no-repeat;
+  filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.5));
+}
+.gs-shop-removal-label { font-weight: 700; font-size: 15px; line-height: 1.15;
+  text-shadow: 0 1px 0 rgba(255, 246, 226, 0.3); }
+.gs-shop-removal.is-unaffordable .gs-shop-removal-medal { opacity: 0.6; }
+.gs-shop-removal.is-spent { cursor: default; }
+.gs-shop-removal.is-spent .gs-shop-removal-medal { filter: brightness(0.92)
+  drop-shadow(0 4px 6px rgba(0, 0, 0, 0.55)); }
+
+/* leave: the painted arrow banner the game uses for "go on" (the reference's
+   Proceed arrow, bottom right of frame). r4 shipped a slate hex plate, which
+   at this size read as a bordered rounded rect with UI-weight text — the P1
+   "web-grade control living inside the game world". The reds are sampled off
+   game-shop-1.png's arrow: body rgb(82,29,20), lit upper bevel ~rgb(126,45,34),
+   cream lettering — a much deeper, more desaturated red than a CSS button
+   would ever pick. No border, no radius: the SHAPE carries the affordance. */
+.gs-shop-hexbtn {
+  border: none; padding: 0; cursor: pointer; border-radius: 0;
+  background: none;
+  font-family: var(--game-font);
+  filter: drop-shadow(2px 7px 9px rgba(0, 0, 0, 0.66));
+  transition: transform 0.12s ease;
+}
+.gs-shop-hexbtn .gs-shop-hexface {
+  display: block; padding: 17px 58px 18px 30px; line-height: 1;
+  font-weight: 700; font-size: 19px; letter-spacing: 0.05em;
+  color: #f2ddb4; text-shadow: 0 2px 3px rgba(0, 0, 0, 0.9);
+  background:
+    linear-gradient(rgba(255, 214, 168, 0.22), rgba(255, 214, 168, 0) 34%),
+    linear-gradient(#7e2c20, #55190f 58%, #35100b);
+  clip-path: polygon(0 20%, 66% 20%, 66% 0, 100% 50%, 66% 100%, 66% 80%, 0 80%);
+}
+.gs-shop-hexbtn:hover:not(:disabled) { transform: translateX(4px); }
+.gs-shop-hexbtn:hover:not(:disabled) .gs-shop-hexface {
+  background:
+    linear-gradient(rgba(255, 226, 180, 0.30), rgba(255, 226, 180, 0) 34%),
+    linear-gradient(#9a3726, #6a2013 58%, #451510);
+}
+.gs-shop-hexbtn:active:not(:disabled) { transform: translate(4px, 2px); }
+/* disabled = replay's read-only view; keep the banner in-scene, just inert */
+.gs-shop-hexbtn:disabled { cursor: default; opacity: 1; }
+
+/* ---- air: dust drifting in the lamplight ---------------------------------
+   Between the viewer and the wares, so it is the FIRST thing in the frame that
+   is nearer than the merchandise. The two layers carry different dot sizes and
+   drift at different speeds — the parallax is the depth cue; a single static
+   sprinkle would just look like sensor noise. Sits under the grade so the
+   room's own falloff dims the motes at the edges, as it would real dust.
+   Positions are hash-seeded in Shop.tsx, never Math.random. */
+/* pointer-events MUST stay off: this sits at z5, above the whole content
+   layer, so without it the dust film would swallow every buy click */
+.gs-shop > .gs-shop-motes {
+  position: absolute; inset: -16% 0; z-index: 5; pointer-events: none;
+  mix-blend-mode: screen;
+}
+.gs-shop-motes > i {
+  position: absolute; inset: 0; display: block;
+  background-repeat: no-repeat;
+  will-change: transform;
+}
+.gs-shop-motes > .is-far { animation: gs-shop-drift-far 39s linear infinite; }
+.gs-shop-motes > .is-near {
+  animation: gs-shop-drift-near 23s linear infinite;
+  /* the near layer is slightly out of focus, like anything a hand's breadth
+     from the lens — the depth-of-field difference is half the parallax read */
+  filter: blur(1.4px);
+}
+@keyframes gs-shop-drift-far {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-14px, -42px, 0); }
+}
+@keyframes gs-shop-drift-near {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(24px, -96px, 0); }
+}
+
+/* ---- scene grade: the room's light reaches the props ---------------------
+   .gs-scene's own vignette (::after) sits UNDER the content layer, so every UI
+   prop used to render at full brightness over a dim room — the "pasted layers"
+   tell. These sit ABOVE the content instead: a multiply pass that carries the
+   room's falloff onto cards/tags/rug/signboard, a screen pass that lets the
+   lamp pools spill over them, and a grain that both planes share.
+
+   r5 reshapes the multiply. r4's was one soft brown ellipse whose alpha topped
+   out at 0.46 — it TINTED the edges instead of crushing them, and it left the
+   top edge (the darkest band in every reference frame, right under the HUD)
+   completely open. It is now a corner crush that reaches 0.9 at the frame's
+   corners plus explicit top and bottom edge crushes, and it is near-black
+   rather than brown so the darks go DOWN instead of sideways. Still gentle
+   over the lit centre — every label clears the contrast floor. */
+.gs-shop > .gs-shop-grade,
+.gs-shop > .gs-shop-warm,
+.gs-shop > .gs-shop-grain {
+  position: absolute; inset: 0; pointer-events: none;
+}
+.gs-shop > .gs-shop-grade {
+  z-index: 6;
+  background:
+    radial-gradient(90% 84% at 46% 50%,
+      rgba(8, 5, 6, 0) 26%, rgba(26, 13, 12, 0.40) 60%, rgba(12, 6, 8, 0.72) 82%, rgba(5, 3, 4, 0.92) 100%),
+    linear-gradient(to bottom, rgba(8, 5, 6, 0.58), rgba(8, 5, 6, 0) 15%),
+    linear-gradient(to top, rgba(6, 3, 5, 0.46), rgba(6, 3, 5, 0) 13%);
+  mix-blend-mode: multiply;
+}
+.gs-shop > .gs-shop-warm {
+  z-index: 7;
+  background:
+    radial-gradient(40% 30% at 44% 34%, rgba(255, 190, 116, 0.13), transparent 76%),
+    radial-gradient(34% 26% at 32% 78%, rgba(255, 176, 96, 0.11), transparent 76%),
+    radial-gradient(24% 20% at 76% 56%, rgba(255, 150, 70, 0.10), transparent 78%);
+  mix-blend-mode: screen;
+}
+/* One filtering pass over both planes. The P1 was that a soft, upscaled-looking
+   backdrop sat behind vector-crisp DOM sprites; a single fine grain laid over
+   everything is what a render pass would do, and it stops the two planes
+   reading as a JPEG and an SVG in the same box. Self-contained feTurbulence —
+   no asset fetch. */
+.gs-shop > .gs-shop-grain {
+  z-index: 8;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  mix-blend-mode: overlay;
+  opacity: 0.1;
+}
+
+/* ---- the near plane -----------------------------------------------------
+   The single strongest thing the reference frames have and r4 did not: an
+   UNLIT layer in front of everything. game-shop-1.png is seen past black
+   grass silhouettes along its bottom edge; nothing in the r4 shop was nearer
+   than the wares, and its near band measured BRIGHTER than the reference's
+   brightest focal object. These are the tent's own furniture, out of focus
+   because they are a hand's breadth from the camera: poles down both margins,
+   sacking heaped along the bottom, the valance hanging into the top of frame.
+   Deliberately shaped around the live controls — the masses at the bottom
+   corners stay outside the frame, so only their falloff reaches the rug and
+   the Leave banner, seating both in shadow instead of covering them.
+   It also swallows what still overhangs at the left margin, so the rug's
+   remaining crop reads as something standing in front of it. */
+.gs-shop > .gs-shop-fg {
+  position: absolute; inset: -6% -4% -5%; z-index: 9; pointer-events: none;
+  filter: blur(8px);
+  background:
+    /* tent poles at both margins */
+    linear-gradient(to right, rgba(4, 2, 4, 0.94) 0 1.6%, rgba(4, 2, 4, 0) 5.2%),
+    linear-gradient(to left, rgba(4, 2, 4, 0.9) 0 1.2%, rgba(4, 2, 4, 0) 4.4%),
+    /* sacking heaped along the bottom, centres below the frame */
+    radial-gradient(30% 13% at 6% 106%, rgba(4, 2, 4, 0.95) 46%, rgba(4, 2, 4, 0) 100%),
+    radial-gradient(22% 10% at 60% 107%, rgba(4, 2, 4, 0.9) 46%, rgba(4, 2, 4, 0) 100%),
+    radial-gradient(19% 12% at 101% 106%, rgba(4, 2, 4, 0.92) 44%, rgba(4, 2, 4, 0) 100%),
+    /* the valance hanging into the top of frame (clear of the Merchant sign) */
+    radial-gradient(38% 9% at 52% -5%, rgba(4, 2, 4, 0.9) 44%, rgba(4, 2, 4, 0) 100%),
+    radial-gradient(26% 7% at 93% -4%, rgba(4, 2, 4, 0.86) 44%, rgba(4, 2, 4, 0) 100%);
+}
+
+/* advisor win chips: tooling voice, centered under their item on a scrim */
+.gs-shop-chip { display: flex; justify-content: center; }
+.gs-shop-chip > div {
+  background: rgba(6, 8, 10, 0.6); border-radius: 7px; padding: 2px 8px 4px;
+  box-shadow: inset 0 0 0 1px rgba(255, 246, 226, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-shop-lanternglow, .gs-shop-motes > i { animation: none; }
+  .gs-shop-cardstand, .gs-shop-item, .gs-shop-removal, .gs-shop-hexbtn,
+  .gs-shop-itemart img, .gs-shop-removal-medal, .gs-shop-itemtip,
+  .gs-shop-cardstand .gs-card,
+  button.gs-shop-pricetag { transition: none; }
+}

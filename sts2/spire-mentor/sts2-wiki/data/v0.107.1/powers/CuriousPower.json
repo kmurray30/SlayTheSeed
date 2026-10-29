@@ -1,0 +1,9 @@
+{
+  "class_name": "CuriousPower",
+  "title": "Curious",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Powers cost [blue]1[/blue] {energyPrefix:energyIcons(1)} less.",
+  "smart_description": "Powers cost [blue]{Amount}[/blue] {energyPrefix:energyIcons(1)} less.",
+  "notes": "Each stack reduces the energy cost of Power-type cards by 1 (minimum 0). Only applies to cards owned by the power owner."
+}

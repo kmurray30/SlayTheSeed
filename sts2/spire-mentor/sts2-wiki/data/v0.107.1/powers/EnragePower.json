@@ -1,0 +1,9 @@
+{
+  "class_name": "EnragePower",
+  "title": "Enrage",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever you play a Skill, gains [blue]2[/blue] [gold]Strength[/gold].",
+  "smart_description": "Whenever you play a Skill, gains [blue]2[/blue] [gold]Strength[/gold].",
+  "notes": "This power grants Strength equal to its Amount each time you play a Skill card. Has Counter stack type."
+}

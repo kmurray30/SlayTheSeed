@@ -1,0 +1,31 @@
+{
+  "class_name": "Stabbot",
+  "title": "Stabbot",
+  "min_hp": 19,
+  "max_hp": 24,
+  "min_hp_base": 18,
+  "max_hp_base": 23,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "STAB_MOVE",
+      "title": "Stab",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 12,
+          "damage_base": 11,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": ["Deal 11/12 damage", "Apply 1 Frail"]
+    }
+  ],
+  "move_pattern": "Repeats Stab every turn",
+  "powers_on_spawn": [],
+  "notes": "Applies Frail with each attack, reducing the player's damage output."
+}

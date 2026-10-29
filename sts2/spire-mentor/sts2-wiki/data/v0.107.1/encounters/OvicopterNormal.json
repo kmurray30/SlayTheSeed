@@ -1,0 +1,10 @@
+{
+  "class_name": "OvicopterNormal",
+  "title": "Ovicopter",
+  "room_type": "Monster",
+  "is_weak": false,
+  "monsters": ["Ovicopter"],
+  "total_monsters": 1,
+  "tags": [],
+  "notes": "Encounter features 6 slots total: 1 Ovicopter and 5 egg slots. The encounter spawns only the Ovicopter initially, which can summon ToughEggs during combat. Custom camera scaling (0.8x) and offset applied."
+}

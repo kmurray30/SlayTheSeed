@@ -1,0 +1,9 @@
+{
+  "class_name": "PhantomBladesPower",
+  "title": "Phantom Blades",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "[gold]Shivs[/gold] gain [gold]Retain[/gold].\nThe first [gold]Shiv[/gold] you play each turn deals [blue]9[/blue] additional damage.",
+  "smart_description": "[gold]Shivs[/gold] gain [gold]Retain[/gold].\nThe first [gold]Shiv[/gold] you play each turn deals [blue]{Amount}[/blue] additional damage.",
+  "notes": "The Counter stack type tracks how many shivs have been played this turn. This power applies Retain to all shiv cards in hand and grants additive damage only to the first shiv played each turn (regardless of subsequent shivs in that turn)."
+}

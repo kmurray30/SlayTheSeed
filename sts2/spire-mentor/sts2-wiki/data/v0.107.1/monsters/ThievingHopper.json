@@ -1,0 +1,90 @@
+{
+  "class_name": "ThievingHopper",
+  "title": "Thieving Hopper",
+  "min_hp": 84,
+  "max_hp": 84,
+  "min_hp_base": 79,
+  "max_hp_base": 79,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "THIEVERY_MOVE",
+      "title": "Thievery",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 19,
+          "damage_base": 17,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": [
+        "Deal 17/19 damage",
+        "Steal 1 card"
+      ]
+    },
+    {
+      "id": "NAB_MOVE",
+      "title": "Nab",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 16,
+          "damage_base": 14,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 14/16 damage"
+      ]
+    },
+    {
+      "id": "HAT_TRICK_MOVE",
+      "title": "Hat Trick",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 23,
+          "damage_base": 21,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 21/23 damage"
+      ]
+    },
+    {
+      "id": "FLUTTER_MOVE",
+      "title": "Flutter",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Hover and gain FlutterPower (5)"
+      ]
+    },
+    {
+      "id": "ESCAPE_MOVE",
+      "title": "Escape",
+      "intents": [
+        {
+          "type": "escape"
+        }
+      ],
+      "effects": [
+        "Escape"
+      ]
+    }
+  ],
+  "move_pattern": "Cycles through: Thievery → Flutter → Hat Trick → Nab → Escape. After Escape, repeats Escape indefinitely.",
+  "powers_on_spawn": [
+    "Escape Artist (5)"
+  ],
+  "notes": "Thievery steals a card from the player's deck or discard pile, with priority order: Uncommon cards > Common/Rare/Event cards > Basic/Quest cards > Ancient or Imbued cards. The stolen card is removed from combat and the hopper applies SwipePower to it, allowing the hopper to use the stolen card. Flutter causes the hopper to hover, which changes its attack animations and sound effects. After reaching Escape, the hopper will repeat the Escape move indefinitely, likely attempting to flee the combat. The hopper spawns with Escape Artist power when entering combat."
+}

@@ -1,0 +1,30 @@
+{
+  "class_name": "CloakAndDagger",
+  "title": "Cloak and Dagger",
+  "character": "Silent",
+  "energy_cost": 1,
+  "type": "Skill",
+  "rarity": "Common",
+  "target": "Self",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Block",
+      "base_value": 6
+    },
+    {
+      "type": "Cards",
+      "base_value": 1,
+      "upgraded_value": 2
+    }
+  ],
+  "description": "Gain 6 Block. Add 1 Shiv into your Hand.",
+  "upgraded_description": "Gain 6 Block. Add 2 Shivs into your Hand.",
+  "referenced_powers": [
+    {
+      "class_name": "Shiv",
+      "title": "Shiv",
+      "slug": "shiv"
+    }
+  ]
+}

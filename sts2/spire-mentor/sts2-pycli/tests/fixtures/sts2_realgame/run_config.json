@@ -1,0 +1,61 @@
+{
+  "_provenance": "logs/realgame/20260711T000030Z.jsonl step 1 (real SimBridge v2 run_config capture)",
+  "state": {
+    "type": "run_config",
+    "characters": [
+      {
+        "id": "IRONCLAD",
+        "name": "The Ironclad"
+      },
+      {
+        "id": "SILENT",
+        "name": "The Silent"
+      },
+      {
+        "id": "REGENT",
+        "name": "The Regent"
+      },
+      {
+        "id": "NECROBINDER",
+        "name": "The Necrobinder"
+      },
+      {
+        "id": "DEFECT",
+        "name": "The Defect"
+      },
+      {
+        "id": "RANDOM_CHARACTER",
+        "name": "Random"
+      }
+    ],
+    "max_ascension": 10,
+    "defaults": {
+      "character": "Ironclad",
+      "ascension": 0,
+      "seed": null
+    },
+    "seed": "",
+    "act": 1,
+    "floor": 0,
+    "mod_version": "0.1.0",
+    "run_state": {
+      "gold": 0,
+      "hp": 0,
+      "max_hp": 0,
+      "potions": [],
+      "potion_slot_count": 0,
+      "relics": [],
+      "master_deck": [],
+      "ascension": 0,
+      "character": null
+    },
+    "state_id": 1,
+    "request_id": "1"
+  },
+  "recorded_action": {
+    "action": "start_run",
+    "character": "Ironclad",
+    "ascension": 0,
+    "seed": 42
+  }
+}

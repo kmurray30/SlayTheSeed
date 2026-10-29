@@ -1,0 +1,90 @@
+{
+  "class_name": "DecimillipedeSegment",
+  "title": "Decimillipede",
+  "min_hp": 46,
+  "max_hp": 52,
+  "min_hp_base": 40,
+  "max_hp_base": 46,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "WRITHE_MOVE",
+      "title": "Writhe",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 6,
+          "damage_base": 5,
+          "hits": 2,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 5/6 damage",
+        "2 hits"
+      ]
+    },
+    {
+      "id": "BULK_MOVE",
+      "title": "Bulk",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 7,
+          "damage_base": 6,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Deal 6/7 damage",
+        "Apply 2 Strength"
+      ]
+    },
+    {
+      "id": "CONSTRICT_MOVE",
+      "title": "Constrict",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 9,
+          "damage_base": 8,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": [
+        "Deal 8/9 damage",
+        "Apply 1 Weak"
+      ]
+    },
+    {
+      "id": "DEAD_MOVE",
+      "title": "Dead",
+      "intents": [],
+      "effects": []
+    },
+    {
+      "id": "REATTACH_MOVE",
+      "title": "Reattach",
+      "intents": [
+        {
+          "type": "heal"
+        }
+      ],
+      "effects": [
+        "Heal via Reattach"
+      ]
+    }
+  ],
+  "move_pattern": "Cycles through Constrict → Bulk → Writhe. Starting move varies by segment position within the formation. When defeated, transitions through Dead state, then Reattaches before resuming the cycle with a random next move.",
+  "powers_on_spawn": [
+    "ReattachPower"
+  ],
+  "notes": "This is a segment of the Decimillipede boss. Its HP is automatically adjusted in AfterAddedToRoom to avoid duplicates with other segments in the formation. When defeated, it enters a Dead state before being able to reattach via the ReattachPower (granted 25 stacks on spawn). The starter move index determines which of the three attacks begins the combat sequence. The entity has special handling for Phobia Mode texture display."
+}

@@ -1,0 +1,89 @@
+{
+  "class_name": "DecimillipedeSegmentBack",
+  "title": "Decimillipede Segment",
+  "min_hp": 46,
+  "max_hp": 52,
+  "min_hp_base": 40,
+  "max_hp_base": 46,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "WRITHE_MOVE",
+      "title": "Writhe",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 6,
+          "damage_base": 5,
+          "hits": 2,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 6/5 damage in 2 hits"
+      ]
+    },
+    {
+      "id": "BULK_MOVE",
+      "title": "Bulk",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 7,
+          "damage_base": 6,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Deal 7/6 damage",
+        "Apply 2 Strength"
+      ]
+    },
+    {
+      "id": "CONSTRICT_MOVE",
+      "title": "Constrict",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 9,
+          "damage_base": 8,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": [
+        "Deal 9/8 damage",
+        "Apply 1 Weak"
+      ]
+    },
+    {
+      "id": "DEAD_MOVE",
+      "title": "Dead",
+      "intents": [],
+      "effects": []
+    },
+    {
+      "id": "REATTACH_MOVE",
+      "title": "Reattach",
+      "intents": [
+        {
+          "type": "heal"
+        }
+      ],
+      "effects": [
+        "Reattach to the main body"
+      ]
+    }
+  ],
+  "move_pattern": "Cycles: Writhe → Constrict → Bulk → (repeat). Starting move is Writhe, Bulk, or Constrict depending on segment position. When killed, performs Dead Move and Reattach Move before returning to the cycle.",
+  "powers_on_spawn": [
+    "Reattach (25)"
+  ],
+  "notes": "Part of the Decimillipede multi-enemy encounter. Each segment generates a unique HP value to avoid duplicate health pools. When a segment dies, it reattaches to the main body and rejoins combat with the move cycle continuing. Ascension scaling affects damage at A9 (DeadlyEnemies) and HP at A8 (ToughEnemies)."
+}

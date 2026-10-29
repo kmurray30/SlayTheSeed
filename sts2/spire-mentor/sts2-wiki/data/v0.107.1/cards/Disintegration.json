@@ -1,0 +1,18 @@
+{
+  "class_name": "Disintegration",
+  "title": "Disintegration",
+  "character": "Status",
+  "energy_cost": -2,
+  "type": "Status",
+  "rarity": "Status",
+  "target": "None",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "HpLoss",
+      "base_value": 6
+    }
+  ],
+  "description": "At the end of your turn, take 6 damage.",
+  "notes": "Unplayable status card. Can be chosen from KnowledgeDemon encounter. Applies DisintegrationPower which deals 6 damage at the end of each turn."
+}

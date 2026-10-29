@@ -1,0 +1,9 @@
+{
+  "class_name": "NoBlockPower",
+  "title": "No Block",
+  "power_type": "Debuff",
+  "stack_type": "Counter",
+  "description": "You cannot gain [gold]Block[/gold] from cards.",
+  "smart_description": "You cannot gain [gold]Block[/gold] from cards for {Amount:plural:[blue]{}[/blue] turn|[blue]{}[/blue] turns}.",
+  "notes": "Debuff that prevents the afflicted creature from gaining Block from cards. Uses a Counter stack type, decrementing by 1 after each enemy turn until expiration. The {Amount} in smartDescription represents the remaining counter value."
+}

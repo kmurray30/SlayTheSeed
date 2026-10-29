@@ -1,0 +1,9 @@
+{
+  "class_name": "WeakPower",
+  "title": "Weak",
+  "power_type": "Debuff",
+  "stack_type": "Counter",
+  "description": "Weakened creatures deal [blue]25%[/blue] less damage with Attacks.",
+  "smart_description": "Attacks deal [blue]25%[/blue] less damage for [blue]{Amount}[/blue] {Amount:plural:turn|turns}.",
+  "notes": "Reduces the affected creature's Attack damage to 75% of its original value (25% reduction). Decreases by 1 each turn after the enemy's turn ends. Can be modified by PaperKrane relic and Debilitate power."
+}

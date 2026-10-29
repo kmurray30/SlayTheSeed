@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a1330"/>
+      <stop offset="1" stop-color="#0b0814"/>
+    </linearGradient>
+    <linearGradient id="flame" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#ff4d2e"/>
+      <stop offset="0.55" stop-color="#ff9d2e"/>
+      <stop offset="1" stop-color="#ffe27a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.62" r="0.5">
+      <stop offset="0" stop-color="#ff7a2e" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff7a2e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <ellipse cx="32" cy="40" rx="22" ry="20" fill="url(#glow)"/>
+  <!-- a spire: tall blade rising into a flame -->
+  <path d="M32 8 L40 36 L32 56 L24 36 Z" fill="url(#flame)"/>
+  <path d="M32 8 L32 56 L24 36 Z" fill="#000" opacity="0.18"/>
+  <path d="M32 14 C 38 24 38 30 32 40 C 26 30 26 24 32 14 Z" fill="#ffe27a" opacity="0.85"/>
+</svg>

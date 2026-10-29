@@ -1,0 +1,9 @@
+{
+  "class_name": "ClarityPower",
+  "title": "Clarity",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the start of your next turn, draw [blue]1[/blue] additional card.",
+  "smart_description": "At the start of your next {Amount:plural:turn|[blue]{}[/blue] turns}, draw [blue]1[/blue] additional card.",
+  "notes": "Counter-type power that accumulates across multiple turns. Each stack adds 1 to hand draw and decrements by 1 at the end of each turn. Distinct from DrawCardsNextTurnPower due to stacking behavior—Clarity allows multiple active applications to coexist and stack their draw bonus."
+}

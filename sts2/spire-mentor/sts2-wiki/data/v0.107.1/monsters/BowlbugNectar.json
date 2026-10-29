@@ -1,0 +1,50 @@
+{
+  "class_name": "BowlbugNectar",
+  "title": "Bowlbug (Nectar)",
+  "min_hp": 36,
+  "max_hp": 39,
+  "min_hp_base": 35,
+  "max_hp_base": 38,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "THRASH_MOVE",
+      "title": "Thrash",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 3
+        }
+      ],
+      "effects": ["Deal 3 damage"]
+    },
+    {
+      "id": "BUFF_MOVE",
+      "title": "Buff",
+      "intents": [
+        {
+          "type": "buff",
+          "amount": 16,
+          "amount_base": 15,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Apply 15/16 Strength"]
+    },
+    {
+      "id": "THRASH2_MOVE",
+      "title": "Thrash",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 3
+        }
+      ],
+      "effects": ["Deal 3 damage"]
+    }
+  ],
+  "move_pattern": "Thrash → Buff → Thrash (repeats)",
+  "powers_on_spawn": [],
+  "notes": "A simple enemy that alternates between attacking and buffing itself with Strength."
+}

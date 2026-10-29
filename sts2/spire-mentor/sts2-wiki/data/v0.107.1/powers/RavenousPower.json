@@ -1,0 +1,9 @@
+{
+  "class_name": "RavenousPower",
+  "title": "Ravenous",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "When an enemy dies, Corpse Slug immediately eats it, becoming [gold]Stunned[/gold] and gaining [blue]1[/blue] [gold]Strength[/gold].",
+  "smart_description": "When an enemy dies, Corpse Slug immediately eats it, becoming [gold]Stunned[/gold] and gaining [blue]{Amount}[/blue] [gold]Strength[/gold].",
+  "notes": "Corpse Slug enemy power. When an allied Corpse Slug dies, this power triggers: the surviving Corpse Slug becomes Stunned and gains Strength equal to the power's Amount (stack value). Uses Counter stack type, meaning the Strength gain scales with how many times this power has triggered."
+}

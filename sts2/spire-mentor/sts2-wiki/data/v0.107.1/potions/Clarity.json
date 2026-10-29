@@ -1,0 +1,9 @@
+{
+  "class_name": "Clarity",
+  "title": "Clarity Extract",
+  "rarity": "Uncommon",
+  "usage": "CombatOnly",
+  "target": "AnyPlayer",
+  "description": "Draw 1 card. At the start of your next 3 turns, draw 1 additional card.",
+  "notes": "Applies the Clarity power which grants additional card draw at the start of subsequent turns."
+}

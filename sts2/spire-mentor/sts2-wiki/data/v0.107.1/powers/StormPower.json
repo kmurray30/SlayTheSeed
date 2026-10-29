@@ -1,0 +1,9 @@
+{
+  "class_name": "StormPower",
+  "title": "Storm",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever you play a Power, [gold]Channel[/gold] [blue]1[/blue] [gold]Lightning[/gold].",
+  "smart_description": "Whenever you play a Power, [gold]Channel[/gold] [blue]{Amount}[/blue] [gold]Lightning[/gold].",
+  "notes": "Tracks each power card played and the Storm stack amount at the time of play. Channels lightning equal to the tracked amount when the power finishes playing, avoiding double-triggers on multiple plays of Storm and avoiding triggering on powers that were already in play before Storm was applied."
+}

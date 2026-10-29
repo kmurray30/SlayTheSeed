@@ -1,0 +1,82 @@
+{
+ "config": {
+  "c_puct": 2.5,
+  "depth": 200,
+  "draw_widening_c": 2.0,
+  "hidden_info": "beliefdraw",
+  "seed": 1,
+  "sims": 48,
+  "threads": 1
+ },
+ "pv": null,
+ "scores": [
+  {
+   "action": "Sweeping Beam",
+   "hp_n": 22,
+   "hp_sd": 0.0,
+   "is_best": true,
+   "losses": 0,
+   "low_confidence": false,
+   "mean_final_hp": 4.0,
+   "q": 1.0426,
+   "q_saturated": false,
+   "stable_idx": 0,
+   "target_index": null,
+   "ties": 0,
+   "visits": 22,
+   "win_prob": 1.0,
+   "wins": 22
+  },
+  {
+   "action": "drink Energy Potion",
+   "hp_n": 12,
+   "hp_sd": 1.4907,
+   "is_best": false,
+   "losses": 2,
+   "low_confidence": false,
+   "mean_final_hp": 3.3333,
+   "q": 0.6475,
+   "q_saturated": false,
+   "stable_idx": -100,
+   "target_index": null,
+   "ties": 0,
+   "visits": 12,
+   "win_prob": 0.8333,
+   "wins": 10
+  },
+  {
+   "action": "TURBO",
+   "hp_n": 11,
+   "hp_sd": 1.7814,
+   "is_best": false,
+   "losses": 3,
+   "low_confidence": false,
+   "mean_final_hp": 2.9091,
+   "q": 0.4324,
+   "q_saturated": false,
+   "stable_idx": 1,
+   "target_index": null,
+   "ties": 0,
+   "visits": 11,
+   "win_prob": 0.7273,
+   "wins": 8
+  },
+  {
+   "action": "end turn",
+   "hp_n": 3,
+   "hp_sd": 0.0,
+   "is_best": false,
+   "losses": 3,
+   "low_confidence": false,
+   "mean_final_hp": 0.0,
+   "q": -1.1851,
+   "q_saturated": false,
+   "stable_idx": -1,
+   "target_index": null,
+   "ties": 0,
+   "visits": 3,
+   "win_prob": 0.0,
+   "wins": 0
+  }
+ ]
+}

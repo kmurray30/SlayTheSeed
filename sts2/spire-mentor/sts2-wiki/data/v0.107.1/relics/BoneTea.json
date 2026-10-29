@@ -1,0 +1,8 @@
+{
+  "class_name": "BoneTea",
+  "title": "Bone Tea",
+  "rarity": "Event",
+  "description": "At the start of the next combat, [gold]Upgrade[/gold] your starting hand.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Triggers on the first turn of the next combat, upgrading all cards in your starting hand. The relic consumes one use per combat and is disabled when no uses remain."
+}

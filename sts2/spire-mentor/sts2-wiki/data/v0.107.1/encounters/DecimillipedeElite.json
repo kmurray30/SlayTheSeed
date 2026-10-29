@@ -1,0 +1,14 @@
+{
+  "class_name": "DecimillipedeElite",
+  "title": "The Decimillipede",
+  "room_type": "Elite",
+  "is_weak": false,
+  "monsters": [
+    "DecimillipedeSegmentFront",
+    "DecimillipedeSegmentMiddle",
+    "DecimillipedeSegmentBack"
+  ],
+  "total_monsters": 3,
+  "tags": [],
+  "notes": "Three-part segmented enemy encounter. Each segment is a distinct monster (front, middle, back). The encounter uses a custom scene and camera. Each segment is assigned a randomized starter move index (0-2), with the front segment selected randomly via RNG, and the middle and back segments offset by +1 and +2 respectively (mod 3)."
+}

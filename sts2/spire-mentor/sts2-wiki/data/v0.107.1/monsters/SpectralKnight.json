@@ -1,0 +1,59 @@
+{
+  "class_name": "SpectralKnight",
+  "title": "Spectral Knight",
+  "min_hp": 97,
+  "max_hp": 97,
+  "min_hp_base": 93,
+  "max_hp_base": 93,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "HEX",
+      "title": "Hex",
+      "intents": [
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": [
+        "Apply 2 Hex"
+      ]
+    },
+    {
+      "id": "SOUL_SLASH",
+      "title": "Soul Slash",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 17,
+          "damage_base": 15,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 15/17 damage"
+      ]
+    },
+    {
+      "id": "SOUL_FLAME",
+      "title": "Soul Flame",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 4,
+          "damage_base": 3,
+          "hits": 3,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 3/4 damage",
+        "3 hits"
+      ]
+    }
+  ],
+  "move_pattern": "Hex → Soul Slash → alternates between Soul Slash and Soul Flame (2:1 ratio, Soul Flame cannot repeat consecutively)",
+  "powers_on_spawn": [],
+  "notes": "Soul Flame applies the damage in 3 separate hits with a single animation. The RandomBranchState weights Soul Slash at 2:1 against Soul Flame."
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "PlowPower",
+  "title": "Plow",
+  "power_type": "Debuff",
+  "stack_type": "Counter",
+  "description": "The first time this creature's HP reaches [blue]150[/blue] or below, it becomes [gold]Stunned[/gold].",
+  "smart_description": "The first time this creature's HP reaches [blue]150[/blue] or below, it becomes [gold]Stunned[/gold] and loses all its [gold]Strength[/gold].",
+  "notes": "This is a triggered debuff applied to enemies. When the specified HP threshold is crossed via damage, it triggers once: stuns the creature, removes all Strength and Temporary Strength powers, then removes itself from play. After triggering, it has no further effect."
+}

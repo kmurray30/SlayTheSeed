@@ -1,0 +1,9 @@
+{
+  "class_name": "PoisonPotion",
+  "title": "Poison Potion",
+  "rarity": "Common",
+  "usage": "CombatOnly",
+  "target": "AnyEnemy",
+  "description": "Apply [blue]6[/blue] [gold]Poison[/gold].",
+  "notes": "Combat-only potion. Usage type CombatOnly is a specialized potion usage not in the standard Drink/Throw/Apply categories."
+}

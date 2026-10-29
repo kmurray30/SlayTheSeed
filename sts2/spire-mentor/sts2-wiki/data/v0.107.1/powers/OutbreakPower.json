@@ -1,0 +1,9 @@
+{
+  "class_name": "OutbreakPower",
+  "title": "Outbreak",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Every [blue]10[/blue] times you apply [gold]Poison[/gold], deal damage to ALL enemies.",
+  "smart_description": "Every [blue]3[/blue] times you apply [gold]Poison[/gold], deal [blue]{Amount}[/blue] damage to ALL enemies.",
+  "notes": "⚠️ Source-of-truth discrepancy: localization description text shows '10', but code threshold is hardcoded to 3 applications (RepeatVar constant). Smart description corrected to match code. Displays counter of poison applications. {Amount} is resolved at runtime to the power's damage value."
+}

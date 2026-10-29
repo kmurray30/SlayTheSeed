@@ -1,0 +1,47 @@
+{
+  "class_name": "PhrogParasite",
+  "title": "Phrog Parasite",
+  "min_hp": 66,
+  "max_hp": 68,
+  "min_hp_base": 61,
+  "max_hp_base": 64,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "INFECT_MOVE",
+      "title": "Infect",
+      "intents": [
+        {
+          "type": "status",
+          "amount": 3
+        }
+      ],
+      "effects": [
+        "Add 3 Infection to player's discard pile"
+      ]
+    },
+    {
+      "id": "LASH_MOVE",
+      "title": "Lash",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 5,
+          "damage_base": 4,
+          "hits": 4,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 4/5 damage",
+        "4 hits"
+      ]
+    }
+  ],
+  "move_pattern": "Cycles between Infect and Lash",
+  "powers_on_spawn": [
+    "Apply 4 Infested Power"
+  ],
+  "notes": "Gains Infested Power on spawn. The Infect move adds Infection status cards to the player's discard pile, which act as debuffs by fouling the player's hand with unplayable cards. Alternates between this status move and direct multi-hit attacks with Lash."
+}

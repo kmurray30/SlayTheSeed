@@ -1,0 +1,9 @@
+{
+  "class_name": "TrackingPower",
+  "title": "Tracking",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "[gold]Weak[/gold] enemies take [blue]2[/blue] times more damage from Attacks.",
+  "smart_description": "[gold]Weak[/gold] enemies take [blue]{Amount}[/blue] times more damage from Attacks.",
+  "notes": "Applies a multiplicative damage bonus only to Powered Attacks against targets with Weak. Only the owner or their pets can trigger the damage modification. The multiplier is stored as the power's stack counter."
+}

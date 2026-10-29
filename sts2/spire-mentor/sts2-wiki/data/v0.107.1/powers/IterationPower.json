@@ -1,0 +1,9 @@
+{
+  "class_name": "IterationPower",
+  "title": "Iteration",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "The first time you draw a Status each turn, draw more cards.",
+  "smart_description": "The first time you draw a Status each turn, draw [blue]{Amount}[/blue] {Amount:plural:card|cards}.",
+  "notes": "Triggers when a Status card is drawn. Counts the number of Status cards drawn this turn via combat history. Only applies the card draw bonus on the first Status card drawn per turn."
+}

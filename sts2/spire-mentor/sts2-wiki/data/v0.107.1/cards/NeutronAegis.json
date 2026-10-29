@@ -1,0 +1,28 @@
+{
+  "class_name": "NeutronAegis",
+  "title": "Neutron Aegis",
+  "character": "Regent",
+  "energy_cost": 1,
+  "type": "Power",
+  "rarity": "Rare",
+  "target": "Self",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Plating",
+      "base_value": 8,
+      "upgraded_value": 11
+    }
+  ],
+  "description": "Gain 8 [gold]Plating[/gold].",
+  "upgraded_description": "Gain 11 [gold]Plating[/gold].",
+  "star_cost": 5,
+  "referenced_powers": [
+    {
+      "class_name": "PlatingPower",
+      "title": "Plating",
+      "slug": "plating"
+    }
+  ],
+  "notes": "Star cost cards are special cards that cost a Star instead of energy. This card grants the Plating power, which grants block at the end of each turn and decreases by 1 each turn."
+}

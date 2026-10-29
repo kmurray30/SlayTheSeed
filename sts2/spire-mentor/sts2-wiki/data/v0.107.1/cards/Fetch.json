@@ -1,0 +1,25 @@
+{
+  "class_name": "Fetch",
+  "title": "Fetch",
+  "character": "Regent",
+  "energy_cost": 0,
+  "type": "Attack",
+  "rarity": "Uncommon",
+  "target": "Single",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 3,
+      "upgraded_value": 6
+    },
+    {
+      "type": "Cards",
+      "base_value": 1
+    }
+  ],
+  "description": "[gold]Osty[/gold] deals 3 damage.\nIf this is the first time this card has been played this turn, draw 1 card.",
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "Glows gold when not yet played this turn, glows red when Osty is missing. Only draws cards on the first play per turn."
+}

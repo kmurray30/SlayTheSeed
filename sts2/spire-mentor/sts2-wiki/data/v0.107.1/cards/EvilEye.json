@@ -1,0 +1,22 @@
+{
+  "class_name": "EvilEye",
+  "title": "Evil Eye",
+  "character": "Ironclad",
+  "energy_cost": 1,
+  "type": "Skill",
+  "rarity": "Uncommon",
+  "target": "Self",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Block",
+      "base_value": 8,
+      "upgraded_value": 11
+    }
+  ],
+  "description": "Gain 8 Block. Gain another 8 Block if you have Exhausted a card this turn.",
+  "upgraded_description": "Gain 11 Block. Gain another 11 Block if you have Exhausted a card this turn.",
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "Gains Block twice (for a total of 16/22 Block) if you have exhausted a card this turn. Card glows gold when this condition is met."
+}

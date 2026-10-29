@@ -1,0 +1,69 @@
+{
+  "class_name": "KinPriest",
+  "title": "Kin Priest",
+  "min_hp": 199,
+  "max_hp": 199,
+  "min_hp_base": 190,
+  "max_hp_base": 190,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "ORB_OF_FRAILTY",
+      "title": "Orb of Frailty",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 9,
+          "damage_base": 8,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": ["Deal 8/9 damage", "Apply 1 Frail"]
+    },
+    {
+      "id": "ORB_OF_WEAKNESS",
+      "title": "Orb of Weakness",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 9,
+          "damage_base": 8,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": ["Deal 8/9 damage", "Apply 1 Weak"]
+    },
+    {
+      "id": "BEAM",
+      "title": "Soul Beam",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 3,
+          "hits": 3
+        }
+      ],
+      "effects": ["Deal 3 damage", "3 hits"]
+    },
+    {
+      "id": "RITUAL",
+      "title": "Dark Ritual",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Apply 2/3 Strength to self"]
+    }
+  ],
+  "move_pattern": "Cycles: Orb of Frailty → Orb of Weakness → Soul Beam → Dark Ritual",
+  "powers_on_spawn": [],
+  "notes": "Kin Priest fights alongside Kin Followers. When all followers are defeated, the Kin Priest reacts with a death line. The priest applies Strength to itself during Dark Ritual to boost damage output."
+}

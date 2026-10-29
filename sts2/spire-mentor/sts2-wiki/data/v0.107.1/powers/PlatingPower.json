@@ -1,0 +1,9 @@
+{
+  "class_name": "PlatingPower",
+  "title": "Plating",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the end of your turn, gain Block. Plating is reduced by 1 at the start of your turn.",
+  "smart_description": "At the end of your turn, gain {Amount} Block. Plating is reduced by {Decrement} at the start of your turn.",
+  "notes": "For enemies, the Decrement value scales with multiplayer player count. Enemies with Plating gain block at the start of combat (round 1 only). Block is gained during the early end-of-turn phase, before end-of-turn damage effects. Multiplayer: enemy block gain scales by ((players - 1) * 2 + 1) × Amount."
+}

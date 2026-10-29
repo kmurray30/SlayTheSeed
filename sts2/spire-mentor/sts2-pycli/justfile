@@ -1,0 +1,585 @@
+# justfile for sts2-pycli
+# Usage: just <recipe>     (run `just --list` for the full list)
+
+# Deployment recipes (GCP identity, Cloudflare Pages, bug-report bucket) live
+# in deploy/justfile — a tree that never ships in the public export, hence the
+# optional import: a public checkout simply has none of those recipes.
+import? "deploy/justfile"
+
+# Resolve the .NET SDK binary. Honours $DOTNET if set; otherwise tries the
+# common per-user install paths (~/.dotnet-arm64 on Apple Silicon, ~/.dotnet
+# from the official Linux installer) before falling back to `dotnet` on PATH.
+# Override with `DOTNET=/path/to/dotnet just <recipe>`.
+dotnet := env_var_or_default(
+  "DOTNET",
+  if path_exists(home_directory() / ".dotnet-arm64/dotnet") == "true"
+    { home_directory() / ".dotnet-arm64/dotnet" }
+  else if path_exists(home_directory() / ".dotnet/dotnet") == "true"
+    { home_directory() / ".dotnet/dotnet" }
+  else { "dotnet" })
+cs_project := "src/Sts2Headless/Sts2Headless.csproj"
+
+# The project venv's interpreter, run directly (no `uv run` re-sync — see the
+# `workbench` recipe). Windows venvs keep it under Scripts/.
+venv_python := if os_family() == "windows" { ".venv/Scripts/python.exe" } else { ".venv/bin/python" }
+
+# Default recipe — show help
+default: help
+
+# Show this help message
+help:
+    @just --list
+
+## Setup and Installation
+
+# Initialize a freshly cloned repo (deps + pre-commit hooks)
+setup:
+    @echo "🚀 Setting up development environment..."
+    @just install-dev
+    @just install-hooks
+    @echo "✅ Setup complete."
+
+# Install Python dev dependencies via uv
+install-dev:
+    @echo "📦 Installing dev dependencies..."
+    uv sync --dev
+
+# Install pre-commit hooks (via prek)
+install-hooks:
+    @echo "🪝 Installing pre-commit hooks..."
+    uv run prek install
+
+## Code Quality
+
+# Format Python code with ruff (MUTATES the tree)
+format:
+    @echo "🎨 Formatting..."
+    uv run --frozen ruff format .
+
+# Fail if anything is unformatted, without touching it.
+#
+# This is the gate; `format` is the fix. A gate that rewrites files instead of
+# failing cannot be trusted to tell you the tree was clean, and it silently
+# drags unrelated reflow into whatever change you were making — which is
+# exactly how 24 files drifted before PR #343 swept them up.
+format-check:
+    @echo "🎨 Checking formatting..."
+    uv run --frozen ruff format --check .
+
+# Lint Python code with ruff
+lint:
+    @echo "🔍 Linting..."
+    uv run --frozen ruff check .
+
+# Lint and auto-fix issues
+lint-fix:
+    @echo "🔧 Linting with auto-fix..."
+    uv run --frozen ruff check . --fix
+
+# Type-check with ty (currently scoped to new code; see [tool.ty.src] in pyproject.toml)
+typecheck:
+    @echo "🔍 Type-checking..."
+    uv run --frozen ty check
+
+# Check for dependency issues with deptry
+deptry:
+    @echo "🔍 Checking dependencies..."
+    uv run --frozen deptry .
+
+## PPO champions
+
+# Regenerate the champion regions in net.rs + Dockerfile from champions.toml
+sync-champions:
+    @echo "🏆 Syncing champion regions from data/ppo/champions.toml..."
+    uv run --frozen python scripts/sync_champions.py
+
+# Gate: fail if a generated champion region is stale
+check-champions:
+    @echo "🏆 Checking champion regions..."
+    uv run --frozen python scripts/sync_champions.py --check
+
+# Point a character at a new champion everywhere (manifest + generated regions)
+promote-champion character onnx:
+    uv run --frozen python scripts/promote_champion.py {{character}} {{onnx}}
+
+## Testing
+
+# Run pytest unit tests, excluding `slow` ones (rebuilds C# headless runner first)
+test: build-cs
+    @echo "🧪 Running tests..."
+    uv run --frozen pytest
+
+# Run ONLY the slow-marked tests (full-run PPO/parity walks, ~2700 CPU-seconds).
+test-slow: build-cs
+    @echo "🐢 Running slow tests..."
+    uv run --frozen pytest -m slow
+
+# Run the whole suite, slow tests included (pre-merge / nightly gate).
+test-all: build-cs
+    @echo "🧪 Running full suite (incl. slow)..."
+    uv run --frozen pytest -m ""
+
+# Run tests with verbose output
+test-verbose: build-cs
+    uv run --frozen pytest -v
+
+# Run tests with coverage report
+test-coverage: build-cs
+    uv run --frozen pytest --cov=python --cov-report=term-missing
+
+# Full regression — 5 games per character, all must complete
+#
+# `--frozen --no-sync` matters here: a bare `uv run` re-syncs the project, and
+# because `sts2_rs` is installed as an EDITABLE build backed by maturin,
+# re-syncing rebuilds the whole Rust workspace from scratch inside uv's own
+# build cache. Measured 2026-07-26: a Rust-touching regression sat for 45+
+# minutes in `maturin build_editable` before running a single game, with no
+# output and no game process, which reads exactly like a hang.
+#
+# READ THIS BEFORE COPYING `--no-sync` ELSEWHERE. That re-sync is not
+# gratuitous — it is the stale-wheel guard, driven by the `[tool.uv]
+# cache-keys` block in `../sts2-rs/crates/sts2-py/pyproject.toml`, which
+# rebuilds the extension whenever ANY workspace `.rs` file changes.
+# `--no-sync` skips it, so a recipe that uses it runs against WHATEVER
+# `sts2_rs` happens to be installed, however stale.
+#
+# It is safe here for one specific reason: `play_full_run.py` drives the C#
+# subprocess with a random policy and never imports `sts2_rs`, so there is no
+# engine to keep fresh. Any recipe that DOES import it (`test`, the parity
+# harness, anything under `python/sts2_hint/`) must keep the sync.
+regression-test: build-cs
+    @echo "🎮 Running full regression (this takes a while)..."
+    @for char in Ironclad Silent Defect Regent Necrobinder; do \
+        echo "── $char ──"; \
+        uv run --frozen --no-sync python python/play_full_run.py 5 "$char" 2>&1 | grep -E "Wins|Completed"; \
+    done
+
+## C# Build
+
+# Build the C# headless runner for one game build (GH #789): lib/<ver>/ ->
+# src/Sts2Headless/bin/<ver>/. The tests and tools pick a build with
+# STS2_GAME_VERSION (default v0.107.1); pytest also takes --game-version.
+build-cs ver="v0.107.1":
+    @echo "🔨 Building C# project for {{ver}}..."
+    {{dotnet}} build {{cs_project}} -p:GameVersion={{ver}}
+
+# Build the C# headless runner for every supported game build
+build-cs-all:
+    @just build-cs v0.107.1
+    @just build-cs v0.111.0
+
+# Build the self-contained SimAdvisor.exe (GH #380; Windows only).
+# Dedicated .venv-advisor (no torch), PyInstaller onedir -> dist/SimAdvisor/.
+build-advisor-exe:
+    pwsh -NoProfile -File scripts/build_advisor_exe.ps1
+
+## Rust hint backend (sts2_rs PyO3 extension)
+
+# Build + install the sts2_rs MCTS hint extension into the active venv
+# via maturin. Wraps setup.sh with STS2_SKIP_DOTNET=1 so we only do
+# the Rust step (use `just setup` / `./setup.sh` for the full flow).
+# Sources .venv first so setup.sh's venv-active guard is satisfied
+# without the operator having to activate it manually.
+build-rust:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "🦀 Building sts2_rs PyO3 extension..."
+    # `bin/` on POSIX, `Scripts/` on Windows. Checking only the former made
+    # this recipe report "❌ .venv missing" on every Windows checkout that
+    # had a perfectly good .venv, and send the operator to `just install-dev`
+    # -- which cannot fix a venv that already exists.
+    if [ -f .venv/bin/activate ]; then
+        source .venv/bin/activate
+    elif [ -f .venv/Scripts/activate ]; then
+        source .venv/Scripts/activate
+    else
+        echo "❌ .venv missing — run \`just install-dev\` first."
+        exit 1
+    fi
+    STS2_SKIP_DOTNET=1 ./setup.sh
+
+# Stale-wheel regression test for setup.sh's maturin step (bead sts2-rs-j7gi).
+test-stale-wheel:
+    @echo "🧪 Running stale-wheel test..."
+    bash tests/test_setup_stale_wheel.sh
+
+# Fail-closed `run` guard regression test for wheel-venv.sh (issue #15 Trap 1).
+test-wheel-venv:
+    @echo "🧪 Running wheel-venv ambiguity-guard test..."
+    bash tests/test_wheel_venv_ambiguity.sh
+
+# Content-addressed worktree-venv keying + reachability GC (issue #15 / Phase 2).
+test-venv-hashkey:
+    @echo "🧪 Running content-addressed venv test..."
+    bash tests/test_venv_hashkey.sh
+# 50-combat seeded smoke gate for the sts2_hint recommender (bead sts2-rs-886i).
+# Fails if any seed hits UnsupportedStateError. Free-running coverage:
+# `uv run python tests/smoke_hint.py --random-seeds 50`.
+smoke-hint: build-cs
+    @echo "🔥 Running 50-combat sts2_hint smoke..."
+    uv run python tests/smoke_hint.py --seeds 1-50
+
+# Wall-clock bench for sts2_hint.recommend() — writes baseline JSON
+# under tests/bench_baselines/ when --update-baseline is passed.
+bench-hint: build-cs
+    @echo "📊 Running sts2_hint overhead bench..."
+    uv run python tests/bench_hint_overhead.py
+
+## Workbench
+
+# Run the workbench backend (FastAPI on :8077; override with STS2_PORT).
+# Rebuilds the sts2_rs engine into .venv first when a Rust source changed, so
+# the recompute/"search" path never serves a stale engine (it shares the
+# `_sim-engine-fresh` guard with `sim-ui`).
+workbench: _sim-engine-fresh
+    # Use .venv/bin/python directly, NOT `uv run`: `uv run` re-syncs the project
+    # env before launching, which reinstalls the STALE CACHED sts2-rs editable
+    # wheel (version pinned 0.0.1) and clobbers the fresh maturin build that
+    # `_sim-engine-fresh` just produced — right before the server loads it.
+    # The sim-* recipes already run the venv python directly for this reason.
+    PYTHONPATH=python {{venv_python}} -m workbench
+
+# Install web/ npm deps if missing (idempotent; fast no-op when already present)
+_web-deps:
+    cd web && [ -d node_modules ] || npm install
+
+# Run the workbench frontend dev server (Vite on :5173). Serves the workbench at
+# /, SimLab at /simlab.html (linked from each other's header), and proxies all
+# /api/* to the workbench backend on :8077 — which now also serves the SimLab
+# API. So `just workbench` + `just workbench-web` gives you SimLab too; you do
+# NOT need `just sim-ui` for the SimLab page in dev.
+workbench-web: _web-deps
+    cd web && npm run dev
+
+## SimLab
+#
+# In dev, SimLab rides on the workbench: start `just workbench` (backend, now
+# mounts the SimLab API) + `just workbench-web` (Vite), then open
+# http://localhost:5173/simlab.html (or click "🧪 SimLab" in the workbench).
+#
+# `just sim-ui` below is the STANDALONE single-server build (SimLab SPA + API on
+# :8078), independent of the workbench — handy for a SimLab-only deployment. It
+# rebuilds the Rust engine if changed, frees the port, builds the SPA, serves.
+
+SIM_PORT := "8078"
+# Bind address for the SimLab server; this machine only unless overridden.
+SIM_HOST := env("STS2_HOST", "127.0.0.1")
+
+# Run a SimLab sweep, e.g.: just sim --name demo --encounter MAWLER_NORMAL --seeds 1000
+sim *ARGS: _sim-engine-fresh
+    PYTHONPATH=python {{venv_python}} -m simlab run {{ARGS}}
+
+# SimLab perf bench vs the design budget
+sim-bench: _sim-engine-fresh
+    PYTHONPATH=python {{venv_python}} -m simlab bench
+
+# Start the SimLab web UI on :8078 — rebuilds engine if changed, frees port, builds SPA, serves.
+sim-ui: _sim-engine-fresh _web-deps
+    -fuser -k {{SIM_PORT}}/tcp 2>/dev/null
+    @sleep 1
+    cd web && npm run build
+    PYTHONPATH=python {{venv_python}} -m uvicorn simlab.web.app:app --host {{SIM_HOST}} --port {{SIM_PORT}}
+
+# SimLab backend only on :8078 (no SPA build) — fast engine-dev loop; pair with `just workbench-web`.
+sim-api: _sim-engine-fresh
+    -fuser -k {{SIM_PORT}}/tcp 2>/dev/null
+    @sleep 1
+    PYTHONPATH=python {{venv_python}} -m uvicorn simlab.web.app:app --host {{SIM_HOST}} --port {{SIM_PORT}}
+
+# Force-rebuild the sts2_rs engine wheel into .venv (after editing ../sts2-rs).
+# Uses maturin via wheel-venv.sh (real recompile + post-build freshness gate),
+# NOT `uv sync --reinstall-package`: uv keys the editable build by the pinned
+# version (0.0.1, never bumped), so it reinstalls a STALE CACHED wheel across
+# commits and silently serves an outdated engine (the recurring stale-wheel bug).
+sim-engine:
+    scripts/wheel-venv.sh build
+
+# Installs into this checkout's venv (main -> .venv, a worktree -> its own
+# .venv-h/<hash>). PPO training (`ppo.trainer`, `ppo.screen`) refuses any other
+# wheel. Runs ../sts2-rs/scripts/pgo_wheel.sh: plain build + 50-run identity
+# baseline, instrumented build, profile workload (5 characters x 8 seeds of PPO
+# full runs), optimized build, identity re-check. Measured 2026-10-13 on the
+# 48-thread dev host: 14.4 min end to end with the plain build already current
+# (instrumented build 5m51s, optimized build 3m56s, the three workloads ~4 min
+# at --jobs 10); after an engine edit add the plain fat-LTO build, 3m11s.
+# A no-op (~1 s) when a PGO wheel fresh for the current source is already
+# installed (WHEEL_VENV_REPLACE_PGO=1 forces a rebuild); `just sim-engine` and
+# the `_sim-engine-fresh` recipes keep such a wheel instead of downgrading it,
+# and so do `uv run` / `uv sync` until a file uv's cache-keys name changes after
+# the build started (the install writes the key taken before it:
+# scripts/uv_stamp_wheel.py; nothing re-keys it later). Run it after the gates.
+#
+# Build the PGO sts2_rs wheel PPO training requires (~15-18 min; no-op when fresh)
+[unix]
+sim-engine-pgo:
+    STS2_WHEEL_PGO=1 scripts/wheel-venv.sh build
+
+# pgo_wheel.sh is bash (Linux; macOS with bash >= 4.3). On Windows, train on the
+# plain wheel (`just sim-engine`) with the trainer's explicit opt-out.
+[windows]
+sim-engine-pgo:
+    @echo "sim-engine-pgo: the PGO build is bash-only. On Windows run 'just sim-engine', then train with --allow-plain-wheel (or STS2_ALLOW_PLAIN_WHEEL=1)."
+    @exit 1
+
+# Ensure the installed sts2_rs engine matches the source before serving.
+# Always goes through `wheel-venv.sh build` (maturin: a ~1s no-op when nothing
+# changed) which now self-VERIFIES freshness (build_git vs HEAD + .rmeta +
+# content probe) and self-heals a stale .so. The old `find -newer` mtime
+# fast-path was dropped: it is fooled by a fresh-mtime/STALE-CONTENT .so (e.g.
+# a `uv sync` reinstalling its cached 0.0.1 wheel from an old commit), which it
+# would wave through as "up to date". (Hidden helper; `_` prefix.)
+[unix]
+_sim-engine-fresh:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    scripts/wheel-venv.sh build >/dev/null
+
+# Windows (Git Bash): no per-worktree venvs; `uv sync` rebuilds sts2_rs into
+# .venv whenever the Rust sources changed (the cache-keys in sts2-py's pyproject).
+[windows]
+_sim-engine-fresh:
+    uv sync --quiet
+
+## Live advisor
+#
+# The mod's SimAdvisor.cmd runs the advisor through `uv run`, whose cache-keys
+# span the Rust workspace: after any `.rs`/`Cargo.*` edit the NEXT launch
+# compiles sts2_rs first (~14 min cold) before it can open a port or answer
+# anything. That build is adopted into the game's job object, so quitting the
+# game kills it and the following launch starts over — on 2026-08-22 three
+# launches in a row died that way and the advisor never once came up.
+#
+# Warming deliberately goes through `uv run` rather than `_sim-engine-fresh`:
+# the same path the advisor uses, so the artifact left installed is exactly the
+# one it will load — no maturin-vs-uv question about which build wins the venv.
+
+# Pre-build the Rust engine so the in-game advisor launches instantly
+advisor-warm:
+    uv run python -c "import sts2_rs; print('sts2_rs ready — src_hash', sts2_rs.src_hash())"
+
+## Misc
+
+# Remove caches and build artifacts
+clean:
+    @echo "🧹 Cleaning..."
+    find . -type d -name "__pycache__" -prune -exec rm -rf {} +
+    find . -type d -name ".pytest_cache" -prune -exec rm -rf {} +
+    find . -type d -name ".ruff_cache" -prune -exec rm -rf {} +
+    rm -rf src/Sts2Headless/bin src/Sts2Headless/obj
+    rm -rf src/GodotStubs/bin src/GodotStubs/obj
+
+# Format-check + lint + typecheck + deptry + tests
+check:
+    @just format-check
+    @just lint
+    @just typecheck
+    @just deptry
+    @just check-champions
+    @just test
+
+# Format-check + lint + typecheck + deptry + tests (full CI pipeline)
+#
+# Deliberately `format-check`, not `format`: a pipeline that reformats the tree
+# as a side effect of being run is not a gate, and it hands you a dirty working
+# copy mixing its reflow into your diff. If this fails, run `just format`.
+ci:
+    @just format-check
+    @just lint
+    @just typecheck
+    @just deptry
+    @just check-champions
+    @just test
+
+# Run pre-commit hooks on all files
+pre-commit:
+    uv run prek run --all-files
+
+# Generate/update CHANGELOG.md from git history
+changelog:
+    @echo "📝 Generating changelog..."
+    uv run git-cliff -o CHANGELOG.md
+
+# Upgrade all dependencies
+update-deps:
+    uv lock --upgrade
+
+# Refresh lockfile
+lock:
+    uv lock
+
+# Sync env with lockfile
+sync:
+    uv sync
+
+# Show project info
+info:
+    @echo "Project: sts2-pycli"
+    @uv run python --version 2>/dev/null || echo "Python:  uv not synced"
+    @echo "uv:      $(uv --version)"
+    @echo "Branch:  $(git branch --show-current)"
+
+# Show dependency tree
+deps:
+    uv tree
+
+## Browser workbench
+
+# The Rust `sts2-workbench` crate `include_str!`s a committed data bundle
+# (localization_eng copies + trimmed wiki manifests + art manifest) under
+# ../sts2-rs/crates/sts2-workbench/data/. The bundler is stdlib-only and needs
+# the sibling sts2-wiki checkout (data/v0.107.1 + site/public/images). One
+# bundle per game build (GH #801): the default v0.107.1 in data/game/, every
+# other build whose sources exist (localization_eng_<ver>/ + wiki data/<ver>/)
+# in data/game/<ver>/ — both recipes below build/check all of them.
+
+# Regenerate the sts2-workbench data bundle
+workbench-data:
+    @echo "📦 Bundling workbench data for sts2-workbench..."
+    uv run --no-project python scripts/bundle_workbench_data.py
+
+# Gate: fail if the committed bundle drifts from its sources
+check-workbench-data:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "📦 Checking workbench data bundle..."
+    tmp="$(mktemp -d)"
+    trap 'rm -rf "$tmp"' EXIT
+    uv run --no-project python scripts/bundle_workbench_data.py -o "$tmp" > /dev/null
+    if ! diff -r -q "$tmp" ../sts2-rs/crates/sts2-workbench/data; then
+        echo "ERROR: sts2-rs/crates/sts2-workbench/data is stale — run: just workbench-data" >&2
+        exit 1
+    fi
+    echo "✅ workbench data bundle is up to date"
+
+# Build the browser-only workbench into web/dist: the SPA with every /api/*
+# call routed to the Rust engine (WASM) in a Web Worker — no Python backend.
+# Depends on the wasm-bindgen package at web/src/wasm/pkg/ from `just wasm-build`
+# (that recipe is owned by the sts2-workbench-wasm crate; run it first).
+workbench-web-static: _web-deps
+    cd web && npm run build:static
+
+# Serve that static build (vite preview on 127.0.0.1:4173 — see the host note
+# in web/vite.config.ts) with the game art mounted from ../sts2-wiki when
+# VITE_ASSETS_BASE is unset — a browser check of the exact bundle. Runs vite
+# directly rather than `npm run preview:static`: npm scripts run under cmd.exe
+# on Windows, where the `VAR=value cmd` prefix does not parse.
+workbench-static-preview:
+    uv run --no-project python scripts/workbench_static.py preview
+
+# Golden HTTP fixtures of the PYTHON workbench server (the oracle) for the Rust
+# port's replay test: scripted play over tests/workbench/golden/scenarios/*.json,
+# every request + response hash recorded under
+# ../sts2-rs/crates/sts2-workbench/tests/golden/<scenario>/ (contract in the
+# script's docstring and that directory's README.md). Needs the sts2_rs wheel.
+
+# Re-record the workbench golden fixtures (full scenario matrix, ~minutes)
+workbench-golden-dump *args:
+    @echo "📼 Recording workbench golden fixtures..."
+    PYTHONPATH=python {{venv_python}} scripts/dump_workbench_golden.py {{args}}
+
+# Record the SimLab sweep golden (GH #707): the Python runner's rows + the
+# results payload for two small sweeps, replayed by the Rust port's
+# `sweep_parity` test. Re-dump after a change to simlab/{runner,specs,
+# telemetry,intel,agents}.py or to `_kde`.
+simlab-sweep-golden-dump *args:
+    @echo "📼 Recording the SimLab sweep golden..."
+    PYTHONPATH=python {{venv_python}} scripts/dump_simlab_sweep_golden.py {{args}}
+
+# Record the state-import combat-lane golden (GH #708): the Python adapter
+# chain's engine wire dict for every real SpireMentor capture under
+# tests/fixtures/realgame_adapter/, replayed by the Rust port's
+# `state_import_combat_parity` test. Re-dump after a change to
+# realgame_adapter.py, sts2_hint/{adapter,canonical_maps}.py or
+# workbench/state_import.py.
+state-import-golden-dump *args:
+    @echo "📼 Recording the state-import combat-lane golden..."
+    PYTHONPATH=python {{venv_python}} scripts/dump_state_import_golden.py {{args}}
+
+# Gate: re-dump into a temp dir and fail if the committed fixtures drifted
+workbench-golden-check:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "📼 Checking workbench golden fixtures..."
+    tmp="$(mktemp -d)"
+    trap 'rm -rf "$tmp"' EXIT
+    PYTHONPATH=python {{venv_python}} scripts/dump_workbench_golden.py --out "$tmp" > "$tmp.log" \
+        || { cat "$tmp.log"; echo "ERROR: golden dump failed" >&2; exit 1; }
+    # simlab_sweep.json / state_import_combat.json come from their own dump scripts.
+    if ! diff -r -q -x README.md -x simlab_sweep.json -x state_import_combat.json "$tmp" ../sts2-rs/crates/sts2-workbench/tests/golden; then
+        echo "ERROR: sts2-rs/crates/sts2-workbench/tests/golden drifted — run: just workbench-golden-dump" >&2
+        exit 1
+    fi
+    echo "✅ workbench golden fixtures are up to date"
+
+## Workbench MCTS-run inspection
+
+# Record an MCTS run from a .run-source fixture → workbench JSONL log
+record-fixture fixture sims="3000":
+    PYTHONPATH=python uv run python -m workbench.record --fixture {{fixture}} --sims {{sims}}
+
+# Render one recorded run as Markdown (agent-readable)
+report log:
+    PYTHONPATH=python uv run python -m workbench.report {{log}}
+
+# Aggregate loss patterns across a dir of recorded runs
+aggregate logs_dir:
+    PYTHONPATH=python uv run python -m workbench.aggregate {{logs_dir}}
+
+## Browser workbench (wasm)
+#
+# The workbench's engine-facing layer is `../sts2-rs/crates/sts2-workbench`
+# (a plain Rust port of python/workbench); `sts2-workbench-wasm` is its
+# wasm-bindgen shell. `wasm-build` compiles it and drops the `--target web`
+# bundle into web/src/wasm/pkg (gitignored); `workbench-static` then builds
+# the SPA in static mode (no backend: every /api/* call goes to the worker).
+
+# Pin the CLI to the wasm-bindgen crate version in Cargo.lock: the two MUST
+# match or wasm-bindgen refuses the artifact.
+wasm_bindgen_version := `grep -A1 'name = "wasm-bindgen"' ../sts2-rs/Cargo.lock | grep version | head -1 | cut -d'"' -f2`
+
+# Type-check the wasm graph (no linking). The M1 graph must build for
+# wasm32-unknown-unknown; sts2-mcts/sts2-runai are checked with default
+# features off (tract-onnx / rayon gated) for the later advisor milestones.
+wasm-check:
+    cd ../sts2-rs && cargo check --target wasm32-unknown-unknown -p sts2-workbench-wasm
+    cd ../sts2-rs && cargo check --target wasm32-unknown-unknown -p sts2-mcts -p sts2-runai --no-default-features
+
+# Build the wasm bundle into web/src/wasm/pkg (needs `cargo install
+# wasm-bindgen-cli --version <lock version>`; wasm-opt is used if present).
+wasm-build:
+    uv run --no-project python scripts/workbench_static.py wasm
+
+# Stamped into the static build as VITE_BUILD_ID: the cache-buster on the VFX
+# manifest fetched from the immutable art bucket (src/effects/manifest.ts,
+# bindings.ts) and the service worker's shell-cache name (public/sw.js via
+# vite.config.ts). `-dirty` when the tree has uncommitted changes; `local` in
+# a checkout with no commits yet (a fresh public export). Defined here, not in
+# deploy/justfile, because `workbench-static` uses it and deploy/ never ships
+# in the public export. Override: VITE_BUILD_ID=x just deploy-static-cf.
+wb_build_id := env_var_or_default("VITE_BUILD_ID", `git describe --always --dirty --abbrev=12 --exclude '*' 2>/dev/null || echo local`)
+
+# Full static build: wasm bundle + SPA in static mode -> web/dist, with the
+# art tree inside it (`_art-into-dist`). The art is served same-origin from
+# /assets — Cloudflare Pages serves it, whereas the GCS
+# bucket bills its downloads to the project and went dark (403
+# UserProjectAccountProblem) the day the project's billing was detached
+# (2026-09-02). Set VITE_ASSETS_BASE=https://… to build against a hosted art
+# origin instead (then dist carries no art). VITE_BUILD_ID (see the static
+# site deploy section) names the service worker's shell cache and busts the VFX manifest
+# cache.
+workbench-static:
+    VITE_BUILD_ID="{{wb_build_id}}" uv run --no-project python scripts/workbench_static.py build
+
+# Put the sibling wiki's art tree into web/dist/assets — images at /assets,
+# audio at /assets/audio (the layout the dev mount and the bucket use), every
+# PNG shipped as WebP under its .png name (scripts/art_to_dist.py: why, the
+# lossless folders, the encode cache in web/.art-cache) — and refuse to
+# continue unless every file of the art manifest is there. Vite empties dist
+# on every build, so this runs after it. Needs `cwebp` (libwebp).
+_art-into-dist:
+    uv run --no-project python scripts/workbench_static.py art
+
+# Browser-only end-to-end (Playwright against `vite preview` of the static
+# build; no Python backend). Build first: `just workbench-static`.
+e2e-static:
+    cd web && npx playwright test -c playwright.static.config.ts

@@ -1,0 +1,8 @@
+{
+  "class_name": "LavaLamp",
+  "title": "Lava Lamp",
+  "rarity": "Shop",
+  "description": "At the end of combat, [gold]Upgrade[/gold] all card rewards if you took no damage.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Tracks unblocked damage taken during combat. If the player takes no unblocked damage during a combat, all upgradable card rewards at the end of combat are upgraded. Unblockable damage does not count toward triggering the condition."
+}

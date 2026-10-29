@@ -1,0 +1,9 @@
+{
+  "class_name": "TemporaryFocusPower",
+  "title": "Temporary Focus",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Gain [gold]Focus[/gold] until the end of this turn.",
+  "smart_description": "Gain [blue]{Amount}[/blue] [gold]Focus[/gold] until the end of this turn.",
+  "notes": "Abstract power class that applies temporary Focus (bonus to spell damage scaling) via the underlying FocusPower. The temporary bonus expires at the end of the current turn. Can be subclassed to create debuff versions that reduce Focus. Has special handling to prevent reapplication when copied by Misery."
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "ThieveryPower",
+  "title": "Thievery",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Steals [gold]Gold[/gold] when Attacking.",
+  "smart_description": "Steals [blue]stacks[/blue] [gold]Gold[/gold] when Attacking.",
+  "notes": "The counter value represents the amount of gold stolen per attack. The actual amount stolen is the minimum of the counter value and the target's available gold."
+}

@@ -1,0 +1,495 @@
+{
+ "details": [],
+ "error": null,
+ "label": "Map → (1,4)",
+ "step": {
+  "action_label": "",
+  "assets_base": "https://assets.test",
+  "chosen_action": null,
+  "decision": "shop",
+  "idx": 0,
+  "meta": {
+   "act": 1,
+   "act_name": "Overgrowth",
+   "bg_col": 1,
+   "bg_row": 4,
+   "bg_seed": 1,
+   "floor": 4,
+   "step_no": 0,
+   "turn": null
+  },
+  "pv": null,
+  "scores": [],
+  "source": "live",
+  "state": {
+   "act": 1,
+   "act1": "overgrowth",
+   "act_name": "Overgrowth",
+   "ascension": 0,
+   "bg_col": 1,
+   "bg_row": 4,
+   "bg_seed": 1,
+   "card_removal_cost": 75,
+   "cards": [
+    {
+     "card_cost": 1,
+     "color": "red",
+     "cost": 49,
+     "description": "Deal damage equal to your Block.",
+     "description_rich": "Deal damage equal to your [gold]Block[/gold].",
+     "id": "BODY_SLAM",
+     "image": "https://assets.test/card_atlas/ironclad/body_slam.png",
+     "index": 0,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Body Slam",
+     "on_sale": false,
+     "rarity": "Common",
+     "type": "Attack"
+    },
+    {
+     "card_cost": 1,
+     "color": "red",
+     "cost": 74,
+     "description": "Deal 6 damage.\nDeals 3 additional damage for each card in your Exhaust Pile.",
+     "description_rich": "Deal 6 damage.\nDeals 3 additional damage for each card in your Exhaust Pile.",
+     "id": "ASHEN_STRIKE",
+     "image": "https://assets.test/card_atlas/ironclad/ashen_strike.png",
+     "index": 1,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Ashen Strike",
+     "on_sale": false,
+     "rarity": "Uncommon",
+     "type": "Attack"
+    },
+    {
+     "card_cost": 1,
+     "color": "red",
+     "cost": 25,
+     "description": "Gain 8 Block.\nDraw 1 card.",
+     "description_rich": "Gain 8 Block.\nDraw 1 card.",
+     "id": "SHRUG_IT_OFF",
+     "image": "https://assets.test/card_atlas/ironclad/shrug_it_off.png",
+     "index": 2,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Shrug It Off",
+     "on_sale": true,
+     "rarity": "Common",
+     "type": "Skill"
+    },
+    {
+     "card_cost": 1,
+     "color": "red",
+     "cost": 50,
+     "description": "Gain 7 Block.\nExhaust 1 card at random.",
+     "description_rich": "Gain 7 Block.\nExhaust 1 card at random.",
+     "id": "TRUE_GRIT",
+     "image": "https://assets.test/card_atlas/ironclad/true_grit.png",
+     "index": 3,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "True Grit",
+     "on_sale": false,
+     "rarity": "Common",
+     "type": "Skill"
+    },
+    {
+     "card_cost": 1,
+     "color": "red",
+     "cost": 77,
+     "description": "Gain 2 Strength.",
+     "description_rich": "Gain 2 Strength.",
+     "id": "INFLAME",
+     "image": "https://assets.test/card_atlas/ironclad/inflame.png",
+     "index": 4,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Inflame",
+     "on_sale": false,
+     "rarity": "Uncommon",
+     "type": "Power"
+    },
+    {
+     "card_cost": 1,
+     "color": "colorless",
+     "cost": 90,
+     "description": "Deal 14 damage.",
+     "description_rich": "Deal 14 damage.",
+     "id": "ULTIMATE_STRIKE",
+     "image": "https://assets.test/card_atlas/colorless/ultimate_strike.png",
+     "index": 5,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Ultimate Strike",
+     "on_sale": false,
+     "rarity": "Uncommon",
+     "type": "Attack"
+    },
+    {
+     "card_cost": 3,
+     "color": "colorless",
+     "cost": 166,
+     "description": "At the start of your turn, deal 5 damage to ALL enemies and increase this damage by 5.",
+     "description_rich": "At the start of your turn, deal 5 damage to ALL enemies and increase this damage by 5.",
+     "id": "ROLLING_BOULDER",
+     "image": "https://assets.test/card_atlas/colorless/rolling_boulder.png",
+     "index": 6,
+     "is_available": true,
+     "is_stocked": false,
+     "name": "Rolling Boulder",
+     "on_sale": false,
+     "rarity": "Rare",
+     "type": "Power"
+    }
+   ],
+   "decision": "shop",
+   "floor": 4,
+   "options": [
+    {
+     "action": "buy_card",
+     "args": {
+      "card_index": 0
+     },
+     "enabled": true,
+     "label": "Buy BODY_SLAM.title (49g)"
+    },
+    {
+     "action": "buy_card",
+     "args": {
+      "card_index": 1
+     },
+     "enabled": true,
+     "label": "Buy ASHEN_STRIKE.title (74g)"
+    },
+    {
+     "action": "buy_card",
+     "args": {
+      "card_index": 2
+     },
+     "enabled": true,
+     "label": "Buy SHRUG_IT_OFF.title (25g)"
+    },
+    {
+     "action": "buy_card",
+     "args": {
+      "card_index": 3
+     },
+     "enabled": true,
+     "label": "Buy TRUE_GRIT.title (50g)"
+    },
+    {
+     "action": "buy_card",
+     "args": {
+      "card_index": 4
+     },
+     "enabled": true,
+     "label": "Buy INFLAME.title (77g)"
+    },
+    {
+     "action": "buy_card",
+     "args": {
+      "card_index": 5
+     },
+     "enabled": true,
+     "label": "Buy ULTIMATE_STRIKE.title (90g)"
+    },
+    {
+     "action": "buy_potion",
+     "args": {
+      "potion_index": 0
+     },
+     "enabled": true,
+     "label": "Buy DISTILLED_CHAOS.title (100g)"
+    },
+    {
+     "action": "buy_potion",
+     "args": {
+      "potion_index": 1
+     },
+     "enabled": true,
+     "label": "Buy FRUIT_JUICE.title (100g)"
+    },
+    {
+     "action": "buy_potion",
+     "args": {
+      "potion_index": 2
+     },
+     "enabled": true,
+     "label": "Buy VULNERABLE_POTION.title (50g)"
+    },
+    {
+     "action": "remove_card",
+     "args": {},
+     "enabled": true,
+     "label": "Remove a card (75g)"
+    },
+    {
+     "action": "leave_room",
+     "args": {},
+     "enabled": true,
+     "label": "Leave shop"
+    }
+   ],
+   "player": {
+    "block": 0,
+    "deck": [
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Deal 6 damage.",
+      "description_rich": "Deal 6 damage.",
+      "id": "STRIKE_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/strike_ironclad.png",
+      "index": 0,
+      "name": "Strike",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Deal 6 damage.",
+      "description_rich": "Deal 6 damage.",
+      "id": "STRIKE_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/strike_ironclad.png",
+      "index": 1,
+      "name": "Strike",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Deal 6 damage.",
+      "description_rich": "Deal 6 damage.",
+      "id": "STRIKE_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/strike_ironclad.png",
+      "index": 2,
+      "name": "Strike",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Deal 6 damage.",
+      "description_rich": "Deal 6 damage.",
+      "id": "STRIKE_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/strike_ironclad.png",
+      "index": 3,
+      "name": "Strike",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Deal 6 damage.",
+      "description_rich": "Deal 6 damage.",
+      "id": "STRIKE_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/strike_ironclad.png",
+      "index": 4,
+      "name": "Strike",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Gain 5 Block.",
+      "description_rich": "Gain 5 Block.",
+      "id": "DEFEND_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/defend_ironclad.png",
+      "index": 5,
+      "name": "Defend",
+      "rarity": "Basic",
+      "type": "Skill",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Gain 5 Block.",
+      "description_rich": "Gain 5 Block.",
+      "id": "DEFEND_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/defend_ironclad.png",
+      "index": 6,
+      "name": "Defend",
+      "rarity": "Basic",
+      "type": "Skill",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Gain 5 Block.",
+      "description_rich": "Gain 5 Block.",
+      "id": "DEFEND_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/defend_ironclad.png",
+      "index": 7,
+      "name": "Defend",
+      "rarity": "Basic",
+      "type": "Skill",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Gain 5 Block.",
+      "description_rich": "Gain 5 Block.",
+      "id": "DEFEND_IRONCLAD",
+      "image": "https://assets.test/card_atlas/ironclad/defend_ironclad.png",
+      "index": 8,
+      "name": "Defend",
+      "rarity": "Basic",
+      "type": "Skill",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 2,
+      "description": "Deal 8 damage.\nApply 2 Vulnerable.",
+      "description_rich": "Deal 8 damage.\nApply 2 Vulnerable.",
+      "id": "BASH",
+      "image": "https://assets.test/card_atlas/ironclad/bash.png",
+      "index": 9,
+      "name": "Bash",
+      "rarity": "Basic",
+      "type": "Attack",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 2,
+      "description": "Lose 2 HP.\nGain 16 Block.",
+      "description_rich": "Lose 2 HP.\nGain 16 Block.",
+      "id": "BLOOD_WALL",
+      "image": "https://assets.test/card_atlas/ironclad/blood_wall.png",
+      "index": 10,
+      "name": "Blood Wall",
+      "rarity": "Common",
+      "type": "Skill",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 2,
+      "description": "Gain 12 Block.\nWhenever you are attacked this turn, deal 4 damage back.",
+      "description_rich": "Gain 12 Block.\nWhenever you are attacked this turn, deal 4 damage back.",
+      "id": "FLAME_BARRIER",
+      "image": "https://assets.test/card_atlas/ironclad/flame_barrier.png",
+      "index": 11,
+      "name": "Flame Barrier",
+      "rarity": "Uncommon",
+      "type": "Skill",
+      "upgraded": false
+     },
+     {
+      "color": "red",
+      "cost": 1,
+      "description": "Deal 9 damage.\nPut a card from your Discard Pile on top of your Draw Pile.",
+      "description_rich": "Deal 9 damage.\nPut a card from your Discard Pile on top of your Draw Pile.",
+      "id": "HEADBUTT",
+      "image": "https://assets.test/card_atlas/ironclad/headbutt.png",
+      "index": 12,
+      "name": "Headbutt",
+      "rarity": "Common",
+      "type": "Attack",
+      "upgraded": false
+     }
+    ],
+    "gold": 130,
+    "hp": 55,
+    "max_hp": 80,
+    "name": "Ironclad",
+    "potion_slots": 3,
+    "potions": [],
+    "relics": [
+     {
+      "description": "At the end of combat, heal 6 HP.",
+      "id": "BURNING_BLOOD",
+      "image": "https://assets.test/relic_atlas/burning_blood.png",
+      "name": "Burning Blood"
+     },
+     {
+      "description": "At the start of Elite combats, draw 2 additional cards and gain 1 Energy.",
+      "id": "BOOMING_CONCH",
+      "image": "https://assets.test/relic_atlas/booming_conch.png",
+      "name": "Booming Conch"
+     }
+    ]
+   },
+   "potions": [
+    {
+     "cost": 100,
+     "description": "Play the top 3 cards of your Draw Pile.",
+     "id": "DISTILLED_CHAOS",
+     "image": "https://assets.test/potion_atlas/distilled_chaos.png",
+     "index": 0,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Distilled Chaos"
+    },
+    {
+     "cost": 100,
+     "description": "Gain 5 Max HP.",
+     "id": "FRUIT_JUICE",
+     "image": "https://assets.test/potion_atlas/fruit_juice.png",
+     "index": 1,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Fruit Juice"
+    },
+    {
+     "cost": 50,
+     "description": "Apply 3 Vulnerable.",
+     "id": "VULNERABLE_POTION",
+     "image": "https://assets.test/potion_atlas/vulnerable_potion.png",
+     "index": 2,
+     "is_available": true,
+     "is_stocked": true,
+     "name": "Vulnerable Potion"
+    }
+   ],
+   "relics": [
+    {
+     "cost": 176,
+     "description": "At the start of each combat, apply 1 Weak to ALL enemies.",
+     "id": "RED_MASK",
+     "image": "https://assets.test/relic_atlas/red_mask.png",
+     "index": 0,
+     "is_available": true,
+     "is_stocked": false,
+     "name": "Red Mask"
+    },
+    {
+     "cost": 311,
+     "description": "At the start of each combat, discard any number of cards then draw that many.",
+     "id": "GAMBLING_CHIP",
+     "image": "https://assets.test/relic_atlas/gambling_chip.png",
+     "index": 1,
+     "is_available": true,
+     "is_stocked": false,
+     "name": "Gambling Chip"
+    },
+    {
+     "cost": 180,
+     "description": "While you have no potions, you have 2 additional Dexterity.",
+     "id": "BELT_BUCKLE",
+     "image": "https://assets.test/relic_atlas/belt_buckle.png",
+     "index": 2,
+     "is_available": true,
+     "is_stocked": false,
+     "name": "Belt Buckle"
+    }
+   ]
+  }
+ }
+}

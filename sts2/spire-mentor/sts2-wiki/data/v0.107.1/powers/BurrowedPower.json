@@ -1,0 +1,9 @@
+{
+  "class_name": "BurrowedPower",
+  "title": "Burrowed",
+  "power_type": "Buff",
+  "stack_type": "Single",
+  "description": "[gold]Block[/gold] is not removed at the start of this creature's turn. [gold]Stunned[/gold] if all [gold]Block[/gold] is removed.",
+  "smart_description": "[gold]Block[/gold] is not removed at the start of [gold]{OwnerName}[/gold]'s turn. [gold]Stunned[/gold] if all [gold]Block[/gold] is removed.",
+  "notes": "Burrowed is a single-instance buff used by the Tunneler monster. It prevents block removal at turn start, but if all block is broken, the creature becomes Stunned. The smart description includes the creature's name for better readability in-game. When the power is removed or block is fully broken, all remaining block is lost."
+}

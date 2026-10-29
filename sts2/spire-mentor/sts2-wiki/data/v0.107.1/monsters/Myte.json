@@ -1,0 +1,55 @@
+{
+  "class_name": "Myte",
+  "title": "Myte",
+  "min_hp": 64,
+  "max_hp": 69,
+  "min_hp_base": 61,
+  "max_hp_base": 67,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "TOXIC_MOVE",
+      "title": "Toxic Cornucopia",
+      "intents": [
+        {
+          "type": "status",
+          "amount": 2
+        }
+      ],
+      "effects": ["Add 2 Toxic to hand"]
+    },
+    {
+      "id": "BITE_MOVE",
+      "title": "Bite",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 15,
+          "damage_base": 13,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 15/13 damage"]
+    },
+    {
+      "id": "SUCK_MOVE",
+      "title": "Suck",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 6,
+          "damage_base": 4,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Deal 6/4 damage", "Apply 3/2 Strength"]
+    }
+  ],
+  "move_pattern": "Cycles through Toxic Cornucopia → Bite → Suck. In first slot starts with Toxic Cornucopia; in second slot starts with Suck.",
+  "powers_on_spawn": [],
+  "notes": "Myte gains Strength each time it uses Suck, making it a threat that increases in power over time. The Toxic Cornucopia attack fills the player's hand with useless cards, forcing discard decisions."
+}

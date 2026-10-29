@@ -1,0 +1,21 @@
+{
+  "class_name": "CompileDriver",
+  "title": "Compile Driver",
+  "character": "Defect",
+  "energy_cost": 1,
+  "type": "Attack",
+  "rarity": "Common",
+  "target": "Single",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 7,
+      "upgraded_value": 10
+    }
+  ],
+  "description": "Deal 7 damage. Draw 1 card for each unique Orb you have.",
+  "upgraded_description": "Deal 10 damage. Draw 1 card for each unique Orb you have.",
+  "x_cost": false,
+  "notes": "The number of cards drawn equals the count of unique Orbs currently in your Orb Queue. This makes the card scale with Orb generation."
+}

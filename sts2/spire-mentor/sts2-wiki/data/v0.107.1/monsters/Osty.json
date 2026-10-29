@@ -1,0 +1,18 @@
+{
+  "class_name": "Osty",
+  "title": "Osty",
+  "min_hp": 1,
+  "max_hp": 1,
+  "is_companion": true,
+  "moves": [
+    {
+      "id": "NOTHING_MOVE",
+      "title": "Nothing",
+      "intents": [],
+      "effects": []
+    }
+  ],
+  "move_pattern": "Repeats Nothing indefinitely (no-op move)",
+  "powers_on_spawn": [],
+  "notes": "Osty is a companion creature that provides no active contribution to combat. The creature loops a no-op move with no intents or effects. Health bar only appears while alive. Can be revived after death."
+}

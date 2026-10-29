@@ -1,0 +1,9 @@
+{
+  "class_name": "HellraiserPower",
+  "title": "Hellraiser",
+  "power_type": "Buff",
+  "stack_type": "Single",
+  "description": "Whenever you draw a card containing \"Strike\", it is played against a random enemy.",
+  "smart_description": "Whenever you draw a card containing \"Strike\", it is played against a random enemy.",
+  "notes": "Auto-plays are capped at 9 per turn when all enemies have infinite HP. If any enemy has finite HP, the counter resets. Automatically selects a random enemy as the target."
+}

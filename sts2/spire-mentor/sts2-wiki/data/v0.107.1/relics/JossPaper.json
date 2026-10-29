@@ -1,0 +1,8 @@
+{
+  "class_name": "JossPaper",
+  "title": "Joss Paper",
+  "rarity": "Uncommon",
+  "description": "Every [blue]5[/blue] times you [gold]Exhaust[/gold] a card, draw [blue]1[/blue] card.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Tracks the number of exhausted cards and draws 1 card when the count reaches 5. The counter resets after drawing (any overflow carries to the next cycle). Ethereal cards exhausted at turn end are counted separately and processed together at the end of turn. Multiple thresholds can be crossed in a single turn, triggering multiple draws."
+}

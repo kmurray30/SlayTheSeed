@@ -1,0 +1,9 @@
+{
+  "class_name": "StarNextTurnPower",
+  "title": "Star Next Turn",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Gain 1 star next turn.",
+  "smart_description": "Gain [blue]X[/blue] stars next turn (where X equals the power's current stack).",
+  "notes": "At the start of your next turn, you gain stars equal to this power's stack intensity, then the power removes itself."
+}

@@ -1,0 +1,13 @@
+{
+  "class_name": "QueenBoss",
+  "title": "Queen",
+  "room_type": "Boss",
+  "is_weak": false,
+  "monsters": [
+    "Queen",
+    "TorchHeadAmalgam"
+  ],
+  "total_monsters": 2,
+  "tags": [],
+  "notes": "Final boss encounter with custom scene and special background. Features Queen and TorchHeadAmalgam in named slots with custom music (act3_boss_queen)."
+}

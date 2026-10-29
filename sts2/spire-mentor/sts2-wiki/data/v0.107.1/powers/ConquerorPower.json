@@ -1,0 +1,9 @@
+{
+  "class_name": "ConquerorPower",
+  "title": "Conqueror",
+  "power_type": "Debuff",
+  "stack_type": "Counter",
+  "description": "[gold]Sovereign Blade[/gold] deals double damage to the enemy this turn.",
+  "smart_description": "[gold]Sovereign Blade[/gold] deals double damage to [gold]{OwnerName}[/gold] {Amount:plural:this turn|for the next [blue]{}[/blue] turns}.",
+  "notes": "Applied by enemies. Decreases by 1 at the end of each enemy turn. When active, Sovereign Blade attacks deal double damage to the power owner."
+}

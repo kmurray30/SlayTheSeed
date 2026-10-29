@@ -1,0 +1,10 @@
+{
+  "class_name": "TestSubjectBoss",
+  "title": "Test Subject",
+  "room_type": "Boss",
+  "is_weak": false,
+  "monsters": ["TestSubject"],
+  "total_monsters": 1,
+  "tags": [],
+  "notes": "Boss encounter featuring the Test Subject. Uses custom Act 3 boss music (event:/music/act3_boss_test_subject) and custom background."
+}

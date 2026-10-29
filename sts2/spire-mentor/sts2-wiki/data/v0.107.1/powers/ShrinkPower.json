@@ -1,0 +1,9 @@
+{
+  "class_name": "ShrinkPower",
+  "title": "Shrink",
+  "power_type": "Debuff",
+  "stack_type": "Counter",
+  "description": "This creature's Attacks deal 30% less damage for the next 3 turns.",
+  "smart_description": "Attacks deal 30% less damage for {Amount} turn(s) while {ApplierName} remains.",
+  "notes": "Visually scales the affected creature to 50% of its normal size. Decrements by 1 each turn. Removes itself when the applier dies. Allows negative stacking (AllowNegative = true)."
+}

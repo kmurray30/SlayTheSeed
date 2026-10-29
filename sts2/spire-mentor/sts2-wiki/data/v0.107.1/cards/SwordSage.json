@@ -1,0 +1,27 @@
+{
+  "class_name": "SwordSage",
+  "title": "Sword Sage",
+  "character": "Regent",
+  "energy_cost": 2,
+  "type": "Power",
+  "rarity": "Rare",
+  "target": "Self",
+  "keywords": ["Replay"],
+  "vars": [
+    {
+      "type": "Magic",
+      "base_value": 1
+    }
+  ],
+  "description": "[gold]Sovereign Blade[/gold] gains [gold]Replay[/gold] +1.",
+  "upgraded_cost": 1,
+  "x_cost": false,
+  "referenced_powers": [
+    {
+      "class_name": "SwordSagePower",
+      "title": "Sword Sage",
+      "slug": "sword-sage"
+    }
+  ],
+  "notes": "Applies the Sword Sage power (a buff stack) to the player. Each stack grants Replay to Sovereign Blade cards—both those in hand and new ones that enter combat. Sovereign Blade is a 2-cost attack token that deals 10 damage and repeats based on Replay stacks."
+}

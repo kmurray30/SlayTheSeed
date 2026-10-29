@@ -1,0 +1,27 @@
+{
+  "class_name": "Calcify",
+  "title": "Calcify",
+  "character": "Colorless",
+  "energy_cost": 1,
+  "type": "Power",
+  "rarity": "Uncommon",
+  "target": "Self",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Magic",
+      "base_value": 4,
+      "upgraded_value": 6
+    }
+  ],
+  "description": "[gold]Osty's[/gold] attacks deal 4 additional damage.",
+  "x_cost": false,
+  "referenced_powers": [
+    {
+      "class_name": "CalcifyPower",
+      "title": "Calcify",
+      "slug": "calcify"
+    }
+  ],
+  "notes": "Grants a power that increases damage dealt by Osty (likely a specific character or enemy ability). The power stacks based on the number of times applied."
+}

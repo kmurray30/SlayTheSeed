@@ -1,0 +1,70 @@
+{
+  "class_name": "LouseProgenitor",
+  "title": "Louse Progenitor",
+  "min_hp": 138,
+  "min_hp_base": 134,
+  "max_hp": 141,
+  "max_hp_base": 136,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "WEB_CANNON_MOVE",
+      "title": "Web Cannon",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 10,
+          "damage_base": 9,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": [
+        "Deal 9/10 damage",
+        "Apply 2 Frail"
+      ]
+    },
+    {
+      "id": "CURL_AND_GROW_MOVE",
+      "title": "Curl and Grow",
+      "intents": [
+        {
+          "type": "block",
+          "amount": 18,
+          "amount_base": 14,
+          "ascension": 8
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Gain 14/18 Block",
+        "Apply 5 Strength"
+      ]
+    },
+    {
+      "id": "POUNCE_MOVE",
+      "title": "Pounce",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 16,
+          "damage_base": 14,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 14/16 damage"
+      ]
+    }
+  ],
+  "move_pattern": "Cycles: Web Cannon → Curl and Grow → Pounce",
+  "powers_on_spawn": [
+    "Curl Up"
+  ],
+  "notes": "Louse Progenitor starts Curled with Curl Up power (gains 14/18 Block at A8). When Curled, Web Cannon and Pounce attacks will uncurl the monster before executing their damage. This creates a defensive rhythm: the monster cycles between attacking (uncurled) and defending while applying Strength (curled). Strength amplifies damage during subsequent attacks once the defensive phase is over."
+}

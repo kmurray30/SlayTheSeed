@@ -1,0 +1,26 @@
+{
+  "class_name": "Monologue",
+  "title": "Monologue",
+  "character": "Regent",
+  "energy_cost": 0,
+  "type": "Skill",
+  "rarity": "Uncommon",
+  "target": "Self",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Strength",
+      "base_value": 1
+    }
+  ],
+  "description": "Whenever you play a card this turn, gain 1 [gold]Strength[/gold] this turn.",
+  "upgraded_cost": 0,
+  "notes": "Upgrade: Adds Retain keyword. MonologuePower grants Strength each time you play a card; accumulated Strength is removed at end of turn.",
+  "referenced_powers": [
+    {
+      "class_name": "MonologuePower",
+      "title": "Monologue",
+      "slug": "monologue-power"
+    }
+  ]
+}

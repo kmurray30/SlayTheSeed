@@ -1,0 +1,34 @@
+{
+  "class_name": "SnappingJaxfruit",
+  "title": "Snapping Jaxfruit",
+  "min_hp": 34,
+  "max_hp": 36,
+  "min_hp_base": 31,
+  "max_hp_base": 33,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "ENERGY_ORB_MOVE",
+      "title": "Energy Orb",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 4,
+          "damage_base": 3,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Deal 3/4 damage",
+        "Apply 2 Strength"
+      ]
+    }
+  ],
+  "move_pattern": "Repeats each turn: Energy Orb",
+  "powers_on_spawn": [],
+  "notes": "Applies Strength to itself each turn, increasing its damage output over time."
+}

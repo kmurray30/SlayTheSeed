@@ -1,0 +1,9 @@
+{
+  "class_name": "StableSerum",
+  "title": "Stable Serum",
+  "rarity": "Uncommon",
+  "usage": "Drink",
+  "target": "Self",
+  "description": "Retain your Hand for 2 turns.",
+  "notes": "Can only be used during combat. Applies the Retain Hand power effect."
+}

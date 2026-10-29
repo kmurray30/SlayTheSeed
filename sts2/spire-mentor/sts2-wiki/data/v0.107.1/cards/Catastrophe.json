@@ -1,0 +1,22 @@
+{
+  "class_name": "Catastrophe",
+  "title": "Catastrophe",
+  "character": "Colorless",
+  "energy_cost": 2,
+  "type": "Skill",
+  "rarity": "Uncommon",
+  "target": "Self",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Cards",
+      "base_value": 2,
+      "upgraded_value": 3
+    }
+  ],
+  "description": "Play 2 random cards from your [gold]Draw Pile[/gold].",
+  "upgraded_description": "Play 3 random cards from your [gold]Draw Pile[/gold].",
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "Cards are selected randomly from the Draw Pile. Unplayable cards are avoided if possible, but any card is selected if all remaining cards are Unplayable. Selected cards are auto-played in order."
+}

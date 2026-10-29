@@ -1,0 +1,79 @@
+{
+  "class_name": "TorchHeadAmalgam",
+  "title": "Torch Head Amalgam",
+  "min_hp": 211,
+  "max_hp": 211,
+  "min_hp_base": 199,
+  "max_hp_base": 199,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "TACKLE_MOVE",
+      "title": "Tackle",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 19,
+          "damage_base": 18,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 19/18 damage"]
+    },
+    {
+      "id": "TACKLE_2_MOVE",
+      "title": "Tackle",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 19,
+          "damage_base": 18,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 19/18 damage"]
+    },
+    {
+      "id": "BEAM_MOVE",
+      "title": "Beam",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 8,
+          "hits": 3
+        }
+      ],
+      "effects": ["Deal 8 damage", "3 hits"]
+    },
+    {
+      "id": "TACKLE_3_MOVE",
+      "title": "Weak Tackle",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 15,
+          "damage_base": 14,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 15/14 damage"]
+    },
+    {
+      "id": "TACKLE_4_MOVE",
+      "title": "Weak Tackle",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 15,
+          "damage_base": 14,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 15/14 damage"]
+    }
+  ],
+  "move_pattern": "Cycles: Tackle → Tackle → Beam → Weak Tackle → Weak Tackle → Beam",
+  "powers_on_spawn": ["Minion"],
+  "notes": "This monster applies the Minion power to itself when spawned, creating a minion enemy."
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "TrashToTreasurePower",
+  "title": "Trash to Treasure",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever you create a Status, [gold]Channel[/gold] [blue]1[/blue] random Orb.",
+  "smart_description": "Whenever you create a Status, [gold]Channel[/gold] [blue]X[/blue] random Orb(s), where X equals this power's stack count.",
+  "notes": "Triggers whenever the player creates a Status card. Channels a random Orb from the full orb pool. The stack amount determines how many Orbs are channeled per Status created."
+}

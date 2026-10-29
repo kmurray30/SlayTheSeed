@@ -1,0 +1,62 @@
+{
+  "class_name": "Fabricator",
+  "title": "Fabricator",
+  "min_hp": 155,
+  "max_hp": 155,
+  "min_hp_base": 150,
+  "max_hp_base": 150,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "FABRICATE_MOVE",
+      "title": "Fabricate",
+      "intents": [
+        {
+          "type": "summon"
+        }
+      ],
+      "effects": [
+        "Spawn defensive bot (Guardbot or Noisebot)",
+        "Spawn aggro bot (Zapbot or Stabbot)"
+      ]
+    },
+    {
+      "id": "FABRICATING_STRIKE_MOVE",
+      "title": "Fabricating Strike",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 21,
+          "damage_base": 18,
+          "ascension": 9
+        },
+        {
+          "type": "summon"
+        }
+      ],
+      "effects": [
+        "Deal 18/21 damage",
+        "Spawn aggro bot (Zapbot or Stabbot)"
+      ]
+    },
+    {
+      "id": "DISINTEGRATE_MOVE",
+      "title": "Disintegrate",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 13,
+          "damage_base": 11,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 11/13 damage"
+      ]
+    }
+  ],
+  "move_pattern": "Alternates each turn between spawning minions or dealing damage based on its current army size. While it has fewer than 4 alive teammates, it randomly uses Fabricate (spawns both defensive and aggro bots) or Fabricating Strike (deals damage and spawns aggro bot). Once it reaches 4 teammates, it switches to Disintegrate (damage only) and cannot spawn more minions.",
+  "powers_on_spawn": [],
+  "notes": "Fabricator summons minions to fight alongside it. It maintains two bot pools: defensive (Guardbot, Noisebot) and aggro (Zapbot, Stabbot). The same bot type is never spawned twice in a row—it alternates between options. Fabricator has a spawn cap of 4 alive minions; once reached, it stops spawning and uses Disintegrate until minions die. Minions inherit the Minion Power status. FABRICATING_STRIKE_MOVE is hidden from the Bestiary."
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "NoEnergyGainPower",
+  "title": "No Energy Gain",
+  "power_type": "Debuff",
+  "stack_type": "Single",
+  "description": "You cannot gain additional Energy this turn.",
+  "smart_description": "You cannot gain additional Energy this turn.",
+  "notes": "This debuff blocks all energy gain for its owner during the turn it is applied. It is automatically removed at the end of the turn."
+}

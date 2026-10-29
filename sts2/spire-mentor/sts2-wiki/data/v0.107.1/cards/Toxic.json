@@ -1,0 +1,18 @@
+{
+  "class_name": "Toxic",
+  "title": "Toxic",
+  "character": "Status",
+  "energy_cost": -2,
+  "type": "Status",
+  "rarity": "Status",
+  "target": "None",
+  "keywords": ["Exhaust"],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 5
+    }
+  ],
+  "description": "At the end of your turn, if this is in your [gold]Hand[/gold], take 5 damage.",
+  "notes": "This card has no upgrades (MaxUpgradeLevel: 0). It only triggers its passive damage effect while in your hand at the end of your turn. As a Status card, it cannot be played during combat."
+}

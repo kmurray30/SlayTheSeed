@@ -1,0 +1,21 @@
+{
+  "class_name": "ManifestAuthority",
+  "title": "Manifest Authority",
+  "character": "Colorless",
+  "energy_cost": 1,
+  "type": "Skill",
+  "rarity": "Uncommon",
+  "target": "Self",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Block",
+      "base_value": 7,
+      "upgraded_value": 8
+    }
+  ],
+  "description": "Gain 7 Block. Add 1 random Colorless card into your Hand.",
+  "upgraded_description": "Gain 8 Block. Add 1 random Upgraded Colorless card into your Hand.",
+  "referenced_powers": [],
+  "notes": "When upgraded, the randomly added Colorless card is automatically upgraded before being added to your hand."
+}

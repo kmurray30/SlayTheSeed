@@ -1,0 +1,8 @@
+{
+  "class_name": "HexPower",
+  "title": "Hex",
+  "power_type": "Debuff",
+  "stack_type": "Single",
+  "description": "While Spectral Knight is alive, ALL your cards are [gold]Ethereal[/gold].",
+  "notes": "Applies the Hexed affliction to all player cards when the power is first applied and when new cards enter combat. Grants the Ethereal keyword to any card with the Hexed affliction. Automatically removed when the Spectral Knight dies."
+}

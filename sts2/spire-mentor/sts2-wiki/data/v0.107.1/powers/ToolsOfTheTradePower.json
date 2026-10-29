@@ -1,0 +1,9 @@
+{
+  "class_name": "ToolsOfTheTradePower",
+  "title": "Tools of the Trade",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the start of your turn, draw [blue]1[/blue] card and discard [blue]1[/blue] card.",
+  "smart_description": "At the start of your turn, draw [blue]{Amount}[/blue] {Amount:plural:card|cards} and discard [blue]{Amount}[/blue] {Amount:plural:card|cards}.",
+  "notes": "Counter power that stacks. Each stack increases both the number of cards drawn and the number of cards you must select to discard at the start of your turn. The discard selection is interactive (you choose which cards to discard)."
+}

@@ -1,0 +1,8 @@
+{
+  "class_name": "DampenPower",
+  "title": "Dampen",
+  "power_type": "Debuff",
+  "stack_type": "None",
+  "description": "While Magi Knight is alive, ALL your cards are [gold]Downgraded[/gold].",
+  "notes": "Applied by Magi Knight. When this power is applied, all of your currently upgraded cards are downgraded. When the Magi Knight dies and this power is removed, all downgraded cards are restored to their original upgrade level."
+}

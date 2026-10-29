@@ -1,0 +1,26 @@
+{
+  "class_name": "GunkUp",
+  "title": "Gunk Up",
+  "character": "Colorless",
+  "energy_cost": 1,
+  "type": "Attack",
+  "rarity": "Common",
+  "target": "Single",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 4,
+      "upgraded_value": 5
+    },
+    {
+      "type": "Repeat",
+      "base_value": 3
+    }
+  ],
+  "description": "Deal 4 damage 3 times.\nAdd a [gold]Slimed[/gold] into your [gold]Discard Pile[/gold].",
+  "upgraded_description": "Deal 5 damage 3 times.\nAdd a [gold]Slimed[/gold] into your [gold]Discard Pile[/gold].",
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "Enemy attack that generates Slimed debuff cards. The Slimed cards are added to the player's discard pile, not the enemy's."
+}

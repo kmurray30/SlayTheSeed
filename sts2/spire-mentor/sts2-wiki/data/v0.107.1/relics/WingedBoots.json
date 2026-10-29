@@ -1,0 +1,9 @@
+{
+  "class_name": "WingedBoots",
+  "title": "Winged Boots",
+  "rarity": "Ancient",
+  "character": null,
+  "description": "You may ignore paths when choosing the next rooms to travel to [blue]3[/blue] times.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Counter-based relic that allows up to 3 instances of free travel (bypassing normal map adjacency). The counter decrements when you enter a room that is not directly connected to the previous room, indicating a non-standard path taken. Only available in single-player runs."
+}

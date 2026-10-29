@@ -1,0 +1,8 @@
+{
+  "class_name": "TheSealedThronePower",
+  "title": "The Sealed Throne",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever you play a card, gain 1 ⭐.",
+  "smart_description": "Whenever you play a card, gain [Amount] ⭐."
+}

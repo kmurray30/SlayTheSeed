@@ -1,0 +1,34 @@
+{
+  "class_name": "Offering",
+  "title": "Offering",
+  "character": "Colorless",
+  "energy_cost": 0,
+  "type": "Skill",
+  "rarity": "Rare",
+  "target": "Self",
+  "keywords": [
+    "Exhaust"
+  ],
+  "vars": [
+    {
+      "type": "HpLoss",
+      "base_value": 6
+    },
+    {
+      "type": "Energy",
+      "base_value": 2
+    },
+    {
+      "type": "Cards",
+      "base_value": 3,
+      "upgraded_value": 5
+    }
+  ],
+  "description": "Lose 6 HP.\nGain 2 Energy.\nDraw 3 cards.",
+  "upgraded_description": "Lose 6 HP.\nGain 2 Energy.\nDraw 5 cards.",
+  "upgraded_cost": null,
+  "x_cost": false,
+  "star_cost": null,
+  "referenced_powers": [],
+  "notes": "This card sacrifices health for energy and card draw. The upgrade increases cards drawn from 3 to 5."
+}

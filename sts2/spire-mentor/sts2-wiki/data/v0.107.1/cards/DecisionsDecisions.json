@@ -1,0 +1,26 @@
+{
+  "class_name": "DecisionsDecisions",
+  "title": "Decisions, Decisions",
+  "character": "Colorless",
+  "energy_cost": 0,
+  "type": "Skill",
+  "rarity": "Rare",
+  "target": "Self",
+  "keywords": ["Exhaust"],
+  "star_cost": 6,
+  "vars": [
+    {
+      "type": "Cards",
+      "base_value": 3,
+      "upgraded_value": 5
+    },
+    {
+      "type": "Repeat",
+      "base_value": 3
+    }
+  ],
+  "description": "Draw 3 cards.\nChoose a Skill in your [gold]Hand[/gold] and play it 3 times.",
+  "upgraded_description": "Draw 5 cards.\nChoose a Skill in your [gold]Hand[/gold] and play it 3 times.",
+  "x_cost": false,
+  "notes": "This card selects a Skill from hand with a filter for playable Skills (excludes Unplayable keyword). Selected Skill is automatically played the specified number of times."
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "HelloWorldPower",
+  "title": "Hello World",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the start of your turn, add random Common cards into your Hand.",
+  "smart_description": "At the start of your turn, add [blue]{Amount}[/blue] random Common {Amount:plural:card|cards} into your [gold]Hand[/gold].",
+  "notes": "This power triggers during the BeforeHandDraw phase. The stack counter determines how many cards are added each turn. At least 1 stack is required for the effect to trigger. Cards are randomly selected from your character's unlocked Common cards."
+}

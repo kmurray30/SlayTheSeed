@@ -1,0 +1,22 @@
+{
+  "class_name": "DeprecatedMonster",
+  "title": "Deprecated Monster",
+  "min_hp": 0,
+  "max_hp": 0,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "STUB",
+      "title": "Stub",
+      "intents": [
+        {
+          "type": "hidden"
+        }
+      ],
+      "effects": []
+    }
+  ],
+  "move_pattern": "Stub move loops indefinitely (no actual effect).",
+  "powers_on_spawn": [],
+  "notes": "This is a placeholder monster for removed creatures, primarily used in run history. It has 0 HP and does not perform any actual actions in combat."
+}

@@ -1,0 +1,83 @@
+{
+  "class_name": "InfestedPrism",
+  "title": "Infested Prism",
+  "min_hp": 171,
+  "max_hp": 171,
+  "min_hp_base": 161,
+  "max_hp_base": 161,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "JAB_MOVE",
+      "title": "Jab",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 17,
+          "damage_base": 15,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 15/17 damage"]
+    },
+    {
+      "id": "RADIATE_MOVE",
+      "title": "Radiate",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 13,
+          "damage_base": 11,
+          "ascension": 9
+        },
+        {
+          "type": "block",
+          "amount": 13,
+          "amount_base": 11,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 11/13 damage", "Gain 11/13 Block"]
+    },
+    {
+      "id": "WHIRLWIND_MOVE",
+      "title": "Whirlwind",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 6,
+          "damage_base": 5,
+          "hits": 3,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 5/6 damage", "3 hits"]
+    },
+    {
+      "id": "PULSATE_MOVE",
+      "title": "Pulsate",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 10,
+          "damage_base": 8,
+          "ascension": 9
+        },
+        {
+          "type": "buff"
+        },
+        {
+          "type": "block",
+          "amount": 22,
+          "amount_base": 20,
+          "ascension": 8
+        }
+      ],
+      "effects": ["Deal 8/10 damage", "Gain 20/22 Block", "Apply 2/3 Vital Spark"]
+    }
+  ],
+  "move_pattern": "Cycles: Jab → Radiate → Whirlwind → Pulsate",
+  "powers_on_spawn": ["Vital Spark (2/3)"],
+  "notes": "Starts combat with 2/3 stacks of Vital Spark and gains additional stacks each time it uses Pulsate. Vital Spark is an enemy power that persists throughout the fight, with the Pulsate move being its primary method of accumulation."
+}

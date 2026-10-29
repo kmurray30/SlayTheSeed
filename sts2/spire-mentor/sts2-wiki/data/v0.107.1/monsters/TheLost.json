@@ -1,0 +1,50 @@
+{
+  "class_name": "TheLost",
+  "title": "The Lost",
+  "min_hp": 99,
+  "min_hp_base": 93,
+  "hp_ascension": 8,
+  "max_hp": 99,
+  "max_hp_base": 93,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "DEBILITATING_SMOG",
+      "title": "Debilitating Smog",
+      "intents": [
+        {
+          "type": "debuff"
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Steal 2 Strength",
+        "Gain 2 Strength"
+      ]
+    },
+    {
+      "id": "EYE_LASERS",
+      "title": "Eye Lasers",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 5,
+          "damage_base": 4,
+          "hits": 2,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 4/5 damage",
+        "2 hits"
+      ]
+    }
+  ],
+  "move_pattern": "Alternates: Debilitating Smog → Eye Lasers",
+  "powers_on_spawn": [
+    "Possess Strength"
+  ],
+  "notes": "Applies Possess Strength on spawn. Debilitating Smog steals 2 Strength from the player and grants 2 Strength to the monster. Eye Lasers deals scaling damage (A9) in 2 hits."
+}

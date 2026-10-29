@@ -1,0 +1,9 @@
+{
+  "class_name": "SelfFormingClayPower",
+  "title": "Self-Forming Clay",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Gain [blue]3[/blue] [gold]Block[/gold] next turn.",
+  "smart_description": "Gain [blue]3[/blue] [gold]Block[/gold] next turn.",
+  "notes": "Triggers when block is cleared on your turn, granting block equal to the power's amount before removing itself."
+}

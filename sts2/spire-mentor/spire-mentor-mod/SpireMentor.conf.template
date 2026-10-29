@@ -1,0 +1,22 @@
+{
+  "_readme": "Defaults for a PLAYER install: the AI coach (Advisor mode) switches on when the game starts and never plays for you unless you ask (F8 turns it off; untick 'Turn the coach on when the game starts' in the mod settings to keep it off). Set auto_start to true only if you want the AI to play whole runs by itself.",
+  "_pause_on": "Where F7 (AI plays until you stop) hands the game back to you. 'unsupported' = every decision the AI has no real policy for (e.g. the Crystal Sphere). Add event ids to always play those yourself, e.g. \"unsupported, Neow\". Set to \"\" to never pause.",
+  "pause_on": "unsupported",
+  "port": 9002,
+  "auto_start": false,
+  "advisor_autoplay": false,
+  "speed_patches": true,
+  "fast_mode": "normal",
+  "time_scale": 1.0,
+  "character": "Ironclad",
+  "ascension": 0,
+  "seed": null,
+  "num_runs": 1,
+  "agent_timeout_seconds": 0,
+  "client_run_config": false,
+  "debug_player_hp": 0,
+  "overlay": true,
+  "stall_timeout_seconds": 300,
+  "think_fps": 10,
+  "run_timeout_minutes": 360
+}

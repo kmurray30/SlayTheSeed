@@ -1,0 +1,8 @@
+{
+  "class_name": "BeautifulBracelet",
+  "title": "Beautiful Bracelet",
+  "rarity": "Ancient",
+  "description": "Upon pickup, choose [blue]3[/blue] cards in your [gold]Deck[/gold]. [gold]Enchant[/gold] them with [purple]Swift[/purple] [blue]3[/blue].",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Opens an interactive deck selection on pickup. You must select exactly 3 cards to enchant with Swift 3. The enchantment permanently modifies the selected cards."
+}

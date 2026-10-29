@@ -1,0 +1,22 @@
+{
+  "class_name": "BattleFriendV2",
+  "title": "Battle Friend V2.0",
+  "min_hp": 150,
+  "max_hp": 150,
+  "is_companion": true,
+  "moves": [
+    {
+      "id": "NOTHING_MOVE",
+      "title": "Nothing",
+      "intents": [],
+      "effects": [
+        "Does nothing"
+      ]
+    }
+  ],
+  "move_pattern": "Uses Nothing only. The move loops indefinitely.",
+  "powers_on_spawn": [
+    "BattlewornDummyTimeLimitPower (3)"
+  ],
+  "notes": "A companion monster that takes no actions in combat. It enters with a time limit power that will remove it after a certain number of turns."
+}

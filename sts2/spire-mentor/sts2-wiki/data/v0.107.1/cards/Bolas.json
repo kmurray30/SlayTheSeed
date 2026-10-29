@@ -1,0 +1,24 @@
+{
+  "class_name": "Bolas",
+  "title": "Bolas",
+  "character": "Colorless",
+  "energy_cost": 0,
+  "type": "Attack",
+  "rarity": "Rare",
+  "target": "Single",
+  "keywords": [
+    "Replay"
+  ],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 3,
+      "upgraded_value": 4
+    }
+  ],
+  "description": "Deal 3 damage.\nAt the start of your next turn, return this to your [gold]Hand[/gold].",
+  "upgraded_description": "Deal 4 damage.\nAt the start of your next turn, return this to your [gold]Hand[/gold].",
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "Returns to hand at the start of the next turn through built-in Replay mechanic. The upgrade increases damage by 1 (3→4)."
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "InfernoPower",
+  "title": "Inferno",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the start of your turn, lose [blue]1[/blue] HP. Whenever you lose HP on your turn, deal [blue]4[/blue] damage to ALL enemies.",
+  "smart_description": "At the start of your turn, lose [blue]{SelfDamage}[/blue] HP. Whenever you lose HP on your turn, deal [blue]{Amount}[/blue] damage to ALL enemies.",
+  "notes": "This is a scaling buff power. The SelfDamage amount (shown as 1 in the base description) can be incremented, increasing the self-damage cost each turn while maintaining the same damage output to enemies. Both the self-damage and enemy damage are applied as unblockable damage."
+}

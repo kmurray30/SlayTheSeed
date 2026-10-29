@@ -1,0 +1,21 @@
+{
+  "class_name": "MindBlast",
+  "title": "Mind Blast",
+  "character": "Ironclad",
+  "energy_cost": 1,
+  "type": "Attack",
+  "rarity": "Uncommon",
+  "target": "Single",
+  "keywords": ["Innate"],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 1
+    }
+  ],
+  "description": "Deal damage equal to the number of cards in your [gold]Draw Pile[/gold].",
+  "upgraded_cost": 0,
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "Damage is calculated dynamically as 1 × (number of cards in your Draw Pile). The in-combat info popup displays the computed damage value."
+}

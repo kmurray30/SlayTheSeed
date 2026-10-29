@@ -1,0 +1,18 @@
+{
+  "class_name": "VoidForm",
+  "title": "Void Form",
+  "character": "Regent",
+  "energy_cost": 3,
+  "type": "Power",
+  "rarity": "Rare",
+  "target": "Self",
+  "keywords": ["Ethereal"],
+  "vars": [
+    {
+      "type": "Cards",
+      "base_value": 2
+    }
+  ],
+  "description": "End your turn.\nThe first 2 cards you play each turn are free to play.",
+  "notes": "When upgraded, removes the Ethereal keyword."
+}

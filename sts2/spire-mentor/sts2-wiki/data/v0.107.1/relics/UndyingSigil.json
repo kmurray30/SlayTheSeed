@@ -1,0 +1,8 @@
+{
+  "class_name": "UndyingSigil",
+  "title": "Undying Sigil",
+  "rarity": "Shop",
+  "description": "Enemies with at least as much [gold]Doom[/gold] as HP deal [blue]50%[/blue] less damage.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "This relic modifies enemy damage based on their Doom power stacks. When an enemy has accumulated Doom power stacks equal to or exceeding their current HP, their damage dealt to you is reduced by 50%. Additionally, the presence of this relic causes enemies' Doom to trigger at the start of their turn rather than at the end, allowing them to die before attacking."
+}

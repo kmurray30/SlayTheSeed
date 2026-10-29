@@ -1,0 +1,717 @@
+#!/usr/bin/env python3
+"""Extract monster data from STS2 decompiled C# source code + localization."""
+
+import argparse
+import os
+import re
+
+from scripts.common import (
+    class_name_to_loc_key,
+    find_loc_key,
+    load_localization,
+    read_cs_files,
+    write_json,
+)
+
+# Companion monsters that fight on the player's side, not as enemies
+COMPANION_CLASSES = {
+    "Osty",
+    "BattleFriendV1",
+    "BattleFriendV2",
+    "BattleFriendV3",
+    "Byrdpip",
+    "PaelsLegion",
+}
+
+# Maps the C# AscensionLevel enum constants to integer ascension levels.
+# Drives the human-facing "scales above A<N>" labels on the wiki.
+ASCENSION_LEVEL_NAMES: dict[str, int] = {
+    "EliteScaling": 1,
+    "ReducedHealing": 2,
+    "ReducedGold": 3,
+    "FewerPotionSlots": 4,
+    "AscendersBane": 5,
+    "FewerRestSites": 6,
+    "RarerCards": 7,
+    "ToughEnemies": 8,
+    "DeadlyEnemies": 9,
+    "TwoBosses": 10,
+}
+
+
+def _ascension_name_to_level(name: str) -> int | None:
+    return ASCENSION_LEVEL_NAMES.get(name)
+
+
+def parse_hp(content: str) -> tuple[int | None, int | None, int | None, int | None, int | None]:
+    """Extract MinInitialHp and MaxInitialHp.
+
+    Returns (min_hp, max_hp, min_hp_base, max_hp_base, hp_ascension), where
+    ``*_base`` and ``hp_ascension`` are populated only when the source
+    expresses a scaling value via ``AscensionHelper.GetValueIfAscension``.
+    """
+    min_hp: int | None = None
+    max_hp: int | None = None
+    min_hp_base: int | None = None
+    max_hp_base: int | None = None
+    hp_ascension: int | None = None
+
+    for target, prop_name in [("min", "MinInitialHp"), ("max", "MaxInitialHp")]:
+        # Pattern 1: => N;
+        m = re.search(rf"{prop_name}\s*=>\s*(\d+)\s*;", content)
+        if m:
+            val = int(m.group(1))
+            base_val: int | None = None
+            level_name: str | None = None
+        else:
+            # Pattern 2: => AscensionHelper.GetValueIfAscension(level, ascVal, baseVal)
+            m = re.search(
+                rf"{prop_name}\s*=>\s*AscensionHelper\.GetValueIfAscension\("
+                rf"\s*(?:AscensionLevel\.)?(\w+)\s*,\s*(\d+),\s*(\d+)\)",
+                content,
+            )
+            if m:
+                level_name = m.group(1)
+                val = int(m.group(2))  # ascension (harder) value
+                base_val = int(m.group(3))
+            else:
+                continue
+
+        if target == "min":
+            min_hp = val
+            if base_val is not None and base_val != val:
+                min_hp_base = base_val
+        else:
+            max_hp = val
+            if base_val is not None and base_val != val:
+                max_hp_base = base_val
+
+        if level_name and hp_ascension is None:
+            level = _ascension_name_to_level(level_name)
+            if level is not None:
+                hp_ascension = level
+
+    return min_hp, max_hp, min_hp_base, max_hp_base, hp_ascension
+
+
+def parse_intent(text: str) -> dict:
+    """Parse a single intent constructor."""
+    # SingleAttackIntent with numeric literal
+    m = re.search(r"SingleAttackIntent\((\d+)\)", text)
+    if m:
+        return {"type": "attack", "damage": int(m.group(1))}
+
+    # SingleAttackIntent with variable reference (e.g., DarkStrikeDamage)
+    m = re.search(r"SingleAttackIntent\((\w+)\)", text)
+    if m and not m.group(1)[0].isupper():
+        return {"type": "attack"}
+    if m:
+        return {"type": "attack"}
+
+    # MultiAttackIntent
+    m = re.search(r"MultiAttackIntent\((\d+),\s*(\d+)\)", text)
+    if m:
+        return {"type": "multi_attack", "damage": int(m.group(1)), "hits": int(m.group(2))}
+    m = re.search(r"MultiAttackIntent\((\w+),\s*(\d+)\)", text)
+    if m:
+        return {"type": "multi_attack", "hits": int(m.group(2))}
+    if "MultiAttackIntent" in text:
+        return {"type": "multi_attack"}
+
+    if "BuffIntent" in text:
+        return {"type": "buff"}
+    if "DebuffIntent" in text:
+        return {"type": "debuff"}
+    if "CardDebuffIntent" in text:
+        return {"type": "debuff"}
+
+    m = re.search(r"BlockIntent\((\d+)\)", text)
+    if m:
+        return {"type": "block", "amount": int(m.group(1))}
+    if "BlockIntent" in text:
+        return {"type": "block"}
+    if "DefendIntent" in text:
+        return {"type": "block"}
+
+    if "StunIntent" in text:
+        return {"type": "stun"}
+    if "SleepIntent" in text:
+        return {"type": "sleep"}
+    if "HiddenIntent" in text:
+        return {"type": "hidden"}
+    if "SummonIntent" in text or "SpawnIntent" in text:
+        return {"type": "summon"}
+    if "HealIntent" in text:
+        return {"type": "heal"}
+    if "EscapeIntent" in text:
+        return {"type": "escape"}
+    if "DeathBlowIntent" in text:
+        return {"type": "death_blow"}
+    if "StatusIntent" in text:
+        return {"type": "status"}
+
+    m = re.search(r"(\w+Intent)", text)
+    if m:
+        return {"type": m.group(1)}
+
+    return {"type": "unknown"}
+
+
+def extract_method_body(content: str, method_name: str) -> str | None:
+    """Extract the body of a method by name, handling brace nesting."""
+    escaped = re.escape(method_name)
+    modifiers = r"(?:private|public|protected|internal|override|virtual|static|async|\s)+"
+    pattern = rf"{modifiers}\w[\w<>\[\],\s]*\s+{escaped}\s*\("
+    m = re.search(pattern, content)
+    if not m:
+        return None
+
+    brace_pos = content.find("{", m.start())
+    if brace_pos == -1:
+        return None
+
+    depth = 0
+    i = brace_pos
+    while i < len(content):
+        if content[i] == "{":
+            depth += 1
+        elif content[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return content[brace_pos + 1 : i]
+        i += 1
+    return None
+
+
+def _format_scaled(asc_val: int, base_val: int | None) -> str:
+    """Render a numeric value as ``base/asc`` when scaling, else plain ``asc``."""
+    if base_val is None or base_val == asc_val:
+        return str(asc_val)
+    return f"{base_val}/{asc_val}"
+
+
+def parse_move_effects(content: str, move_id: str) -> list[str]:
+    """Extract detailed effects from a move's execution method.
+
+    Numeric values that scale with ascension are rendered as
+    ``base/asc`` (e.g. ``"Deal 12/13 damage"``) so the renderer can show
+    both tiers; non-scaling values keep the plain ``"Deal N damage"`` form.
+    """
+    # Convert MOVE_ID to likely method name: DARK_STRIKE_MOVE -> DarkStrike, then DarkStrikeMove
+    base = move_id.removesuffix("_MOVE")
+    parts = base.split("_")
+    method_name = "".join(p.capitalize() for p in parts)
+
+    # Try MethodNameMove first, then MethodName
+    body = extract_method_body(content, method_name + "Move")
+    if not body:
+        body = extract_method_body(content, method_name)
+    if not body:
+        return []
+
+    effects: list[str] = []
+
+    # DamageCmd.Attack (literal, decimal literal, or variable)
+    seen_damage = False
+    for m in re.finditer(r"DamageCmd\.Attack\((\w+)\)", body):
+        name = _strip_cs_suffix(m.group(1))
+        result = _resolve_property_full(name, content)
+        if result is not None:
+            asc_val, base_val, _ = result
+            effects.append(f"Deal {_format_scaled(asc_val, base_val)} damage")
+            seen_damage = True
+        elif not name.isdigit() and not seen_damage:
+            effects.append("Deal damage")
+
+    # WithHitCount (literal or variable)
+    for m in re.finditer(r"WithHitCount\((\w+)\)", body):
+        name = _strip_cs_suffix(m.group(1))
+        result = _resolve_property_full(name, content)
+        if result is not None:
+            asc_val, base_val, _ = result
+            effects.append(f"{_format_scaled(asc_val, base_val)} hits")
+
+    # PowerCmd.Apply<PowerName>(target, amount, ...)
+    for m in re.finditer(r"PowerCmd\.Apply<(\w+)>\([^,]+,\s*(\d+)", body):
+        power = m.group(1).removesuffix("Power")
+        amount = m.group(2)
+        effects.append(f"Apply {amount} {power}")
+
+    # PowerCmd.Apply<PowerName>(target, variable, ...)
+    for m in re.finditer(r"PowerCmd\.Apply<(\w+)>\([^,]+,\s*(\w+)", body):
+        power = m.group(1).removesuffix("Power")
+        var_name = m.group(2)
+        if var_name.isdigit():
+            continue
+        # Already captured by numeric version above?
+        if any(power in e for e in effects):
+            continue
+        result = _resolve_property_full(var_name, content)
+        if result is not None:
+            asc_val, base_val, _ = result
+            effects.append(f"Apply {_format_scaled(asc_val, base_val)} {power}")
+        else:
+            effects.append(f"Apply {power}")
+
+    # GainBlock (literal or variable)
+    for m in re.finditer(r"GainBlock\([^,]*,\s*(\w+)", body):
+        name = _strip_cs_suffix(m.group(1))
+        result = _resolve_property_full(name, content)
+        if result is not None:
+            asc_val, base_val, _ = result
+            effects.append(f"Gain {_format_scaled(asc_val, base_val)} Block")
+
+    # CardPileCmd.AddToCombatAndPreview<CardName>
+    for m in re.finditer(r"AddToCombatAndPreview<(\w+)>", body):
+        effects.append(f"Add {m.group(1)} to discard")
+
+    # CreatureCmd.Heal
+    for m in re.finditer(r"CreatureCmd\.Heal\([^,]*,\s*(\d+)", body):
+        effects.append(f"Heal {m.group(1)}")
+
+    # CreatureCmd.Damage (self-damage / to player)
+    for m in re.finditer(r"CreatureCmd\.Damage\([^,]*,\s*[^,]*,\s*(\d+)", body):
+        effects.append(f"Deal {m.group(1)} damage (fixed)")
+
+    return effects
+
+
+def _move_id_to_name(move_id: str) -> str:
+    """Convert a move ID like FORBIDDEN_INCANTATION_MOVE to 'Forbidden Incantation'."""
+    name = move_id.removesuffix("_MOVE")
+    return name.replace("_", " ").title()
+
+
+def _parse_move_pattern(method_body: str) -> dict:
+    """Extract move pattern info: starting move, cycles, random branches."""
+    pattern: dict = {}
+
+    # Find starting move: MonsterMoveStateMachine(list, startingMoveVar)
+    start_m = re.search(r"new\s+MonsterMoveStateMachine\s*\([^,]+,\s*(\w+)\)", method_body)
+    if start_m:
+        start_var = start_m.group(1)
+        # Find what move ID this variable corresponds to
+        var_m = re.search(rf'{start_var}\s*=\s*new\s+MoveState\s*\(\s*"([^"]+)"', method_body)
+        if var_m:
+            pattern["starts_with"] = var_m.group(1)
+
+    # Build a map of variable name -> move ID
+    var_to_id: dict[str, str] = {}
+    for m in re.finditer(
+        r'(?:MoveState\s+)?(\w+)\s*=\s*.*?new\s+MoveState\s*\(\s*"([^"]+)"',
+        method_body,
+    ):
+        var_to_id[m.group(1)] = m.group(2)
+
+    # Find FollowUpState chains
+    follow_ups: list[tuple[str, str]] = []
+    for m in re.finditer(
+        r"(\w+)\.FollowUpState\s*=\s*"
+        r'(?:new\s+MoveState\s*\(\s*"([^"]+)"'
+        r"|new\s+(?:Random|Conditional)BranchState"
+        r"|\(?(\w+)\)?)",
+        method_body,
+    ):
+        src_var = m.group(1)
+        src_id = var_to_id.get(src_var, src_var)
+        if m.group(2):
+            # Inline new MoveState
+            dst_id = m.group(2)
+            follow_ups.append((src_id, dst_id))
+        elif m.group(3):
+            # Variable reference (skip if it's a BranchState variable)
+            dst_var = m.group(3)
+            dst_id = var_to_id.get(dst_var, dst_var)
+            # Only include if it resolved to a move ID (not a variable name)
+            if dst_id != dst_var:
+                follow_ups.append((src_id, dst_id))
+        # else: RandomBranchState/ConditionalBranchState — skip
+
+    if follow_ups:
+        chains: list[str] = []
+        for src_id, dst_id in follow_ups:
+            chains.append(f"{src_id} -> {dst_id}")
+        pattern["follow_ups"] = chains
+
+    # Find RandomBranchState
+    random_branches: list[dict] = []
+    for m in re.finditer(
+        r"AddBranch\s*\(\s*(\w+)(?:,\s*MoveRepeatType\.(\w+))?\s*(?:,\s*(\d+))?\s*\)",
+        method_body,
+    ):
+        var_name = m.group(1)
+        repeat_type = m.group(2)
+        weight = m.group(3)
+
+        # Resolve variable to move ID
+        var_to_id_local: dict[str, str] = {}
+        for vm in re.finditer(
+            r'MoveState\s+(\w+)\s*=\s*new\s+MoveState\s*\(\s*"([^"]+)"',
+            method_body,
+        ):
+            var_to_id_local[vm.group(1)] = vm.group(2)
+
+        move_id = var_to_id_local.get(var_name, var_name)
+        branch: dict = {"move": move_id}
+        if repeat_type:
+            branch["repeat"] = repeat_type
+        if weight:
+            branch["weight"] = int(weight)
+        random_branches.append(branch)
+
+    if random_branches:
+        pattern["random_branches"] = random_branches
+
+    # Self-loops (move follows up to itself)
+    for m in re.finditer(r"(\w+)\.FollowUpState\s*=\s*\1\b", method_body):
+        var_name = m.group(1)
+        loop_move_id = var_to_id.get(var_name)
+        if loop_move_id:
+            pattern.setdefault("repeats", []).append(loop_move_id)
+
+    return pattern
+
+
+def _describe_pattern(pattern: dict, move_titles: dict[str, str]) -> str:
+    """Generate a BestiaryMod-style description of the move pattern.
+
+    Examples:
+      "Always uses Smash."
+      "Cycles in the order: Attack -> Attack -> Siphon Soul."
+      "Starts with Incantation. Then repeats Dark Strike."
+      "50% chance of Chomp and 50% chance of Enfeebling Spores."
+    """
+
+    def n(move_id: str) -> str:
+        return move_titles.get(move_id, _move_id_to_name(move_id))
+
+    start = pattern.get("starts_with")
+    follow_ups = pattern.get("follow_ups", [])
+    repeats = pattern.get("repeats", [])
+    branches = pattern.get("random_branches", [])
+
+    # Build the follow-up chain as a graph
+    chain: dict[str, str] = {}
+    for fu in follow_ups:
+        src, dst = fu.split(" -> ")
+        chain[src] = dst
+
+    # Detect cycle: follow the chain and see if it loops back
+    cycle_start = start if start and start in chain else next(iter(chain), None) if chain else None
+    if cycle_start and cycle_start in chain:
+        cycle: list[str] = [cycle_start]
+        current = chain[cycle_start]
+        visited = {cycle_start}
+        while current and current not in visited:
+            cycle.append(current)
+            visited.add(current)
+            current = chain.get(current, "")
+        if current == cycle_start and len(cycle) > 1 and len(cycle) == len(chain):
+            # Full cycle detected — all follow-ups form one loop
+            cycle_names = " -> ".join(n(m) for m in cycle)
+            if start and start != cycle_start:
+                return f"Starts with {n(start)}, then cycles: {cycle_names}."
+            return f"Cycles in the order: {cycle_names}."
+
+    # Single move that repeats
+    if start and start in repeats and not chain and not branches:
+        return f"Always uses {n(start)}."
+
+    # Build description from parts
+    parts: list[str] = []
+
+    if start:
+        if start in repeats and chain:
+            # Starts with a repeating move but eventually transitions
+            parts.append(f"Starts with {n(start)} (repeats).")
+        elif not chain and not branches:
+            parts.append(f"Always uses {n(start)}.")
+        else:
+            parts.append(f"Starts with {n(start)}.")
+
+    # Non-cyclic follow-ups
+    if chain:
+        # Check if it's a simple alternation
+        if len(chain) == 2:
+            items = list(chain.items())
+            a_src, a_dst = items[0]
+            b_src, b_dst = items[1]
+            if a_dst == b_src and b_dst == a_src:
+                parts.append(f"Then alternates between {n(a_src)} and {n(a_dst)}.")
+                chain.clear()
+
+        for src, dst in chain.items():
+            if src == dst or dst in repeats:
+                continue
+            if not any(src in p for p in parts):
+                parts.append(f"After {n(src)}, uses {n(dst)}.")
+
+    # Repeats (not already covered)
+    for move_id in repeats:
+        if move_id == start:
+            continue  # Already handled
+        parts.append(f"Then repeats {n(move_id)}.")
+
+    # Random branches
+    if branches:
+        total_weight = sum(b.get("weight", 1) for b in branches)
+        branch_parts = []
+        for b in branches:
+            w = b.get("weight", 1)
+            pct = round(100 * w / total_weight) if total_weight > 0 else 0
+            desc = n(b["move"])
+            repeat = b.get("repeat", "")
+            if repeat == "CannotRepeat":
+                desc += " (can't repeat)"
+            branch_parts.append(f"{pct}% chance of {desc}")
+
+        if not parts:
+            parts.append(", ".join(branch_parts) + ".")
+        else:
+            parts.append("Then " + ", ".join(branch_parts) + ".")
+
+    return " ".join(parts)
+
+
+def _strip_cs_suffix(name: str) -> str:
+    """Strip C# numeric literal suffixes (e.g. ``10m`` → ``10``)."""
+    if name.endswith(("m", "f", "d")) and name[:-1].isdigit():
+        return name[:-1]
+    return name
+
+
+def _resolve_property_full(
+    var_name: str, content: str
+) -> tuple[int, int | None, int | None] | None:
+    """Resolve a variable to (asc_value, base_value, ascension_level).
+
+    ``base_value`` and ``ascension_level`` are ``None`` for non-scaling
+    literals; otherwise they are the easier-difficulty value and the
+    ascension tier (e.g. ``9`` for ``DeadlyEnemies``) at which the harder
+    value kicks in.
+    """
+    if var_name.isdigit():
+        return int(var_name), None, None
+    prop_m = re.search(rf"{var_name}\s*=>\s*(\d+)\s*;", content)
+    if prop_m:
+        return int(prop_m.group(1)), None, None
+    prop_m = re.search(
+        rf"{var_name}\s*=>\s*AscensionHelper\.GetValueIfAscension\("
+        rf"\s*(?:AscensionLevel\.)?(\w+)\s*,\s*(\d+),\s*(\d+)\)",
+        content,
+    )
+    if prop_m:
+        level_name = prop_m.group(1)
+        asc_val = int(prop_m.group(2))
+        base_val = int(prop_m.group(3))
+        level = _ascension_name_to_level(level_name)
+        if asc_val == base_val:
+            return asc_val, None, None
+        return asc_val, base_val, level
+    return None
+
+
+def parse_moves(content: str) -> tuple[list[dict], dict]:
+    """Parse MoveState declarations from GenerateMoveStateMachine()."""
+    method_body = extract_method_body(content, "GenerateMoveStateMachine")
+    if not method_body:
+        return [], {}
+
+    moves: list[dict] = []
+    seen_ids: set[str] = set()
+
+    # Extract move pattern info
+    move_pattern = _parse_move_pattern(method_body)
+
+    # Find ALL MoveState constructors, whether assigned to variables or inline
+    for m in re.finditer(r'new\s+MoveState\s*\(\s*"([^"]+)"', method_body):
+        move_id = m.group(1)
+        if move_id in seen_ids:
+            continue
+        seen_ids.add(move_id)
+
+        # Get the full constructor args (find matching paren)
+        start = m.start()
+        paren_start = method_body.find("(", start)
+        depth = 0
+        end = paren_start
+        while end < len(method_body):
+            if method_body[end] == "(":
+                depth += 1
+            elif method_body[end] == ")":
+                depth -= 1
+                if depth == 0:
+                    break
+            end += 1
+
+        constructor_args = method_body[paren_start + 1 : end]
+
+        # Parse intents from constructor args
+        intents: list[dict] = []
+        for intent_m in re.finditer(r"new\s+\w*Intent\s*\([^)]*\)", constructor_args):
+            intents.append(parse_intent(intent_m.group(0)))
+
+        # Also check for intent variables passed by name
+        if not intents:
+            # Sometimes intents are variables defined elsewhere
+            if "SingleAttackIntent" in constructor_args:
+                intents.append({"type": "attack"})
+            elif "BuffIntent" in constructor_args:
+                intents.append({"type": "buff"})
+
+        # Parse effects from the move's execution method
+        effects = parse_move_effects(content, move_id)
+
+        # Try to resolve damage/hits from intents that reference properties.
+        # Capture base value and threshold so the wiki can show ascension scaling.
+        for intent in intents:
+            if intent["type"] in ("attack", "multi_attack") and "damage" not in intent:
+                intent_text = re.search(
+                    rf'"{move_id}".*?(\w+AttackIntent)\s*\((\w+)',
+                    method_body,
+                    re.DOTALL,
+                )
+                if intent_text:
+                    var_name = intent_text.group(2)
+                    result = _resolve_property_full(var_name, content)
+                    if result is not None:
+                        asc_val, base_val, level = result
+                        intent["damage"] = asc_val
+                        if base_val is not None:
+                            intent["damage_base"] = base_val
+                        if level is not None:
+                            intent["ascension"] = level
+
+            if intent["type"] == "multi_attack" and "hits" not in intent:
+                intent_text = re.search(
+                    rf'"{move_id}".*?MultiAttackIntent\s*\(\w+,\s*(\w+)',
+                    method_body,
+                    re.DOTALL,
+                )
+                if intent_text:
+                    var_name = intent_text.group(1)
+                    result = _resolve_property_full(var_name, content)
+                    if result is not None:
+                        asc_val, base_val, level = result
+                        intent["hits"] = asc_val
+                        if base_val is not None:
+                            intent["hits_base"] = base_val
+                        if level is not None and "ascension" not in intent:
+                            intent["ascension"] = level
+
+        moves.append(
+            {
+                "id": move_id,
+                "intents": intents,
+                "effects": effects,
+            }
+        )
+
+    return moves, move_pattern
+
+
+def parse_powers_on_spawn(content: str) -> list[str]:
+    """Extract powers applied when monster is added to room."""
+    body = extract_method_body(content, "AfterAddedToRoom")
+    if not body:
+        return []
+
+    powers = []
+    for m in re.finditer(r"PowerCmd\.Apply<(\w+)>", body):
+        power = m.group(1).removesuffix("Power")
+        if power not in powers:
+            powers.append(power)
+    return powers
+
+
+def apply_localization(monster: dict, loc_data: dict[str, str]) -> None:
+    """Apply localization data to a monster dict."""
+    class_name = monster["class_name"]
+    loc_key = find_loc_key(class_name, loc_data, suffix=".name")
+    if not loc_key:
+        loc_key = class_name_to_loc_key(class_name)
+
+    monster["loc_key"] = loc_key
+    name_key = f"{loc_key}.name"
+    monster["title"] = loc_data.get(name_key, class_name)
+
+    # Apply move titles (with fallback name generation)
+    move_titles: dict[str, str] = {}
+    for move in monster.get("moves", []):
+        move_id = move["id"]
+        move_loc_id = move_id.removesuffix("_MOVE")
+        move_title_key = f"{loc_key}.moves.{move_loc_id}.title"
+        title = loc_data.get(move_title_key, "")
+        if not title:
+            title = _move_id_to_name(move_id)
+        move["title"] = title
+        move_titles[move_id] = title
+
+    # Generate move pattern description
+    if monster.get("move_pattern"):
+        monster["move_pattern_desc"] = _describe_pattern(monster["move_pattern"], move_titles)
+
+
+def parse_monster_file(class_name: str, content: str) -> dict | None:
+    """Parse a decompiled monster .cs file."""
+    if ": MonsterModel" not in content:
+        return None
+
+    monster: dict = {"class_name": class_name}
+
+    min_hp, max_hp, min_hp_base, max_hp_base, hp_ascension = parse_hp(content)
+    monster["min_hp"] = min_hp or 0
+    monster["max_hp"] = max_hp or min_hp or 0
+    if min_hp_base is not None:
+        monster["min_hp_base"] = min_hp_base
+    if max_hp_base is not None:
+        monster["max_hp_base"] = max_hp_base
+    if hp_ascension is not None:
+        monster["hp_ascension"] = hp_ascension
+
+    moves, move_pattern = parse_moves(content)
+    monster["moves"] = moves
+    monster["move_pattern"] = move_pattern
+    monster["powers_on_spawn"] = parse_powers_on_spawn(content)
+
+    return monster
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Extract STS2 monster data")
+    parser.add_argument("decompiled_dir", help="Path to decompiled source directory")
+    parser.add_argument("loc_dir", help="Path to localization directory")
+    parser.add_argument("output_dir", help="Path to output data directory")
+    args = parser.parse_args()
+
+    decompiled_dir = os.path.expanduser(args.decompiled_dir)
+    loc_dir = os.path.expanduser(args.loc_dir)
+    output_dir = os.path.expanduser(args.output_dir)
+
+    loc_data = load_localization(loc_dir, "monsters")
+
+    monsters_dir = os.path.join(decompiled_dir, "MegaCrit.Sts2.Core.Models.Monsters")
+    monsters: list[dict] = []
+
+    for class_name, content in read_cs_files(monsters_dir):
+        monster = parse_monster_file(class_name, content)
+        if not monster:
+            continue
+
+        if class_name in COMPANION_CLASSES:
+            monster["is_companion"] = True
+
+        apply_localization(monster, loc_data)
+        monsters.append(monster)
+
+    output_path = os.path.join(output_dir, "monsters.json")
+    write_json(output_path, monsters)
+
+    print(f"Extracted {len(monsters)} monsters to {output_path}")
+    with_moves = sum(1 for m in monsters if m.get("moves"))
+    with_effects = sum(1 for m in monsters if any(mv.get("effects") for mv in m.get("moves", [])))
+    print(f"  With moves: {with_moves}, With detailed effects: {with_effects}")
+
+
+if __name__ == "__main__":
+    main()

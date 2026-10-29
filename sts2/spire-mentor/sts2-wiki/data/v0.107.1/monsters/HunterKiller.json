@@ -1,0 +1,58 @@
+{
+  "class_name": "HunterKiller",
+  "title": "Hunter Killer",
+  "min_hp": 126,
+  "min_hp_base": 121,
+  "max_hp": 126,
+  "max_hp_base": 121,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "TENDERIZING_GOOP_MOVE",
+      "title": "Tenderizing Goop",
+      "intents": [
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": [
+        "Apply 1 Tender Power"
+      ]
+    },
+    {
+      "id": "BITE_MOVE",
+      "title": "Bite",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 19,
+          "damage_base": 17,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 17/19 damage"
+      ]
+    },
+    {
+      "id": "PUNCTURE_MOVE",
+      "title": "Puncture",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 8,
+          "damage_base": 7,
+          "hits": 3,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 7/8 damage, 3 hits"
+      ]
+    }
+  ],
+  "move_pattern": "Starts with Tenderizing Goop. Then cycles randomly between Bite and Puncture, with Puncture favored (2:1 weight) and Bite prevented from repeating consecutively.",
+  "powers_on_spawn": [],
+  "notes": "Tenderizing Goop applies Tender power to the player, increasing their damage taken. Then cycles through Bite (single-hit attack) and Puncture (triple-hit attack) with heavy emphasis on Puncture."
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "Fortifier",
+  "title": "Fortifier",
+  "rarity": "Uncommon",
+  "usage": "Drink",
+  "target": "AnyPlayer",
+  "description": "Triple your [gold]Block[/gold].",
+  "notes": "When used, grants block equal to twice the player's current block (total effect: current block × 3)"
+}

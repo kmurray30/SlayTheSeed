@@ -1,0 +1,9 @@
+{
+  "class_name": "AccuracyPower",
+  "title": "Accuracy",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "[gold]Shivs[/gold] deal additional damage.",
+  "smart_description": "[gold]Shivs[/gold] deal [blue]{Amount}[/blue] additional damage.",
+  "notes": "Only affects cards with the Shiv tag. Only applies to powered attacks. Damage bonus is equal to the stack count."
+}

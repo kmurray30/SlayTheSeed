@@ -1,0 +1,56 @@
+# cargo-nextest configuration.
+# Install:  cargo install cargo-nextest --locked
+# Run:      cargo nextest run --workspace
+#
+# Default profile balances throughput (one process per test on big boxes)
+# with sane CI ergonomics (fail-fast off, retries on flaky integration tests).
+#
+# ── Slow-test convention ───────────────────────────────────────────────
+# Tests whose name starts with `slow_` are expensive (e.g. multi-seed
+# map generation in a debug build) and are EXCLUDED from the default and
+# CI runs via `default-filter`. This is distinct from `#[ignore]`, which
+# the repo uses for broken / pending tests. Run the slow set explicitly
+# with `cargo nextest run --profile slow`.
+
+[profile.default]
+# Use all available cores for parallelism.
+test-threads = "num-cpus"
+# Don't abort the whole run on the first failure; we want the full report.
+fail-fast = false
+# Long-running parity/fuzz harnesses can exceed the default 60s slow-warn.
+slow-timeout = { period = "60s", terminate-after = 3 }
+# Skip `slow_`-prefixed tests in day-to-day runs.
+default-filter = "not test(/(?:^|::)slow_/)"
+
+# The run's wall clock is its longest test, not the sum: 849 test-seconds
+# finish in ~30 s on 32 cores, but a 50 s test started late ends the run
+# late. Start the known long poles first.
+[[profile.default.overrides]]
+filter = "test(=golden_parity_all_scenarios) | test(/^ppo_policy_completes_short_run_seed/) | test(=chained_horizon_emits_rows_with_chain_score) | test(=last_turn_grade_flags_an_under_played_turn) | test(=heuristic_calibration_mse_non_regressing)"
+priority = 100
+
+[profile.ci]
+# CI gets a stricter timeout so a hung test doesn't burn billed minutes.
+slow-timeout = { period = "120s", terminate-after = 2 }
+fail-fast = false
+# One retry to absorb GH-runner flakiness (network / disk hiccups).
+retries = 1
+# The fast PR gate skips slow tests too; the nightly `slow` profile
+# covers them. `default-filter` is per-profile, not inherited from
+# `default`, so it is repeated here.
+default-filter = "not test(/(?:^|::)slow_/)"
+
+# The two longest whole-pipeline tests already ran 190 s and 230 s on the
+# GH runner against the 240 s cap above, and the 2026-10-18 sync (more
+# tests in the run, a larger golden set) pushed both over it. Give just
+# these two a 480 s cap rather than loosening it for every test. (The PPO
+# test is now one test per seed.)
+[[profile.ci.overrides]]
+filter = "test(=golden_parity_all_scenarios) | test(/^ppo_policy_completes_short_run_seed/)"
+slow-timeout = { period = "120s", terminate-after = 4 }
+
+# Nightly / on-demand: run ONLY the slow-tagged tests.
+[profile.slow]
+fail-fast = false
+slow-timeout = { period = "120s", terminate-after = 3 }
+default-filter = "test(/(?:^|::)slow_/)"

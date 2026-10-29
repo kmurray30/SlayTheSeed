@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STS2 Replay File Formats</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --panel2: #1d2027;
+    --ink: #e6e9ef;
+    --muted: #98a0b3;
+    --accent: #7cc4ff;
+    --accent2: #ffd479;
+    --green: #8fdca0;
+    --red: #ff8e8e;
+    --border: #2a2e38;
+    --code-bg: #0b0d11;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 48px 24px 120px; }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 28px;
+    margin-bottom: 36px;
+  }
+  h1 { font-size: 2.1rem; margin: 0 0 8px; letter-spacing: -0.02em; }
+  .sub { color: var(--muted); font-size: 1.02rem; }
+  .meta { color: var(--muted); font-size: 0.85rem; margin-top: 14px; }
+  .meta code { color: var(--accent2); }
+  h2 {
+    font-size: 1.5rem; margin: 56px 0 14px; letter-spacing: -0.01em;
+    padding-top: 12px;
+  }
+  h3 { font-size: 1.12rem; margin: 32px 0 10px; color: var(--accent); }
+  h4 { font-size: 0.98rem; margin: 22px 0 8px; color: var(--accent2); }
+  p { margin: 12px 0; }
+  a { color: var(--accent); }
+  code {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    background: var(--panel2);
+    padding: 1.5px 6px;
+    border-radius: 5px;
+    color: #cfe6ff;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.83rem;
+    line-height: 1.55;
+    margin: 14px 0;
+  }
+  pre code { background: none; padding: 0; color: #d6dbe6; font-size: inherit; }
+  .tag {
+    display: inline-block; font-size: 0.72rem; font-weight: 600;
+    padding: 2px 9px; border-radius: 999px; vertical-align: middle;
+    margin-left: 8px; letter-spacing: 0.03em;
+  }
+  .tag.jsonl { background: #16324a; color: #9fd0ff; border: 1px solid #245074; }
+  .tag.run   { background: #3a2c14; color: #ffd479; border: 1px solid #6a5220; }
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--panel);
+    padding: 12px 18px; border-radius: 0 8px 8px 0; margin: 18px 0;
+    color: var(--muted);
+  }
+  .callout.warn { border-left-color: var(--accent2); }
+  .callout strong { color: var(--ink); }
+  table {
+    width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem;
+    background: var(--panel); border-radius: 10px; overflow: hidden;
+  }
+  th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { background: var(--panel2); color: var(--accent); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  td code { white-space: nowrap; }
+  tr:last-child td { border-bottom: none; }
+  .pill { font-size: 0.75rem; color: var(--muted); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
+  .cardbox {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .cardbox h3 { margin-top: 0; }
+  nav.toc {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 22px; margin: 0 0 12px;
+  }
+  nav.toc strong { display:block; color: var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px;}
+  nav.toc ol { margin: 0; padding-left: 20px; }
+  nav.toc li { margin: 4px 0; }
+  .src { color: var(--muted); font-size: 0.8rem; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+  .kbd { color: var(--green); }
+  footer.page { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.82rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="page">
+  <h1>STS2 Replay File Formats</h1>
+  <div class="sub">Two distinct on-disk formats record a Slay&nbsp;the&nbsp;Spire&nbsp;2 run in this project. This page documents both — field by field, with real examples.</div>
+  <div class="meta">Project: <code>sts2-pycli</code> &nbsp;·&nbsp; Generated 2026-06-06 &nbsp;·&nbsp; Sources: <code>python/game_log.py</code>, <code>python/replay/scraped.py</code></div>
+</header>
+
+<nav class="toc">
+  <strong>Contents</strong>
+  <ol>
+    <li><a href="#overview">Overview — two formats, one word</a></li>
+    <li><a href="#jsonl">Format A — JSONL run logs <span class="pill">logs/*.jsonl</span></a></li>
+    <li><a href="#run">Format B — Scraped <code>.run</code> files <span class="pill">corpus</span></a></li>
+    <li><a href="#compare">Side-by-side comparison</a></li>
+  </ol>
+</nav>
+
+<h2 id="overview">1 · Overview — two formats, one word</h2>
+<p>The word <em>“replay”</em> is overloaded in this repo. It refers to two completely different files that are produced by different tools, in different shapes, for different purposes:</p>
+
+<div class="grid2">
+  <div class="cardbox">
+    <h3>A · JSONL run logs <span class="tag jsonl">JSONL</span></h3>
+    <p>Written <strong>by this project</strong> as it drives the headless engine. One JSON object per line, alternating <code>state</code> (decision point the engine offered) and <code>action</code> (command we sent back). This is what the <strong>Workbench GUI</strong> scrubs through.</p>
+    <p class="src">Producer: <code>python/game_log.py</code> · Location: <code>logs/&lt;ts&gt;_&lt;char&gt;_&lt;seed&gt;.jsonl</code></p>
+  </div>
+  <div class="cardbox">
+    <h3>B · Scraped <code>.run</code> files <span class="tag run">JSON</span></h3>
+    <p>Captured <strong>from real human games</strong> by the external <code>sts2_run_scraper</code> tool. A single JSON object describing a whole run: acts, per-floor history, choices made, HP/gold snapshots. Consumed by the <strong>parity harness</strong> to verify the engine reproduces real play.</p>
+    <p class="src">Producer: external scraper · Parser: <code>python/replay/scraped.py</code> · Location: <code>../sts2_run_scraper/data/files/&lt;char&gt;/&lt;YYYY-MM&gt;/&lt;uuid&gt;.run</code></p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="jsonl">2 · Format A — JSONL run logs <span class="tag jsonl">logs/*.jsonl</span></h2>
+
+<p>A JSONL ("JSON Lines") file: each line is one self-contained JSON object — a <strong>record</strong>. Records are appended live (and <code>flush()</code>ed) as the run plays, so a log is readable even mid-run or after a crash. The producer is <code>GameLogger</code> in <code>python/game_log.py</code>; old logs auto-delete after 7 days.</p>
+
+<h3>Filename</h3>
+<pre><code>logs/20260605_035316_Necrobinder_run_5.jsonl
+     └── ts ──┘ └────── character ──┘ └seed┘
+     %Y%m%d_%H%M%S      Necrobinder    run_5   (slashes in seed → "_")</code></pre>
+
+<h3>Record envelope</h3>
+<p>Every line shares the same four-key envelope; the payload lives in <code>data</code>.</p>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Meaning</th></tr>
+  <tr><td><code>step</code></td><td>int</td><td>Monotonic counter. Incremented on each <code>state</code>; the following <code>action</code> reuses the same number, so a state/action pair shares one <code>step</code>.</td></tr>
+  <tr><td><code>ts</code></td><td>string</td><td>ISO-8601 wall-clock timestamp (<code>datetime.now().isoformat()</code>).</td></tr>
+  <tr><td><code>type</code></td><td>string</td><td><code>"meta"</code> (self-describing header, first line), <code>"state"</code> (engine → us), or <code>"action"</code> (us → engine).</td></tr>
+  <tr><td><code>data</code></td><td>object</td><td>The payload. Shape depends on <code>type</code> + decision/cmd (below).</td></tr>
+</table>
+
+<p>After the <code>meta</code> header, a log is a strict alternation: <code>state</code>, then the <code>action</code> chosen for it, repeated. A real Necrobinder log of 382 play records is exactly 191 states + 191 actions.</p>
+
+<h3 id="meta">2.0 · <code>meta</code> header — the self-describing first record</h3>
+<p>Every log's <strong>first line</strong> is a <code>meta</code> record naming the run, so a log identifies itself without relying on the <code>start_run</code> command (the Workbench live/branching loggers never emit one). Written by <code>GameLogger.__init__</code>.</p>
+<pre><code>{"step":0,"ts":"2026-06-06T10:00:00.000000","type":"meta",
+ "data":{"character":"Necrobinder","seed":"run_5","ascension":0}}</code></pre>
+<table>
+  <tr><th>data field</th><th>Type</th><th>Notes</th></tr>
+  <tr><td><code>character</code></td><td>string</td><td>Character the run was started with.</td></tr>
+  <tr><td><code>seed</code></td><td>string</td><td>The seed string handed to the engine (the real RNG seed it hashes). May be a synthetic label like <code>"run_5"</code> for batch runs, or a game seed like <code>"SYDDKWZUC8"</code>.</td></tr>
+  <tr><td><code>ascension</code></td><td>int</td><td>Ascension level (0–20). Defaults to 0.</td></tr>
+</table>
+<div class="callout"><strong>Consumer-safe.</strong> <code>TimelineStore.load_jsonl</code> only acts on <code>state</code>/<code>action</code> records, so the <code>meta</code> line is silently ignored by the Workbench timeline — it never shifts step indices.</div>
+
+<h3>2.1 · <code>action</code> records</h3>
+<p>The very first record is always a <code>start_run</code>; every subsequent action is a generic <code>action</code> command with an <code>action</code> verb and its <code>args</code>.</p>
+<pre><code>// run bootstrap (carries ascension since it became self-describing)
+{"step":0,"ts":"2026-06-05T03:53:16.897153","type":"action",
+ "data":{"cmd":"start_run","character":"Necrobinder","seed":"run_5","ascension":0}}
+
+// an event/menu choice
+{"step":1,"ts":"...","type":"action",
+ "data":{"cmd":"action","action":"choose_option","args":{"option_index":0}}}
+
+// a card play in combat
+{"step":17,"ts":"...","type":"action",
+ "data":{"cmd":"action","action":"play_card","args":{"card_index":0,"target_index":0}}}</code></pre>
+<table>
+  <tr><th>data.cmd</th><th>Other keys</th><th>When</th></tr>
+  <tr><td><code>start_run</code></td><td><code>character</code>, <code>seed</code>, <code>ascension</code></td><td>First <em>action</em> record (after the <code>meta</code> header). <code>ascension</code> is included by all drivers.</td></tr>
+  <tr><td><code>action</code></td><td><code>action</code> (verb), <code>args</code> (object)</td><td>Every other step. Common verbs: <code>choose_option</code> (<code>option_index</code>), <code>play_card</code> (<code>card_index</code>, <code>target_index</code>), plus map / reward / rest selections.</td></tr>
+</table>
+
+<h3>2.2 · <code>state</code> records</h3>
+<p>A <code>state</code> payload always has <code>type:"decision"</code> and a <code>decision</code> discriminator naming the kind of choice being requested, plus a <code>context</code> block locating the run (act, floor, room, boss). Observed <code>decision</code> values in one run:</p>
+<table>
+  <tr><th>decision</th><th>Meaning</th></tr>
+  <tr><td><code>combat_play</code></td><td>Mid-combat: pick a card to play (or end turn). The richest state — carries hand, enemies, piles, powers.</td></tr>
+  <tr><td><code>map_select</code></td><td>Choose the next room on the act map.</td></tr>
+  <tr><td><code>card_reward</code></td><td>Pick (or skip) a card from a reward screen.</td></tr>
+  <tr><td><code>card_select</code></td><td>Select card(s) from a pile (e.g. discard/exhaust effects).</td></tr>
+  <tr><td><code>event_choice</code></td><td>Choose an event/Neow option.</td></tr>
+  <tr><td><code>rest_site</code></td><td>Rest-site action (rest / smith / …).</td></tr>
+  <tr><td><code>game_over</code></td><td>Terminal record — run ended (win or death).</td></tr>
+</table>
+
+<h4>Shared <code>context</code> block</h4>
+<pre><code>"context": {
+  "act": 1, "act_name": "Overgrowth",
+  "floor": 2, "room_type": "Monster",
+  "boss": {"id": "CEREMONIAL_BEAST_BOSS", "name": "Ceremonial Beast"}
+}</code></pre>
+
+<h4>Example — an <code>event_choice</code> state (Neow, floor 1)</h4>
+<pre><code>{"step":1,"ts":"2026-06-05T03:53:17.685443","type":"state","data":{
+  "type":"decision","decision":"event_choice",
+  "context":{"act":1,"act_name":"Overgrowth","floor":1,"room_type":"Event",
+             "boss":{"id":"CEREMONIAL_BEAST_BOSS","name":"Ceremonial Beast"}},
+  "event_name":"Neow","description":null,
+  "options":[
+    {"index":0,"title":"New Leaf",
+     "description":"Upon pickup, Transform {Cards} {Cards:plural:card|cards}.",
+     "text_key":"NEOW.pages.INITIAL.options.NEW_LEAF",
+     "is_locked":false,"vars":{"Cards":1}},
+    {"index":1,"title":"Winged Boots", "...":"..."},
+    {"index":2,"title":"Silver Crucible","...":"..."}
+  ],
+  "player":{
+    "name":"The Necrobinder","hp":66,"max_hp":66,"block":0,"gold":99,
+    "relics":[{"name":"Bound Phylactery",
+               "description":"At the start of your turn, Summon {Summon}.",
+               "vars":{"Summon":1}}],
+    "potions":[],"deck_size":10,
+    "deck":[{"id":"CARD.STRIKE_NECROBINDER","name":"Strike","cost":1,
+             "type":"Attack","upgraded":false,
+             "description":"Deal {Damage:diff()} damage.",
+             "stats":{"damage":6},"keywords":null,
+             "after_upgrade":{"cost":1,"stats":{"damage":9},
+               "description":"Deal {Damage:diff()} damage.",
+               "added_keywords":null,"removed_keywords":null}},
+            "... 9 more cards ..."]
+  }
+}}</code></pre>
+<div class="callout warn">
+  <strong>Template variables are unresolved in the log.</strong> Card/relic/event text uses tokens like <code>{Damage}</code>, <code>{Block}</code>, <code>{Summon}</code>, and richer forms like <code>{Damage:diff()}</code> or <code>{Cards:plural:card|cards}</code>. The concrete numbers live alongside in <code>stats</code> / <code>vars</code>. Anything user-facing must resolve these before display (see <code>CLAUDE.md → Localization</code>).
+</div>
+
+<h4>Example — a <code>combat_play</code> state (the rich one)</h4>
+<p>Top-level keys of a combat state: <code>type, decision, context, round, energy, max_energy, hand, enemies, player, player_powers, draw_pile, discard_pile, exhaust_pile, draw_pile_count, discard_pile_count, exhaust_pile_count, osty</code>.</p>
+<pre><code>{"type":"decision","decision":"combat_play",
+ "context":{"act":1,"act_name":"Overgrowth","floor":2,"room_type":"Monster","boss":{...}},
+ "round":1,"energy":3,"max_energy":3,
+ "enemies":[
+   {"index":0,"name":"Shrinker Beetle","hp":38,"max_hp":38,"block":0,
+    "intents":[{"type":"DebuffStrong"}],"intends_attack":false,"powers":null}
+ ],
+ "hand":[
+   {"index":0,"id":"CARD.STRIKE_NECROBINDER","name":"Strike","cost":1,"type":"Attack",
+    "stats":{"damage":6},"description":"Deal {Damage:diff()} damage.",
+    "can_play":true,"target_type":"AnyEnemy"},
+   {"index":1,"id":"CARD.BODYGUARD","name":"Bodyguard","cost":1,"type":"Skill",
+    "stats":{"summon":5},"description":"Summon {Summon:diff()}.",
+    "can_play":true,"target_type":"Self"},
+   {"index":2,"id":"CARD.DEFEND_NECROBINDER","name":"Defend","cost":1,"type":"Skill",
+    "stats":{"block":5},"description":"Gain {Block:diff()} Block.",
+    "can_play":true,"target_type":"Self"}
+ ],
+ "player":{"name":"The Necrobinder","hp":66,"max_hp":66,"block":0,"gold":99,
+           "relics":[...],"potions":[],"deck_size":9,"deck":[...]},
+ "player_powers":[...],
+ "draw_pile_count":4,"discard_pile_count":0,"exhaust_pile_count":0,
+ "draw_pile":[...],"discard_pile":[...],"exhaust_pile":[...]}
+
+// the action chosen for this state:
+{"type":"action","data":{"cmd":"action","action":"play_card",
+                          "args":{"card_index":0,"target_index":0}}}</code></pre>
+<table>
+  <tr><th>Combat key</th><th>Notes</th></tr>
+  <tr><td><code>round</code>, <code>energy</code>, <code>max_energy</code></td><td>Turn counter and energy pool.</td></tr>
+  <tr><td><code>enemies[]</code></td><td><code>index, name, hp, max_hp, block, intents[], intends_attack, powers</code>. <code>intents[].type</code> is a string like <code>DebuffStrong</code>; numeric attack damage appears here when the intent is an attack.</td></tr>
+  <tr><td><code>hand[]</code></td><td>Playable cards with <code>can_play</code> and <code>target_type</code> (<code>AnyEnemy</code> / <code>Self</code> / …). <code>index</code> is what <code>play_card.args.card_index</code> refers to.</td></tr>
+  <tr><td><code>player</code></td><td>Same player shape as non-combat states (hp/block/gold/relics/potions + full <code>deck</code>).</td></tr>
+  <tr><td><code>player_powers[]</code></td><td>Active buffs/debuffs on the player this combat.</td></tr>
+  <tr><td><code>*_pile</code> / <code>*_pile_count</code></td><td>Draw / discard / exhaust pile contents and their sizes.</td></tr>
+  <tr><td><code>osty</code></td><td>Engine-internal opaque token passed through; not for display.</td></tr>
+</table>
+
+<h3>Reading a log in Python</h3>
+<pre><code>import json
+with open("logs/20260605_035316_Necrobinder_run_5.jsonl") as fh:
+    records = [json.loads(line) for line in fh]
+
+for r in records:
+    if r["type"] == "state":
+        print(r["step"], r["data"]["decision"], r["data"]["context"]["floor"])
+    else:
+        print(r["step"], "→", r["data"].get("action", r["data"]["cmd"]))</code></pre>
+
+<!-- ============================================================ -->
+<h2 id="run">3 · Format B — Scraped <code>.run</code> files <span class="tag run">JSON</span></h2>
+
+<p>A <code>.run</code> file is a <strong>single JSON object</strong> describing one complete human-played run, produced externally by <code>sts2_run_scraper</code>. The parity harness parses it (<code>python/replay/scraped.py → parse_run()</code>) into typed <code>Run</code> / <code>Floor</code> dataclasses, re-drives the same choices through the Rust engine, and asserts the engine's HP / gold / deck match the recorded snapshots.</p>
+
+<div class="callout">
+  <strong>Schema pin.</strong> The parser targets <code>sts2_run_scraper</code> schema <code>v0.103.2</code>. It is <em>lenient about unknown fields</em> (forward-compatible) but strict about the fields it actually reads. Example files in the corpus may carry an older <code>build_id</code> (e.g. <code>v0.98.3</code>) — the harness filters to the pinned build.
+</div>
+
+<h3>Filename &amp; location</h3>
+<pre><code>../sts2_run_scraper/data/files/the-defect/2026-03/05eeee23-5bf5-4327-a1e4-166a03708495.run
+                               └ character ┘└YYYY-MM┘ └──────────── uuid ─────────────┘</code></pre>
+
+<h3>3.1 · Top-level object</h3>
+<p>Observed keys of a real <code>.run</code> file:</p>
+<pre><code>{
+  "schema_version": ...,
+  "build_id": "v0.98.3",
+  "seed": "SYDDKWZUC8",
+  "ascension": 1,
+  "game_mode": ...,
+  "platform_type": ...,
+  "modifiers": [...],
+  "acts": ["ACT.UNDERDOCKS", "ACT.HIVE", "ACT.GLORY"],
+  "players": [ ... ],                 // length 1 = single-player (required)
+  "map_point_history": [ [...], [...], [...] ],   // one array per act
+  "win": true,
+  "was_abandoned": false,
+  "killed_by_encounter": ...,
+  "killed_by_event": ...,
+  "start_time": ...,
+  "run_time": ...
+}</code></pre>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Parsed into</th><th>Notes</th></tr>
+  <tr><td><code>seed</code></td><td>string</td><td><code>Run.seed</code></td><td>Raw human-typed alphanumeric seed, e.g. <code>"SYDDKWZUC8"</code>. The engine's <code>…from_string_seed</code> applies the same string-hash mix the C# game uses.</td></tr>
+  <tr><td><code>ascension</code></td><td>int</td><td><code>Run.ascension</code></td><td>0–20, passed to the engine constructor verbatim.</td></tr>
+  <tr><td><code>build_id</code></td><td>string</td><td><code>Run.build_id</code></td><td>Game build the run was recorded on.</td></tr>
+  <tr><td><code>win</code></td><td>bool</td><td><code>Run.won</code></td><td>Did the human win (final-act boss kill)?</td></tr>
+  <tr><td><code>acts</code></td><td>string[]</td><td><code>Run.acts</code></td><td>Per-act biome ids; same length as <code>map_point_history</code>.</td></tr>
+  <tr><td><code>players</code></td><td>array</td><td>—</td><td><strong>Must be length 1.</strong> Multiplayer runs raise <code>ValueError</code> — the harness is single-player only at this pin.</td></tr>
+  <tr><td><code>map_point_history</code></td><td>array of arrays</td><td><code>Run.floors</code></td><td>Outer = acts, inner = floor rows. Flattened in encounter order (Act 1 → 2 → 3). Must be non-empty.</td></tr>
+</table>
+
+<h3>3.2 · A floor row</h3>
+<p>Each inner element of <code>map_point_history</code> is a floor row with keys <code>map_point_type</code>, <code>player_stats</code>, <code>rooms</code>. The harness reads the first two.</p>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Notes</th></tr>
+  <tr><td><code>map_point_type</code></td><td>string</td><td>Room type, lowercased on parse: <code>ancient</code> / <code>monster</code> / <code>elite</code> / <code>boss</code> / <code>shop</code> / <code>rest_site</code> / <code>treasure</code> / <code>event</code>.</td></tr>
+  <tr><td><code>player_stats</code></td><td>array</td><td>Single-player ⇒ index <code>[0]</code> is the snapshot. <strong>Must be present</strong> — a missing entry is a scraper drop signal and raises <code>ValueError</code>.</td></tr>
+  <tr><td><code>rooms</code></td><td>array</td><td>Map geometry; not consumed by the harness.</td></tr>
+</table>
+
+<p>Floors are <strong>1-indexed</strong> across the whole run (ancient room = floor 1, boss = final). The <code>Floor.ordinal</code> the parser assigns is a global running count, not per-act.</p>
+
+<h3>3.3 · <code>player_stats[0]</code> — the per-floor snapshot</h3>
+<p>This is the "after this floor resolved" state. Observed keys: <code>ancient_choice, cards_gained, current_gold, current_hp, damage_taken, event_choices, gold_gained, gold_lost, gold_spent, gold_stolen, hp_healed, max_hp, max_hp_gained, max_hp_lost, player_id, relic_choices</code>.</p>
+
+<h4>Real floor-1 (ancient) snapshot</h4>
+<pre><code>{
+  "ancient_choice": [
+    {"TextKey":"GOLDEN_PEARL",     "title":{"key":"GOLDEN_PEARL.title","table":"relics"},     "was_chosen":false},
+    {"TextKey":"ARCANE_SCROLL",    "title":{"key":"ARCANE_SCROLL.title","table":"relics"},    "was_chosen":true },
+    {"TextKey":"PRECARIOUS_SHEARS","title":{"key":"PRECARIOUS_SHEARS.title","table":"relics"},"was_chosen":false}
+  ],
+  "cards_gained": [{"id":"CARD.ECHO_FORM"}],
+  "current_gold": 99,
+  "current_hp": 75,
+  "damage_taken": 0,
+  "event_choices": [{"title":{"key":"ARCANE_SCROLL.title","table":"relics"}}],
+  "gold_gained":0,"gold_lost":0,"gold_spent":0,"gold_stolen":0,
+  "hp_healed":75,"max_hp":75,"max_hp_gained":0,"max_hp_lost":0,
+  "player_id":1,
+  "relic_choices": [{"choice":"RELIC.ARCANE_SCROLL","was_picked":true}]
+}</code></pre>
+
+<h3>3.4 · How <code>parse_run()</code> maps it to a <code>Floor</code></h3>
+<p>The parser flattens the messy, room-type-dependent scraper shapes into a uniform <code>Floor</code> dataclass:</p>
+<table>
+  <tr><th>Floor field</th><th>Source</th><th>Extraction rule</th></tr>
+  <tr><td><code>ordinal</code></td><td>position</td><td>Global 1-indexed running count across all acts.</td></tr>
+  <tr><td><code>map_point_type</code></td><td><code>row.map_point_type</code></td><td>Lowercased.</td></tr>
+  <tr><td><code>hp_after</code></td><td><code>current_hp</code></td><td>Exact for non-combat; combats allow ±2 tolerance (Vulnerable rounding / intent variance).</td></tr>
+  <tr><td><code>gold_after</code></td><td><code>current_gold</code></td><td>Always exact.</td></tr>
+  <tr><td><code>relics_picked</code></td><td><code>ancient_choice</code> + <code>relic_choices</code></td><td>Union of entries with <code>was_chosen</code>/<code>was_picked</code> true. Normalized to <code>"RELIC.&lt;UPPER_SNAKE&gt;"</code> (prefix added if missing).</td></tr>
+  <tr><td><code>cards_gained</code></td><td><code>cards_gained</code></td><td>Card ids added to the master deck (shop buys, reward picks, event grants).</td></tr>
+  <tr><td><code>cards_removed</code></td><td><code>cards_removed</code></td><td>Removals (Smith pre-state, shop purge, event removals).</td></tr>
+  <tr><td><code>upgraded_cards</code></td><td><code>upgraded_cards</code></td><td>One entry per upgraded instance. <em>Bare strings</em> in v0.103.2; the parser also accepts <code>{id}</code> dicts.</td></tr>
+  <tr><td><code>event_choices</code></td><td><code>event_choices</code></td><td>For chosen options, the TextKey tail is lowercased (e.g. <code>…options.BOTTLE.title → "bottle"</code>).</td></tr>
+  <tr><td><code>raw_player_stats</code></td><td>whole blob</td><td>Retained verbatim for diagnostics; not used in equality/checkpoints.</td></tr>
+</table>
+
+<div class="callout warn">
+  <strong>Shape quirks the parser absorbs.</strong>
+  <code>card_choices</code> entries are <code>{card:{id}, was_picked}</code>; <code>relic_choices</code> are the same with <code>relic</code>/<code>was_chosen</code>; <code>ancient_choice</code> (floor 1 only) uses <code>{TextKey, was_chosen}</code> directly. <code>cards_gained</code>/<code>cards_removed</code> entries are <code>{"id": "CARD.X"}</code> dicts, while <code>upgraded_cards</code> are bare <code>"CARD.X"</code> strings. The helper <code>_ids()</code> accepts both string and <code>{id}</code> forms so the parser keeps working if the scraper schema converges either way.
+</div>
+
+<h3>Parsing a <code>.run</code> in Python</h3>
+<pre><code>from pathlib import Path
+from replay.scraped import parse_run
+
+run = parse_run(Path(".../the-defect/2026-03/05eeee23-….run"))
+print(run.seed, run.ascension, "won" if run.won else "lost")
+for f in run.floors:
+    print(f"{f.ordinal:>2} {f.map_point_type:<9} hp={f.hp_after} gold={f.gold_after} "
+          f"+cards={f.cards_gained} +relics={f.relics_picked}")</code></pre>
+<p>The <code>Run</code> dataclass exposes: <code>seed, ascension, build_id, won, acts, floors[], source_path</code>. Each <code>Floor</code>: <code>ordinal, map_point_type, hp_after, gold_after, relics_picked, cards_gained, cards_removed, upgraded_cards, event_choices, raw_player_stats</code>.</p>
+
+<!-- ============================================================ -->
+<h2 id="compare">4 · Side-by-side comparison</h2>
+<table>
+  <tr><th>&nbsp;</th><th>A · JSONL run logs</th><th>B · Scraped <code>.run</code></th></tr>
+  <tr><td><strong>Container</strong></td><td>JSON Lines (one object per line)</td><td>One JSON object</td></tr>
+  <tr><td><strong>Extension</strong></td><td><code>.jsonl</code></td><td><code>.run</code> (JSON inside)</td></tr>
+  <tr><td><strong>Produced by</strong></td><td>This project (<code>game_log.py</code>) driving the engine</td><td>External <code>sts2_run_scraper</code> from real human games</td></tr>
+  <tr><td><strong>Granularity</strong></td><td>Every decision + action (per card play)</td><td>Per-floor after-state snapshots</td></tr>
+  <tr><td><strong>Captures full game state?</strong></td><td>Yes — hand, enemies, piles, powers, deck</td><td>No — HP/gold + choice deltas only</td></tr>
+  <tr><td><strong>Primary consumer</strong></td><td>Workbench GUI replay / debugging</td><td>Parity harness (engine vs. reality)</td></tr>
+  <tr><td><strong>Parser / writer</strong></td><td><code>python/game_log.py</code></td><td><code>python/replay/scraped.py</code></td></tr>
+  <tr><td><strong>Lifecycle</strong></td><td>Auto-deleted after 7 days</td><td>Persistent corpus, versioned by schema pin</td></tr>
+  <tr><td><strong>Template vars</strong></td><td>Unresolved (<code>{Damage}</code> + <code>stats</code>)</td><td>TextKeys (<code>RELIC.X</code>, <code>CARD.Y</code>)</td></tr>
+</table>
+
+<footer class="page">
+  Sourced directly from <code>python/game_log.py</code> and <code>python/replay/scraped.py</code> plus a real log
+  (<code>20260605_035316_Necrobinder_run_5.jsonl</code>) and a real corpus file
+  (<code>the-defect/2026-03/05eeee23-…​.run</code>). Schemas evolve — re-check the parsers if the pin moves.
+</footer>
+
+</div>
+</body>
+</html>

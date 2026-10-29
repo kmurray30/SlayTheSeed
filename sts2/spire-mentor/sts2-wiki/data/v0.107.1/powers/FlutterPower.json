@@ -1,0 +1,9 @@
+{
+  "class_name": "FlutterPower",
+  "title": "Flutter",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Receives 50% less damage from Attacks.",
+  "smart_description": "Receives 50% less damage from Attacks. Deal attack damage {Amount} time(s) to Stun it.",
+  "notes": "Counters each powered Attack that lands. When counter reaches 0, the owner is Stunned and ceases Hovering. This effect is applied to the ThievingHopper monster and scales in multiplayer."
+}

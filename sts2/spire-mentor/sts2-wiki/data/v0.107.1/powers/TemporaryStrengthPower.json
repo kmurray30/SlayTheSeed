@@ -1,0 +1,9 @@
+{
+  "class_name": "TemporaryStrengthPower",
+  "title": "Temporary Strength",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Gain [gold]Strength[/gold] until the end of this turn.",
+  "smart_description": "Gain [blue]variable[/blue] [gold]Strength[/gold] until the end of this turn.",
+  "notes": "This is an abstract base class representing temporary strength buffs. The actual amount of Strength gained depends on the source model (Card, Potion, or Relic) that applies this power. The power automatically expires at the end of the turn and reduces Strength back to normal. Concrete subclasses like FlexPotionPower inherit from this."
+}

@@ -1,0 +1,78 @@
+{
+  "class_name": "GremlinMerc",
+  "title": "Gremlin Merc",
+  "min_hp": 51,
+  "max_hp": 53,
+  "min_hp_base": 47,
+  "max_hp_base": 49,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "GIMME_MOVE",
+      "title": "Gimme",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 8,
+          "damage_base": 7,
+          "hits": 2,
+          "ascension": 8
+        }
+      ],
+      "effects": [
+        "Deal 8/7 damage",
+        "2 hits",
+        "Steal from each player"
+      ]
+    },
+    {
+      "id": "DOUBLE_SMASH_MOVE",
+      "title": "Double Smash",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 7,
+          "damage_base": 6,
+          "hits": 2,
+          "ascension": 8
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": [
+        "Deal 7/6 damage",
+        "2 hits",
+        "Apply 2 Weak",
+        "Steal from each player"
+      ]
+    },
+    {
+      "id": "HEHE_MOVE",
+      "title": "Hehe",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 9,
+          "damage_base": 8,
+          "ascension": 8
+        },
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Deal 9/8 damage",
+        "Apply 2 Strength",
+        "Steal from each player"
+      ]
+    }
+  ],
+  "move_pattern": "Cycles: Gimme → Double Smash → Hehe",
+  "powers_on_spawn": [
+    "Surprise (1)",
+    "Thievery (applied to each player, 20)"
+  ],
+  "notes": "Every move triggers the Thievery power, which causes the monster to steal gold from each player. The Gimme move has special dialogue and visual effects on its first use only."
+}

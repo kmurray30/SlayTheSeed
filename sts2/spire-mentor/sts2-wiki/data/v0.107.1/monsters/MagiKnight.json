@@ -1,0 +1,94 @@
+{
+  "class_name": "MagiKnight",
+  "title": "Magi Knight",
+  "min_hp": 89,
+  "max_hp": 89,
+  "min_hp_base": 82,
+  "max_hp_base": 82,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "POWER_SHIELD_MOVE",
+      "title": "Power Shield",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 7,
+          "damage_base": 6,
+          "ascension": 9
+        },
+        {
+          "type": "block",
+          "amount": 9,
+          "amount_base": 5,
+          "ascension": 8
+        }
+      ],
+      "effects": [
+        "Deal 7/6 damage",
+        "Gain 9/5 Block"
+      ]
+    },
+    {
+      "id": "DAMPEN_MOVE",
+      "title": "Dampen",
+      "intents": [
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": [
+        "Apply Dampen"
+      ]
+    },
+    {
+      "id": "RAM_MOVE",
+      "title": "Ram",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 11,
+          "damage_base": 10,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 11/10 damage"
+      ]
+    },
+    {
+      "id": "PREP_MOVE",
+      "title": "Prep",
+      "intents": [
+        {
+          "type": "block",
+          "amount": 9,
+          "amount_base": 5,
+          "ascension": 8
+        }
+      ],
+      "effects": [
+        "Gain 9/5 Block"
+      ]
+    },
+    {
+      "id": "MAGIC_BOMB",
+      "title": "Magic Bomb",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 40,
+          "damage_base": 35,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 40/35 damage"
+      ]
+    }
+  ],
+  "move_pattern": "Starts with Power Shield → Dampen, then cycles: Ram → Prep → Magic Bomb",
+  "powers_on_spawn": [],
+  "notes": "The Prep move is hidden from the bestiary display. The Magi Knight alternates between offensive attacks (Ram and Magic Bomb) and defensive maneuvers (Power Shield and Prep) while applying Dampen debuffs to hinder the player."
+}

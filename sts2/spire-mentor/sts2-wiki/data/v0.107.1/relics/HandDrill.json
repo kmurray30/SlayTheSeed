@@ -1,0 +1,8 @@
+{
+  "class_name": "HandDrill",
+  "title": "Hand Drill",
+  "rarity": "Event",
+  "description": "Whenever you break an enemy's Block, apply 2 Vulnerable.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "Triggers when the player's creature deals damage that breaks an enemy's Block. Only applies Vulnerable if the target is not the player."
+}

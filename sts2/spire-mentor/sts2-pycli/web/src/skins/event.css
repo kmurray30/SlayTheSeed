@@ -1,0 +1,545 @@
+/* ============================================================================
+   Event / Neow screen skin — scoped under .gs-event (rides on .gs-scene).
+   ============================================================================
+   Art URLs arrive as CSS custom properties set inline by EventScreen.tsx via
+   assetUrl() (never hardcoded here — the assets base can be a CDN in lean
+   deployments):
+     --ev-btn       ui/common_ui/event_button.png          (teal clipped-corner plaque)
+     --ev-btn-glow  ui/common_ui/event_button_outline.png  (white rim, used as the stroke)
+     --neow-bg      scene_bgs/neow_room/neow_bg.png        (cavern, black cutout for Neow)
+     --neow-atlas   scene_bgs/neow_room/neow.png           (rig atlas; head CSS-cropped below)
+     --neow-fall-l / --neow-fall-r                          (waterfall strands)
+     --neow-vig     scene_bgs/neow_room/neow_vignette.png  (cave-mouth frame, transparent center)
+*/
+
+/* ---- frame height ---------------------------------------------------------
+   The shared primitive only sets `min-height: 100%`, so the scene box is
+   content-sized and a percentage height on anything inside it resolves to
+   auto — which is why `.gs-event-col { min-height: 100% }` never took and
+   `justify-content: flex-end` silently did nothing. The viewport parent has a
+   definite height, so pin to it: now the column really is frame-height and the
+   Neow stack can hang off its bottom edge. */
+.gs-event.gs-scene { height: 100%; }
+
+/* ---- scene grade: the room must read as a lit place -----------------------
+   The shared .gs-scene::before already lifts raw PCK art a little; event
+   illustrations are authored darker still (the game adds candle-glow passes),
+   so lift further here and warm it slightly. Legibility comes from the text
+   column's local scrim + the bottom scrim, never a full-frame dim. */
+.gs-event.gs-scene::before {
+  filter: brightness(1.5) saturate(1.14) contrast(1.03);
+}
+/* The shared primitive frames the art with `inset 0 0 110px 24px black` — a
+   hard-edged dark band down every side that reads as an <img> clipped into a
+   box. The painting has to reach the frame edge and *feather* into dark, so
+   the box-shadow ring is dropped here and replaced by a wide radial falloff
+   plus the bottom scrim the options sit on. */
+.gs-event.gs-scene::after {
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.3), transparent 13%,
+      transparent 60%, rgba(4, 6, 8, 0.42) 88%, rgba(4, 6, 8, 0.62)),
+    radial-gradient(125% 105% at 48% 44%, transparent 40%,
+      rgba(0, 0, 0, 0.18) 68%, rgba(0, 0, 0, 0.44) 88%, rgba(0, 0, 0, 0.66));
+  box-shadow: none;
+}
+
+/* ---- layout: game anchors title/text/options in the RIGHT column ---------- */
+.gs-event-col {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: min(700px, 47%);
+  margin-left: auto;
+  margin-right: 6%;
+  min-height: 100%;
+  /* the game's anchor line puts the option bars just past mid-frame; the old
+     `padding: 6.5%` top-anchored them a full 12% of frame height too high.
+     Centring (with a downward bias) lands them there and, unlike a fixed or
+     percentage top pad, still fits when the body copy runs long. */
+  /* `safe` centre: when the column is TALLER than the frame, plain `center`
+     overflows equally at both ends and the top of the list becomes
+     unreachable — you cannot scroll above a flex container's content box.
+     `safe` falls back to flex-start in exactly that case. */
+  justify-content: safe center;
+  /* Scroll the option list INSIDE the scene rather than growing the page.
+     Neow's blessing is the tallest event the game serves (four relic options,
+     each with a description, plus a win chip under every one once hints are
+     on); at a short viewport that ran off the bottom of the frame, and since
+     the scene's parent clips, the last option could not be reached at all. */
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 246, 226, 0.28) transparent;
+  padding: 40px 0 24px;
+  text-align: center;
+  /* local legibility scrim behind the column, not over the whole frame */
+  background: radial-gradient(110% 90% at 50% 42%, rgba(5, 7, 10, 0.5), rgba(5, 7, 10, 0) 74%);
+}
+.gs-event-header { position: relative; }
+.gs-event-header .gs-event-analyze { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+
+/* ---- typography ----------------------------------------------------------- */
+.gs-event-title {
+  margin: 0;
+  font-family: var(--game-font);
+  font-weight: 700;
+  font-size: clamp(24px, 2.4vw, 38px);
+  letter-spacing: 0.3px;
+  color: var(--gold);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.85), 0 0 18px rgba(0, 0, 0, 0.6);
+}
+.gs-event-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-family: var(--game-font);
+  color: oklch(93% 0.02 85);
+  font-size: 16.5px;
+  line-height: 1.55;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 12px rgba(0, 0, 0, 0.55);
+}
+.gs-event-body p { margin: 0; }
+/* the display-only emphasis pass (RichText `emphasize`) — the game's body copy
+   bolds its subject noun in the same near-white, never a second colour */
+.gs-event-body strong { font-weight: 700; color: oklch(97% 0.015 85); }
+
+/* ---- options: the game's actual event_button plaque art -------------------
+   NINE-SLICE GEOMETRY (measured off the PNG, do not "tidy" these numbers).
+   event_button.png is 284x110 with a 7-8 px fully transparent margin; the
+   plate's clipped corner is a straight 45° cut running from (34, 8) to (8, 37)
+   — so the corner region spans 38 source px from the image edge, NOT 30.
+
+   Round 3 sliced at `30 fill / 15px`, which broke the shape two ways at once:
+   the bottom of the diagonal (y 30..37) fell OUTSIDE the corner slice and into
+   the LEFT EDGE slice, which nine-slice then stretches down the full height —
+   smearing a half-transparent diagonal into a soft feathered edge — and the
+   corner it did capture was squashed 30->15 px. The result reads as a plain
+   rounded rectangle with a blurred rim, which is exactly what the round-3
+   critics saw. Fix: slice 38 (the whole cut) and render the corner at 33 px,
+   i.e. a uniform 0.87 scale, so the cut stays a crisp straight chamfer.
+
+   `--ev-out` is the art's transparent margin at that same scale, so the
+   PAINTED plate edge lands exactly on the button's border box. */
+.gs-event-options { display: flex; flex-direction: column; gap: 20px; margin-top: 8px; }
+.gs-event-option {
+  --ev-slice: 38;
+  --ev-bw: 33px;
+  --ev-out: 7px;
+  --ev-stroke: oklch(78% 0.093 205);
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  /* horizontal padding clears the chamfer; the game insets its label ~25 px */
+  padding: 12px 28px;
+  min-height: 78px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: oklch(93% 0.02 85);
+  font-family: var(--game-font);
+  cursor: pointer;
+  /* no CSS bloom: the game's plates are flat lit material with a thin stroke.
+     Any glow lives on the art layers below, clipped to the plate silhouette. */
+  box-shadow: none;
+}
+/* the plaque art itself, on its own layer so it can be lit without touching
+   the text. Measured: the game renders this PNG at ~1.09x its authored
+   brightness (art teal rgb(42,77,82) -> game rgb(47,84,89)); round 3 ran it at
+   1.3/1.3, which is where the "bright saturated plastic teal" came from. */
+.gs-event-option::before {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--ev-out));
+  border: var(--ev-bw) solid transparent;
+  border-image: var(--ev-btn) var(--ev-slice) fill / var(--ev-bw) stretch;
+  /* drop-shadow follows the chamfered alpha silhouette — a box-shadow would
+     draw the rectangle the plate deliberately is not */
+  filter: brightness(1.09) drop-shadow(0 3px 5px rgba(0, 0, 0, 0.55));
+  pointer-events: none;
+  transition: filter 0.15s ease;
+}
+.gs-event-option > * { position: relative; }
+/* the stroke: the game's own outline art, same slice geometry as the plate.
+   Default leg paints the art as-is (white rim); where mask-border exists the
+   art becomes a MASK for a flat colour, which is what makes the game's cyan
+   (and the taken plate's gold) reachable without a bloom filter. */
+.gs-event-option::after {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--ev-out));
+  border: var(--ev-bw) solid transparent;
+  border-image: var(--ev-btn-glow) var(--ev-slice) / var(--ev-bw) stretch;
+  opacity: 0.62;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+@supports ((-webkit-mask-box-image: none) or (mask-border-source: none)) {
+  .gs-event-option::after {
+    border-image: none;
+    background: var(--ev-stroke);
+    -webkit-mask-box-image: var(--ev-btn-glow) var(--ev-slice) / var(--ev-bw) stretch;
+    mask-border: var(--ev-btn-glow) var(--ev-slice) / var(--ev-bw) stretch;
+    opacity: 0.92;
+  }
+}
+.gs-event-option:hover:not(:disabled)::after { opacity: 1; }
+.gs-event-option:hover:not(:disabled)::before {
+  filter: brightness(1.26) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
+}
+.gs-event-option:focus-visible {
+  outline: 2px solid oklch(80% 0.1 220);
+  outline-offset: 4px;
+}
+/* the theme dims every disabled button to 50% — replay's read-only options
+   must stay solid plaques (the game always draws them full-strength) */
+.gs-event-option:disabled { cursor: default; opacity: 1; }
+/* the theme's hover rule paints border-color amber; our border must stay
+   absent so only the plaque art shows */
+.gs-event-option:not(:disabled):hover { border-color: transparent; }
+.gs-event-option.is-locked { opacity: 0.55; filter: grayscale(0.5); }
+
+/* single continue-style option ("Proceed"): the game gives it one wide, short
+   bar low in the frame rather than a stacked card */
+.gs-event-options.is-solo .gs-event-option { min-height: 62px; padding: 10px 28px; }
+
+.gs-event-option-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.gs-event-option-name {
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--gold);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+.gs-event-option-desc {
+  font-size: 15px;
+  line-height: 1.4;
+  color: oklch(93% 0.02 85);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* framed relic/icon art (Neow blessings) instead of a bare pasted sprite */
+.gs-event-option-icon {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  padding: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 32%, oklch(34% 0.04 240 / 0.95), oklch(16% 0.02 240 / 0.95));
+  border: 1px solid oklch(70% 0.1 85 / 0.55);
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.8);
+}
+.gs-event-option-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+/* ---- replay keeper: the branch that was taken ------------------------------
+   The game has no "chosen" badge at all — its selected state is the SAME plate
+   drawn brighter with a warm edge. Round 3's floating yellow circle-check
+   overhanging the corner was an invention and the critics' rank-3 P0. What is
+   left is that lit plate plus a small gold pip riding ON the plate's right
+   edge, which keeps the replay scannable without adding a foreign object. */
+.gs-event-option.is-taken { --ev-stroke: oklch(82% 0.13 86); }
+.gs-event-option.is-taken::before {
+  filter: brightness(1.34) saturate(1.04) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
+}
+/* fallback leg only (no mask-border): tint the white rim art warm */
+.gs-event-option.is-taken::after { opacity: 0.8; filter: sepia(1) saturate(2.4) hue-rotate(-14deg); }
+@supports ((-webkit-mask-box-image: none) or (mask-border-source: none)) {
+  .gs-event-option.is-taken::after { opacity: 1; filter: none; }
+}
+.gs-event-medallion {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  width: 13px;
+  height: 13px;
+  margin-top: -6.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, oklch(93% 0.11 92), oklch(63% 0.13 85) 68%, oklch(46% 0.1 80));
+  box-shadow: 0 0 0 1px oklch(32% 0.05 78 / 0.85), 0 0 7px oklch(80% 0.14 85 / 0.5);
+}
+
+/* ============================================================================
+   Neow variant — compose the real neow_room scene layers.
+   The bg's central black blob is the game's cutout for the animated Neow rig;
+   the static head (crown + stitched face) is CSS-cropped out of the rig atlas
+   and layered into it. Layers are stretched 100%/100% so percent positions
+   track the 1920x900 art exactly regardless of viewport aspect.
+============================================================================ */
+.gs-scene > .gs-neow-scene { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.gs-neow-scene > div { position: absolute; background-repeat: no-repeat; }
+.gs-neow-bg { inset: 0; background-image: var(--neow-bg); background-size: 100% 100%; }
+/* head crop: atlas 1920x1626, box x172 y1044 w294 h336 (crown + face). The
+   atlas cell is hard-cut on its right/bottom edge; the altar layer below
+   covers the bottom and a soft mask fades the right. */
+.gs-neow-head {
+  left: 38.2%;
+  top: 7%;
+  width: 27.5%;
+  aspect-ratio: 294 / 336;
+  background-image: var(--neow-atlas);
+  background-size: 653.06% auto;
+  background-position: 10.58% 80.93%;
+  filter: drop-shadow(0 0 24px rgba(70, 160, 210, 0.35)) brightness(1.06);
+  -webkit-mask-image: linear-gradient(to right, black 90%, transparent 99%);
+  mask-image: linear-gradient(to right, black 90%, transparent 99%);
+}
+/* altar rocks + glowing slab in front of the chin (atlas box x40 y1382 w588 h244) */
+.gs-neow-altar {
+  left: 24.4%;
+  top: 69.5%;
+  width: 55%;
+  aspect-ratio: 588 / 244;
+  background-image: var(--neow-atlas);
+  background-size: 326.53% auto;
+  background-position: 3% 100%;
+  filter: brightness(1.05);
+}
+.gs-neow-fall { top: 0; height: 102%; opacity: 0.95; background-size: auto 100%; }
+.gs-neow-fall--l { left: 8%; width: 24%; background-image: var(--neow-fall-l); background-position: left top; }
+.gs-neow-fall--r { right: 0; width: 25%; background-image: var(--neow-fall-r); background-position: right top; }
+.gs-neow-vignette { inset: 0; background-image: var(--neow-vig); background-size: 100% 100%; }
+/* cold cavern light around the face */
+.gs-neow-glow {
+  inset: 0;
+  background: radial-gradient(46% 44% at 52% 36%, rgba(110, 200, 245, 0.26), transparent 70%);
+  mix-blend-mode: screen;
+}
+
+/* Neow content: centered column pushed to the bottom third so the face stays
+   visible. The name is NOT a banner over the scene — see .gs-neow-lockup. */
+.gs-event--neow .gs-event-col {
+  margin: 0 auto;
+  width: min(660px, 55%);
+  /* the column fills the frame and the stack hangs off its bottom edge. A
+     percentage top padding would resolve against the scene WIDTH, overflow the
+     (definite-height, overflow:auto) viewport and drag the bottom-left lockup
+     below the fold — which is exactly what it did. */
+  /* `safe`, for the same reason the base column is `safe center`: Neow's is
+     the tallest option list the game serves (four relics, each with a
+     description, plus a win chip apiece once hints are on), and plain
+     `flex-end` pushes the overflow off the TOP of the column, where it cannot
+     be scrolled to. `safe` falls back to flex-start in exactly that case, so
+     the list scrolls inside the cave instead of running off it. */
+  justify-content: safe flex-end;
+  padding: 0 0 30px;
+  background: none;
+}
+.gs-event--neow .gs-event-col.is-solo {
+  /* one wide Proceed bar riding the bottom edge, as the game draws it */
+  width: min(920px, 62%);
+  padding: 0 0 26px;
+}
+
+/* the game's engraved name plaque, bottom-left of the cave: small, pale,
+   low-contrast stone lettering with the epithet under it — never tracked caps
+   floating over the middle of the frame. */
+.gs-neow-lockup {
+  position: absolute;
+  left: 2.6%;
+  bottom: 3.2%;
+  z-index: 1;
+  text-align: left;
+  pointer-events: none;
+}
+.gs-neow-name {
+  margin: 0;
+  font-family: var(--game-font);
+  font-weight: 700;
+  font-size: clamp(26px, 3vw, 50px);
+  line-height: 1;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: oklch(92% 0.006 250 / 0.85);
+  /* engraved: a dark bottom bevel plus a hairline top highlight */
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.55), 0 -1px 0 rgba(255, 255, 255, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.75);
+}
+.gs-neow-epithet {
+  margin-top: 4px;
+  font-family: var(--game-font);
+  font-style: italic;
+  font-size: clamp(12px, 1.05vw, 18px);
+  letter-spacing: 0.4px;
+  color: oklch(90% 0.008 250 / 0.78);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-event-option, .gs-event-option::before, .gs-event-option::after { transition: none; }
+}
+
+/* ---- treasure room -------------------------------------------------------
+   The game gives a chest its own room: you walk up to it and open it, and the
+   reward screens come after. Ours arrived as one "Open" bar on an empty
+   backdrop, so a treasure room registered only as two lines in the log.
+
+   The whole room is one Spine rig per act (`animations/backgrounds/
+   treasure_room/chest_room_act_N`, a single clip named `animation`), the same
+   shape the rest-site hero and every monster already use — so there is nothing
+   to compose here beyond placing it and making the chest itself the button. */
+.gs-treasure {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 100%;
+  min-height: 380px;
+  background: radial-gradient(120% 100% at 50% 62%, #241a10 0%, #0d0a07 72%);
+}
+.gs-treasure-rig {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 26px 34px rgba(0, 0, 0, 0.6));
+}
+/* The chest IS the affordance. A transparent hit area over the rig, with the
+   prompt riding under it in the game's face — not a plaque button parked below
+   a picture of a chest. */
+.gs-treasure-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: end center;
+  padding-bottom: 6%;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--game-font);
+}
+.gs-treasure-hit:disabled { cursor: default; }
+.gs-treasure-prompt {
+  font-size: clamp(17px, 2vw, 26px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #f6e6c4;
+  -webkit-text-stroke: 4px #3a2a12;
+  paint-order: stroke fill;
+  text-shadow: 0 3px 5px rgba(0, 0, 0, 0.7);
+  opacity: 0.9;
+  transition: opacity 0.14s ease, transform 0.14s ease;
+}
+.gs-treasure-hit:hover:not(:disabled) .gs-treasure-prompt,
+.gs-treasure-hit:focus-visible .gs-treasure-prompt {
+  opacity: 1;
+  transform: translateY(-3px);
+}
+.gs-treasure-hit.is-opened .gs-treasure-prompt { opacity: 0.6; }
+.gs-treasure-hit:focus-visible { outline: 3px solid #e2b466; outline-offset: -10px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-treasure-prompt { transition: none; }
+}
+
+/* ---- the chest reveal ("What's Inside?") ----------------------------------
+   A treasure room has no decision in it: the engine opens the chest on entry
+   and moves on (see TreasureReveal.tsx). This panel is what makes the room
+   visible — the banner, the open chest, and what it held — laid out over the
+   screen you actually landed on, dismissed by a click.
+
+   It reuses `.gs-treasure`'s room backdrop and `.gs-treasure-rig` placement;
+   only the overlay behaviour and the haul below the chest are new. */
+.gs-treasure-reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  grid-template-rows: auto 1fr auto auto;
+  align-content: center;
+  justify-items: center;
+  gap: clamp(6px, 1.2vh, 16px);
+  padding: clamp(12px, 2.4vh, 28px) 16px clamp(16px, 3vh, 34px);
+  cursor: pointer;
+  /* A short viewport must scroll rather than crop the banner off the top and
+     the gold off the bottom — `align-content: center` overflows BOTH edges. */
+  overflow: auto;
+  /* Opaque: the map underneath is the NEXT decision, and showing it through
+     the chest reads as two screens at once. */
+  background: radial-gradient(120% 100% at 50% 58%, #241a10 0%, #070604 78%);
+  animation: gs-treasure-in 0.18s ease-out;
+}
+@keyframes gs-treasure-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* The game's own parchment ribbon, same lockup as the card-reward screen. */
+.gs-treasure-banner {
+  position: relative;
+  width: min(520px, 84%);
+  display: grid; place-items: center;
+  filter: drop-shadow(0 9px 15px rgba(0, 0, 0, 0.6));
+}
+.gs-treasure-banner > img { width: 100%; height: auto; display: block; }
+.gs-treasure-title {
+  position: absolute;
+  margin: 0; padding-bottom: 0.55em;  /* optical center of the ribbon's bow */
+  font-family: var(--game-font);
+  font-weight: 700;
+  font-size: clamp(20px, 2.5vw, 30px);
+  color: #fff6e2;
+  -webkit-text-stroke: 5px #4d3f2c;
+  paint-order: stroke fill;
+  text-shadow: 0 2px 3px rgba(28, 18, 8, 0.55);
+}
+
+/* What the chest held: the relic beside its plaque, gold beneath. */
+.gs-treasure-haul {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  max-width: min(560px, 92%);
+}
+.gs-treasure-relic {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.gs-treasure-relic > img {
+  width: clamp(52px, 6vw, 76px);
+  height: auto;
+  filter: drop-shadow(0 0 16px rgba(120, 220, 235, 0.45));
+}
+.gs-treasure-plaque {
+  padding: 10px 14px;
+  border-radius: 7px;
+  background: oklch(30% 0.035 250 / 0.92);
+  border: 1px solid oklch(45% 0.04 250);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
+  font-family: var(--game-font);
+  text-align: left;
+}
+.gs-treasure-relicname {
+  font-weight: 700;
+  font-size: clamp(15px, 1.5vw, 19px);
+  color: var(--gold);
+}
+.gs-treasure-relictext {
+  margin-top: 3px;
+  font-size: clamp(13px, 1.25vw, 16px);
+  line-height: 1.45;
+  color: oklch(93% 0.02 85);
+  white-space: pre-line;
+}
+.gs-treasure-empty { color: oklch(80% 0.02 85); font-size: 15px; }
+.gs-treasure-gold {
+  font-family: var(--game-font);
+  font-size: clamp(14px, 1.35vw, 17px);
+  color: var(--gold);
+  text-shadow: 0 1px 3px rgba(16, 10, 4, 0.85);
+}
+
+.gs-treasure-dismiss {
+  padding: 7px 22px;
+  border: 1px solid #6b552c;
+  border-radius: 5px;
+  background: oklch(28% 0.03 70 / 0.9);
+  color: #f6e6c4;
+  font-family: var(--game-font);
+  font-size: 15px;
+  cursor: pointer;
+}
+.gs-treasure-dismiss:hover { background: oklch(34% 0.04 70 / 0.95); }
+.gs-treasure-dismiss:focus-visible { outline: 3px solid #e2b466; outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-treasure-reveal { animation: none; }
+}

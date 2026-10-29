@@ -1,0 +1,9 @@
+{
+  "class_name": "SubroutinePower",
+  "title": "Subroutine",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever you play a Power, gain 1 energy.",
+  "smart_description": "Whenever you play a Power, gain {Amount} energy.",
+  "notes": "Tracks individual Power cards to avoid triggering on cards that started play before this power was applied. Energy is granted equal to the power's current stack value at the time each Power card is played."
+}

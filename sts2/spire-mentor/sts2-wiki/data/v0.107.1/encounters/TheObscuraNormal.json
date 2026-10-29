@@ -1,0 +1,10 @@
+{
+  "class_name": "TheObscuraNormal",
+  "title": "The Obscura",
+  "room_type": "Monster",
+  "is_weak": false,
+  "monsters": ["TheObscura"],
+  "total_monsters": 1,
+  "tags": [],
+  "notes": "Encounter defines two slots (illusion and obscura). AllPossibleMonsters includes both TheObscura and Parafright, but GenerateMonsters() only spawns TheObscura in the obscura slot. The illusion slot is defined but currently unused."
+}

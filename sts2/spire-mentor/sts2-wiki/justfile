@@ -1,0 +1,340 @@
+# STS2 Wiki build pipeline
+
+# Game version (auto-detected or override)
+version := env("STS2_VERSION", "v0.107.1")
+
+# Where the game build lives. `just import-game` (monorepo root) copies or links
+# the player's own install into ../sts2_binaries/<version>/ with a fixed layout:
+#   release_info.json, SlayTheSpire2.pck, data/ -> the platform data_sts2_* dir
+# (sts2.dll and its sibling DLLs). Every recipe below reads from there, so the
+# same commands work on Linux, macOS and Windows. Overrides, for a build that
+# is somewhere else: STS2_BINARIES (the root), or STS2_DLL / STS2_PCK /
+# STS2_RELEASE for a single file.
+sts2_binaries := env("STS2_BINARIES", justfile_directory() / "../sts2_binaries")
+sts2_build := sts2_binaries / version
+sts2_dll := env("STS2_DLL", sts2_build / "data/sts2.dll")
+sts2_pck := env("STS2_PCK", sts2_build / "SlayTheSpire2.pck")
+sts2_release := env("STS2_RELEASE", sts2_build / "release_info.json")
+
+# Default: full build
+default: check build
+
+# --- Sanity checks ---
+
+check: check-format check-types check-content check-links check-images test
+
+check-format:
+    uv run ruff check scripts/ tools/
+    uv run ruff format --check scripts/ tools/
+
+check-types:
+    uv run mypy scripts/
+
+# DISCOVERS `scripts/test_*.py` rather than listing them: the hand-kept list
+# this replaced silently omitted whichever module was added last, and an
+# omitted module is invisible -- `just check` stayed green while
+# `test_particle_scene` and `test_godot_curve` (the parser behind every
+# committed emitter spec and baked LUT) went unrun. `tools/` is a separate
+# package root, so it still needs its own line.
+test:
+    uv run python -m unittest discover -t . -s scripts -p 'test_*.py' -v
+    uv run python -m unittest tools.lookup.test_lookup -v
+
+# Validates generated content/*.md frontmatter against site/src/content.config.ts
+# zod schemas. This is the end-to-end validation that the per-entity JSON in
+# data/{version}/ produces valid Astro content after the generate step.
+# Requires content to have been generated first (run `just generate-from-data`).
+check-content:
+    cd site && npx --no-install astro sync
+
+check-links:
+    uv run python -m scripts.check_links site/dist
+
+check-images:
+    uv run python -m scripts.check_images data/{{version}} site/public/images
+
+format:
+    uv run ruff format scripts/ tools/
+    uv run ruff check --fix scripts/
+
+# --- Decompile + extract from game ---
+
+detect-version:
+    @python3 -c "import json; print(json.load(open('{{sts2_release}}'))['version'])"
+
+decompile:
+    #!/usr/bin/env bash
+    export DOTNET_ROOT="${DOTNET_ROOT:-$(dirname $(dirname $(readlink -f $(which dotnet) 2>/dev/null || echo /opt/homebrew/Cellar/dotnet/10.0.103/libexec/dotnet)))}"
+    if [ -d "decompiled/{{version}}" ]; then
+        echo "Already decompiled: {{version}}"
+    else
+        echo "Decompiling {{version}}..."
+        ~/.dotnet/tools/ilspycmd -p -o "decompiled/{{version}}" "{{sts2_dll}}"
+    fi
+
+extract-pck:
+    #!/usr/bin/env bash
+    if [ -d "extracted/{{version}}/localization" ]; then
+        echo "Already extracted PCK: {{version}}"
+    else
+        echo "Extracting PCK for {{version}}..."
+        uv run python -m scripts.extract_pck "{{sts2_pck}}" "extracted/{{version}}" --prefix localization/eng
+        uv run python -m scripts.extract_pck "{{sts2_pck}}" "extracted/{{version}}" --prefix images/atlases
+    fi
+
+# Historical alias: the audio pipeline was the first to honour STS2_PCK, so its
+# recipes (and extract-images / extract-vfx) still say `sfx_pck`. Same file.
+sfx_pck := sts2_pck
+
+# Path to the unpacked FMOD Studio API (not committed). Required for --render
+# on Linux/macOS; on Windows, unset, the game's own fmod.dll next to the pck
+# is used (or FMOD_LIB_DIR).
+fmod_sdk_root := env("FMOD_SDK_ROOT", "")
+
+# Extract the SFX banks (NOT music) from the pck and render named event WAVs
+extract-sfx:
+    FMOD_SDK_ROOT="{{fmod_sdk_root}}" uv run python -m scripts.extract_sfx "{{sfx_pck}}" "extracted/{{version}}" --render
+
+# Trim and encode rendered SFX WAVs to Opus/WebM at -16 LUFS
+encode-sfx:
+    #!/usr/bin/env bash
+    set -o pipefail
+    mkdir -p logs
+    uv run python -m scripts.encode_sfx \
+      "extracted/{{version}}/audio" "site/public/audio" | tee logs/encode-sfx.log
+
+# Regenerate the workbench's game <-> sound-event map from the decomp. One map
+# per game build (GH #877): the default build's (v0.107.1) at
+# web/public/sfx_map.json, any other build's at web/public/<ver>/sfx_map.json
+# (what web/src/sound/sfxMap.ts fetches for a run of that build).
+build-sfx-map:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    out="../sts2-pycli/web/public/sfx_map.json"
+    if [ "{{version}}" != "v0.107.1" ]; then
+      mkdir -p "../sts2-pycli/web/public/{{version}}"
+      out="../sts2-pycli/web/public/{{version}}/sfx_map.json"
+    fi
+    uv run python -m scripts.build_sfx_map "decompiled/{{version}}" "$out"
+
+# --- Extraction pipeline ---
+
+extract-cards:
+    uv run python -m scripts.extract_cards decompiled/{{version}} extracted/{{version}}/localization/eng data/{{version}}
+
+extract-powers:
+    uv run python -m scripts.extract_powers decompiled/{{version}} extracted/{{version}}/localization/eng data/{{version}}
+
+extract-monsters:
+    uv run python -m scripts.extract_monsters decompiled/{{version}} extracted/{{version}}/localization/eng data/{{version}}
+
+extract-encounters:
+    uv run python -m scripts.extract_encounters decompiled/{{version}} extracted/{{version}}/localization/eng data/{{version}}
+
+extract-ancients:
+    uv run python -m scripts.extract_ancients decompiled/{{version}} extracted/{{version}}/localization/eng data/{{version}}
+
+# `{{sfx_pck}}` (STS2_PCK, falling back to the Steam path), not `{{sts2_pck}}`
+# — same as `extract-vfx`. The hardcoded macOS Steam path made this recipe
+# unrunnable anywhere the game is not installed in that exact location, including
+# against the vendored `sts2_binaries/` pck.
+extract-images:
+    uv run python scripts/extract_images.py "{{sfx_pck}}" extracted/{{version}} site/public/images
+
+# Extract the renderable combat VFX (flipbook frames + Spine rigs) + manifest.
+# `sfx_pck`, despite the audio-flavoured name, is the pck variable that honours
+# STS2_PCK (see its definition above) — the audio pipeline just needed that
+# first. No --rev: the extractor derives one from a content hash of what it
+# wrote, so the manifest's `?v=` bust moves only when the art actually does.
+extract-vfx:
+    uv run python -m scripts.extract_vfx "{{sfx_pck}}" site/public/images
+
+# Every creature and room Spine rig -> site/public/images/*_rigs/
+extract-rigs:
+    uv run python -m scripts.extract_rig "{{sfx_pck}}" --all site/public/images
+
+# Still portraits (monsters/*.png, character_sprites/*.png) rendered from the
+# rigs `extract-rigs` wrote, via tools/spine-renderer (npm ci on first use)
+render-portraits:
+    uv run python -m scripts.render_portraits site/public/images
+
+# Rebuild the committed card/move -> VFX effect binding table (design spec
+# §1.4). Re-run this after touching decompiled/{{version}}'s Cards or
+# Monsters and commit the diff -- `test_extract_vfx_bindings` fails if the
+# committed table and a fresh extraction disagree. Also publishes a copy to
+# site/public/images/vfx/vfx_bindings.json (same convention as manifest.json)
+# -- that's the copy the workbench frontend actually fetches; commit BOTH.
+extract-vfx-bindings:
+    uv run python -m scripts.extract_vfx_bindings decompiled/{{version}} data/{{version}}/vfx_bindings.json
+
+# Rebuild the committed C# power-flash site ledger (creature-event VFX spec
+# 2026-08-29, section 1.5). Re-run after touching decompiled/{{version}}'s
+# Powers and commit the diff -- `test_power_flash_sites` fails if the committed
+# table and a fresh extraction disagree, and the Rust `power_flash_coverage`
+# gate counts the unported sites BY NAME. Re-extraction PRESERVES the
+# `ported`/`rust` fields of sites that still exist.
+extract-power-flash-sites:
+    uv run python -m scripts.power_flash_sites decompiled/{{version}} data/{{version}}/power_flash_sites.json
+
+extract-potions:
+    uv run python -m scripts.extract_potions decompiled/{{version}} extracted/{{version}}/localization/eng data/{{version}}
+
+extract-relics:
+    uv run python -m scripts.extract_relics decompiled/{{version}} extracted/{{version}}/localization/eng data/{{version}}
+
+extract-epochs:
+    uv run python -m scripts.extract_epochs decompiled/{{version}} extracted/{{version}}/localization/eng data/{{version}}
+
+extract-characters:
+    uv run python -m scripts.extract_characters decompiled/{{version}} extracted/{{version}}/localization/eng data/{{version}}
+
+extract-enchantments:
+    uv run python -m scripts.extract_enchantments decompiled/{{version}} extracted/{{version}}/localization/eng data/{{version}}
+
+# Note: events are extracted by llm-extract-events (per-entity JSON in data/{version}/events/).
+extract: extract-powers extract-cards extract-monsters extract-encounters extract-potions extract-relics extract-ancients extract-enchantments extract-characters extract-epochs
+
+# --- LLM-based extraction ---
+# These replace the regex-based extractors above for the migrated entity types.
+# Use --skip-build for batch mode (~15x faster); the per-entity generate step
+# is not needed when running the full pipeline because `just generate` rebuilds
+# all pages from the committed per-entity JSON.
+
+llm_concurrency := env("STS2_LLM_CONCURRENCY", "8")
+
+llm-extract-events:
+    uv run python -m scripts.llm_extract --type events --version {{version}} --concurrency {{llm_concurrency}} --skip-build
+
+llm-extract-monsters:
+    uv run python -m scripts.llm_extract --type monsters --version {{version}} --concurrency {{llm_concurrency}} --skip-build
+
+llm-extract-enchantments:
+    uv run python -m scripts.llm_extract --type enchantments --version {{version}} --concurrency {{llm_concurrency}} --skip-build
+
+llm-extract-potions:
+    uv run python -m scripts.llm_extract --type potions --version {{version}} --concurrency {{llm_concurrency}} --skip-build
+
+llm-extract-cards:
+    uv run python -m scripts.llm_extract --type cards --version {{version}} --concurrency {{llm_concurrency}} --skip-build
+
+llm-extract-powers:
+    uv run python -m scripts.llm_extract --type powers --version {{version}} --concurrency {{llm_concurrency}} --skip-build
+
+llm-extract-relics:
+    uv run python -m scripts.llm_extract --type relics --version {{version}} --concurrency {{llm_concurrency}} --skip-build
+
+llm-extract-encounters:
+    uv run python -m scripts.llm_extract --type encounters --version {{version}} --concurrency {{llm_concurrency}} --skip-build
+
+llm-extract: llm-extract-events llm-extract-monsters llm-extract-enchantments llm-extract-potions llm-extract-cards llm-extract-powers llm-extract-relics llm-extract-encounters
+
+# --- Site generation ---
+
+generate-cards:
+    uv run python -m scripts.generate_cards data/{{version}} site/src/content/cards
+
+generate-powers:
+    uv run python -m scripts.generate_powers data/{{version}} site/src/content/powers
+
+generate-monsters:
+    uv run python -m scripts.generate_monsters data/{{version}} site/src/content/monsters
+
+generate-encounters:
+    uv run python -m scripts.generate_encounters data/{{version}} site/src/content/encounters
+
+generate-ancients:
+    uv run python -m scripts.generate_ancients data/{{version}} site/src/content/ancients
+
+generate-potions:
+    uv run python -m scripts.generate_potions data/{{version}} site/src/content/potions
+
+generate-relics:
+    uv run python -m scripts.generate_relics data/{{version}} site/src/content/relics
+
+generate-events:
+    uv run python -m scripts.generate_events data/{{version}} site/src/content/events
+
+generate-epochs:
+    uv run python -m scripts.generate_epochs data/{{version}} site/src/content/epochs
+
+generate-characters:
+    uv run python -m scripts.generate_characters data/{{version}} site/src/content/characters
+
+generate-ascensions:
+    uv run python -m scripts.generate_ascensions extracted/{{version}}/localization/eng site/src/content/ascensions --decompiled-dir decompiled/{{version}} --data-dir data/{{version}}
+
+# Generate from committed data only (safe for CI — no decompiled/extracted dirs needed)
+generate-enchantments:
+    uv run python -m scripts.generate_enchantments data/{{version}} site/src/content/enchantments
+
+generate-from-data: generate-cards generate-powers generate-monsters generate-encounters generate-potions generate-relics generate-ancients generate-events generate-epochs generate-characters generate-enchantments
+
+# Full generate including ascensions (requires extracted/ and decompiled/ dirs)
+generate: generate-from-data generate-ascensions
+
+site-install:
+    cd site && npm install
+
+build-site:
+    cd site && npm run build
+
+# Full pipeline: extract, generate, build
+build: extract generate build-site
+
+preview:
+    cd site && npm run dev
+
+# Build all versions into a merged dist-final directory
+build-all-versions:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    VERSIONS="v0.98.2 v0.99.1 v0.100.0 v0.101.0 v0.103.2 v0.105.1 v0.107.0 v0.107.1"
+    LATEST="v0.107.1"
+    ALL_VERSIONS="v0.107.1,v0.107.0,v0.105.1,v0.103.2,v0.101.0,v0.100.0,v0.99.1,v0.98.2"
+    DIST_FINAL="site/dist-final"
+
+    rm -rf "$DIST_FINAL"
+    mkdir -p "$DIST_FINAL"
+
+    for ver in $VERSIONS; do
+        echo "=== Building $ver ==="
+
+        # Generate content for this version
+        STS2_VERSION="$ver" just generate-from-data
+
+        # Set base URL and version env vars
+        export PUBLIC_STS2_VERSION="$ver"
+        export PUBLIC_STS2_ALL_VERSIONS="$ALL_VERSIONS"
+        export PUBLIC_STS2_LATEST="$LATEST"
+
+        if [ "$ver" = "$LATEST" ]; then
+            export ASTRO_BASE="/sts2-wiki/"
+        else
+            export ASTRO_BASE="/sts2-wiki/$ver/"
+        fi
+
+        # Build the Astro site
+        cd site && npm run build && cd ..
+
+        # Check internal links (only for latest — older versions have expected broken links
+        # to content added in later versions)
+        if [ "$ver" = "$LATEST" ]; then
+            uv run python -m scripts.check_links site/dist
+        fi
+
+        # Copy output to final directory
+        if [ "$ver" = "$LATEST" ]; then
+            cp -r site/dist/* "$DIST_FINAL/"
+        else
+            mkdir -p "$DIST_FINAL/$ver"
+            cp -r site/dist/* "$DIST_FINAL/$ver/"
+        fi
+
+        echo "=== Done $ver ==="
+    done
+
+    echo "All versions built into $DIST_FINAL"
+
+# Full update from game files
+update: decompile extract-pck extract extract-images generate build-site

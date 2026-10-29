@@ -1,0 +1,8 @@
+{
+  "class_name": "PreciseScissors",
+  "title": "Precise Scissors",
+  "rarity": "Ancient",
+  "description": "Upon pickup, remove 1 card from your Deck.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "Upon obtaining this relic, you are prompted to select 1 card from your deck to permanently remove. The selection happens immediately when the relic is acquired."
+}

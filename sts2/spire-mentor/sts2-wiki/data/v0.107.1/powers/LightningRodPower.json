@@ -1,0 +1,9 @@
+{
+  "class_name": "LightningRodPower",
+  "title": "Lightning Rod",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the start of the next [blue]2[/blue] turns, [gold]Channel[/gold] [blue]1[/blue] [gold]Lightning[/gold].",
+  "smart_description": "At the start of the next {Amount:plural:turn|[blue]{}[/blue] turns}, [gold]Channel[/gold] [blue]1[/blue] [gold]Lightning[/gold].",
+  "notes": "Channels one Lightning Orb at the start of each turn until the counter expires. The power decrements each time it triggers."
+}

@@ -1,0 +1,9 @@
+{
+  "class_name": "MonologuePower",
+  "title": "Monologue",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever you play a card this turn, gain [blue]1[/blue] [gold]Strength[/gold] this turn.",
+  "smart_description": "Whenever you play a card this turn, gain [blue]1[/blue] [gold]Strength[/gold] this turn.\nCurrently granting [blue][accumulator][/blue] [gold]Strength[/gold].",
+  "notes": "Monologue has a dynamic stack type: it displays as a Counter when StrengthApplied > 0 (tracking cumulative Strength granted this turn), and as None when StrengthApplied = 0. The power tracks which cards were played after it was applied and accumulates bonus Strength for each card played. At the end of the turn, it removes itself and applies a negative Strength to offset the bonuses."
+}

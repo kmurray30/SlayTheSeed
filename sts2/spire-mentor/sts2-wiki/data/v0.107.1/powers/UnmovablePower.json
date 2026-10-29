@@ -1,0 +1,9 @@
+{
+  "class_name": "UnmovablePower",
+  "title": "Unmovable",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "The first time you gain [gold]Block[/gold] from a card each turn, double the amount gained.",
+  "smart_description": "The first time you gain [gold]Block[/gold] from a card each turn, double the amount gained.",
+  "notes": "Uses a Counter stack type to track block-gain events from cards. Each turn, the counter tracks how many times the player has gained block from card plays. Only the first block gain per turn (counter = 0) receives the doubling effect. The counter increments with each card-driven block gain and resets at the start of each turn. Does not apply to monsters or non-card block sources."
+}

@@ -1,0 +1,83 @@
+{
+ "assumptions": {
+  "energy": 3,
+  "hand": 5,
+  "samples": 200
+ },
+ "block": {
+  "per_turn": 16.1,
+  "scaling_cards": [
+   "Lightning Rod",
+   "Bulk Up"
+  ]
+ },
+ "composition": {
+  "by_rarity": {
+   "Basic": 8,
+   "Common": 4,
+   "Curse": 1,
+   "Uncommon": 2
+  },
+  "by_type": {
+   "Attack": 4,
+   "Curse": 1,
+   "Power": 1,
+   "Skill": 9
+  },
+  "dead_cards": 1,
+  "energy_curve": {
+   "0": 3,
+   "1": 10,
+   "2": 1
+  },
+  "unupgraded_basics": 5
+ },
+ "damage": {
+  "aoe_attacks": [],
+  "attack_count": 4,
+  "per_turn": 12.2,
+  "scaling_cards": [
+   "Zap",
+   "Hotfix",
+   "Bulk Up"
+  ],
+  "single_target": 12.3,
+  "vs_group": 12.2
+ },
+ "deck_size": 15,
+ "lenses": {
+  "boss": 27.4,
+  "hallway": 27.0,
+  "scaling": 27.6
+ },
+ "scores": {
+  "block": 55.3,
+  "damage": 26.4,
+  "velocity": 0.6,
+  "volume": 9.6
+ },
+ "velocity": {
+  "bottleneck": "energy",
+  "cards_per_turn": 3.5,
+  "dilution": 1.0,
+  "draw_limited_turns": 0.2,
+  "energy_limited_turns": 6.1,
+  "engine_cards": 0,
+  "extra_per_turn": 0.0,
+  "tags": {}
+ },
+ "warnings": [
+  {
+   "severity": "info",
+   "text": "No AOE — multi-enemy fights (Gremlins, hallways) will be slow."
+  },
+  {
+   "severity": "info",
+   "text": "Low velocity — few draw/energy cards; you'll often draw the wrong hand."
+  },
+  {
+   "severity": "info",
+   "text": "Energy-limited — cards stranded in hand; more energy helps, more draw won't."
+  }
+ ]
+}

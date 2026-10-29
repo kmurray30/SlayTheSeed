@@ -1,0 +1,8 @@
+{
+  "class_name": "ToxicEgg",
+  "title": "Toxic Egg",
+  "rarity": "Rare",
+  "description": "Whenever you add a Skill into your Deck, Upgrade it.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "Upgrades apply to Skills obtained from card rewards, merchant purchases, and when added to your deck. Only upgrades Skills that are upgradable. Cannot appear after Act 2 (restricted to before Act 3 treasure chest)."
+}

@@ -1,0 +1,42 @@
+{
+  "class_name": "DevotedSculptor",
+  "title": "Devoted Sculptor",
+  "min_hp": 172,
+  "max_hp": 172,
+  "min_hp_base": 162,
+  "max_hp_base": 162,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "FORBIDDEN_INCANTATION_MOVE",
+      "title": "Forbidden Incantation",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Apply 9 Ritual Power"
+      ]
+    },
+    {
+      "id": "SAVAGE_MOVE",
+      "title": "Savage",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 15,
+          "damage_base": 12,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 12/15 damage"
+      ]
+    }
+  ],
+  "move_pattern": "Starts with Forbidden Incantation, then Savage (repeats)",
+  "powers_on_spawn": [],
+  "notes": "Ritual Power buff grows each time Forbidden Incantation is used. The monster applies this power to itself at increased damage thresholds."
+}

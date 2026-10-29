@@ -1,0 +1,12 @@
+{
+  "class_name": "MechaKnightElite",
+  "title": "Mecha Knight",
+  "room_type": "Elite",
+  "is_weak": false,
+  "monsters": [
+    "MechaKnight"
+  ],
+  "total_monsters": 1,
+  "tags": [],
+  "notes": "Single elite encounter. Camera scaled to 0.9 with 50-unit downward offset."
+}

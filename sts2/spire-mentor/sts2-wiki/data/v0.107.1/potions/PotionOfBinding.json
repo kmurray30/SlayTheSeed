@@ -1,0 +1,9 @@
+{
+  "class_name": "PotionOfBinding",
+  "title": "Potion of Binding",
+  "rarity": "Uncommon",
+  "usage": "Apply",
+  "target": "AllEnemies",
+  "description": "Apply 1 Weak and 1 Vulnerable to ALL enemies.",
+  "notes": "CombatOnly potion — can only be used during combat encounters."
+}

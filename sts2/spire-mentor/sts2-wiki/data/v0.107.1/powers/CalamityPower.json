@@ -1,0 +1,9 @@
+{
+  "class_name": "CalamityPower",
+  "title": "Calamity",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever you play an Attack, add a random Attack into your [gold]Hand[/gold].",
+  "smart_description": "Whenever you play an Attack, add {Amount:plural:a random Attack|[blue]{}[/blue] random Attacks} into your [gold]Hand[/gold].",
+  "notes": "Counter power that adds random Attack cards from your character's card pool to your hand whenever an Attack is played. The number added equals the power's stack amount."
+}

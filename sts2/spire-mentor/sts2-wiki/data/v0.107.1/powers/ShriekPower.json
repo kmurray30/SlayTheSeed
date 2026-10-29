@@ -1,0 +1,9 @@
+{
+  "class_name": "ShriekPower",
+  "title": "Shriek",
+  "power_type": "Debuff",
+  "stack_type": "Counter",
+  "description": "The first time this creature's HP reaches [blue]50%[/blue] or below, it becomes [gold]Stunned[/gold].",
+  "smart_description": "The first time [gold]{OwnerName}'s[/gold] HP reaches [blue]{Amount}[/blue] or below, it becomes [gold]Stunned[/gold].",
+  "notes": "Triggers once when the affected creature's HP drops to or below the Amount threshold. Once triggered, applies Stun and removes this power. Scales in multiplayer."
+}

@@ -1,0 +1,8 @@
+{
+  "class_name": "RingOfTheDrake",
+  "title": "Ring of the Drake",
+  "rarity": "Starter",
+  "description": "At the start of your first [blue]3[/blue] turns, draw [blue]2[/blue] additional cards.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Triggers via ModifyHandDraw hook, which increases the draw count only on the owner's turns and only while the current turn number does not exceed 3."
+}

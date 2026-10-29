@@ -1,0 +1,9 @@
+{
+  "class_name": "NutritiousSoup",
+  "title": "Nutritious Soup",
+  "rarity": "Ancient",
+  "character": null,
+  "description": "Upon pickup, Enchant all Strikes in your Deck with Tezcatara's Ember.",
+  "flavor": "Details for this relic will be revealed in the future...",
+  "notes": "Only enchants Basic (Common) Strikes in your deck. Does not enchant upgraded versions or higher rarity strikes."
+}

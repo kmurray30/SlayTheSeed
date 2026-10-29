@@ -1,0 +1,12 @@
+{
+  "class_name": "FogmogNormal",
+  "title": "Fogmog",
+  "room_type": "Monster",
+  "is_weak": false,
+  "monsters": [
+    "Fogmog"
+  ],
+  "total_monsters": 1,
+  "tags": [],
+  "notes": "Encounter has both 'illusion' and 'fogmog' slots defined, but only spawns Fogmog. EyeWithTeeth is listed in AllPossibleMonsters but not generated."
+}

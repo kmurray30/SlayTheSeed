@@ -1,0 +1,100 @@
+{
+  "class_name": "Crusher",
+  "title": "Crusher",
+  "min_hp": 219,
+  "max_hp": 219,
+  "min_hp_base": 209,
+  "max_hp_base": 209,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "THRASH",
+      "title": "Thrash",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 14,
+          "damage_base": 12,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 12/14 damage"
+      ]
+    },
+    {
+      "id": "ENLARGING_STRIKE",
+      "title": "Enlarging Strike",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 4
+        }
+      ],
+      "effects": [
+        "Deal 4 damage"
+      ]
+    },
+    {
+      "id": "BUG_STING",
+      "title": "Bug Sting",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 7,
+          "damage_base": 6,
+          "hits": 2,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": [
+        "Deal 6/7 damage",
+        "2 hits",
+        "Apply 2 Weak",
+        "Apply 2 Frail"
+      ]
+    },
+    {
+      "id": "ADAPT",
+      "title": "Adapt",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Apply 2/3 Strength"
+      ]
+    },
+    {
+      "id": "GUARDED_STRIKE",
+      "title": "Guarded Strike",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 14,
+          "damage_base": 12,
+          "ascension": 9
+        },
+        {
+          "type": "block",
+          "amount": 18
+        }
+      ],
+      "effects": [
+        "Deal 12/14 damage",
+        "Gain 18 Block"
+      ]
+    }
+  ],
+  "move_pattern": "Cycles: Thrash → Enlarging Strike → Bug Sting → Adapt → Guarded Strike",
+  "powers_on_spawn": [
+    "Back Attack (Left)",
+    "Crab Rage"
+  ],
+  "notes": "Boss-class monster (Kaiser Crab themed) with a fixed 5-move cycle. Multiple attacks scale damage at A9 (Deadly Enemies), while HP scales at A8 (Tough Enemies). Bug Sting applies both Weak and Frail to debilitate the player while building Strength with Adapt. Reacts to damage taken with animation feedback."
+}

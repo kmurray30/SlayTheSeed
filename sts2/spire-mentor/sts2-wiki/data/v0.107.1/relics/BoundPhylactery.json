@@ -1,0 +1,8 @@
+{
+  "class_name": "BoundPhylactery",
+  "title": "Bound Phylactery",
+  "rarity": "Starter",
+  "description": "At the start of your turn, [gold]Summon[/gold] [blue]1[/blue].",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Summons 1 pet before combat starts and at the start of each turn thereafter (after turn 1). The pet summoned is Osty, which responds to effects checking for its existence."
+}

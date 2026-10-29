@@ -1,0 +1,3 @@
+---
+notes: "If you fail to defeat the dummy within [blue]3 turns[/blue], you receive [red]no reward[/red] \u2014 only a defeat message. Despite the [red]\"LETHAL HUMILIATION\"[/red] warning, you do not die.<br><br>Setting 1 potion: drawn from your character's potion pool + shared pool, weighted by rarity (65% Common, 25% Uncommon, 10% Rare).<br><br>Setting 2 upgrades: 2 random upgradable cards from your deck (not player-chosen).<br><br>Setting 3 relic: pulled from the standard relic pool (the next relic you'd get from an elite).<br><br>HP values shown are base single-player values and scale upward in multiplayer runs."
+---

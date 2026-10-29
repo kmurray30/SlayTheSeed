@@ -1,0 +1,8 @@
+{
+  "class_name": "SilverCrucible",
+  "title": "Silver Crucible",
+  "rarity": "Ancient",
+  "description": "The first 3 card rewards you see are Upgraded. The first Treasure Chest you open is empty.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "This relic has two effects that work together: (1) Automatically upgrades the first 3 card rewards encountered, (2) Makes the first treasure chest empty once the 3 upgrades are used and at least one treasure room has been entered. The relic is disabled once both conditions are met. Only available in single-player runs."
+}

@@ -1,0 +1,8 @@
+{
+  "class_name": "ShadowStepPower",
+  "title": "Shadow Step",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Next turn, Attacks deal double damage.",
+  "smart_description": "Next turn|For the next [blue]{Amount}[/blue] turns after this one, Attacks deal double damage."
+}

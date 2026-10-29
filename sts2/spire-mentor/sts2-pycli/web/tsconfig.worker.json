@@ -1,0 +1,21 @@
+{
+  // The engine Web Worker project (src/worker/**): same rules as the app
+  // project but against the WebWorker lib instead of DOM, so `self.postMessage`
+  // / `MessageEvent` type-check as a worker and nothing there can reach for
+  // `window` or `document` by mistake. tsconfig.app.json excludes the directory
+  // for the same reason tsconfig.node-tests.json carves out its files.
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.worker.tsbuildinfo",
+    "lib": ["ES2020", "WebWorker"]
+  },
+  "include": [
+    "src/worker",
+    // `import.meta.env` + `?url` imports (vite/client) and the wasm module's
+    // type contract, which tsconfig.app.json gets for free from `include: ["src"]`.
+    "src/vite-env.d.ts",
+    "src/wasm/pkg.d.ts"
+  ],
+  // Cancel the inherited exclude (which names this very directory).
+  "exclude": []
+}

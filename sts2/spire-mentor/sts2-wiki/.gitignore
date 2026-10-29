@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+
+# LLM extraction transcripts
+logs/
+*.py[cod]
+*$py.class
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+.venv/
+
+# Node
+node_modules/
+site/dist/
+site/dist-final/
+site/.astro/
+site/.claude/
+
+# Generated content (regenerated from data/ by `just generate`)
+site/src/content/cards/
+site/src/content/relics/
+site/src/content/potions/
+site/src/content/powers/
+site/src/content/enchantments/
+site/src/content/monsters/
+site/src/content/encounters/
+site/src/content/events/
+site/src/content/ancients/
+site/src/content/epochs/
+
+# Extracted game images
+# These are committed since they're needed for the site build
+
+# Astro boilerplate
+site/README.md
+site/public/favicon.ico
+site/public/favicon.svg
+
+# Decompiled game code — committed (private repo)
+
+# Extracted PCK contents (localization, assets)
+extracted/
+
+# Claude enrichment cache
+enriched/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# claude-reliability managed
+.claude/bin/
+.claude/*.local.md
+.claude/*.local.json
+.claude/*.local
+.claude-reliability/
+.spire-codex/
+.bestiary/
+AUDIT-FINDINGS.md
+
+SlayTheSpire2.pck

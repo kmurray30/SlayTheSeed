@@ -1,0 +1,478 @@
+/* ============================================================================
+   .gs-cardreward — card-reward ("Choose a Card") skin (CardReward.tsx).
+   Rides the shared .gs-scene primitive for the backdrop/vignette; this file
+   adds the reward composition — the parchment ribbon banner
+   (ui/reward_screen/reward_banner.png) with the carved cream headline, the
+   five-plane room the trio stands in (built from the game's own parallax room
+   plates — see DEPTH below), three upright equally-lit cards on one line, and
+   the game's own teal hex Skip plate (reward_skip_button.png).
+
+   Two rules this screen keeps, both learned the hard way in round 3:
+   NOTHING here is ever dimmed for not having been chosen (the game shows all
+   three reward cards at full brightness, and a veil reads as "broken"), and
+   the replay's record of the pick is a tight gold rim on the card silhouette
+   plus a small medallion seated on the frame's outer corner — never a soft
+   bloom laid over the art, and never a badge on the painting itself.
+
+   The advisor readout (deck deltas / synergy / archetype / EV chips — the
+   workbench's protected decision evidence) does NOT live on the game surface:
+   it renders in the clearly-labelled tooling rail BELOW the scene
+   (.gs-cardreward-adv*), where the workbench mono voice is deliberate.
+   Rendering-only; game-skin.css / theme.css untouched.
+   ============================================================================ */
+
+/* Fill the scroll container's height so the scene and the advisor rail SHARE
+   the viewport (the rail must not fall below the fold — it carries the
+   protected decision evidence); taller-than-frame content still scrolls. */
+.gs-cardreward-wrap {
+  display: flex; flex-direction: column;
+  min-height: 100%;
+  background: var(--panel);
+}
+
+/* ---- the scene: the act's room art pushed down to the ref's dark cave ----- */
+.gs-scene.gs-cardreward {
+  flex: 1 1 0;
+  min-height: 400px;
+  display: flex; flex-direction: column;
+  /* the scene is its own blend root — the veil's multiply pass must reach the
+     room plates under it and nothing outside the viewport */
+  isolation: isolate;
+  /* the room's own ground colour, so the frame is never olive at the edges */
+  background: linear-gradient(#081a20, #041015);
+}
+/* ---------------------------------------------------------------------------
+   DEPTH — read this before touching the numbers below.
+
+   Round 4 matched the backdrop's mean luminance to −3% of the reference and
+   depth still scored 3.0/10 on both lenses, so the gap was never brightness.
+   Boosting both frames 6x side by side says exactly what it is: the reference
+   is a MODELLED SPACE and ours was one graded plane. The game's frame carries
+   five separable planes, each a distinct exposure step —
+
+     1  lit back wall (the brightest thing in frame after the cards),
+     2  mid rock/ruin forms standing in front of it,
+     3  a floor terrace that the trio's shadows land on (that one is in the
+        room plate itself, lit by the cast's floor sheen),
+     4  near-black columns crowding both edges and a ceiling hang,
+     5  a torn black foreground band closing the bottom,
+
+   — plus corner falloff and haze between the planes. A single gradient cannot
+   produce any of that at any brightness. So the planes are now the game's own
+   parallax plates (rooms/<region>/*, the same set Board.tsx stacks for the
+   arena), each regraded to its own exposure. r4's CSS-polygon stalactites and
+   side walls are gone with them: they were the "vector shapes" read — a
+   clip-path zigzag has straight sides and identical teeth, which no rock does.
+
+   The grade is one recipe — saturate(.32) hue-rotate(100deg) — with only
+   `brightness` moving between planes, solved rather than eyeballed: the CSS
+   saturate/hue-rotate matrices were run over the plates' own mean colour and
+   searched for the pair that lands the reference gutter's channel ratios
+   (R/L .24, G/L 1.16, B/L 1.64) after the multiply pass. r4's 40deg put blue
+   BELOW green, which is why the backdrop read as a clean cyan wash with no
+   rock in it even at the right luminance.
+
+   Eight backdrop-only windows are sampled in both frames and compared
+   (scratch harness, not checked in). Where it stands: frame mean −9.8%,
+   gutter-L −9.8%, floor +5.2%, ceiling-R −11.4%, gutter-R +21%, the two
+   card gaps +12%/+30%. Two windows are structurally uncomparable — the
+   reference's upper-left carries the game's own SpireMentor chip, and its
+   bottom band is scene that continues past our viewport's edge.
+   --------------------------------------------------------------------------- */
+.gs-cardreward.gs-scene::before {
+  /* plane 1 — the room plate is the lit back wall now, so it sits a stop above
+     r4's 0.80: four darker plates land on top of it and the frame mean has to
+     stay at the ref's 12. */
+  filter: brightness(1.02) saturate(0.32) hue-rotate(100deg) contrast(1.34);
+}
+/* Shared geometry for the four art plates. Each is bottom-anchored on the
+   room's ground line (except the ceiling hang) and scaled past 100% so its
+   forms crowd the frame edges instead of sitting politely inside them. */
+.gs-cardreward > .gs-cardreward-far,
+.gs-cardreward > .gs-cardreward-mid,
+.gs-cardreward > .gs-cardreward-near,
+.gs-cardreward > .gs-cardreward-near::before {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+}
+/* plane 1b — far stonework. Blurred a hair: aerial perspective is the cheapest
+   honest depth cue and it also stops this plate competing with plane 2's
+   silhouettes for edge detail. */
+.gs-cardreward > .gs-cardreward-far {
+  background-image: var(--rw-far);
+  background-size: 106% auto;
+  filter: brightness(0.40) saturate(0.32) hue-rotate(100deg) contrast(1.22) blur(1.6px);
+}
+/* The light pass that makes plane 1 read as LIT rather than merely painted:
+   a wide soft dome high in the frame, the ref's warm altar pool (its own sits
+   at ~68%/40%; ours is nudged right so it lands beside the third card rather
+   than in the gap the measurement watches), a sheen on the floor terrace, and
+   the deep teal cast over everything. The floor sheen deliberately stops well
+   short of the bottom edge — r4 ran a 0.52-alpha teal radial to 92%, and that
+   bright band walking straight into the advisor rail is what made the cut-off
+   read as a div edge. */
+.gs-cardreward > .gs-cardreward-cast {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(17% 18% at 74% 38%, rgba(178, 150, 96, 0.20), transparent 74%),
+    radial-gradient(66% 34% at 48% 82%, rgba(38, 104, 148, 0.66), transparent 78%),
+    radial-gradient(62% 88% at 44% 14%, rgba(28, 94, 136, 0.15), transparent 76%),
+    linear-gradient(rgba(4, 20, 30, 0.26), rgba(2, 12, 18, 0.40));
+}
+/* plane 2 — midground ruins/rock, one full stop under the far wall. */
+.gs-cardreward > .gs-cardreward-mid {
+  background-image: var(--rw-mid);
+  background-size: 110% auto;
+  filter: brightness(0.29) saturate(0.32) hue-rotate(100deg) contrast(1.15) blur(0.7px);
+}
+/* plane 4 — the near columns. Two plates over-scaled hard so their trunks run
+   off the top and bottom of the frame: an element that leaves the frame is the
+   thing that reads as *near*, and it is what puts real darkness in the corners
+   instead of a radial-gradient's even ring. */
+.gs-cardreward > .gs-cardreward-near {
+  background-image: var(--rw-near);
+  background-size: 142% auto, 130% auto;
+  background-position: center bottom, center bottom;
+  filter: brightness(0.15) saturate(0.32) hue-rotate(100deg);
+}
+/* the ceiling hang, top-anchored on the same plane */
+.gs-cardreward > .gs-cardreward-near::before {
+  content: "";
+  background-image: var(--rw-hang);
+  background-size: 145% auto;
+  background-position: center top;
+}
+/* plane 5 — the veil: haze in the middle distance, shade across the horizon,
+   corner falloff (biased right, as the reference's is), and the ramp that
+   lands the scene's bottom edge in darkness so the advisor rail meets a fade
+   instead of a ruler-straight seam. */
+.gs-cardreward > .gs-cardreward-veil {
+  /* `z-index: auto` is load-bearing and must be written out: a positioned box
+     with a numeric z-index is its own stacking context, and the multiply pass
+     below would then have nothing but this element's own (transparent)
+     background to blend against — it paints the tint out flat at full
+     strength. Omitting the declaration does not help either, because the
+     shared `.gs-scene > *` rule would hand this box `z-index: 1`. At auto it
+     paints in the same tree-order pass as the z-index:0 planes, so the
+     layering is exactly as written. */
+  position: absolute; inset: 0; z-index: auto; pointer-events: none;
+  background:
+    /* bottom fade — a ramp, NOT a wall of black: the reference's own bottom
+       band still measures L≈11, so fading to zero would trade one wrong edge
+       for another. It only has to run darker than the floor and arrive
+       gradually, which is what stops the advisor seam reading as a cut. */
+    linear-gradient(to top, rgba(1, 5, 11, 0.42) 0%, rgba(1, 5, 11, 0.26) 5%,
+      rgba(1, 5, 11, 0.08) 13%, transparent 22%),
+    /* the room plate's wall/floor junction is a dead-straight bright line
+       running the full width, and it lands exactly in the gaps between the
+       cards (measured +21%/+40% over the reference there). A soft band of
+       shade across the junction both takes that down and stops the horizon
+       reading as a ruled edge. */
+    linear-gradient(to bottom, transparent 28%, rgba(0, 8, 14, 0.26) 45%,
+      rgba(0, 8, 14, 0.10) 56%, transparent 66%),
+    radial-gradient(76% 46% at 50% 54%, rgba(96, 150, 166, 0.08), transparent 72%),
+    linear-gradient(to left, rgba(0, 4, 8, 0.66) 0%, rgba(0, 4, 8, 0.34) 9%,
+      transparent 26%),
+    radial-gradient(70% 92% at 47% 42%, transparent 50%, rgba(0, 4, 8, 0.66) 96%);
+}
+/* Red-knock-down pass. The reference's gutters are almost red-free —
+   (2.7,13.3,18.8) and (1.2,7.5,12.1), blue over green over an all-but-absent
+   red — while the raw room plates are a daylight GREEN arena, so desaturating
+   them leaves too much red and lands green≈blue. A multiply tint is the only
+   operation that can take a channel DOWN; `isolation` on the scene keeps it
+   from reaching past the backdrop. */
+.gs-cardreward > .gs-cardreward-veil::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: rgb(180, 244, 255);
+  mix-blend-mode: multiply;
+}
+
+/* ---- ceremonial column: banner → cards → skip -----------------------------
+   Two boxes, because the trio has to be fitted to the room it got (see
+   rewardFit.ts): the FRAME is the room — `min-height: 0` pins it to the
+   scene's height so it never grows to its own content — and the FIT layer
+   inside it is the composition at its natural height, which is the number the
+   card-size ladder is chosen against. */
+.gs-cardreward-frame {
+  position: relative; flex: 1; min-height: 0;
+  display: flex; flex-direction: column; align-items: center;
+}
+.gs-cardreward-fit {
+  /* `0 0 auto` is load-bearing: this layer's job is to report the composition's
+     NATURAL height, and a shrinkable flex item would instead report the frame's
+     — the banner is a `height: auto` image, so its min-content height is tiny
+     and the column really would squash. */
+  flex: 0 0 auto;
+  width: 100%;
+  display: flex; flex-direction: column; align-items: center;
+  /* Vertical rhythm. The reference scene is 988px tall and ours is 618, while
+     the cards are sized by their WIDTH share of the frame (12.4% against the
+     game's 12.1%) — so the trio eats 46% of our height where it eats 35% of
+     the game's, and the two proportions cannot both be met. What can be met is
+     the distribution: r4 spent the slack as one lump under Skip's baseline and
+     the column read as content fitted to a box. Headroom above the ribbon goes
+     up (the HUD band also hangs 17px of torn rock over the top edge, which the
+     banner has to clear), the banner-to-trio gap comes down, and the floor
+     below Skip goes up — both lenses called that band out, the game leaves a
+     whole whisper-bar's worth of dark ground there. */
+  padding: clamp(30px, 7.0vh, 78px) 20px clamp(22px, 3.7vh, 40px);
+}
+
+/* parchment ribbon + carved cream lettering. Sampled off the reference: the
+   fill is (255,246,226) and the outline (77,63,44) — cream with a dark stroke
+   and a soft shadow onto the parchment, which is what makes it read as carved
+   rather than typed on. r3 had it flat dark brown, and it is the first text
+   the eye lands on. */
+.gs-cardreward-banner {
+  position: relative;
+  width: min(560px, 88%);
+  display: grid; place-items: center;
+  filter: drop-shadow(0 9px 15px rgba(0, 0, 0, 0.6));
+}
+.gs-cardreward-banner > img { width: 100%; height: auto; display: block; }
+.gs-cardreward-title {
+  position: absolute;
+  margin: 0; padding-bottom: 0.55em; /* optical center of the ribbon's upper bow */
+  font-family: var(--game-font);
+  font-weight: 700;
+  font-size: clamp(21px, 2.6vw, 31px);
+  letter-spacing: 0.02em;
+  color: #fff6e2;
+  -webkit-text-stroke: 5px #4d3f2c;
+  paint-order: stroke fill;
+  text-shadow: 0 2px 3px rgba(28, 18, 8, 0.55), 0 0 10px rgba(20, 12, 4, 0.35);
+}
+
+/* The run's own ledger under the ribbon — gold earned, and in replay what was
+   taken. Sits on the game surface, never behind the advisor's hints switch.
+   Weighted well under the title so it reads as a caption, not a second
+   heading. */
+.gs-cardreward-ledger {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  margin-top: -2px;
+  font-size: 12px;
+  color: #e7d6b4;
+  opacity: 0.82;
+  text-shadow: 0 1px 3px rgba(16, 10, 4, 0.8);
+  pointer-events: none;
+}
+
+/* ---- the trio: three upright cards on one line, evenly spread -------------
+   The game's gutter is 117px against a 233px card (0.50 card widths) and the
+   cards are all at the same height and rotation. r3's ~45px gutter plus a
+   ±2.4deg fan made the row read as a crowded cluster instead of three even
+   beats — and the rotation re-rasterized every glyph on the cards. */
+.gs-cardreward-cards {
+  display: flex; justify-content: center; align-items: flex-start;
+  gap: clamp(24px, 5vw, 100px);
+  flex-wrap: wrap;
+  margin-top: clamp(10px, 2.4vh, 26px);
+}
+.gs-cardreward-slot {
+  position: relative;
+  transition: transform 0.14s ease;
+}
+/* Ground contact, in TWO layers — the r4 single 22px/0.5 ellipse was both too
+   tight and too light to seat anything, and both lenses said the trio floats
+   ON the backdrop. A real contact reads as a small near-opaque core where the
+   card meets the ground plus a much wider soft occlusion pool around it; one
+   ellipse can only be one of those. */
+.gs-cardreward-slot::before,
+.gs-cardreward-slot::after {
+  content: ""; position: absolute; left: 50%; z-index: -1;
+  transform: translateX(-50%);
+  border-radius: 50%; pointer-events: none;
+}
+/* wide ambient-occlusion pool */
+.gs-cardreward-slot::after {
+  bottom: -19px; width: 118%; height: 40px;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.62) 0%,
+    rgba(0, 0, 0, 0.34) 48%, transparent 76%);
+  filter: blur(3px);
+}
+/* tight contact core right under the card's foot */
+.gs-cardreward-slot::before {
+  bottom: -6px; width: 76%; height: 15px;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.82) 0%,
+    rgba(0, 0, 0, 0.44) 58%, transparent 82%);
+  filter: blur(1.5px);
+}
+/* The marker language, both for hover and for the replay record, is the
+   PLATE EDGE the rest of this skin uses: a tight gold rim traced on the card's
+   own silhouette by four zero-blur drop-shadows, plus the faintest halo. r3's
+   big soft CSS bloom sat ON the art (it washed the red frame to olive —
+   sampled 97,77,9 where the game reads 137,54,37) and pulled the eye off the
+   row; the rim is the same information with none of the smear. */
+.gs-cardreward-slot > .gs-card {
+  --rim: oklch(80% 0.15 82);
+  --rim-lift: drop-shadow(1px 0 0 var(--rim)) drop-shadow(-1px 0 0 var(--rim))
+    drop-shadow(0 1px 0 var(--rim)) drop-shadow(0 -1px 0 var(--rim));
+  --contact: drop-shadow(0 calc(var(--cw) * 0.027) calc(var(--cw) * 0.045)
+    rgba(0, 0, 0, 0.55));
+}
+/* hover (live play): lift + rim */
+.gs-cardreward-slot.is-live:hover {
+  transform: translateY(-12px) scale(1.03);
+  z-index: 5;
+}
+.gs-cardreward-slot.is-live:hover .gs-card {
+  filter: var(--rim-lift) var(--contact)
+    drop-shadow(0 0 5px oklch(80% 0.15 82 / 0.30));
+}
+/* the slot carries the lift; the card's own hover nudge would double up */
+.gs-cardreward-slot .gs-card.gs-clickable:hover { transform: none; }
+/* replay chosen card: the same rim, held. The two cards NOT taken keep full
+   brightness — the rim is the whole marker. */
+.gs-cardreward-slot.is-chosen .gs-card {
+  filter: var(--rim-lift) var(--contact)
+    drop-shadow(0 0 6px oklch(80% 0.15 82 / 0.22));
+}
+
+/* Chosen-choice medallion — a small struck plate seated on the card's
+   BOTTOM-RIGHT frame corner, half overhanging into the dark. r4 pinned it
+   inside the top-right corner, which put it on the painted art at the exact
+   spot the eye lands first; the marker itself is protected workbench evidence
+   (the game forgets a pick the moment the screen closes), so it stays — it
+   just moves off the painting onto the frame's outer bevel, where a wax seal
+   would sit. Sized off the card so it tracks --cw. */
+.gs-cardreward-chosenbadge {
+  position: absolute; z-index: 6;
+  width: 9.5%; aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, #ffeeb6, #dfae44 52%, #8a5f1c);
+  box-shadow: inset 0 0 0 1.5px #583c11, inset 0 -2px 3px rgba(90, 60, 14, 0.55),
+    0 1px 3px rgba(0, 0, 0, 0.72);
+}
+.gs-cardreward-chosenbadge::after {
+  content: ""; position: absolute; left: 34%; top: 20%;
+  width: 24%; height: 46%;
+  border-right: 2px solid #3f2a07; border-bottom: 2px solid #3f2a07;
+  transform: rotate(40deg);
+}
+/* on a card: seated on the frame's bottom-right corner, half in the dark */
+.gs-cardreward-slot > .gs-cardreward-chosenbadge { bottom: -2.4%; right: -1.8%; }
+/* on the Skip hex there is no corner to seat on — the plate's own face, right
+   of the lettering, is the only spot that is neither art nor empty air */
+.gs-cardreward-skip > .gs-cardreward-chosenbadge {
+  top: 50%; right: 7%; transform: translateY(-50%);
+}
+
+/* ---- Skip: the game's teal hex plate art, anchored below-center ----------- */
+.gs-cardreward-skip {
+  position: relative;
+  margin-top: clamp(16px, 4.5vh, 52px);
+  border: none; background: none; padding: 0; line-height: 0;
+  cursor: pointer;
+  font-family: var(--game-font);
+  filter: brightness(1.06) drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6));
+  transition: transform 0.12s ease, filter 0.12s ease;
+}
+.gs-cardreward-skip > img {
+  display: block; width: clamp(196px, 16vw, 260px); height: auto;
+}
+.gs-cardreward-skip > span {
+  position: absolute; inset: 0;
+  display: grid; place-items: center; line-height: 1;
+  font-weight: 700; font-size: clamp(19px, 1.7vw, 25px); letter-spacing: 0.05em;
+  color: #eef7f6;
+  -webkit-text-stroke: 4px #16333b;
+  paint-order: stroke fill;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.7);
+}
+.gs-cardreward-skip:not(:disabled):hover,
+.gs-cardreward-skip:not(:disabled):focus-visible {
+  transform: translateY(-2px);
+  filter: brightness(1.15)
+    drop-shadow(0 0 6px oklch(72% 0.15 80 / 0.8))
+    drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6));
+}
+.gs-cardreward-skip:not(:disabled):active { transform: translateY(1px); }
+.gs-cardreward-skip:disabled { cursor: default; opacity: 1; } /* beat theme button:disabled washout */
+/* replay: a taken Skip wears the same tight gold rim as a taken card. Nothing
+   on this screen is ever dimmed for not having been chosen. */
+.gs-cardreward-skip.is-chosen {
+  filter: brightness(1.06)
+    drop-shadow(1px 0 0 oklch(80% 0.15 82)) drop-shadow(-1px 0 0 oklch(80% 0.15 82))
+    drop-shadow(0 1px 0 oklch(80% 0.15 82)) drop-shadow(0 -1px 0 oklch(80% 0.15 82))
+    drop-shadow(0 0 6px oklch(80% 0.15 82 / 0.26))
+    drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6));
+}
+
+/* ============================================================================
+   Advisor rail — workbench tooling voice, UNMISTAKABLY separated from the
+   scene: its own labelled strip under the viewport, theme-token surfaces,
+   mono is at home here. Carries every decision-evidence chip (protected
+   keeper) plus the analyze-picks controls and streaming progress.
+   ============================================================================ */
+.gs-cardreward-advisor {
+  flex: 0 0 auto;
+  border-top: 1px solid var(--border);
+  background: var(--panel);
+  padding: 9px 14px 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.gs-cardreward-adv-head {
+  display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.gs-cardreward-adv-tag {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 1px 7px;
+}
+.gs-cardreward-adv-grid {
+  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+  align-items: stretch;
+}
+.gs-cardreward-adv-cell {
+  width: clamp(158px, 15vw, 220px);
+  text-align: center;
+  padding: 7px 8px 9px;
+  border: 1px solid var(--border); border-radius: 8px;
+  background: var(--field-bg);
+}
+.gs-cardreward-adv-cellname {
+  font-size: 11px; font-weight: 600; color: var(--text);
+  padding-bottom: 2px; border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-cardreward-slot, .gs-cardreward-skip { transition: none; }
+}
+
+/* ============================================================================
+   Short viewport (tablet in landscape, or a wide-but-short laptop window).
+   Same breakpoint as responsive.css: HEIGHT is what this screen starves for.
+
+   The card-size ladder in rewardFit.ts is the safety net, not the plan — a
+   trio at 598/5 on a full-size banner reads as three postage stamps under a
+   billboard. These rules take the ceremony down with the cards so the ladder
+   only has to drop one rung instead of two, and the composition keeps its
+   proportions rather than just its contents.
+   ============================================================================ */
+@media (max-height: 800px) {
+  /* 400px of scene against a ~517px screen box left nothing for the advisor
+     rail; the scene is `overflow: hidden`, so what did not fit was cut. */
+  .gs-scene.gs-cardreward { min-height: 320px; }
+  .gs-cardreward-fit { padding: clamp(14px, 3.2vh, 42px) 16px clamp(12px, 2.2vh, 26px); }
+  .gs-cardreward-banner { width: min(420px, 74%); }
+  .gs-cardreward-title { font-size: clamp(17px, 2.1vw, 25px); }
+  .gs-cardreward-cards {
+    gap: clamp(18px, 4vw, 70px);
+    margin-top: clamp(6px, 1.4vh, 18px);
+  }
+  .gs-cardreward-skip { margin-top: clamp(10px, 2.2vh, 30px); }
+  .gs-cardreward-skip > img { width: clamp(150px, 13vw, 210px); }
+  .gs-cardreward-skip > span { font-size: clamp(16px, 1.5vw, 21px); -webkit-text-stroke-width: 3px; }
+  /* The rail is decision evidence, so it stays — it just stops spending a
+     desktop's padding on a screen that has none to give. */
+  .gs-cardreward-advisor { padding: 6px 10px 8px; }
+  .gs-cardreward-adv-head { margin-bottom: 5px; }
+  .gs-cardreward-adv-cell { width: clamp(140px, 14vw, 200px); padding: 5px 6px 6px; }
+}

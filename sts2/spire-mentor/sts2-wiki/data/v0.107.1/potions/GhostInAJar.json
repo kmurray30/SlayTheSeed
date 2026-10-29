@@ -1,0 +1,9 @@
+{
+  "class_name": "GhostInAJar",
+  "title": "Ghost in a Jar",
+  "rarity": "Rare",
+  "usage": "Apply",
+  "target": "AnyPlayer",
+  "description": "Gain [blue]1[/blue] [gold]Intangible[/gold].",
+  "notes": "Grants 1 stack of Intangible, reducing damage taken by 1 per turn. Combat-only potion."
+}

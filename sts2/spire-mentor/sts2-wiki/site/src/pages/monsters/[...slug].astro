@@ -1,0 +1,193 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getMoveIntents, getMoveEffectLines, parsePattern, intentIconFile, monsterImageName, isSoloEncounter, processBBCode } from '../../utils';
+
+export async function getStaticPaths() {
+  const monsters = await getCollection('monsters');
+  return monsters.map(monster => ({
+    params: { slug: monster.id },
+    props: { monster },
+  }));
+}
+
+const { monster } = Astro.props;
+
+function hpRange(min: number, max: number): string {
+  return min === max ? String(min) : `${min}–${max}`;
+}
+
+const hpDisplay = hpRange(monster.data.min_hp, monster.data.max_hp);
+
+// When HP scales with ascension, build a "<base> HP below A<N>, <asc> HP at A<N>+" callout.
+const minHpBase = monster.data.min_hp_base;
+const maxHpBase = monster.data.max_hp_base;
+const hpAsc = monster.data.hp_ascension;
+const hpBaseDisplay = (minHpBase != null || maxHpBase != null)
+  ? hpRange(minHpBase ?? monster.data.min_hp, maxHpBase ?? monster.data.max_hp)
+  : null;
+const hpScalingNote = hpBaseDisplay && hpAsc != null
+  ? `${hpBaseDisplay} HP below A${hpAsc}, ${hpDisplay} HP at A${hpAsc}+`
+  : null;
+
+// Build power slug lookup for linking
+const allPowers = await getCollection('powers');
+const powerSlugs: Record<string, string> = {};
+for (const p of allPowers) {
+  powerSlugs[p.data.title.toLowerCase()] = p.id;
+  const shortName = p.data.class_name.replace(/Power$/, '');
+  powerSlugs[shortName.toLowerCase()] = p.id;
+}
+
+const base = import.meta.env.BASE_URL;
+const patternSteps = parsePattern(monster.data.move_pattern);
+
+// Monster portrait image (rendered from Spine)
+const monsterImgPath = `${base}images/monsters/${monsterImageName(monster.data.class_name)}.png`;
+
+// Look up encounter data for "Appears In" section
+const allEncounters = await getCollection('encounters');
+const encBySlug = new Map(allEncounters.map(e => [e.id, e]));
+
+// Partition this monster's encounters into solo and group
+const monsterEncRefs = monster.data.encounters;
+const soloEncounters = monsterEncRefs.filter(ref => {
+  const enc = encBySlug.get(ref.slug);
+  return enc ? isSoloEncounter(enc) : false;
+});
+const groupEncounters = monsterEncRefs.filter(ref => {
+  const enc = encBySlug.get(ref.slug);
+  return enc ? !isSoloEncounter(enc) : true;
+});
+const hasSolo = soloEncounters.length > 0;
+const hasGroup = groupEncounters.length > 0;
+---
+
+<BaseLayout title={monster.data.title}>
+  <div class="card-detail" style="max-width: 900px;">
+    <a href={`${base}monsters/`} class="back-link">&larr; All Monsters</a>
+
+    <div class="card-header">
+      <div class="item-row" style="align-items: center;">
+        <img src={monsterImgPath} alt={monster.data.title}
+             style="width: 120px; height: 120px; object-fit: contain; border-radius: var(--radius); flex-shrink: 0;"
+             onerror="this.style.display='none'" />
+        <div>
+          <h1>
+            {monster.data.title}
+            <span style="font-size: 0.6em; color: var(--text-muted); font-weight: normal; margin-left: 0.5rem;"
+                  title={hpScalingNote ?? undefined}>
+              {hpDisplay} HP
+            </span>
+          </h1>
+          {hpScalingNote && (
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">
+              {hpScalingNote}
+            </div>
+          )}
+          {monster.data.is_companion && (
+            <span class="tag tag-green" style="margin-top: 0.25rem;">Companion</span>
+          )}
+        </div>
+      </div>
+    </div>
+
+    {monster.data.moves.length > 0 && (
+      <div class="two-col" style="margin-top: 1rem;">
+        {/* Left column: Moves table */}
+        <div>
+          <h2 class="section-heading" style="margin-top: 0;">Moves</h2>
+          <table class="moves-table">
+            <tbody>
+              {monster.data.moves.map(move => {
+                const intents = getMoveIntents(move);
+                const effectLines = getMoveEffectLines(move, powerSlugs, base);
+                return (
+                  <tr>
+                    <td class="move-name">{move.title}</td>
+                    <td>
+                      <div class="move-intents">
+                        {move.intents.map((rawIntent, idx) => {
+                          const desc = intents[idx];
+                          return (
+                            <span class={`intent-tag ${desc.intentClass}`}
+                                  title={desc.ascensionTitle ?? undefined}>
+                              <img src={`${base}images/intent_atlas/${intentIconFile(rawIntent.type)}`}
+                                   alt="" class="intent-icon" onerror="this.style.display='none'" />
+                              {desc.intentLabel}
+                            </span>
+                          );
+                        })}
+                      </div>
+                      {effectLines.length > 0 && (
+                        <div style="margin-top: 0.35rem; font-size: 0.8rem; color: var(--text-muted);">
+                          {effectLines.map((line, i) => (
+                            <>
+                              {i > 0 && <span> · </span>}
+                              <span set:html={line} />
+                            </>
+                          ))}
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Right column: Pattern & info */}
+        <div>
+          {patternSteps.length > 0 && (
+            <>
+              <h2 class="section-heading" style="margin-top: 0;">Move Pattern</h2>
+              <div style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1rem;">
+                {patternSteps.map(step => (
+                  <div style="padding: 0.25rem 0; color: var(--text); font-size: 0.9rem;">
+                    {step}
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          {monster.data.powers_on_spawn.length > 0 && (
+            <div style="margin-top: 1.5rem;">
+              <h2 class="section-heading">Innate Powers</h2>
+              <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                {monster.data.powers_on_spawn.map(power => {
+                  const slug = powerSlugs[power.toLowerCase()];
+                  return slug
+                    ? <a href={`${base}powers/${slug}/`} class="tag">{power}</a>
+                    : <span class="tag">{power}</span>;
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    )}
+
+    {monster.data.notes && (
+      <>
+        <h2 class="section-heading">Mechanics</h2>
+        <div class="desc-text" style="font-size: 0.9rem; line-height: 1.7; white-space: pre-line;" set:html={processBBCode(monster.data.notes ?? '')} />
+      </>
+    )}
+
+    {hasGroup && (
+      <>
+        <h2 class="section-heading">Appears In</h2>
+        <ul class="linked-list">
+          {hasSolo && (
+            <li style="color: var(--text-muted);">Solo</li>
+          )}
+          {groupEncounters.map(ref => (
+            <li><a href={`${base}encounters/${ref.slug}/`}>{ref.title}</a></li>
+          ))}
+        </ul>
+      </>
+    )}
+  </div>
+</BaseLayout>

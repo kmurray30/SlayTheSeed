@@ -1,0 +1,39 @@
+{
+  "class_name": "Chomper",
+  "title": "Chomper",
+  "min_hp": 63,
+  "max_hp": 67,
+  "min_hp_base": 60,
+  "max_hp_base": 64,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "CLAMP_MOVE",
+      "title": "Clamp",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 9,
+          "damage_base": 8,
+          "hits": 2,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 8/9 damage", "2 hits"]
+    },
+    {
+      "id": "SCREECH_MOVE",
+      "title": "Screech",
+      "intents": [
+        {
+          "type": "status"
+        }
+      ],
+      "effects": ["Add 3 Dazed"]
+    }
+  ],
+  "move_pattern": "Alternates between Clamp and Screech. Can start with either move.",
+  "powers_on_spawn": ["Artifact x2"],
+  "notes": "Chomper gains 2 Artifact on entry, reducing the effectiveness of debuffs applied to it."
+}

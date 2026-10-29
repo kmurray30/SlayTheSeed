@@ -1,0 +1,8 @@
+{
+  "class_name": "NutritiousOyster",
+  "title": "Nutritious Oyster",
+  "rarity": "Ancient",
+  "description": "Upon pickup, raise your Max HP by [blue]11[/blue].",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "This relic triggers its effect upon being obtained (HasUponPickupEffect). It permanently increases max HP by 11."
+}

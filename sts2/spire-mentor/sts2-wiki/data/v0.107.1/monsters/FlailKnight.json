@@ -1,0 +1,59 @@
+{
+  "class_name": "FlailKnight",
+  "title": "Flail Knight",
+  "min_hp": 108,
+  "max_hp": 108,
+  "min_hp_base": 101,
+  "max_hp_base": 101,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "WAR_CHANT",
+      "title": "War Chant",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": [
+        "Apply 3 Strength to self"
+      ]
+    },
+    {
+      "id": "FLAIL_MOVE",
+      "title": "Flail",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 10,
+          "damage_base": 9,
+          "hits": 2,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 9/10 damage",
+        "2 hits"
+      ]
+    },
+    {
+      "id": "RAM_MOVE",
+      "title": "Ram",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 17,
+          "damage_base": 15,
+          "ascension": 9
+        }
+      ],
+      "effects": [
+        "Deal 15/17 damage"
+      ]
+    }
+  ],
+  "move_pattern": "Starts with Ram. Then randomly cycles through War Chant (cannot repeat), Flail, and Ram with weights 1:2:2.",
+  "powers_on_spawn": [],
+  "notes": "Flail Knight applies Strength to itself, scaling its damage output. The monster can apply up to 3 Strength per turn with War Chant, making subsequent attacks stronger."
+}

@@ -1,0 +1,38 @@
+{
+  "class_name": "BruteRubyRaider",
+  "title": "Brute Raider",
+  "min_hp": 31,
+  "max_hp": 34,
+  "min_hp_base": 30,
+  "max_hp_base": 33,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "BEAT_MOVE",
+      "title": "Beat",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 8,
+          "damage_base": 7,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 7/8 damage"]
+    },
+    {
+      "id": "ROAR_MOVE",
+      "title": "Roar",
+      "intents": [
+        {
+          "type": "buff"
+        }
+      ],
+      "effects": ["Apply 3 Strength"]
+    }
+  ],
+  "move_pattern": "Alternates between Beat and Roar",
+  "powers_on_spawn": [],
+  "notes": "Roar is hidden from the bestiary display. The monster applies Strength to itself with Roar to boost its damage output."
+}

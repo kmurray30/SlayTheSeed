@@ -1,0 +1,8 @@
+{
+  "class_name": "DieForYouPower",
+  "title": "Die for You",
+  "power_type": "Buff",
+  "stack_type": "Single",
+  "description": "[gold]Osty[/gold] absorbs all unblocked attack damage.",
+  "notes": "Redirects unblocked attack damage from the PetOwner to Osty. Only applies to powered attacks and when Osty is alive. Osty is not removed from combat after death, and this power persists after its owner's death."
+}

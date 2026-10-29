@@ -1,0 +1,1539 @@
+/* ============================================================================
+   Game skin for the combat board (the left column of the workbench).
+   Scoped under .gs-* so the surrounding workbench panels are untouched.
+   Makes the combat area read like the real STS2 fight screen — atmospheric
+   arena, full-body combatants with HP bars / block shields / intents, and
+   framed cards in the Kreon game font — while staying a CONTAINED viewport
+   (logs / Reasoning / EventLog keep their column on the right).
+   ============================================================================ */
+
+.gs-board { font-family: var(--game-font); }
+
+/* ---- in-viewport game HUD band (GameHud.tsx) --------------------------------
+   The game's drawn top bar: portrait plaque with the ascension flame on its
+   corner, heart + big outlined HP numerals BESIDE it, coin + gold numerals,
+   the recessed potion tray, the relic row laid straight on the stone, then
+   (right) the map scroll and the deck stack. Replaces the old typed text-chip
+   strip on EVERY game screen.
+
+   Material: slate-blue painted stone (#2c444f, sampled off the game's own
+   band), mottled with vine/rock blotches, lit along the lower rim, and torn
+   off along an irregular rocky silhouette that casts onto the scene below —
+   so the band sits OVER the picture instead of abutting it. Kreon numerals,
+   no emoji, no mono, no text buttons. */
+.gs-hud {
+  position: relative; z-index: 6;
+  display: flex; align-items: center; gap: 20px; flex-wrap: nowrap;
+  min-height: 78px; padding: 4px 20px 6px;
+  font-family: var(--game-font); font-variant-numeric: tabular-nums;
+  color: #f6ead0;
+  background:
+    radial-gradient(58% 150% at 12% 8%, rgba(92,122,138,.20), transparent 62%),
+    radial-gradient(34% 130% at 37% 92%, rgba(14,26,34,.30), transparent 64%),
+    radial-gradient(46% 165% at 63% 0%, rgba(96,126,142,.16), transparent 60%),
+    radial-gradient(30% 125% at 83% 88%, rgba(12,24,32,.28), transparent 62%),
+    radial-gradient(22% 110% at 52% 6%, rgba(18,32,40,.22), transparent 66%),
+    radial-gradient(15% 90% at 27% 55%, rgba(20,34,42,.20), transparent 70%),
+    radial-gradient(19% 100% at 71% 40%, rgba(96,126,142,.10), transparent 68%),
+    /* painted-stone grain: wide, low-contrast diagonal wash. Anything tighter
+       than this reads as web pinstriping, not a painted surface. */
+    repeating-linear-gradient(115deg, rgba(214,236,246,.009) 0 19px, transparent 19px 63px),
+    linear-gradient(#2a404b 0%, #2c444f 60%, #314e5c 86%, #35505c 100%);
+  box-shadow: inset 0 2px 0 rgba(190,214,226,.10), inset 0 -1px 0 rgba(150,182,198,.10);
+  /* The band + its teeth cast onto the scene. This has to be a FILTER, not a
+     box-shadow: a box-shadow traces the rectangle the torn edge is cut out
+     of, which is exactly the flat "web strip" edge we are removing. Filter
+     order is filter → clip-path, so the shadow is taken here on the parent;
+     applying it to the clipped pseudo-element would clip the shadow away. */
+  filter: drop-shadow(0 5px 8px rgba(0,0,0,.68));
+}
+/* torn rocky lower edge — teeth of varied width AND depth (a fixed-amplitude
+   zigzag is what read as "flat" in round 3), darkening as they bite down so
+   the silhouette has depth rather than being one flat lip */
+.gs-hud::after {
+  content: ""; position: absolute; top: 100%; left: 0; right: 0; height: 17px;
+  pointer-events: none;
+  background: linear-gradient(#2c4652 0 3px, #1d3039 3px 9px, #12212a 9px 14px, #0a1319);
+  clip-path: polygon(0 0, 0 40%, 1.9% 74%, 3.2% 30%, 6.4% 58%, 8.1% 16%, 12.3% 46%,
+    13.8% 80%, 15.4% 34%, 19.6% 12%, 21.3% 64%, 22.6% 90%, 26.9% 38%, 28.4% 72%,
+    30.1% 20%, 34.3% 50%, 35.9% 84%, 37.4% 28%, 41.6% 60%, 43.1% 14%, 44.7% 52%,
+    48.9% 88%, 50.4% 36%, 52.1% 10%, 56.3% 62%, 57.8% 82%, 59.4% 24%, 63.6% 56%,
+    65.1% 12%, 66.8% 48%, 71.0% 86%, 72.5% 32%, 74.1% 70%, 78.3% 18%, 79.8% 52%,
+    81.4% 88%, 85.6% 26%, 87.1% 64%, 88.8% 14%, 93.0% 44%, 94.5% 78%, 96.1% 30%,
+    98.4% 66%, 100% 42%, 100% 0);
+}
+/* character portrait plaque + the ascension flame riding its corner */
+.gs-hud-charwrap { position: relative; flex: 0 0 auto; display: block; }
+.gs-hud-char {
+  width: 58px; height: 58px; border-radius: 14px; overflow: hidden;
+  background: radial-gradient(circle at 42% 26%, #1e2d37, #101a20 82%);
+  box-shadow: inset 0 0 0 2px rgba(126,158,174,.55), inset 0 3px 7px rgba(0,0,0,.6),
+    0 2px 4px rgba(0,0,0,.45);
+  display: grid; place-items: center;
+}
+.gs-hud-char img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gs-hud-char .gs-hud-charletter { font-weight: 700; font-size: 26px; color: #e8d9ad;
+  text-shadow: 0 1px 2px #000; }
+.gs-hud-asc {
+  position: absolute; right: -9px; bottom: -7px; width: 30px; height: 34px;
+  display: grid; place-items: center; pointer-events: none;
+}
+.gs-hud-flame { position: absolute; inset: 0; width: 100%; height: 100%;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.65)); }
+.gs-hud-asc b {
+  position: relative; font-size: 15px; font-weight: 700; line-height: 1;
+  color: #fff6e2; -webkit-text-stroke: 3px #5c1d06; paint-order: stroke fill;
+  transform: translateY(3px);
+}
+/* stat groups: drawn icon with the big outlined numerals BESIDE it */
+.gs-hud-stat { display: inline-flex; align-items: center; flex: 0 0 auto; gap: 9px; }
+.gs-hud-ico { display: block; flex: 0 0 auto;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,.55)); }
+.gs-hud-heart { width: 46px; height: 43px; }
+.gs-hud-coin { width: 41px; height: 41px; }
+.gs-hud-hpnum, .gs-hud-goldnum {
+  font-weight: 700; font-size: 30px; line-height: 1; letter-spacing: .01em;
+  paint-order: stroke fill; text-shadow: 0 2px 3px rgba(0,0,0,.55);
+}
+.gs-hud-hpnum { color: #ff5f66; -webkit-text-stroke: 4px #611318; }
+.gs-hud-goldnum { color: #f8cf51; -webkit-text-stroke: 4px #48310a; }
+/* potion tray: a recessed stone pod holding the belt's sockets; an empty
+   socket is a dark slot, a filled one carries the potion's own atlas art */
+.gs-hud-potions {
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; flex: 0 0 auto;
+  border-radius: 14px;
+  background: linear-gradient(rgba(11,18,23,.62), rgba(17,27,34,.52));
+  box-shadow: inset 0 0 0 2px rgba(104,134,152,.42), inset 0 3px 7px rgba(0,0,0,.75);
+}
+.gs-hud-socket {
+  width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center;
+  background: radial-gradient(circle at 42% 26%, rgba(74,99,114,.9), rgba(26,40,49,.92) 76%);
+  box-shadow: inset 0 2px 5px rgba(0,0,0,.85), inset 0 -1px 0 rgba(160,190,205,.10);
+}
+.gs-hud-socket img { width: 38px; height: 38px; object-fit: contain; display: block;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.7)); }
+/* relic row riding the bare stone (RelicTray skin="hud"). The atlas art is
+   real game art, but each entry has its own padding and aspect ratio, so a
+   height-only rule rendered every relic at a different optical size — that,
+   at ~30px, is what read as "emoji". A fixed square box + object-fit:contain
+   normalises them, and 44px puts them at the game's own scale. */
+.gs-hud-relictray { display: flex; gap: 6px; row-gap: 2px; align-items: center;
+  flex-wrap: wrap; flex: 0 1 auto; min-width: 0; }
+.gs-hud-relic {
+  padding: 0; border: none; background: none; cursor: pointer; line-height: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; flex: 0 0 auto; border-radius: 8px;
+}
+.gs-hud-relic img { width: 44px; height: 44px; object-fit: contain; display: block;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,.7)); transition: transform .12s ease; }
+.gs-hud-relic:hover img, .gs-hud-relic:focus-visible img { transform: scale(1.1); }
+.gs-hud-relic:focus-visible { outline: 2px solid #9fd0ff; outline-offset: 1px; }
+/* art-less relic: a small named plaque in the game font, not a web chip */
+.gs-hud-relic .gs-hud-relicname { font-family: var(--game-font); font-size: 12px;
+  line-height: 1.15; color: #eadcb2; padding: 5px 6px; border-radius: 7px;
+  background: rgba(8,14,18,.55); box-shadow: inset 0 0 0 1px rgba(176,204,218,.28);
+  text-shadow: 0 1px 2px #000; }
+/* right cluster: map scroll, deck stack */
+.gs-hud-right { margin-left: auto; display: inline-flex; align-items: center;
+  gap: 14px; flex: 0 0 auto; }
+.gs-hud-plaque {
+  position: relative; padding: 0; border: none; background: none; cursor: pointer;
+  line-height: 0; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+}
+.gs-hud-plaque:focus-visible { outline: 2px solid #9fd0ff; outline-offset: 3px; }
+.gs-hud-plaque:active { transform: translateY(1px); }
+/* map: a rolled parchment with the route marker inked onto it — the game has
+   no text buttons in this band */
+.gs-hud-scroll {
+  position: relative; width: 42px; height: 51px; display: grid; place-items: center;
+  background:
+    linear-gradient(94deg, rgba(112,88,56,.24) 0 9%, transparent 9% 91%, rgba(112,88,56,.24) 91%),
+    linear-gradient(#e6d3b0, #cfb794 56%, #bda078);
+  border-radius: 4px / 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,.55), inset 0 0 0 1px rgba(93,72,45,.45);
+  transition: filter .12s ease;
+}
+.gs-hud-scroll::before, .gs-hud-scroll::after {
+  content: ""; position: absolute; left: -3px; right: -3px; height: 8px;
+  background: linear-gradient(#cdb28a, #a88c66); border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,244,222,.35);
+}
+.gs-hud-scroll::before { top: -2px; }
+.gs-hud-scroll::after { bottom: -2px; }
+.gs-hud-scroll img { position: relative; width: 30px; height: 30px; object-fit: contain;
+  display: block; filter: grayscale(1) brightness(.42) contrast(1.35); }
+.gs-hud-plaque:hover .gs-hud-scroll { filter: brightness(1.12); }
+/* deck: the game's own card stack with the red count gem on its corner */
+.gs-hud-deck img { width: 46px; height: 48px; object-fit: contain; display: block;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,.65)); }
+.gs-hud-deckcount {
+  position: absolute; right: -8px; bottom: -6px; min-width: 25px; height: 25px;
+  display: grid; place-items: center; padding: 0 4px; border-radius: 50%;
+  font-size: 15px; font-weight: 700; color: #fff; text-shadow: 0 1px 1px #000;
+  background: radial-gradient(circle at 38% 30%, #e0574a, #8c241e 80%);
+  box-shadow: 0 1px 3px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.25);
+  font-variant-numeric: tabular-nums; line-height: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gs-hud-relic img, .gs-hud-scroll { transition: none; }
+  .gs-hud-relic:hover img, .gs-hud-relic:focus-visible img { transform: none; }
+  .gs-hud-plaque:active { transform: none; }
+}
+/* ---- pile buttons (draw / discard / exhaust) --------------------------------
+   In-scene HUD furniture: the game's own card-stack art (ui/combat_ui/) in
+   the stage's bottom corners — draw bottom-left, discard bottom-right — each
+   with the red count gem (pile_button_count.png) riding the inner corner.
+   These stay the clickable pile-viewer buttons. Anchored to .gs-arena-stage,
+   so they live in the same bottom strip as the hand, like the game. */
+.gs-pileplaque {
+  /* z-index 6 for the same reason as .gs-endturn — above the hand fan. */
+  position: absolute; z-index: 6;
+  font-family: var(--game-font); cursor: pointer; line-height: 0;
+  background: none; border: none; padding: 0;
+}
+/* 66px, not r3's 86px: the ref's pile art is ~90px across a 1002px-tall scene,
+   and our stage is ~675px tall, so 86px read oversized (and over-bright — the
+   art is authored for the game's darker grade, hence the brightness trim). */
+.gs-pileplaque-art { display: block; width: 66px; height: auto;
+  filter: brightness(.9) drop-shadow(0 6px 9px rgba(0,0,0,.6)); }
+.gs-pileplaque:hover .gs-pileplaque-art {
+  filter: drop-shadow(0 0 9px var(--accent)) drop-shadow(0 6px 9px rgba(0,0,0,.6)); }
+/* count gem: the red octagon art with the numeral centered on it */
+.gs-pileplaque-count { position: absolute; width: 30px; height: 26px;
+  display: grid; place-items: center; pointer-events: none; }
+.gs-pileplaque-count img { position: absolute; inset: 0; width: 100%; height: 100%;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,.6)); }
+.gs-pileplaque-count span { position: relative; font-size: 14px; font-weight: 700;
+  line-height: 1; color: #fff; text-shadow: 0 1px 2px #000;
+  font-variant-numeric: tabular-nums; }
+.gs-pile-draw { left: 14px; bottom: 10px; }
+.gs-pile-draw .gs-pileplaque-count { right: -10px; bottom: 0; }
+.gs-pile-discard { right: 14px; bottom: 10px; }
+.gs-pile-discard .gs-pileplaque-count { left: -10px; bottom: 0; }
+/* Exhaust: no persistent HUD pile in the game — rendered (small, tucked left
+   of the discard pile) only when something has actually been exhausted. */
+.gs-pile-exhaust { right: 94px; bottom: 12px; }
+.gs-pile-exhaust .gs-pileplaque-art { width: 46px; opacity: .92; }
+.gs-pile-exhaust .gs-pileplaque-count { left: -8px; bottom: 0; width: 26px; height: 22px; }
+.gs-pile-exhaust .gs-pileplaque-count span { font-size: 12px; }
+
+/* ---- the combat stage --------------------------------------------------
+   ONE continuous scene surface for the arena row AND the hand strip, so the
+   fan overlaps the arena floor exactly like the game instead of hanging off
+   the backdrop onto page-black. Carries the backdrop art, the fallback
+   gradient, the vignette and the clip; the corner HUD (energy orb, piles,
+   End Turn) anchors to ITS bottom corners. */
+.gs-arena-stage {
+  position: relative;
+  /* Fill the board's flex column and absorb ALL vertical slack: flex:1 grows
+     the stage when there's room, min-height:0 lets it shrink when there isn't
+     (small window / debug drawer open) so the tool bar below stays on-screen. */
+  flex: 1 1 0; min-height: 0;
+  /* `clip`, NOT `hidden`. A hidden box is still a scroll container, and the
+     browser will scroll one to reveal whatever gets focus inside it — and the
+     hand's hit frames hang past this box's bottom edge on purpose (the fan is
+     cropped, see .gs-hand). On a touchscreen a tap focuses the card, so the
+     first tap of every fight scrolled the whole scene up by the crop (32px on
+     a tablet) and left it there: fighters, room and hand all sitting high,
+     for the rest of the fight. A clip box cannot scroll, by anyone. */
+  overflow: clip;
+  /* Gradient stays as the paint-before-load / missing-art fallback; the real
+     backdrop art renders in the .gs-arena-bg child. */
+  background:
+    radial-gradient(90% 70% at 22% 28%, rgba(40,90,70,.30), transparent 72%),
+    radial-gradient(90% 70% at 80% 26%, rgba(30,70,80,.26), transparent 72%),
+    linear-gradient(#16241d 0%, #122019 50%, #0c1712 100%);
+}
+
+/* ---- the room's art gate ----------------------------------------------------
+   A room is not one image: it is a stack of 5 to 68 layers — up to 37 distinct
+   PNGs — each its own element with its own `background-image` (see
+   roomScenes.ts / RoomLayers.tsx). The browser fetches those independently and
+   paints each the moment it lands, so on a cold cache the room DRAWS ITSELF ON
+   SCREEN — far wall, then canopy, then floor, then props — with the fighters
+   already standing in front of the half-built thing. Worst on the first fight
+   of a session and on every switch into a boss room, which are exactly the
+   stacks nothing has cached.
+
+   So Board holds the room back until its whole stack has decoded
+   (roomPreload.ts) and flags that here. While it is held, the stage's own
+   gradient above is what you see — a plain empty room, which is a state a
+   backdrop is allowed to be in, unlike a room mid-assembly.
+
+   The dust and the motes ride the same gate: they are the room's air, and
+   weather hanging in a room that is not there yet reads as a bug.
+
+   The fade is on the READY state only, so revealing a room eases in over a
+   quarter second while hiding one (the stack changed — a new act, a boss's own
+   room) is instant: there is nothing to ease out to but the gradient. */
+.gs-arena-stage[data-room-ready="0"] .gs-arena-bg,
+.gs-arena-stage[data-room-ready="0"] .gs-arena-fg,
+.gs-arena-stage[data-room-ready="0"] .gs-arena-dust,
+.gs-arena-stage[data-room-ready="0"] .gs-motes {
+  opacity: 0;
+}
+.gs-arena-stage[data-room-ready="1"] .gs-arena-bg,
+.gs-arena-stage[data-room-ready="1"] .gs-arena-fg,
+.gs-arena-stage[data-room-ready="1"] .gs-arena-dust,
+.gs-arena-stage[data-room-ready="1"] .gs-motes {
+  transition: opacity 240ms ease-out;
+}
+/* The fighters and the hand wait with the room (roomPreload.ts gates the whole
+   fight): invisible until every rig and portrait is in, then in together. */
+.gs-board[data-scene-ready="0"] .gs-actors,
+.gs-board[data-scene-ready="0"] .gs-hand { opacity: 0; }
+.gs-board[data-scene-ready="1"] .gs-actors,
+.gs-board[data-scene-ready="1"] .gs-hand { transition: opacity 240ms ease-out; }
+/* The fade is a cross-fade of two backdrops, not motion — but it is still an
+   animation, and this setting means "show me the end state". */
+@media (prefers-reduced-motion: reduce) {
+  .gs-arena-stage[data-room-ready="1"] .gs-arena-bg,
+  .gs-arena-stage[data-room-ready="1"] .gs-arena-fg,
+  .gs-arena-stage[data-room-ready="1"] .gs-arena-dust,
+  .gs-arena-stage[data-room-ready="1"] .gs-motes,
+  .gs-board[data-scene-ready="1"] .gs-actors,
+  .gs-board[data-scene-ready="1"] .gs-hand {
+    transition: none;
+  }
+}
+
+/* ---- the zoom layer ---------------------------------------------------------
+   The FURNITURE in the scene is authored in absolute px against a ~800px-tall
+   stage: the energy orb (102px), the End Turn plate (188px), the pile plaques,
+   the intent icons, the HP bars. (The fighters and the room art are not: they
+   are laid out in the game's own 1920x1080 scene coordinates and fitted to this
+   layer's box — see src/scene.ts.) That was fine while the workbench only ran
+   in a desktop window, and it broke the moment the stage was shorter: at
+   1366x768 the stage was 476px and the Ironclad's 470px rig oversailed its top
+   edge by 236px; on a tablet in landscape (1024x640) the stage was ~288px and
+   the PLAYER WAS ENTIRELY OFF-SCREEN, with the enemy decapitated and the hand
+   cropped to a band of card backs. Every one of those numbers is a measured
+   proportion of the reference frame, so the fix is not to re-tune them
+   one by one — it is to lay the scene out at the size they were measured for
+   and zoom the whole composition to the box we actually have.
+
+   So: this layer is laid out at `stage size / --gs-k` and scaled back down by
+   `--gs-k` (Board.tsx sets it from the measured stage height, clamped to 1 so
+   a stage with room to spare renders the scene 1:1, exactly as before). Because the layer keeps the
+   stage's exact aspect ratio, every `cover` backdrop and the vignette below
+   crop identically to the unscaled version.
+
+   ALL of the scene lives in here — backdrop, dust, motes, foreground occluder,
+   vignette, combatants, hand, corner furniture — because `transform` makes
+   this element a stacking context: anything left outside it would jump in
+   front of (or behind) the whole layer instead of interleaving by z-index,
+   which is what puts the foreground rock mass over the actors and under the
+   fan. Measure it with `offsetWidth`/`offsetHeight`, never
+   `getBoundingClientRect`, which reports the SCALED box. */
+.gs-stage-scale {
+  position: absolute; top: 0; left: 0;
+  width: calc(100% / var(--gs-k, 1)); height: calc(100% / var(--gs-k, 1));
+  transform: scale(var(--gs-k, 1)); transform-origin: 0 0;
+  display: flex; flex-direction: column;
+}
+/* The painted room art (extracted game scene layers, see asset-inventory).
+   The FAR half of the parallax stack (Board.tsx ROOM_LAYERS.far), painted
+   back-to-front by CSS multi-background order (first listed = topmost).
+
+   THIS ELEMENT IS THE 1920x900 AUTHORING CANVAS, fitted to the stage by
+   height — so `background-size`/`-position` per layer (Board.roomLayerFit)
+   place each one where its scene puts it on that canvas. The values below are
+   only the full-canvas default; Board sets the real lists inline.
+
+   It used to be one `cover` per layer, which is right ONLY while every layer
+   is the full 900px tall. It isn't: the Underdocks' ruin band is 518px and its
+   dock is 572px, and `cover` scaled each up to fill the box on its own — 1.7x
+   too big and slid to the floor, which is why that room read as a wall of
+   stalactites with nothing to stand on.
+
+   Fitting by height assumes the stage is never wider than 1920:900 (it is
+   ~16:9 in practice); past that the canvas would stop reaching the side
+   edges.
+
+   The element carries the canvas's ASPECT and is centred, rather than being
+   inset:0 on the stage. That is what makes horizontal placement mean anything:
+   a `background-position` percentage resolves against the ELEMENT, so while
+   the element was the (16:9) stage and the canvas overflowed it, an x% put a
+   narrow layer somewhere that had nothing to do with where its scene puts it.
+   Every layer being full-width hid that; the boss rooms are full of props that
+   are not (the Kin's brazier flame, the Insatiable's four stumps, the
+   Ceremonial Beast's 22 bead strands). For a full-canvas layer `100% 100%`
+   on a canvas-aspect box is the same pixel as the old `auto 100%`, so the four
+   act rooms render exactly as before. */
+.gs-arena-bg {
+  /* Board sizes and places this element: it is the room's 1920x900 canvas at
+     the 1.44x the combat-room scene draws it, pinned to the scene centre.
+     That the element IS the canvas is what makes per-layer placement mean
+     anything — a `background-position` percentage resolves against the
+     element, so a narrow prop (the Kin's brazier flame, the Insatiable's
+     stumps) lands where its own scene puts it. */
+  position: absolute; pointer-events: none;
+  /* The layers are ELEMENTS inside .gs-room-canvas now, not a multi-background
+     list on this one — the scenes mirror props with a half-turn `rotation` and
+     seven layers carry an inherited `modulate`, and a background list can
+     express neither. Clip to the canvas: the art hangs past its edges (the
+     Overgrowth canopy starts 27px above the top), and the game never shows
+     those rows either — the visible frame is the middle ~70% of the painting. */
+  overflow: hidden;
+  /* NO GRADE. The game draws this art raw and so must we (GH #610).
+     `overgrowth_bg_00_a.tscn` and its 200 siblings are bare `TextureRect`s —
+     no material, no shader, no `modulate` — under a `%BgContainer` with no
+     `CanvasModulate`, and the one `WorldEnvironment` in `scenes/game.tscn` is
+     inert over an LDR 2D canvas (`glow_hdr_threshold` is at its 1.0 default,
+     so nothing on the canvas clears it, and the `adjustment_*` curve is all
+     defaults = identity). Compositing the extracted PNGs at the scene's own
+     1.44x offline reproduces refs/game-combat-2.png to a MEDIAN 1/255 over
+     the whole frame and to 0.1–2.9% on every room-only region — the room is
+     not lit, tinted or bloomed by anything.
+
+     This used to carry `brightness(1.18) contrast(1.12) saturate(0.84)`,
+     solved against three regions of game-combat-1 in r4. That grade DARKENS
+     everything below v≈0.19 (out = 1.3216v - 0.06), and an act room lives at
+     v = 0.05..0.20, so it crushed the very bands it was fitted to lift — the
+     "gap that grows with distance" #607 measured was this curve plus the
+     stage vignette, not a missing depth pass in the game.
+     See docs/experiments/2026-08-30-combat-room-grade/. */
+}
+
+/* ---- the room's foreground layer (ROOM_LAYERS.near) --------------------------
+   The `_fg_` layer: the dark rock/root wedge that fills the lower corners of
+   refs/game-combat-1.png (crop it and the energy orb sits ON a near-black
+   mass, not on grass). Both r4 lenses scored depth 3.0 for exactly this ("no
+   foreground occluders — the reference's dark rock mass over the lower-left is
+   simply gone").
+
+   Darker than the far stack because the ART is: overgrowth's mean opaque
+   luminance runs 39.4 at layer 00 down to 12.8 at 06_c, which is the depth
+   reading darker-toward-camera on its own. It used to be pushed further with
+   a `brightness(0.9)`; the game pushes it nowhere (GH #610).
+
+   NO z-index, so it lands between the far stack (it follows .gs-arena-bg in
+   the DOM) and the combatants (.gs-actors is z-index 1) — the same trick the
+   room's dust and motes use. It USED to be z-index 3, i.e. in front of them, and
+   that is a place the game never puts it: `combat_room.tscn` orders
+   `BgContainer` — which is where the background scene's own `Foreground` node
+   lives — ahead of `AllyContainer`/`EnemyContainer`, with no `z_index` on any
+   of them. Room art in front of a fighter does not read as depth, it reads as
+   a bug: the Underdocks' netting sat across the HP bars and the buff chips
+   under both fighters. The game is emphatic about this in the other direction
+   too — `NCreature` lifts its own `_stateDisplay` to `ZIndex = 1` so the
+   readout clears even the creature's own art. Nothing in the room may cover a
+   combatant's readouts. */
+.gs-arena-fg {
+  /* Same canvas element as .gs-arena-bg — Board sizes and places both.
+     Same canvas box as the far stack too: these layers are authored on the
+     shared 1920x900 canvas, and enlarging them (tried at 114%) lifts the
+     occluder's top edge to 68% of the stage where the ref's sits at 78% —
+     measurably too much dark in the lower corners. */
+  position: absolute; pointer-events: none;
+  overflow: hidden;
+  /* Ungraded, like the far stack above: the `_fg_` art is already painted
+     near-silhouette (overgrowth mean opaque luminance 39.4 at layer 00 down to
+     12.8 at 06_c) and the game adds nothing to it. */
+}
+
+/* The 1920x900 authoring canvas itself, at 1:1, scaled as a unit to whatever
+   box Board gave its parent. Every layer inside is positioned in the
+   manifest's own canvas px — which is what lets a layer carry a `transform`
+   (the half-turn these scenes mirror props with) without its rotation origin
+   drifting with the stage size. */
+.gs-room-canvas {
+  position: absolute; top: 0; left: 0;
+  transform-origin: 0 0;
+}
+
+/* ---- atmospheric haze: REMOVED (GH #610) ------------------------------------
+   There was a `.gs-arena-haze` wash here — a depth haze, a horizon feather and
+   two wall bounces, all in measured Overgrowth greens. It was air the game does
+   not have. Compositing the room's own layers offline reproduces
+   refs/game-combat-2.png to a median 1/255 with nothing over them (see
+   docs/experiments/2026-08-30-combat-room-grade/), so every level this wash
+   added was error: it lifted the far wall and flattened the room's own
+   contrast, which is the "flatter than the game's" half of #610.
+
+   The seam it was feathering is painted into the art. What the game DOES hang
+   in the air is particles — 12 additive fireflies in Overgrowth (`.gs-motes`
+   below), and the real weather three rooms carry (`.gs-arena-dust`). Those
+   stay; a global green wash over all eighteen rooms does not. */
+
+/* ---- room dust --------------------------------------------------------------
+   The room's own weather, for the three rooms that have any: the Insatiable's
+   sand storm, the Waterfall Giant's spray, the Queen's hall mist. In the game
+   this is particle work — the Insatiable hangs 16k sand motes between the
+   camera and the Hive backdrop — and leaving it out is not a missing sparkle,
+   it changes what the room IS. Measured against a game screenshot of that
+   fight: its scene's upper third is rgb(102,84,53), and the raw layer stack
+   without the sand is rgb(33,36,15) — dark GREEN canopy where the game shows
+   warm brown. The room's own airborne tint at its own density closes that to
+   within 2 levels per channel.
+
+   Colour and strength both come out of the scene (roomScenes.atmosphereVars);
+   a room whose artists hung nothing in the air sets neither var, `--gs-dust-a`
+   defaults to 0, and this layer is inert.
+
+   NO z-index, so it lands between the far stack and the combatants, like the
+   room's own foreground — the game's particles thicken the ROOM, they do not
+   fog the fighters standing in it.
+
+   The profile PEAKS in the middle rather than at the top. That is measured, and
+   it is not what a depth haze would do: the reference's thirds are L=80/111/111
+   against a raw stack of 28/80/120, so the air has to LIFT the dark canopy,
+   lift the middle distance hard, and pull the bright near sand slightly DOWN.
+   Solving each band for the alpha that lands it gives 0.68 / 1.0 / 0.59.
+
+   The stops are in % of the STAGE, which is taller than the visible room — the
+   hand fan covers everything past ~68%, so the whole scene lives in the first
+   two thirds of this gradient and a stop at 75% does almost nothing.
+
+   It reaches zero before the floor. Screen can only ADD light, and the near
+   sand is already the brightest thing in the room: carrying the wash down onto
+   it pushed that band to L=135 against the reference's 111. The room's air
+   thins toward the camera anyway, so the profile and the blend agree. */
+.gs-arena-dust {
+  position: absolute; inset: 0; pointer-events: none;
+  /* SCREEN, not a plain wash. Lit airborne sand ADDS light; it does not cover
+     what is behind it. The difference is measurable and it is the whole
+     character of the room: a flat alpha wash tuned to hit the reference's band
+     means drops the scene's luminance spread to sd 21 where the game holds
+     36.9, which reads as a flat brown card instead of dunes. Screening lifts
+     the dark canopy hard and the already-bright near sand barely at all —
+     which is also exactly what the reference does, and it falls out of the
+     blend rather than having to be dialled in per band. */
+  mix-blend-mode: screen;
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--gs-dust-rgb, 0 0 0) / calc(var(--gs-dust-a, 0) * 1))    0%,
+    rgb(var(--gs-dust-rgb, 0 0 0) / calc(var(--gs-dust-a, 0) * 1))    18%,
+    rgb(var(--gs-dust-rgb, 0 0 0) / calc(var(--gs-dust-a, 0) * 0.22)) 36%,
+    rgb(var(--gs-dust-rgb, 0 0 0) / 0)                                56%);
+}
+
+/* ---- firefly motes ----------------------------------------------------------
+   Warm sparks hanging in the canopy, which the ref has and r4 had none of
+   ("no firefly particles" — player lens; "no glowing motes" — art-director
+   lens). Pure CSS: each mote is a bright core plus a wide dim halo, painted as
+   two radial-gradient background layers on ONE element — no DOM nodes, no
+   per-frame JS. The whole layer drifts a few px on a very slow loop; under
+   prefers-reduced-motion the drift stops but the motes stay. */
+.gs-motes {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background-repeat: no-repeat;
+  background-image:
+    radial-gradient(circle 2px at 17% 26%, rgba(226, 255, 158, .95), rgba(226, 255, 158, 0) 68%),
+    radial-gradient(circle 9px at 17% 26%, rgba(196, 240, 120, .16), rgba(196, 240, 120, 0) 72%),
+    radial-gradient(circle 2px at 42% 17%, rgba(232, 255, 176, .85), rgba(232, 255, 176, 0) 68%),
+    radial-gradient(circle 10px at 42% 17%, rgba(196, 240, 120, .14), rgba(196, 240, 120, 0) 72%),
+    radial-gradient(circle 2px at 63% 33%, rgba(226, 255, 158, .9), rgba(226, 255, 158, 0) 68%),
+    radial-gradient(circle 9px at 63% 33%, rgba(196, 240, 120, .15), rgba(196, 240, 120, 0) 72%),
+    radial-gradient(circle 2px at 82% 22%, rgba(232, 255, 176, .8), rgba(232, 255, 176, 0) 68%),
+    radial-gradient(circle 11px at 82% 22%, rgba(196, 240, 120, .13), rgba(196, 240, 120, 0) 72%),
+    radial-gradient(circle 2px at 90% 45%, rgba(226, 255, 158, .75), rgba(226, 255, 158, 0) 68%),
+    radial-gradient(circle 9px at 90% 45%, rgba(196, 240, 120, .12), rgba(196, 240, 120, 0) 72%);
+  animation: gs-motes-drift 26s ease-in-out infinite alternate;
+}
+@keyframes gs-motes-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(6px, -9px, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gs-motes { animation: none; }
+}
+/* On the zoom layer, not on .gs-arena-stage: it has to interleave by z-index
+   with the actors and the foreground mass, which all live inside that layer's
+   stacking context. The layer keeps the stage's aspect ratio, so the ellipse
+   below lands on exactly the same pixels either way. */
+.gs-stage-scale::after { /* the viewport's gold ring */
+  /* z 3 = over the foreground occluder mass, under the corner furniture (4)
+     and the hand (5). */
+  content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  /* The ring is workbench chrome — it says where the framed viewport ends.
+     Everything else this pseudo-element used to paint was a GRADE, and the
+     game has none of it (GH #610):
+
+       * an `inset 0 0 84px 8px rgba(0,0,0,.20)` edge shadow;
+       * a `radial-gradient(ellipse 66% 110% …)` vignette reaching
+         `rgba(0,0,0,.46)` at the corners;
+       * a bottom scrim from 82% down to `rgba(2,4,3,.46)`.
+
+     Measured against refs/game-combat-2.png, the scrim alone put the ground
+     band 48% below the game's (rgb(13,19,5) against the game's (26,33,12)) and
+     the vignette put the side walls ~20% below theirs — between them the two
+     accounted for most of the "darker and flatter" this issue was filed for.
+     The room's own darkness is PAINTED: the `_fg_` rock mass closes the lower
+     corners and the layer stack grades itself back to front.
+     See docs/experiments/2026-08-30-combat-room-grade/. */
+  box-shadow: inset 0 0 0 2px oklch(72% 0.15 80 / 0.14);
+}
+/* ---- the arena spacer ----
+   The combatant row is no longer a flex box: every fighter is placed in the
+   game's own 1920x1080 scene coordinates (see src/scene.ts and .gs-scene), so
+   nothing here decides where anyone stands. What is left is the spacer that
+   keeps the hand strip at the bottom of the stage column — and therefore keeps
+   the scene's ground line above the fan. */
+.gs-arena { flex: 1 1 0; min-height: 0; }
+
+/* ---- the scene layer ----
+   Covers the whole stage and carries the fighters, absolutely placed. Between
+   the room's foreground (no z-index, earlier in the DOM) and the hand
+   (z-index 5), which is the game's own order: `combat_room.tscn` puts
+   `BgContainer` ahead of `AllyContainer`/`EnemyContainer` with no z_index
+   anywhere, so no part of the room is ever drawn over a creature.
+
+   Inert — each combatant re-enables its own pointer — so the empty stretches of
+   the room stay click-through.
+
+   NOT `.gs-scene`: that name is already taken by the framed-viewport surface
+   further down this file, which paints its own gradient and vignette. */
+.gs-actors { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.gs-actors > * { pointer-events: auto; }
+
+.gs-side { position: relative; display: flex; align-items: flex-end; gap: 30px; }
+
+/* ---- Kaiser Crab / Decimillipede ----
+   Both are multi-rig bosses anchored on ONE root, which Board pins to the
+   scene's ground line; the rigs and the per-part overlays hang off that root in
+   px (see KaiserCrabGroup / DecimillipedeGroup). The crab is drawn at its
+   authored scale — wider than the scene — so its layer must be allowed to
+   overflow the stage rather than be fitted into it.
+
+   The group itself is inert; each arm's / segment's overlay re-enables the
+   pointer so the parts stay individually targetable. */
+.gs-crab-group, .gs-decimillipede { pointer-events: none; }
+.gs-crab-group > *, .gs-decimillipede > * { pointer-events: auto; }
+
+/* ---- combatant ---- */
+.gs-combatant { position: relative; display: flex; flex-direction: column; align-items: center; }
+.gs-sprite-wrap { position: relative; }
+/* Shrink's `NCreature.ScaleTo(0.5f, 0.75)`: Visuals.Scale tweened over 0.75 s,
+   EaseInOut + Sine, about the creature's root — its feet, which land ~8px below
+   the box bottom (see .gs-groundshadow). The scale itself is inline
+   (Combatant.tsx, bodyScale). */
+.gs-sprite-body { position: relative; transform-origin: 50% calc(100% + 8px);
+  transition: scale .75s cubic-bezier(.37,0,.63,1); }
+
+/* ---- the Defect's orb belt ----
+   A zero-size ANCHOR on the wrap's horizontal centre at its BOTTOM — the ground
+   line, i.e. the creature's root, which is what NCreature positions the orb
+   manager relative to. Orbs.tsx puts each slot on the arc in px from here; the
+   arc's CENTRE is up over the creature's upper body, not on this point (the
+   game hangs the manager on the `%OrbPos` marker — see ORB_CENTRE_TO_BODY). */
+.gs-orbs {
+  position: absolute; left: 50%; top: 100%; width: 0; height: 0;
+  z-index: 3; pointer-events: none;
+}
+/* Only the orbs themselves take the pointer, so their tooltips work while the
+   empty stretches of the belt leave the creature clickable. */
+.gs-orbs > * { pointer-events: auto; }
+/* The empty-slot fallback: a dashed ring standing in for the game's outline art
+   when it isn't in the art bucket (see Orbs.tsx). Deliberately drawn, not a
+   glyph — an alt-text caption in the belt is the bug this replaced. */
+.gs-orb-empty {
+  display: block; box-sizing: border-box; border-radius: 50%;
+  border: 2px dashed oklch(88% 0.02 210 / 0.45);
+  background: oklch(20% 0.02 210 / 0.25);
+}
+.gs-orb-empty-art { display: block; opacity: 0.55; }
+.gs-sprite { display: block; filter: drop-shadow(0 12px 9px rgba(0,0,0,.55)); }
+/* Static-image fallbacks: no rig, so no authored scene scale to size them by —
+   these are the last-resort cutouts, kept in the ballpark of a drawn rig. */
+.gs-sprite.gs-player { max-height: 282px; }
+.gs-sprite.gs-enemy  { max-height: 256px; }
+.gs-sprite-fallback { width: 120px; height: 150px; background: var(--field-bg); border: 1px solid var(--border); }
+.gs-combatant.gs-clickable { cursor: pointer; }
+.gs-combatant.gs-clickable:hover .gs-sprite { filter: drop-shadow(0 0 10px var(--accent)) drop-shadow(0 12px 9px rgba(0,0,0,.55)); }
+.gs-targeted .gs-sprite { filter: drop-shadow(0 0 8px var(--hp)) drop-shadow(0 12px 9px rgba(0,0,0,.55)); }
+
+/* Ground-contact shadow: a soft ellipse under the feet so sprites sit IN the
+   scene instead of floating on it. z-index:-1 tucks it under the sprite while
+   staying above the arena backdrop (nearest stacking context is .gs-actors).
+
+   r4's version was in the RIGHT place (it lands on the sprite-wrap's bottom,
+   which is the rigs' shared ground line) but invisible: `closest-side` on a
+   16px-tall box gives an 8px vertical radius, and a single .55 stop fading to
+   zero by 72% peaks at one pixel. Both critics scored it as absent ("nothing
+   has a contact shadow, so every sprite sits ON a backdrop rather than IN a
+   scene"). Taller box, a flat dark CORE that holds .78 out to 42%, and a blur
+   for the soft edge; 60% width keeps it inside the feet (the wrap is
+   0.7 × the rig box height, always wider than the body). */
+.gs-groundshadow {
+  /* -13px, not r4's -4px: the rigs' visible feet land ~8px BELOW the
+     sprite-wrap's box bottom (the Spine canvas hangs a `botM` overscan band
+     under the idle pose), so a shadow centred on the box bottom pools behind
+     the shins instead of under the boots. */
+  position: absolute; left: 50%; bottom: -13px; transform: translateX(-50%);
+  /* 84%, not 66%: a blob enemy is as wide as its own rig box, so a narrower
+     pool hides entirely under the body and reads as no shadow at all (which
+     is how both critics scored it). The pool has to peek out at the sides. */
+  width: 84%; height: 34px; border-radius: 50%; z-index: -1; pointer-events: none;
+  background: radial-gradient(closest-side,
+    rgba(0,0,0,.86), rgba(0,0,0,.64) 38%, rgba(0,0,0,.22) 70%, rgba(0,0,0,0) 88%);
+  filter: blur(3px);
+}
+
+/* Name label: kept (workbench affordance) but demoted to a quiet caption —
+   the game shows names only on hover. Hovering the unit brings it up to full
+   strength; the exact-HP numerals above stay always-on (protected keeper). */
+.gs-nameplate { margin-top: 9px; font-weight: 600; font-size: 12px; letter-spacing: .03em;
+  color: #cfc3a6; opacity: .62; text-shadow: 0 2px 3px #000;
+  transition: opacity .12s ease, color .12s ease; }
+.gs-combatant:hover .gs-nameplate { opacity: 1; color: #f6ead0; }
+
+.gs-hotkey {
+  position: absolute; top: calc(var(--rig-top, 0px) - 4px); left: -4px; z-index: 3; min-width: 18px; height: 18px;
+  padding: 0 4px; border-radius: 4px; line-height: 18px; text-align: center; font-size: 12px;
+  font-weight: 700; background: var(--accent-strong); color: var(--on-accent);
+  font-family: var(--game-font); font-variant-numeric: tabular-nums;
+}
+
+/* HP bar — the game's PAINTED bar, measured off refs/game-combat-1 (crop it at
+   3x and the CSS pill r3 shipped is nothing like it):
+     * the silhouette is a CHEVRON — both ends come to a point, they are not
+       rounded caps, and the *fill* ends in a point of its own as it drains;
+     * the track is near-black teal inside a hairline teal frame, not a black
+       pill with a specular top highlight;
+     * the numerals are BIG (roughly 1.5x the bar's own height), cream-white,
+       wrapped in a thick maroon outline, and they OVERFLOW the bar above and
+       below — that overflow is most of what makes the bar read as painted art
+       rather than as a progress element with a caption in it;
+     * the bar's length tracks the creature, not a fixed 150px — r3 drew a
+       13-HP slime and a 27-HP slime exactly the same width, which both critics
+       called out. `--gs-hpw` is set per combatant (Combatant.tsx).
+   The exact-HP numerals stay always-visible (protected workbench keeper). */
+.gs-hpwrap { --gs-chev: polygon(0 50%, 6px 0, calc(100% - 6px) 0, 100% 50%,
+    calc(100% - 6px) 100%, 6px 100%);
+  margin-top: 7px; width: var(--gs-hpw, 150px); position: relative; }
+/* frame: the hairline teal edge, drawn as the layer UNDER the track */
+.gs-hpbar { position: relative; width: 100%; height: 11px;
+  clip-path: var(--gs-chev); background: #2e5459;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,.6)); }
+.gs-hptrack { position: absolute; inset: 1px; clip-path: var(--gs-chev);
+  background: linear-gradient(#0a1417, #16272c 55%, #071013); }
+.gs-hpfill { position: absolute; left: 0; top: 0; bottom: 0;
+  background: linear-gradient(#f0576a, var(--hp) 52%, #a52732);
+  /* the draining end comes to a point, like the art */
+  clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 50%, calc(100% - 5px) 100%, 0 100%);
+  /* smooth drain when hp changes — the game's bar tween; survives reduced-motion */
+  transition: width .45s cubic-bezier(.4,0,.2,1); }
+
+/* Doom band — the kill line, painted on the bar itself.
+   The game gives Doom its own `%DoomForeground` NinePatch inside the track
+   (NHealthBar.RefreshForeground): it runs from the bar's LOW end out to
+   `doom/maxHp`, under the red fill, so the health below the Doom counter reads
+   as already spent. Once Doom reaches current HP the red fill is switched OFF
+   and the whole remaining bar is Doom's (Combatant.tsx drops .gs-hpfill then,
+   which is why this layer sits UNDER it and needs no z-index of its own).
+   The game's own NinePatch art is not in our extract, so the violet is taken
+   from the one Doom colour the decomp does state literally: the doom-lethal HP
+   label, #FB8DFF on a #2D1263 outline (NHealthBar.RefreshText). */
+.gs-hpdoom { position: absolute; left: 0; top: 0; bottom: 0;
+  background: linear-gradient(#e9a6ff, #8f3fc4 52%, #4b1580);
+  clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 50%, calc(100% - 5px) 100%, 0 100%);
+  transition: width .45s cubic-bezier(.4,0,.2,1); }
+/* Lethal: this IS the bar now, so it gets the fill's full presence — plus a
+   slow pulse, because "dies at end of turn" is the one bar state that is a
+   countdown rather than a quantity. */
+.gs-hpdoom-lethal { animation: gs-doom-pulse 1.5s ease-in-out infinite; }
+@keyframes gs-doom-pulse { 0%, 100% { filter: none; } 50% { filter: brightness(1.35); } }
+/* Numerals ride ON the bar and spill past it (paint-order stroke keeps the
+   maroon outline behind the glyphs instead of eating them). Out of flow, so
+   the overflow never moves the name caption below. */
+/* r5: 24px, not r4's 20px. Measured, the ref's digits are 17px of cap height
+   over a 10px red strip in a 1005px scene — a 1.7 overflow ratio, and 17px
+   ABSOLUTE. r4's 20px gave 13px caps over an 8px strip: the right ratio at the
+   wrong absolute size inside our shorter stage, which is what both lenses saw
+   ("HP digits are undersized inside their bars", "HP numerals shrink to sit
+   inside the bar instead of overflowing it"). 24px restores the ref's absolute
+   cap height; the wider negative inset keeps the taller glyphs from clipping. */
+.gs-hptext { position: absolute; inset: -11px 0; display: grid; place-items: center;
+  pointer-events: none; font-size: 24px; font-weight: 700; line-height: 1;
+  color: #fff; letter-spacing: .01em;
+  -webkit-text-stroke: 4px #580e12; paint-order: stroke fill;
+  text-shadow: 0 2px 3px rgba(0,0,0,.55);
+  font-variant-numeric: tabular-nums; }
+/* Doomed numerals: the game recolours the HP label itself (#FB8DFF on a
+   #2D1263 outline — NHealthBar.RefreshText) so the bar and its numbers agree
+   about what is about to happen. Must come AFTER .gs-hptext: both are
+   single-class selectors, so source order is the whole tiebreak. */
+.gs-hptext-doomed { color: #fb8dff; -webkit-text-stroke-color: #2d1263; }
+
+/* Block — NHealthBar.RefreshBlockUi. While the creature has block the bar
+   wears `%BlockOutline` (a light-blue rim in place of the teal edge), the fill
+   is modulated to #3B6FA3 and the HP numerals take a #1B3045 outline instead
+   of the maroon one. Doom-lethal wins the numerals, as RefreshText checks it
+   first. */
+.gs-hp-blocked .gs-hpbar { background: #8fd0ff; }
+.gs-hp-blocked .gs-hpfill { background: linear-gradient(#78a9dc, #3b6fa3 52%, #234d78); }
+.gs-hp-blocked .gs-hptext:not(.gs-hptext-doomed) { -webkit-text-stroke-color: #1b3045; }
+
+/* The shield itself (`%BlockContainer`): the game's ui/combat/block.png with
+   the count on it, centred on the bar's left end and riding over it. */
+.gs-block {
+  position: absolute; left: -17px; top: 50%; margin-top: -17px; z-index: 3; width: 34px; height: 34px;
+  display: grid; place-items: center; pointer-events: none;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,.6));
+}
+.gs-block-icon { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.gs-block-num { position: relative; color: #fff; font-weight: 700; font-size: 17px; line-height: 1;
+  -webkit-text-stroke: 3px #1b3045; paint-order: stroke fill;
+  font-variant-numeric: tabular-nums; }
+
+/* enemy intent — the game's read (refs/game-combat-1.png, measured): a painted
+   ICON CENTRED over the creature's crown, the damage numeral tucked against
+   the icon's lower-LEFT and overhanging it downward, the pair floating ~25px
+   (in a 1083px scene) above the body.
+
+   r5 centred the whole [number][icon] ROW on the combatant column, so the icon
+   sat ~14px right of the body and the number hung out over the background —
+   which is the drift both r5 critics logged ("small, drifted left of its
+   owner", "off-centre from its target"). Centring the ICON and absolutely
+   positioning the numeral off it reproduces the ref AND makes the anchor
+   independent of the digit count (a "6" and a "23×2" now sit identically).
+
+   Box size: the atlas art is only ~55% ink, so a 48px box renders ~26px of
+   visible dagger — the ref's 33px scaled to our ~0.67× stage. A numberless
+   intent has nothing beside it to carry the read, which is why the 48px
+   StatusCard chip scored as "a broken grey/purple chip"; --gs-intent-nodmg
+   gets 58px.
+
+   VERTICAL anchor: `--rig-top` is now SpineSprite's pixel-measured visible top
+   (it scans the rendered frame's alpha), not the skeleton's attachment bounds,
+   which overscanned the painted slime bodies by ~15px of empty air. */
+.gs-intent { --gs-intent-size: 48px;
+  /* The gap is measured to the icon's INK, not to its padded box: every atlas
+     icon carries ~25% transparent padding below the art, so a fixed box offset
+     would float the 58px numberless chip 4px higher than the 48px dagger for
+     no visible reason. 25px is the ref's 38px ink-to-crown gap scaled to our
+     stage (both ≈3.5% of scene height). */
+  position: absolute;
+  bottom: calc(100% - var(--rig-top, 0px) + 25px - var(--gs-intent-size) * 0.25);
+  left: 50%; transform: translateX(-50%);
+  width: var(--gs-intent-size); height: var(--gs-intent-size);
+  /* NOT pointer-events:none — the icon carries `title={intent.type}` and the
+     click bubbles to .gs-combatant, so the intent stays a hover-tooltip and a
+     target hitbox. Only the invisible halo below opts out. */
+  z-index: 3; }
+.gs-intent.gs-intent-nodmg { --gs-intent-size: 58px; }
+/* The soft dark disc the game paints under an intent. It is what stops the
+   icon reading as a sticker pasted on the backdrop ("the intent cluster floats
+   unanchored over background" — r5 artdirector) and it is what makes a
+   low-contrast icon (StatusCard's grey card) separate from the cave at all. */
+.gs-intent::before { content: ""; position: absolute; z-index: -1;
+  pointer-events: none;  /* the disc must not widen the enemy's hover target */
+  left: 50%; top: 50%; width: 168%; height: 168%; transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side,
+    rgba(0,0,0,.80), rgba(0,0,0,.62) 34%, rgba(0,0,0,.30) 58%, rgba(0,0,0,.09) 76%, rgba(0,0,0,0) 90%); }
+/* (no .gs-intent-icon rule: every intent kind now resolves to painted atlas
+   art in Combatant.tsx's INTENT_ART, so the text-glyph span is gone.) */
+.gs-intent .gs-intent-img { width: 100%; height: 100%; object-fit: contain; display: block;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,.85)); }
+/* The damage numeral wears the same maroon OUTLINE as the HP numerals. r3 drew
+   it with `text-shadow: 0 2px 0 #6a1410` — an un-blurred hard offset, which at
+   this size renders as a stray red rule under the number (both critics flagged
+   it). A stroke sits around the glyph instead of under it.
+   `right: 85%` puts its right edge on the icon's INK edge (the art's own
+   transparent padding is ~15% of the box), and `bottom: 4px` drops it below the
+   ink's baseline, both as in the ref. */
+.gs-intent .gs-intent-dmg { position: absolute; right: 85%; bottom: 4px;
+  white-space: nowrap; font-weight: 700; font-size: 23px; line-height: 1;
+  color: #fff; -webkit-text-stroke: 3.6px #5c1013; paint-order: stroke fill;
+  text-shadow: 0 2px 4px rgba(0,0,0,.65);
+  font-variant-numeric: tabular-nums; }
+/* WORKBENCH-ONLY tint (the game paints this numeral plain white —
+   NIntent.UpdateVisuals sets no colour). A telegraph that already has Weak
+   baked into it is indistinguishable from one that has none, which is exactly
+   how bug report `wb-4eae3bad6ebd57f8` happened: the player applied a THIRD
+   Weak stack, the 12 did not move (Weak is a duration counter, so it cannot),
+   and nothing said the x0.75 was already in there.
+
+   The tint is on the STROKE, not the fill: the white fill is what makes the
+   numeral legible against every backdrop in the game, and recolouring it costs
+   more read than the signal is worth. Green = the board is pushing the number
+   DOWN (in your favour), red = up. The icons below say which listeners. */
+.gs-intent .gs-intent-dmg[data-mod="down"] { -webkit-text-stroke-color: #175c2a; }
+.gs-intent .gs-intent-dmg[data-mod="up"] { -webkit-text-stroke-color: #8f1d16; }
+/* The listeners themselves, in their own tray icons, hung under the intent so
+   the answer to "why is it 12?" is on screen and not only in a tooltip.
+   `pointer-events: auto` on the icons keeps their per-modifier titles
+   reachable; the row itself must not widen the enemy's hover target. */
+.gs-intent-mods { position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); margin-top: 2px;
+  display: flex; gap: 3px; pointer-events: none; }
+.gs-intent-mods .gs-intent-mod-icon { width: 15px; height: 15px; display: block;
+  pointer-events: auto;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.9)); }
+.gs-intent-mods .gs-intent-mod-txt { pointer-events: auto;
+  font-family: var(--game-font); font-size: 9px; line-height: 15px;
+  padding: 0 3px; border-radius: 4px; color: #fff;
+  background: rgba(0,0,0,.65); }
+
+/* ---- stolen card (SwipePower) ----
+   The game parents a real card node to the thief's `%StolenCardPos` marker, so
+   the card you lost is visibly IN its hands for as long as it holds it. Same
+   here: pinned to the creature's upper right, tilted like a held card, and
+   anchored to `--rig-top` (the measured rig crown) so it sits on the body
+   rather than at the top of the taller, mostly-empty sprite box.
+   Not `pointer-events: none` — the frame carries the "kill it to get it back"
+   tooltip, and the click still bubbles to .gs-combatant, so the enemy stays
+   targetable through it (same contract as .gs-intent). */
+.gs-stolen { position: absolute; z-index: 4;
+  left: 58%; top: calc(var(--rig-top, 0px) + 16px);
+  display: flex; flex-direction: column; gap: 4px; }
+.gs-stolen-card { transform: rotate(7deg); transform-origin: top left;
+  filter: drop-shadow(0 3px 7px rgba(0,0,0,.7)); }
+
+/* Out of flow (absolute) so a power appearing/disappearing (e.g. Vulnerable)
+   doesn't change the combatant column height — which, with the arena's
+   flex-end (bottom) alignment, would otherwise shove the sprite up/down. */
+.gs-powers { position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  margin-top: 6px; display: flex; justify-content: center;
+  /* `width: max-content`, because an absolutely positioned box with `left: 50%`
+     and `right: auto` shrink-to-fits into what is left of its containing block
+     — HALF the combatant's width. That is what actually wrapped the icon row:
+     a narrow creature got a ~65px box, so five powers came out as three rows
+     that hung down into the hand strip, and `Powers`' own row rule (which is
+     the game's — see NPowerContainer.UpdatePositions) never got to decide
+     anything. */
+  width: max-content; }
+
+/* ---- energy orb ----
+   The character's layered faceted orb (ui/combat/energy_counters/<char>/):
+   five stacked art layers (base, swirl, core, rim, facets) composite the
+   game's big ruby, anchored bottom-left ABOVE the draw pile, count in the
+   game font on top. Anchored to .gs-arena-stage like the piles. */
+.gs-energy { position: absolute; left: 16px; bottom: 96px; z-index: 4;
+  width: 102px; height: 102px; display: grid; place-items: center;
+  filter: drop-shadow(0 7px 12px rgba(0,0,0,.6)); }
+.gs-energy .gs-orb-layer { position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; user-select: none; }
+.gs-energy .gs-gem-val { position: relative; z-index: 2; font-weight: 700; font-size: 26px;
+  color: #fff; text-shadow: 0 2px 3px rgba(20,4,2,.95), 0 0 8px rgba(0,0,0,.65);
+  font-variant-numeric: tabular-nums; }
+
+/* ---- card ----------------------------------------------------------------
+   Composited from the game's own card-template art (see CardFrame.tsx and
+   sts2-wiki/scripts/extract_card_template.py). There is deliberately no CSS
+   border, radius or panel fill here: the frame PNG *is* the card's shape, and
+   painting anything behind it would show through its transparent corners.
+
+   Lengths are fractions of `--cw` (the card's width in px, set inline), which
+   is card.tscn's 300-unit card box — so 1 game unit = var(--cw) / 300.
+   -------------------------------------------------------------------------- */
+.gs-card {
+  position: relative; flex: 0 0 auto;
+  font-family: var(--game-font);
+  /* A card is a picture, not a document: its title and text must never be
+     selectable (a click that lands on the text otherwise starts a selection
+     and shows the text cursor), and an unplayable card shows the plain arrow
+     rather than the I-beam its text would draw. */
+  user-select: none; -webkit-user-select: none; cursor: default;
+  filter: drop-shadow(0 calc(var(--cw) * 0.027) calc(var(--cw) * 0.045) rgba(0,0,0,.55));
+  transition: transform .12s ease;
+  /* Recoloured damage numbers in the description (see renderDesc). */
+  --gs-buff: oklch(72% 0.14 150);
+  --gs-nerf: var(--hp);
+}
+.gs-card.gs-clickable { cursor: pointer; }
+.gs-card.gs-clickable:hover { transform: translateY(-8px); z-index: 20; }
+.gs-card.gs-dim { opacity: .5; }
+.gs-card.gs-played { transform: translateY(-8px); }
+/* The frame has no rectangular edge to outline, so selection reads as a glow
+   around the card's actual silhouette instead of a box around its bounds. */
+.gs-card.gs-played, .gs-card.gs-best {
+  filter: drop-shadow(0 calc(var(--cw) * 0.027) calc(var(--cw) * 0.045) rgba(0,0,0,.55))
+          drop-shadow(0 0 calc(var(--cw) * 0.04) var(--accent-strong));
+}
+
+/* Every full-bleed texture layer; inline styles narrow the ones that are not
+   the whole card. Order in the DOM is card.tscn's draw order. */
+.gs-card-layer {
+  position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+  display: block; pointer-events: none;
+}
+/* The one layer card.tscn does not plain-stretch — see the note at its <img>. */
+.gs-card-banner { object-fit: cover; }
+
+/* Illustration, drawn UNDER the frame — the frame's centre is transparent. */
+.gs-card-portrait { position: absolute; overflow: hidden; }
+.gs-card-portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gs-card-portrait .gs-noart { display: grid; place-items: center; height: 100%;
+  font-size: calc(var(--cw) * 0.06); color: var(--muted); font-family: var(--game-font);
+  background: #0a0e12; }
+
+/* Text. card.tscn's colour is #FFF6E2 with a soft 2-unit drop shadow. */
+.gs-card-title, .gs-card-desc {
+  position: absolute; color: #FFF6E2; text-align: center;
+  display: grid; place-content: center; overflow: hidden;
+  text-shadow: calc(var(--cw) * 0.0067) calc(var(--cw) * 0.0067) 0 rgba(0,0,0,.19);
+}
+/* line_separation = -3 against a 21-unit font. */
+.gs-card-desc { line-height: 1.06; }
+/* spacing_glyph = 1, plus the outline card.tscn puts on the title — whose
+   colour is rarity-keyed (see TITLE_OUTLINE), so it stays legible on every
+   banner. Upgraded titles are StsColors.green, which is pure chartreuse.
+
+   The stroke WIDTH is measured, not derived: card.tscn's `outline_size = 12`
+   is a Godot FT_Stroker radius and does not convert to a CSS length. Matched
+   against refs/game-cardreward-1.png instead — the left stem of "Molten Fist"
+   carries 1.71px of #4D4B40 at a 237px-wide card, and `-webkit-text-stroke` is
+   CENTRED on the glyph edge (so only half of it shows outside the fill). At
+   0.011 the workbench painted 1.17px and read visibly thinner than the game. */
+.gs-card-title {
+  line-height: 1.05; letter-spacing: calc(var(--cw) * 0.0033);
+  -webkit-text-stroke: calc(var(--cw) * 0.0145) var(--gs-title-outline, #4D4B40);
+  paint-order: stroke fill;
+}
+.gs-card-title.gs-upgraded { color: #7FFF00; }
+
+/* Type plaque: a NinePatchRect in-game (patch margins 13 left / 12 right), so
+   it stretches horizontally around the type word without smearing its caps. */
+.gs-card-plaque {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  display: grid; place-content: center; white-space: nowrap; line-height: 1;
+  color: rgba(0,0,0,.75); padding: 0 calc(var(--cw) * 0.013);
+  min-width: calc(var(--cw) * 0.2033);
+  border-style: solid; border-image-slice: 0 12 0 13 fill; border-image-repeat: stretch;
+  border-width: 0 calc(var(--cw) * 0.04) 0 calc(var(--cw) * 0.0433);
+}
+
+/* Cost gems: the number sits on top of its sprite. Energy is the character's
+   orb; the Regent's star cost is a second gem tucked under it (StsColors
+   gives each its own outline — defaultEnergyCostOutline / defaultStarCostOutline). */
+.gs-card-energy { position: absolute; display: grid; place-items: center; }
+.gs-card-energy img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.gs-card-energy span {
+  position: relative; color: #FFF6E2; line-height: 1;
+  -webkit-text-stroke: calc(var(--cw) * 0.013) var(--gs-cost-outline, #4D4A43);
+  paint-order: stroke fill;
+  text-shadow: calc(var(--cw) * 0.0067) calc(var(--cw) * 0.0067) 0 rgba(0,0,0,.19);
+}
+.gs-card-star { --gs-cost-outline: #175561; }
+/* Can't pay for it right now. `NCard.UpdateEnergyCostVisuals` ->
+   `GetCostTextColorInHand(CardCostColor.InsufficientResources)` is
+   `StsColors.red` (#FF5555) over `StsColors.unplayableEnergyCostOutline`
+   (#501717), and that is the WHOLE tell: the card keeps its full opacity and
+   simply stops lighting the hand's cyan Highlight. We used to fade the card to
+   50% instead, which the game never does to a card in your hand.
+
+   Scoped to the energy orb: C# colours the energy and star costs from separate
+   `GetEnergyCostColor` / `GetStarCostColor` calls and reddens only the resource
+   actually short, while the wire gives us one `can_play` flag. Energy is the
+   one that is short almost every time, so the star keeps its own colour rather
+   than being reddened on a guess. */
+.gs-card.gs-unaffordable .gs-card-energy:not(.gs-card-star) {
+  --gs-cost-outline: #501717;
+}
+.gs-card.gs-unaffordable .gs-card-energy:not(.gs-card-star) span { color: #FF5555; }
+
+/* Unplayable for a reason that is NOT a resource cost — a Bound card once you
+   have played one this turn, a smogged Skill. `NCard` lays the game's own
+   `unplayable.png` slash over the energy orb for this
+   (`%UnplayableEnergyIcon`) and leaves the numeral alone; the card face's
+   purple affliction line says which effect is doing it. */
+.gs-card-unplayable {
+  position: absolute; z-index: 4; pointer-events: none; object-fit: contain;
+  /* Laid out on the ENERGY_ICON rect and then scaled to the sprite's own size
+     against the orb's (104px slash vs 74px orb in card_template/), so it
+     overhangs the gem the way the game's `%UnplayableEnergyIcon` does instead
+     of being cropped to it. */
+  scale: 1.4;
+}
+
+/* Cost moved by a hook or a local modifier. `GetCostTextColorInHand` maps
+   `Decreased` -> `StsColors.green` (#7FFF00) over `energyGreenOutline`
+   (#1F5923) and `Increased` -> `energyBlue` (#40FFFF) over `energyBlueOutline`
+   (#20595C). This is what says a 2-cost Attack is free right now because
+   Unrelenting left a FreeAttack behind, rather than printing a bare 0. */
+.gs-card-energy.gs-cost-down { --gs-cost-outline: #1F5923; }
+.gs-card-energy.gs-cost-down span { color: #7FFF00; }
+.gs-card-energy.gs-cost-up { --gs-cost-outline: #20595C; }
+.gs-card-energy.gs-cost-up span { color: #40FFFF; }
+
+/* Inline cost glyphs inside a description ("Gain ●●●"), sized to the text. */
+.gs-card-inline-icon {
+  display: inline-block; height: 1em; width: 1em; vertical-align: -0.16em;
+  object-fit: contain;
+}
+
+/* badges reused from the workbench (played / hotkey / win-prob / upgraded) */
+.gs-badge { position: absolute; z-index: 5; font-family: var(--game-font); font-size: 10px;
+  font-variant-numeric: tabular-nums; border-radius: 6px; padding: 1px 5px; }
+.gs-badge.gs-played-tag { top: 4px; right: 4px; background: var(--accent-strong); color: var(--on-accent); }
+.gs-badge.gs-hotkey-tag { bottom: 4px; left: 4px; background: var(--accent); color: var(--on-accent);
+  min-width: 14px; text-align: center; }
+.gs-badge.gs-win { bottom: 4px; right: 4px; border: 1px solid var(--border); background: var(--panel); color: var(--muted); }
+.gs-badge.gs-win.gs-best { background: var(--accent-strong); color: var(--on-accent); border-color: transparent; }
+.gs-badge.gs-upg { top: 4px; right: 4px; background: oklch(62% 0.13 150); color: var(--on-accent); font-weight: 700; }
+
+/* ---- hand ----------------------------------------------------------------
+   The game's fan: one overlapping arced row rising out of the arena's bottom
+   edge. Pure static layout (per-slot rotate/translate custom props set inline
+   by Hand.tsx) — replay stepping renders instantly, no animation dependence.
+   Layout height comes from the un-transformed card boxes (CSS transforms don't
+   affect flow), so the hand's bottom edge stays put as cards come and go; the
+   min-height (a measured card's height, see below) keeps an empty hand from
+   collapsing the row and shifting the arena above it. The negative top
+   margin lifts the fan INTO the scene; pointer-events pass through the empty
+   strip so the arena's corner HUD stays clickable underneath.
+
+   THE FAN BLEEDS OFF THE STAGE'S BOTTOM EDGE (r4). In the game the held hand
+   is enormous — a card is ~31% of the scene's height — and roughly the bottom
+   half of every card is cropped away by the screen edge: at rest you read cost
+   gem, name banner and art, not paragraphs. r3's hand sat wholly inside the
+   frame at ~55-65% of that size with a dead band of grass under it, which both
+   critics ranked the #1 tell. `--gs-handbleed` is the negative bottom margin
+   that lets the strip hang past the stage's `overflow: hidden`; the arc drops
+   the outer cards further, so they crop more than the middle ones exactly like
+   the ref. The full rules text stays a protected keeper — hover lifts a card
+   clear of the crop and scales it up (see .gs-handslot-lift). */
+.gs-hand { --gs-handpad: 14px;
+  /* HOW MUCH OF A RESTING CARD THE EDGE LEAVES ABOVE IT, and therefore how far
+     the strip hangs past the clip. Hand.tsx sets `--gs-handshow` to the GAME's
+     rest line — 218.8 scene px above the viewport's bottom edge, through the
+     same scene fit the fighters are placed by (see handFan.HAND_REST_VISIBLE);
+     the 219px below is only the pre-measure fallback.
+
+     It used to be the bleed itself, a flat 36px, which cropped 7% of a 295px
+     card where the game crops ~35% of its own. That is the whole of GH "enemy
+     buffs hidden behind the hand": a resting fan reaching ~50 scene px higher
+     than the game's covered the row where `.gs-powers` hangs (under the health
+     bar and the nameplate) on any creature standing behind it. */
+  --gs-handshow: 219px;
+  --gs-handbleed: max(0px, calc(var(--gs-handmin, 253px) - var(--gs-handshow)
+                                + var(--gs-handpad)));
+  /* How far a hovered card rises, and how much it grows. The lift is EXACTLY
+     the crop: a resting card's bottom edge sits `bleed - pad` below the
+     stage's clip line, so rising by that much lands the raised card's bottom
+     ON the line — fully revealed, and still covering every pixel of itself you
+     could have been pointing at. Raising it any further is what used to tear
+     the card out from under the cursor. The game does the same thing from the
+     other end: `NPlayerHand.RefreshLayout` parks the focused holder at a fixed
+     `-Hitbox.Size.Y * 0.5 + 2`, flush with the screen edge, and scales it from
+     the hand's 0.8 to 1.0 — the 1.25x below. */
+  --gs-handlift: calc(var(--gs-handbleed) - var(--gs-handpad));
+  --gs-handhover: 1.25;
+  display: flex; justify-content: center; align-items: flex-end; flex-wrap: nowrap;
+  padding: 0 16px var(--gs-handpad);
+  /* The strip keeps a full card's height even with nothing in it. Hand.tsx
+     sets `--gs-handmin` to the exact box height of the card size it measured
+     (the fallback covers a hand rendered outside the stage); `+ handpad`
+     because everything here is border-box. A flat 120px floor was ~40-175px
+     SHORT of a real card, so playing the last card in hand collapsed the strip
+     and the arena — its flex:1 sibling — swallowed the slack, walking the
+     bottom-aligned player and enemies down the screen mid-turn. */
+  min-height: calc(var(--gs-handmin, 253px) + var(--gs-handpad));
+  margin-top: -40px; margin-bottom: calc(var(--gs-handbleed) * -1);
+  position: relative; z-index: 5; pointer-events: none; }
+/* A slot is the fan's LAYOUT and its hit frame; the card inside it is the only
+   thing that moves on hover. Splitting the two is the fix for a hover that
+   oscillated: the slot used to carry the raise itself, so raising a card slid
+   its own box out from under the cursor, which unhovered it, which dropped it
+   back under the cursor — a 1px mouse move flipped it 20+ times.
+   The slot's own transform therefore carries ONLY the neighbour spread, which
+   moves every card AWAY from the hovered one and so can never chase the
+   pointer. */
+.gs-handslot {
+  position: relative; flex: 0 0 auto; pointer-events: none;
+  z-index: var(--fan-z, 0);
+  transform: translateX(var(--fan-x, 0px));
+  transition: transform .14s ease-out;
+}
+.gs-handslot.gs-hovered { z-index: 60; }
+/* The hit frame: the card's box in its RESTING pose. Nothing about hover
+   touches it, so the pointer's answer to "which card am I on?" cannot change
+   just because a card moved. */
+.gs-handslot-hit {
+  position: absolute; inset: 0; pointer-events: auto;
+  transform: translateY(var(--fan-y, 0px)) rotate(var(--fan-rot, 0deg));
+  transform-origin: 50% 100%;
+}
+.gs-handslot.gs-playable > .gs-handslot-hit { cursor: pointer; }
+/* The card. transform-origin is the slot's bottom, so the scale grows upward
+   and the bottom edge only ever moves by the lift. */
+.gs-handslot-lift {
+  pointer-events: none;
+  transform: translateY(var(--fan-y, 0px)) rotate(var(--fan-rot, 0deg));
+  transform-origin: 50% 100%;
+  transition: transform .14s ease-out;
+}
+.gs-handslot.gs-hovered > .gs-handslot-lift {
+  /* Pointer events come back ONLY while raised, and only ever ADD to the hit
+     area (the frame above stays), so the card can be followed up into the part
+     of it that overhangs the fan without the hover ever narrowing. */
+  pointer-events: auto;
+  transform: translateY(calc(var(--gs-handlift) * -1)) rotate(0deg)
+             scale(var(--gs-handhover));
+}
+.gs-handslot.gs-hovered .gs-card {
+  filter: drop-shadow(0 calc(var(--cw) * 0.027) calc(var(--cw) * 0.045) rgba(0,0,0,.55))
+          drop-shadow(0 0 calc(var(--cw) * 0.05) var(--accent-strong));
+}
+/* Playable rim — the game rims EVERY affordable card in bright cyan at rest
+   (r3 rimmed only the hovered one, so the other four read as greyed out). Only
+   in live play: a replay frame has no energy agency, so its cards stay
+   neutral-bright and unrimmed, and only the played card keeps its gold glow.
+   Hand.tsx puts `gs-playable` on the slot when the card is actually clickable. */
+.gs-handslot.gs-playable .gs-card:not(.gs-played):not(.gs-best) {
+  filter: drop-shadow(0 calc(var(--cw) * 0.027) calc(var(--cw) * 0.045) rgba(0,0,0,.55))
+          drop-shadow(0 0 calc(var(--cw) * 0.018) #7ef0fa)
+          drop-shadow(0 0 calc(var(--cw) * 0.035) rgba(66,214,232,.75));
+}
+/* `.gs-handslot-lift` carries the raise, so the card's own hover nudge (which
+   only fires once the raised card takes its pointer events back) would double
+   up on it. */
+.gs-handslot .gs-card.gs-clickable:hover { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .gs-handslot, .gs-handslot-lift { transition: none; }
+  .gs-nameplate { transition: none; }
+  .gs-endturn-glow { transition: none; }
+  .gs-potion-pop, .gs-potion-art { transition: none; }
+}
+
+/* ---- end turn plate --------------------------------------------------------
+   The game's ACTUAL button art (ui/combat_ui/end_turn_button.png — the gold-
+   trimmed blue-slate banner), living IN the scene at the stage's right edge
+   (above the discard pile, at hand height like the game). Hover lights the
+   extracted glow layer (end_turn_button_glow.png). Rendered even in replay
+   (disabled: desaturated, no glow). Text is overlaid centered on the plate. */
+.gs-endturn {
+  /* z-index 6, ABOVE .gs-hand (5). The fan is centred in the same bottom
+     strip and Hand.tsx now keeps it clear of this plate, but a card box that
+     does reach here must not be the thing that gets the click. */
+  position: absolute; right: 12px; bottom: 112px; z-index: 6;
+  font-family: var(--game-font); border: none; padding: 0; cursor: pointer;
+  background: none; line-height: 0;
+  filter: drop-shadow(0 5px 8px rgba(0,0,0,.55));
+}
+.gs-endturn .gs-endturn-art { display: block; width: 188px; height: auto; }
+.gs-endturn .gs-endturn-glow { position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; opacity: 0; transition: opacity .15s ease; }
+.gs-endturn:hover:not(:disabled) .gs-endturn-glow,
+.gs-endturn:focus-visible .gs-endturn-glow { opacity: 1; }
+.gs-endturn .gs-endturn-face {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  gap: 6px; line-height: 1;
+  font-weight: 700; font-size: 19px; letter-spacing: .04em;
+  /* cream with a hard dark outline, like the plate's own lettering — r3's
+     #f4f0e4 read grey once theme.css's disabled washout landed on top of it */
+  color: #FFF1D6; -webkit-text-stroke: 2.6px rgba(6,10,14,.85); paint-order: stroke fill;
+  text-shadow: 0 2px 3px rgba(0,0,0,.75);
+}
+.gs-endturn:active:not(:disabled) { transform: translateY(2px); }
+/* Replay renders the plate inert but it must still read as the game's blue-
+   gold banner — a heavy grayscale turned it back into the r2 "flat gray
+   hexagon". Keep the art's color, just take the shine off.
+   `opacity: 1` beats theme.css's global `button:disabled { opacity: .5 }`,
+   which was stacking on the plate and letting the grass show through it (same
+   washout already fixed on the shop / event / rest plates). */
+.gs-endturn:disabled { cursor: default; opacity: 1;
+  filter: grayscale(.18) brightness(.92) drop-shadow(0 5px 8px rgba(0,0,0,.55)); }
+/* Small win-prob hint riding the plate (workbench keeper, kept muted). */
+.gs-endturn .gs-endturn-score { font-size: 11px; font-weight: 600; color: #b8c6cc;
+  font-variant-numeric: tabular-nums; }
+
+/* ---- combat tool row (under the stage) --------------------------------------
+   The workbench's own controls: play best / autoplay / play to end / search /
+   hints, plus the MCTS knobs. Not part of the game skin's look — it is the
+   tool half of the workbench — but it lives here because its SIZE is the
+   board's problem: it is the last thing between the stage and the bottom of
+   the window, and everything it takes the stage does not get. Sized in CSS
+   rather than inline so responsive.css can shrink it on a short viewport. */
+.gs-toolrow {
+  display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  padding: 12px 16px 16px;
+}
+.gs-toolrow > button { padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; }
+/* The MCTS knobs get their own full-width line under the buttons. */
+.gs-toolrow-adv { display: block; width: 100%; margin-top: 4px; }
+
+/* ---- potion belt ------------------------------------------------------------
+   Game-like tray under the stage: recessed dark strip of circular sockets
+   (mirrors .gs-hud-potions' material), potion sprite in each filled socket.
+   Name / description / Use / Discard live in a popover that opens on hover or
+   keyboard focus — the controls stay in the DOM at all times (tests, a11y);
+   CSS only fades them, so no interaction is lost. No typed "potions:" label,
+   no bordered web pills. */
+.gs-potiontray {
+  /* IN the scene, at the stage's left edge above the energy orb (Board.tsx
+     renders it inside .gs-arena-stage now). As a flex sibling BELOW the stage
+     it was a lone rounded chip floating on app-black in the gutter under the
+     viewport — the "orphaned green relic chip" / "stray rounded-square icon
+     orphaned in the gutter" both r4 lenses logged. Same z-index band as the
+     other in-scene furniture (orb, piles, End Turn). */
+  position: absolute; left: 16px; bottom: 216px; z-index: 4;
+  display: inline-flex; align-items: center; gap: 7px;
+  /* No outer plate. The sockets ARE the furniture; a rounded-rect panel around
+     them is what read as "a stray rounded-square icon" in the r4 capture. */
+  font-family: var(--game-font);
+}
+.gs-potion { position: relative; }
+.gs-potion-socket {
+  position: relative; width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: radial-gradient(circle at 38% 30%, #23292c, #0b0e10 78%);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,.85), 0 1px 0 rgba(255,246,226,.07);
+}
+.gs-potion-empty { opacity: .75; }
+.gs-potion-filled { cursor: pointer; outline-offset: 2px; }
+.gs-potion-art { width: 34px; height: 34px; object-fit: contain; display: block;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,.7)); transition: transform .12s ease; }
+.gs-potion:hover .gs-potion-art, .gs-potion:focus-within .gs-potion-art { transform: scale(1.12); }
+.gs-potion-glyph { font-size: 18px; color: #cfc3a6; text-shadow: 0 1px 2px #000; }
+/* recommender pick: gold rim on the socket (press-first advice keeper) */
+.gs-potion-best .gs-potion-socket { box-shadow: inset 0 2px 4px rgba(0,0,0,.85),
+  0 0 0 2px var(--accent-strong), 0 0 8px rgba(0,0,0,.5); }
+/* tiny win-prob tag riding the socket's lower edge (workbench keeper) */
+.gs-potion-win { position: absolute; right: -5px; bottom: -3px; z-index: 1;
+  font-size: 9px; font-weight: 700; color: #e8d9ad; padding: 0 3px; border-radius: 5px;
+  background: rgba(0,0,0,.72); box-shadow: 0 0 0 1px rgba(255,246,226,.18);
+  font-variant-numeric: tabular-nums; }
+/* popover: name + description + actions, opens ABOVE the socket. Always in
+   the DOM; hidden via opacity (NOT display/visibility, so tests and the
+   accessibility tree keep the buttons). The padding-bottom bridge keeps the
+   hover contiguous from socket to popover. */
+.gs-potion-pop {
+  /* left-anchored (not centered): the tray hugs the viewport's left edge, so
+     a centered 210px popover on the first socket clips off-screen. */
+  position: absolute; bottom: 100%; left: -8px;
+  z-index: 30; width: 210px; padding-bottom: 7px;
+  opacity: 0; pointer-events: none; transition: opacity .12s ease;
+}
+.gs-potion:hover .gs-potion-pop, .gs-potion:focus-within .gs-potion-pop {
+  opacity: 1; pointer-events: auto; }
+.gs-potion-popin {
+  padding: 8px 10px; border-radius: 8px; color: #f6ead0;
+  background: linear-gradient(#262b25, #14181a 80%);
+  border: 1px solid #6b5732;
+  box-shadow: 0 6px 18px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,246,226,.1);
+}
+.gs-potion-popname { font-weight: 700; font-size: 13px; margin-bottom: 3px;
+  color: #e8d9ad; text-shadow: 0 1px 2px #000; }
+.gs-potion-popdesc { font-size: 11.5px; line-height: 1.4; color: #cfc3a6;
+  white-space: pre-line; }
+.gs-potion-actions { display: flex; gap: 6px; margin-top: 7px; }
+.gs-potion-btn {
+  flex: 1; padding: 3px 8px; cursor: pointer; line-height: 1.2;
+  font-family: var(--game-font); font-weight: 700; font-size: 12px;
+  color: #e8d9ad; text-shadow: 0 1px 2px #000;
+  background: linear-gradient(#3b3427, #201b12 80%);
+  border: 1px solid #6b5732; border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,246,226,.12);
+}
+.gs-potion-btn:hover { border-color: var(--accent); }
+.gs-potion-btn-dim { flex: 0 0 auto; color: #b8ab8d; }
+
+/* ============================================================================
+   Phase 2 — combat-feel overlay effects. All scoped under .gs-*; honor
+   prefers-reduced-motion (the JS also gates these by effects mode).
+   ============================================================================ */
+/* Damage numbers, ported from NDamageNumVfx.cs. The game does NOT float them
+   straight up: it throws each one with a random sideways kick and lets gravity
+   (0, 2000) pull it back down, while three parallel tweens run their own
+   easings — scale 2.5 -> 1 over 1.2s, colour -> cream over 0.5s, alpha -> 0.
+   The arc is sampled at eight stops below; y(t) = -440t + 550t^2, which is the
+   game's velocity and gravity scaled to our shorter board.
+
+   Two elements because the easings differ per property: the outer div carries
+   the ballistic translate (linear, or the arc kinks) and the fade; the inner
+   span carries the scale pop and the per-instance tilt. `--dmg-*` are set from
+   JS per hit — CSS has no RNG, and every one of these is random in the game. */
+@keyframes gs-dmg-arc {
+  0%      { transform: translate(calc(-50% + var(--dmg-jx)), var(--dmg-jy)); }
+  12.5%   { transform: translate(calc(-50% + var(--dmg-jx) + var(--dmg-dx) * 0.125), calc(var(--dmg-jy) + var(--dmg-vy) * -53.6px)); }
+  25%     { transform: translate(calc(-50% + var(--dmg-jx) + var(--dmg-dx) * 0.25),  calc(var(--dmg-jy) + var(--dmg-vy) * -82.5px)); }
+  37.5%   { transform: translate(calc(-50% + var(--dmg-jx) + var(--dmg-dx) * 0.375), calc(var(--dmg-jy) + var(--dmg-vy) * -86.6px)); }
+  50%     { transform: translate(calc(-50% + var(--dmg-jx) + var(--dmg-dx) * 0.5),   calc(var(--dmg-jy) + var(--dmg-vy) * -66px)); }
+  62.5%   { transform: translate(calc(-50% + var(--dmg-jx) + var(--dmg-dx) * 0.625), calc(var(--dmg-jy) + var(--dmg-vy) * -20.6px)); }
+  75%     { transform: translate(calc(-50% + var(--dmg-jx) + var(--dmg-dx) * 0.75),  calc(var(--dmg-jy) + var(--dmg-vy) * 49.5px)); }
+  87.5%   { transform: translate(calc(-50% + var(--dmg-jx) + var(--dmg-dx) * 0.875), calc(var(--dmg-jy) + var(--dmg-vy) * 144.4px)); }
+  100%    { transform: translate(calc(-50% + var(--dmg-jx) + var(--dmg-dx)),         calc(var(--dmg-jy) + var(--dmg-vy) * 264px)); }
+}
+@keyframes gs-dmg-fade { 0%, 30% { opacity: 1; } 100% { opacity: 0; } }
+/* From 2.5x, the game's `.From(Vector2.One * 2.5f)` — the number lands big and
+   settles, rather than growing into place. */
+@keyframes gs-dmg-pop {
+  0%   { transform: scale(2.5) rotate(var(--dmg-rot)); color: #fff; }
+  41%  { color: #fff6e2; }                    /* StsColors.cream, at 0.5s of 1.2s */
+  100% { transform: scale(1) rotate(var(--dmg-rot)); color: #fff6e2; }
+}
+.gs-dmg { position: absolute; top: calc(var(--rig-top, 0px) + 8px); left: 50%; z-index: 6; pointer-events: none;
+  --dmg-jx: 0px; --dmg-jy: -55px; --dmg-dx: 0px; --dmg-vy: 1; --dmg-rot: 0deg;
+  animation: gs-dmg-arc 1.2s linear forwards, gs-dmg-fade 1.2s ease-in forwards; }
+.gs-dmg > span { display: block;
+  font-family: var(--game-font); font-weight: 800; font-size: 30px; color: #fff;
+  text-shadow: 0 2px 0 #6a1410, 0 0 10px rgba(216,68,58,.7), 0 2px 6px #000;
+  animation: gs-dmg-pop 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.gs-dmg.gs-dmg-block > span { text-shadow: 0 2px 0 #1c4a72, 0 0 10px rgba(120,180,255,.6), 0 2px 6px #000; }
+
+/* Hit "punch": a quick squash on the struck body — mirrors the game's
+   DoScaleTween. No white halo (the real game has none). */
+@keyframes gs-hit-punch { 0% { transform: scale(1,1); } 28% { transform: scale(1.08,0.9); }
+  60% { transform: scale(0.97,1.03); } 100% { transform: scale(1,1); } }
+.gs-hit-punch { animation: gs-hit-punch .26s ease-out; transform-origin: 50% 100%; }
+
+/* The struck creature's horizontal wiggle USED TO LIVE HERE, as a damage-tiered
+   stand-in for a screen shake the workbench did not have. Both halves of that
+   are now wrong: the screen shake is real (effects/screenShake.ts), and the
+   game's own per-creature wobble — NCreature.AnimShake — fires on a DEBUFF
+   landing, at a fixed amplitude, and is explicitly suppressed while the hurt
+   animation plays. It is ported in effects/animShake.ts and driven from
+   Combatant.tsx via Web Animations, because four eased oscillations under a
+   half-sine envelope is not a curve a keyframe block can carry (GH #632). */
+
+/* NHealthBar.AnimateInBlock: from 20px above and transparent, alpha over
+   0.5 s (EaseOut Sine), position over 0.5 s (EaseOut Back — the overshoot). */
+@keyframes gs-block-pop { 0% { translate: 0 -20px; opacity: 0; } 100% { translate: 0 0; opacity: 1; } }
+.gs-block.gs-block-pop { animation: gs-block-pop .5s cubic-bezier(.34,1.56,.64,1); }
+@keyframes gs-block-shatter { 0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.6) rotate(8deg); } }
+.gs-block-shatter { position: absolute; left: -15px; top: 50%; margin-top: -17px; z-index: 3; width: 30px; height: 34px;
+  background: conic-gradient(from 0deg, #8fc4ee, #4f87bb, #8fc4ee);
+  clip-path: polygon(50% 0, 100% 22%, 100% 64%, 50% 100%, 0 64%, 0 22%);
+  pointer-events: none; animation: gs-block-shatter .35s ease-out forwards; }
+
+/* `vfx_blocked_text.tscn` (NDamageBlockedVfx.cs::BlockAnim): scale 1->0.6,
+   drift up, colour tweens blue->white, then fades. Scaled well down from the
+   game's -250px screen-space drift for the same reason `.gs-shake` is (see
+   its comment) — the struck creature's own box is much smaller than a
+   full-screen shake budget. */
+@keyframes gs-blocked-text { 0% { transform: translate(-50%,0) scale(1); opacity: 1; color: #21c0ff; }
+  40% { color: #fff; } 60% { opacity: 1; } 100% { transform: translate(-50%,-60px) scale(.6); opacity: 0; color: #fff; } }
+.gs-blocked-text { position: absolute; top: calc(var(--rig-top, 0px) - 6px); left: 50%; z-index: 6; pointer-events: none;
+  font-family: var(--game-font); font-size: 20px; font-weight: 700; white-space: nowrap;
+  text-shadow: 0 2px 4px rgba(0,0,0,.6); animation: gs-blocked-text 1.4s ease-out forwards; }
+
+/* `power_applied_vfx.tscn` / `power_removed_vfx.tscn`, replacing the invented
+   `.gs-buffpop` chip. Applied floats UP for a buff and DOWN for a debuff
+   (NPowerAppliedVfx.cs line 169: `_isBuff ? -100 : 100`); removed always
+   floats up (`NPowerRemovedVfx` has no buff/debuff distinction at all). */
+@keyframes gs-power-pop-up { 0% { transform: translate(-50%,6px) scale(.6); opacity: 0; }
+  20% { opacity: 1; } 100% { transform: translate(-50%,-34px) scale(1); opacity: 0; } }
+@keyframes gs-power-pop-down { 0% { transform: translate(-50%,-6px) scale(.6); opacity: 0; }
+  20% { opacity: 1; } 100% { transform: translate(-50%,34px) scale(1); opacity: 0; } }
+.gs-power-pop { position: absolute; top: calc(var(--rig-top, 0px) - 6px); left: 50%; z-index: 6; pointer-events: none;
+  display: flex; align-items: center; font-family: var(--game-font); white-space: nowrap; }
+.gs-power-pop-icon { width: 26px; height: 26px; display: block; }
+.gs-power-pop-label { font-size: 12px; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,.7); }
+.gs-power-pop-applied { flex-direction: column; gap: 2px; }
+.gs-power-pop-applied.gs-buff { animation: gs-power-pop-up 1.25s ease-out forwards; }
+.gs-power-pop-applied.gs-debuff { animation: gs-power-pop-down 1.25s ease-out forwards; }
+/* Colour only exists on the applied panel — removed has no `_isBuff`. */
+.gs-power-pop-applied .gs-power-pop-label.gs-buff { color: oklch(72% 0.16 150); }
+.gs-power-pop-applied .gs-power-pop-label.gs-debuff { color: oklch(68% 0.19 25); }
+.gs-power-pop-removed { flex-direction: row; gap: 6px; animation: gs-power-pop-up 1.6s ease-out forwards; }
+.gs-power-pop-textcol { display: flex; flex-direction: column; gap: 0; }
+.gs-power-pop-removed .gs-power-pop-label { color: #fff5e2; }
+.gs-power-pop-wearsoff { font-size: 10px; color: #fff5e2; opacity: .85; }
+
+/* Dying enemy: the SPRITE dissolves for real now (`shaders/dissolve.gdshader`,
+   drawn by `SpineSprite`'s own WebGL post-pass, `effects/dissolve.ts`), so
+   this rule must NOT touch it — stacking a CSS opacity/grayscale fade on top
+   of the shader's own fade would darken its output and desync from its
+   duration. It fades everything ELSE inside `.gs-combatant` instead (the HP
+   bar, name, powers — `:not(.gs-sprite-wrap)`), which the dissolve does not
+   touch and which used to fade only because the OLD rule faded the whole
+   `.gs-combatant` wrapper, sprite included.
+
+   ...but ONLY when a dissolve is really running, which is narrower than
+   "something died". Three reachable states have no shader fade to defer to,
+   and each would otherwise pop the sprite out at full opacity where it used
+   to fade: an enemy with no `rig` at all (`Combatant` renders a plain
+   `<img class="gs-sprite">`), a rig whose Spine load FAILED (`SpineSprite`
+   renders the same `<img>` fallback), and any death before `loadManifest()`
+   resolves (`Board.tsx` hands down `dissolve: null`, so `SpineSprite` takes
+   its untouched plain path). So the exclusion is keyed to two classes that
+   assert the dissolve specifically — `gs-dissolving` on the combatant
+   (`Combatant`: dying, a `dissolve` entry, and a rig to draw it on) and
+   `gs-rig-failed` on `SpineSprite`'s own root (the fallback `<img>` case
+   inside an otherwise-dissolving combatant) — rather than to `.gs-dying`
+   alone, which cannot tell those states apart.
+
+   `--gs-dying-ms` is set inline by `Combatant.tsx`'s `dyingChromeFadeSeconds`
+   to the SAME duration fed to the dissolve shader, so the chrome and the
+   sprite finish fading together rather than one lingering after the other.
+
+   The `2.5s` below is a DIFFERENT fallback from `Combatant.tsx`'s
+   `DEFAULT_DYING_FADE_SECONDS` (0.9s), and the two are not meant to agree —
+   they answer different questions. This one covers `--gs-dying-ms` being
+   unset ALTOGETHER, i.e. something applied `.gs-dying` without going through
+   `Combatant` (which sets the property inline on every render, so this is
+   unreachable in the app today); 2.5s is the shipped manifest's own
+   `vfx_monster_death.dissolveSeconds`, so the guess matches what a real
+   corpse actually takes. `Combatant`'s 0.9s covers the case where the
+   variable IS set but `dissolve` is null — no manifest entry, therefore no
+   dissolve at all, therefore the pre-Task-14 chrome timing is the correct
+   length, and it is the same 0.9s `Board.tsx`'s corpse-removal timer falls
+   back to so the corpse leaves when its chrome finishes.
+   `Board.effects.test.tsx` reads `.gs-dying`'s presence (the class, not this
+   rule) as the fading-state marker; Board.tsx already disables
+   `onClick`/`onHoverChange` for any `isDying` corpse via React props,
+   independent of this rule's own `pointer-events: none`. */
+@keyframes gs-chrome-fade { 0% { opacity: 1; filter: none; }
+  100% { opacity: .05; filter: grayscale(1) brightness(.45); } }
+.gs-dying > :not(.gs-sprite-wrap),
+.gs-dying:not(.gs-dissolving) > .gs-sprite-wrap,
+.gs-dying.gs-dissolving .gs-rig-failed {
+  animation-name: gs-chrome-fade;
+  animation-duration: var(--gs-dying-ms, 2.5s);
+  animation-timing-function: ease-out;
+  animation-delay: .1s;
+  animation-fill-mode: forwards;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* AnimShake and the screen shake are absent here on purpose: both are driven
+     from JS, so they ask this media query themselves rather than declaring it. */
+  .gs-dmg, .gs-dmg > span, .gs-hit-punch, .gs-block-pop, .gs-block-shatter, .gs-blocked-text,
+  .gs-power-pop-applied, .gs-power-pop-removed,
+  .gs-dying > :not(.gs-sprite-wrap),
+  .gs-dying:not(.gs-dissolving) > .gs-sprite-wrap,
+  .gs-dying.gs-dissolving .gs-rig-failed { animation: none; }
+}
+
+/* ============================================================================
+   .gs-scene — reusable full-bleed scene backdrop primitive (non-combat screens)
+   ============================================================================
+   Usage (any screen that has extracted backdrop art):
+
+     <div className="gs-scene"
+          style={{ "--gs-scene-bg": `url(${assetUrl("rooms/rest_sites/overgrowth/overgrowth_rest_site_bg.png")})`,
+                   "--gs-scene-pos": "center 30%" } as React.CSSProperties}>
+       ...screen content (auto-raised above the scrim)...
+     </div>
+
+   - `--gs-scene-bg`  : the backdrop image (cover). Omit it and the container
+     just paints the dark fallback ground.
+   - `--gs-scene-pos` : optional background-position (default `center`), for
+     art whose focal point isn't centered.
+   - Layers, back to front: (1) the backdrop on ::before with a mild
+     brightness lift (raw PCK layers are authored dark — the game adds
+     lighting passes we don't have); (2) a vignette + BOTTOM scrim on ::after.
+     Legibility comes from the bottom scrim, never a full-frame dim, so the
+     room keeps reading as a lit place; put text/choices in the lower half or
+     give tall text its own local shadow. (3) the same subtle gold edge ring
+     as .gs-arena, so framed viewports match. Add `gs-scene--plain` to drop
+     the ring on surfaces that shouldn't read as a framed viewport. */
+.gs-scene {
+  position: relative; min-height: 100%; overflow: hidden;
+  background: linear-gradient(#141c17, #0c1712);
+  font-family: var(--game-font);
+}
+.gs-scene::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: var(--gs-scene-bg, none);
+  background-size: cover; background-repeat: no-repeat;
+  background-position: var(--gs-scene-pos, center);
+  filter: brightness(1.1) saturate(1.05);
+}
+.gs-scene::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.28), transparent 20%,
+      transparent 52%, rgba(4,6,8,.62) 86%, rgba(4,6,8,.8)),
+    radial-gradient(85% 75% at 50% 40%, transparent 58%, rgba(0,0,0,.34));
+  box-shadow: inset 0 0 110px 24px rgba(0,0,0,.38),
+    inset 0 0 0 2px oklch(72% 0.15 80 / 0.14);
+}
+.gs-scene--plain::after { box-shadow: inset 0 0 110px 24px rgba(0,0,0,.38); }
+.gs-scene > * { position: relative; z-index: 1; }

@@ -1,0 +1,27 @@
+{
+  "class_name": "EyeWithTeeth",
+  "title": "Eye with Teeth",
+  "min_hp": 6,
+  "max_hp": 6,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "DISTRACT_MOVE",
+      "title": "Distract",
+      "intents": [
+        {
+          "type": "status",
+          "amount": 3
+        }
+      ],
+      "effects": [
+        "Add 3 Dazed"
+      ]
+    }
+  ],
+  "move_pattern": "Repeats Distract",
+  "powers_on_spawn": [
+    "Illusion"
+  ],
+  "notes": "Eye With Teeth is a secondary enemy (minion) — it has ShouldDisappearFromDoom = false and its death animation only triggers when no living primary enemies remain on the field. A STARTLE move title exists in localization but has no corresponding move in the source code."
+}

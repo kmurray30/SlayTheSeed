@@ -1,0 +1,9 @@
+{
+  "class_name": "PoisonPower",
+  "title": "Poison",
+  "power_type": "Debuff",
+  "stack_type": "Counter",
+  "description": "Poisoned creatures lose HP at the start of their turn. Each turn, Poison is reduced by [blue]1[/blue].",
+  "smart_description": "At the start of {OnPlayer:your turn, lose|its turn, loses} [blue]{Amount}[/blue] HP, then reduce [gold]Poison[/gold] by [blue]1[/blue].",
+  "notes": "Poison can trigger multiple times in a single turn if Accelerant is active on any opponent. The actual damage dealt is modified by ModifyDamage hooks (Unblockable, Unpowered). The TriggerCount is the minimum of current Poison amount and (1 + total Accelerant stacks on all opponents)."
+}

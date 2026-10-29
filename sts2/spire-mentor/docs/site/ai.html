@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the AI plays</title>
+<meta name="description" content="How the spire-mentor AI decides: chance-node MCTS with honest hidden information for every combat action, and a per-character PPO transformer for every other decision.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 4 9v14l12 7 12-7V9z' fill='%23d9a441'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kreon:wght@500;700&display=swap">
+<link rel="stylesheet" href="style.css?v=4">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="index.html" aria-label="spire-mentor home"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 4 9v14l12 7 12-7V9z" fill="currentColor" opacity=".18"/><path d="M16 2 4 9v14l12 7 12-7V9zm0 4.6 8 4.7v9.4l-8 4.7-8-4.7v-9.4z" fill="oklch(0.78 0.13 76)"/></svg><span>spire-mentor</span></a>
+  <nav class="toplinks" aria-label="Site">
+    <a href="index.html">Docs</a>
+    <a href="ai.html" aria-current="page"><span class="l">How the AI plays</span><span class="s">AI</span></a>
+    <a href="training.html"><span class="l">How it's trained</span><span class="s">Training</span></a>
+    <a href="benchmarks.html"><span class="l">Benchmarks</span><span class="s">Speed</span></a>
+    <a class="gh" href="https://github.com/tfriedel/spire-mentor"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg><span>GitHub</span></a>
+  </nav>
+  <button class="iconbtn theme" type="button" aria-label="Switch colour theme" title="Switch colour theme"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g></svg></button>
+  <button class="menu" type="button" aria-controls="toc" aria-expanded="false" aria-label="Contents"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg><span class="lbl">Contents</span></button>
+</header>
+
+<div class="layout">
+<nav id="toc" class="toc" aria-label="Contents">
+  <p class="toc-title">On this page</p>
+  <ol>
+    <li><a href="#split">Two halves</a></li>
+    <li><a href="#search">Combat search</a></li>
+    <li><a href="#hidden">Hidden information</a></li>
+    <li><a href="#values">What a fight is worth</a></li>
+    <li><a href="#policy">The run policy</a></li>
+    <li><a href="#run">One run, in order</a></li>
+    <li><a href="#screen">Numbers on screen</a></li>
+    <li><a href="#serving">Where it runs</a></li>
+  </ol>
+</nav>
+
+<main id="top">
+
+<section class="hero">
+  <h1>How the AI plays</h1>
+  <p class="lede">Two different machines share the work. A tree search
+  decides every action inside a fight. A small transformer, trained by
+  reinforcement learning, decides everything between fights. Neither
+  ever sees information a human player could not.</p>
+  <p class="note">How the transformer was trained and promoted is on
+  <a href="training.html">its own page</a>. This page describes what runs at
+  decision time, as deployed.</p>
+  <figure class="video">
+    <div class="frame"><iframe src="https://www.youtube-nocookie.com/embed/DcZs8ZGSDyo" title="Slay the Spire 2: AI beats Ironclad Ascension 9" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+    <figcaption>The AI beating Ironclad at Ascension 9 in the real game, through the Spire Mentor mod. The advisor panel at the top left shows the search's ranking of each move.</figcaption>
+  </figure>
+
+</section>
+
+<section id="split">
+  <h2>Two halves</h2>
+  <figure class="fig">
+    <div class="canvas"><svg viewBox="0 0 820 186" role="img" aria-label="A run alternates between fights, decided action by action by the search, and choices between fights, decided by the run policy"><defs><marker id="ah-split" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead"/></marker><marker id="aa-split" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead-acc"/></marker></defs><line x1="20" y1="70" x2="800" y2="70" class="line"/><circle cx="33" cy="70" r="9" class="hot"/><text x="33" y="104" class="s" text-anchor="middle">start</text><rect x="68" y="52" width="50" height="36" rx="8" class="box"/><text x="93.0" y="75" class="m" text-anchor="middle">fight</text><circle cx="135" cy="70" r="9" class="hot"/><text x="135" y="104" class="s" text-anchor="middle">reward</text><circle cx="179" cy="70" r="9" class="hot"/><text x="179" y="104" class="s" text-anchor="middle">path</text><rect x="214" y="52" width="50" height="36" rx="8" class="box"/><text x="239.0" y="75" class="m" text-anchor="middle">fight</text><circle cx="281" cy="70" r="9" class="hot"/><text x="281" y="104" class="s" text-anchor="middle">reward</text><circle cx="325" cy="70" r="9" class="hot"/><text x="325" y="104" class="s" text-anchor="middle">event</text><circle cx="369" cy="70" r="9" class="hot"/><text x="369" y="104" class="s" text-anchor="middle">path</text><rect x="404" y="52" width="50" height="36" rx="8" class="box"/><text x="429.0" y="75" class="m" text-anchor="middle">elite</text><circle cx="471" cy="70" r="9" class="hot"/><text x="471" y="104" class="s" text-anchor="middle">relic</text><circle cx="515" cy="70" r="9" class="hot"/><text x="515" y="104" class="s" text-anchor="middle">rest</text><circle cx="559" cy="70" r="9" class="hot"/><text x="559" y="104" class="s" text-anchor="middle">shop</text><circle cx="603" cy="70" r="9" class="hot"/><text x="603" y="104" class="s" text-anchor="middle">path</text><rect x="638" y="52" width="50" height="36" rx="8" class="box"/><text x="663.0" y="75" class="m" text-anchor="middle">fight</text><rect x="696" y="52" width="60" height="36" rx="8" class="box"/><text x="726.0" y="75" class="m" text-anchor="middle">boss</text><rect x="24" y="128" width="14" height="14" rx="3" class="box"/><text x="46" y="140" class="m" text-anchor="start">fight: MCTS on every action (1,000 sims, 4,000 at bosses)</text><circle cx="31" cy="164" r="7" class="hot"/><text x="46" y="169" class="m" text-anchor="start">anything else: one forward pass of the run policy</text><text x="20" y="26" class="tb" text-anchor="start">Act 1, schematically: who decides at each stop</text></svg></div>
+    <figcaption>Fights go to the search one action at a time; every other choice is one pass of the run policy. Single-option prompts are taken automatically.</figcaption>
+  </figure>
+  <p>The split is strict. The transformer never plays a card, and it gives
+  the search no priors: the search starts every decision from a uniform
+  prior over legal actions. (The one exception, Ironclad's elite and boss
+  fights in the run agent, takes its priors from a separate move-prior
+  network; see <a href="#search">Combat search</a>.) Combat is where exact
+  lookahead pays most,
+  because one core plays about 59,000 random fights a second
+  (<a href="benchmarks.html">benchmarks</a>). Run-level choices such as which card to take or which path to walk
+  have consequences tens of floors away, which is where a learned policy
+  earns its keep.</p>
+  <p>A typical Ironclad run at Ascension 9 contains about 335 combat
+  decisions (56% in common fights, 20% in elites, 24% in bosses). In
+  September 2026 they took roughly 570,000 simulations in total; the current
+  version plays a decision with only one legal move without a search, so it
+  spends somewhat fewer.</p>
+</section>
+
+<section id="search">
+  <h2>Combat search</h2>
+  <p>The combat agent is Monte-Carlo tree search over the Rust engine
+  (<code>sts2-rs/crates/sts2-mcts</code>). A fresh tree is built for every
+  decision, seeded deterministically from the run seed, so a run replays
+  exactly.</p>
+
+  <figure class="fig">
+    <div class="canvas"><svg viewBox="0 0 760 420" role="img" aria-label="One MCTS iteration: select down the tree with UCT, expand an untried action, sample a chance outcome after End turn, roll out to the end of the fight, back the value up the path"><defs><marker id="ah-mcts" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead"/></marker><marker id="aa-mcts" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead-acc"/></marker></defs><path d="M380,56 L120,106" class="line"/><path d="M380,56 L270,106" class="line"/><path d="M380,56 L440,106" class="path"/><path d="M380,56 L620,106" class="line"/><path d="M440,166 L360,222" class="line"/><path d="M440,166 L540,222" class="path"/><path d="M540,252 L470,300" class="line"/><path d="M540,252 L540,300" class="path"/><path d="M540,252 L610,300" class="line"/><path d="M540,252 L680,300" class="line dash"/><path d="M540,318 c 10,8 -10,14 0,22 s -10,14 0,22 s -10,14 0,22" class="sq"/><rect x="300.0" y="24.0" width="160" height="32" rx="16.0" class="hot"/><text x="380" y="45" class="tb" text-anchor="middle">your turn: 3 energy</text><rect x="72.0" y="107.0" width="96" height="30" rx="15.0" class="box2"/><text x="120" y="127" class="t" text-anchor="middle">Strike</text><text x="120" y="156" class="s num" text-anchor="middle">Q 0.31 · n 210</text><rect x="222.0" y="107.0" width="96" height="30" rx="15.0" class="box2"/><text x="270" y="127" class="t" text-anchor="middle">Defend</text><text x="270" y="156" class="s num" text-anchor="middle">Q 0.27 · n 160</text><rect x="392.0" y="107.0" width="96" height="30" rx="15.0" class="hot"/><text x="440" y="127" class="t" text-anchor="middle">Bash</text><text x="440" y="156" class="s num" text-anchor="middle">Q 0.44 · n 520</text><path d="M620,106 L636,122 L620,138 L604,122 z" class="box2"/><text x="644" y="127" class="t" text-anchor="start">End turn</text><text x="620" y="156" class="s" text-anchor="middle">chance node</text><rect x="312.0" y="222.0" width="96" height="28" rx="14.0" class="box2"/><text x="360" y="241" class="t" text-anchor="middle">Strike</text><path d="M540,221 L555,236 L540,251 L525,236 z" class="hot"/><text x="564" y="240" class="m" text-anchor="start">End turn: enemy acts, you draw</text><circle cx="470" cy="308" r="8" class="box2"/><circle cx="540" cy="308" r="8" class="hot"/><circle cx="610" cy="308" r="8" class="box2"/><circle cx="680" cy="308" r="8" class="box2 dash"/><text x="696" y="304" class="s" text-anchor="start">more as</text><text x="696" y="318" class="s" text-anchor="start">visits grow</text><text x="556" y="354" class="m" text-anchor="start">rollout to the end of the fight</text><text x="556" y="370" class="s" text-anchor="start">(expert play order, at most 200 plies)</text><text x="556" y="400" class="acc-t" text-anchor="start" style="font-weight:650;font-size:14px">value +1.21: won, 54 HP left</text><path d="M532,398 C 430,390 400,200 425,168" class="line-m dash" marker-end="url(#ah-mcts)"/><text x="408" y="300" class="s" text-anchor="end">back up: each node on</text><text x="408" y="316" class="s" text-anchor="end">the path updates its</text><text x="408" y="332" class="s" text-anchor="end">mean; chance nodes</text><text x="408" y="348" class="s" text-anchor="end">average their outcomes</text><circle cx="35" cy="220" r="11" class="hot"/><text x="35" y="224.5" class="s" text-anchor="middle" style="font-weight:700;fill:var(--accent-strong)">1</text><text x="54" y="221" class="tb" text-anchor="start">Select</text><text x="54" y="237" class="s" text-anchor="start">UCT picks a child at each node</text><circle cx="35" cy="260" r="11" class="hot"/><text x="35" y="264.5" class="s" text-anchor="middle" style="font-weight:700;fill:var(--accent-strong)">2</text><text x="54" y="261" class="tb" text-anchor="start">Expand</text><text x="54" y="277" class="s" text-anchor="start">untried actions in expert order</text><circle cx="35" cy="300" r="11" class="hot"/><text x="35" y="304.5" class="s" text-anchor="middle" style="font-weight:700;fill:var(--accent-strong)">3</text><text x="54" y="301" class="tb" text-anchor="start">Chance</text><text x="54" y="317" class="s" text-anchor="start">sample an outcome; widen slowly</text><circle cx="35" cy="340" r="11" class="hot"/><text x="35" y="344.5" class="s" text-anchor="middle" style="font-weight:700;fill:var(--accent-strong)">4</text><text x="54" y="341" class="tb" text-anchor="start">Roll out</text><text x="54" y="357" class="s" text-anchor="start">heuristic play to a result</text><circle cx="35" cy="380" r="11" class="hot"/><text x="35" y="384.5" class="s" text-anchor="middle" style="font-weight:700;fill:var(--accent-strong)">5</text><text x="54" y="381" class="tb" text-anchor="start">Back up</text><text x="54" y="397" class="s" text-anchor="start">update Q and visit counts</text></svg></div>
+    <figcaption>One iteration of the search, repeated 1,000 times per decision (4,000 at bosses). The numbers are illustrative.</figcaption>
+  </figure>
+  <h3>Actions</h3>
+  <p>Each edge is one atomic action: play a card at a target, drink a
+  potion, resolve a choice, or end the turn. There are no whole-turn macro
+  actions. Identical cards in hand collapse to one edge, and untried actions
+  are expanded in the order of an expert play-priority table, so the first
+  visits go to plausible moves.</p>
+
+  <h3>Selection</h3>
+  <p>Plain UCT: each child scores <code>Q + c·√(ln N / n)</code>, and every
+  child is visited once before any is visited twice. The exploration
+  constant depends on the budget: 0.8 below 500 simulations, 1.41 up to
+  999, and 2.5 from 1,000 up, which covers every deployed budget. A PUCT
+  variant with learned priors exists. The deployed search uses it in one
+  place only: the Ironclad run agent's elite and boss fights, where a small
+  move-prior network trained by behaviour cloning on human replays supplies
+  the priors.</p>
+
+  <h3>Chance nodes</h3>
+  <p>Randomness is modelled, not sampled away. Any action that advances one
+  of the combat's random streams (a random target, a random card, an enemy
+  move roll, a shuffle, or a draw from an unknown part of the pile) becomes a
+  chance node. Its outcomes are widened progressively: a node with
+  <var>v</var> visits may hold up to ⌈C·(v+1)<sup>α</sup>⌉ distinct
+  outcomes, and outcomes that look identical to the player are merged. A
+  chance node backs up the plain mean of its children, expectimax-style.</p>
+  <figure class="fig">
+    <div class="canvas"><svg viewBox="0 0 760 330" role="img" aria-label="Progressive widening: how many distinct outcomes a chance node may hold as it is visited more; the end-of-turn node widens fastest"><defs><marker id="ah-dpw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead"/></marker><marker id="aa-dpw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead-acc"/></marker></defs><line x1="70" y1="250.0" x2="560" y2="250.0" class="grid"/><text x="60" y="254.0" class="s num" text-anchor="end">0</text><line x1="70" y1="196.0" x2="560" y2="196.0" class="grid"/><text x="60" y="200.0" class="s num" text-anchor="end">30</text><line x1="70" y1="142.0" x2="560" y2="142.0" class="grid"/><text x="60" y="146.0" class="s num" text-anchor="end">60</text><line x1="70" y1="88.0" x2="560" y2="88.0" class="grid"/><text x="60" y="92.0" class="s num" text-anchor="end">90</text><line x1="70" y1="34.0" x2="560" y2="34.0" class="grid"/><text x="60" y="38.0" class="s num" text-anchor="end">120</text><text x="70.0" y="270" class="s num" text-anchor="middle">0</text><text x="192.5" y="270" class="s num" text-anchor="middle">250</text><text x="315.0" y="270" class="s num" text-anchor="middle">500</text><text x="437.5" y="270" class="s num" text-anchor="middle">750</text><text x="560.0" y="270" class="s num" text-anchor="middle">1,000</text><text x="315.0" y="292" class="m" text-anchor="middle">visits to the chance node</text><text x="18" y="22" class="m" text-anchor="start">distinct outcomes allowed</text><polyline points="70.0,239.2 74.9,219.4 79.8,210.4 84.7,203.2 89.6,196.0 94.5,190.6 99.4,187.0 104.3,181.6 109.2,178.0 114.1,174.4 119.0,170.8 123.9,167.2 128.8,165.4 133.7,161.8 138.6,158.2 143.5,156.4 148.4,152.8 153.3,151.0 158.2,149.2 163.1,145.6 168.0,143.8 172.9,142.0 177.8,140.2 182.7,136.6 187.6,134.8 192.5,133.0 197.4,131.2 202.3,129.4 207.2,127.6 212.1,125.8 217.0,124.0 221.9,122.2 226.8,120.4 231.7,118.6 236.6,116.8 241.5,115.0 246.4,113.2 251.3,111.4 256.2,109.6 261.1,107.8 266.0,107.8 270.9,106.0 275.8,104.2 280.7,102.4 285.6,100.6 290.5,98.8 295.4,98.8 300.3,97.0 305.2,95.2 310.1,93.4 315.0,91.6 319.9,91.6 324.8,89.8 329.7,88.0 334.6,88.0 339.5,86.2 344.4,84.4 349.3,82.6 354.2,82.6 359.1,80.8 364.0,79.0 368.9,79.0 373.8,77.2 378.7,75.4 383.6,75.4 388.5,73.6 393.4,71.8 398.3,71.8 403.2,70.0 408.1,68.2 413.0,68.2 417.9,66.4 422.8,66.4 427.7,64.6 432.6,62.8 437.5,62.8 442.4,61.0 447.3,59.2 452.2,59.2 457.1,57.4 462.0,57.4 466.9,55.6 471.8,55.6 476.7,53.8 481.6,52.0 486.5,52.0 491.4,50.2 496.3,50.2 501.2,48.4 506.1,48.4 511.0,46.6 515.9,46.6 520.8,44.8 525.7,43.0 530.6,43.0 535.5,41.2 540.4,41.2 545.3,39.4 550.2,39.4 555.1,37.6 560.0,37.6" class="path" stroke-linejoin="round"/><text x="570" y="41.60000000000002" class="m" text-anchor="start" style="fill:var(--accent-strong);font-weight:650">End turn (deployed): 118</text><polyline points="70.0,246.4 74.9,237.4 79.8,232.0 84.7,228.4 89.6,226.6 94.5,223.0 99.4,221.2 104.3,219.4 109.2,217.6 114.1,214.0 119.0,212.2 123.9,210.4 128.8,210.4 133.7,208.6 138.6,206.8 143.5,205.0 148.4,203.2 153.3,201.4 158.2,201.4 163.1,199.6 168.0,197.8 172.9,196.0 177.8,196.0 182.7,194.2 187.6,192.4 192.5,192.4 197.4,190.6 202.3,190.6 207.2,188.8 212.1,187.0 217.0,187.0 221.9,185.2 226.8,185.2 231.7,183.4 236.6,183.4 241.5,181.6 246.4,181.6 251.3,179.8 256.2,178.0 261.1,178.0 266.0,176.2 270.9,176.2 275.8,174.4 280.7,174.4 285.6,174.4 290.5,172.6 295.4,172.6 300.3,170.8 305.2,170.8 310.1,169.0 315.0,169.0 319.9,167.2 324.8,167.2 329.7,165.4 334.6,165.4 339.5,165.4 344.4,163.6 349.3,163.6 354.2,161.8 359.1,161.8 364.0,160.0 368.9,160.0 373.8,160.0 378.7,158.2 383.6,158.2 388.5,156.4 393.4,156.4 398.3,156.4 403.2,154.6 408.1,154.6 413.0,154.6 417.9,152.8 422.8,152.8 427.7,151.0 432.6,151.0 437.5,151.0 442.4,149.2 447.3,149.2 452.2,149.2 457.1,147.4 462.0,147.4 466.9,147.4 471.8,145.6 476.7,145.6 481.6,145.6 486.5,143.8 491.4,143.8 496.3,142.0 501.2,142.0 506.1,142.0 511.0,140.2 515.9,140.2 520.8,140.2 525.7,138.4 530.6,138.4 535.5,138.4 540.4,138.4 545.3,136.6 550.2,136.6 555.1,136.6 560.0,134.8" class="line-m" stroke-linejoin="round"/><text x="570" y="138.8" class="m" text-anchor="start">draws: 64</text><polyline points="70.0,248.2 74.9,242.8 79.8,241.0 84.7,239.2 89.6,237.4 94.5,235.6 99.4,235.6 104.3,233.8 109.2,233.8 114.1,232.0 119.0,230.2 123.9,230.2 128.8,230.2 133.7,228.4 138.6,228.4 143.5,226.6 148.4,226.6 153.3,224.8 158.2,224.8 163.1,224.8 168.0,223.0 172.9,223.0 177.8,223.0 182.7,221.2 187.6,221.2 192.5,221.2 197.4,219.4 202.3,219.4 207.2,219.4 212.1,217.6 217.0,217.6 221.9,217.6 226.8,217.6 231.7,215.8 236.6,215.8 241.5,215.8 246.4,215.8 251.3,214.0 256.2,214.0 261.1,214.0 266.0,212.2 270.9,212.2 275.8,212.2 280.7,212.2 285.6,212.2 290.5,210.4 295.4,210.4 300.3,210.4 305.2,210.4 310.1,208.6 315.0,208.6 319.9,208.6 324.8,208.6 329.7,206.8 334.6,206.8 339.5,206.8 344.4,206.8 349.3,206.8 354.2,205.0 359.1,205.0 364.0,205.0 368.9,205.0 373.8,205.0 378.7,203.2 383.6,203.2 388.5,203.2 393.4,203.2 398.3,203.2 403.2,201.4 408.1,201.4 413.0,201.4 417.9,201.4 422.8,201.4 427.7,199.6 432.6,199.6 437.5,199.6 442.4,199.6 447.3,199.6 452.2,199.6 457.1,197.8 462.0,197.8 466.9,197.8 471.8,197.8 476.7,197.8 481.6,197.8 486.5,196.0 491.4,196.0 496.3,196.0 501.2,196.0 506.1,196.0 511.0,194.2 515.9,194.2 520.8,194.2 525.7,194.2 530.6,194.2 535.5,194.2 540.4,194.2 545.3,192.4 550.2,192.4 555.1,192.4 560.0,192.4" class="line-m dash" stroke-linejoin="round"/><text x="570" y="196.4" class="m" text-anchor="start">other chance nodes: 32</text><text x="70" y="318" class="s" text-anchor="start">cap = ⌈C · (visits + 1)^α⌉   End turn: C 5.79, α 0.44 · draws: C 2, α 0.5 · other: C 1, α 0.5</text></svg></div>
+    <figcaption>How many different outcomes a chance node may branch into as its visit count grows. End of turn, where the enemy acts and the next hand is drawn, gets the widest budget.</figcaption>
+  </figure>
+
+  <p>End-of-turn is the widest node, because the enemy turn and the next
+  draw both resolve there. Raising its widening constants (C = 5.79,
+  α = 0.44) gained <strong>+6.35 pp</strong> full-run win rate on 2,000
+  paired runs (p = 8.2e-10). Spending the same extra compute on plain extra
+  simulations gained nothing measurable. Every search on this page uses
+  these constants: training, the promotion gates, the published win rates,
+  the real-game advisor and the browser hint. Since 25 October 2026 the
+  Ironclad run agent (its training, its promotion gates and the browser's run
+  mode) adds its own layer on top: wider End-turn and draw widening (C = 23.1
+  and C = 4), a fight score that counts multi-form enemies by what is left of
+  them, and in elite and boss fights the move priors described above. The
+  real-game advisor and the browser hint do not use this layer.</p>
+
+  <h3>Transpositions and rollouts</h3>
+  <p>A transposition table merges positions reached by different orders of
+  play, so the search is a DAG; it merges about 12% of node creations. Each
+  new leaf is played out by a heuristic rollout: a softmax (τ = 32) over a
+  card-priority table ported from the STS1 agent
+  <em>sts_lightspeed</em>, emptying the hand before ending the turn, for up
+  to 200 plies.</p>
+
+  <h3>Choosing the move</h3>
+  <ol>
+    <li>If the solver proved a child wins, play it.</li>
+    <li>Otherwise take the highest mean value. Among children within 0.02 of
+    the best, the most-visited one wins.</li>
+    <li>Two guards: ending the turn is swapped for an equally good block card
+    when the enemy's announced damage exceeds current block, or for an
+    equally good 0-cost play.</li>
+  </ol>
+
+  <h3>Budgets</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Where</th><th class="num">Simulations</th><th>Threads</th></tr></thead>
+    <tbody>
+      <tr><td>Published simulator win rates</td><td class="num">8,000</td><td>1 per search; parallel across seeds</td></tr>
+      <tr><td>Every promotion gate</td><td class="num">1,000 · 4,000 at bosses</td><td>1 per search; parallel across seeds</td></tr>
+      <tr><td>Spire Mentor advisor in the real game</td><td class="num">8,000</td><td>up to 8, root-parallel</td></tr>
+      <tr><td>Workbench hint in the browser</td><td class="num">2,000</td><td>1, in a Web Worker</td></tr>
+      <tr><td>RL training rollouts</td><td class="num">250 · 1,000 at bosses</td><td>1 per search</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">Root-parallel
+  search gives each thread its own tree with a
+  decorrelated seed and sums the root statistics. Shared-tree parallelism
+  with virtual loss was tried, scaled no better, and broke determinism.</p>
+  <p class="note">How long these take on the benchmark server (not a
+  player's PC): the advisor's 8,000 simulations on an Act-1 boss take 275 ms
+  on one thread and 39.6 ms on eight; the browser hint's 2,000 on an early
+  fight take 39.9 ms as WASM in Chromium and 27.9 ms native. Those were
+  measured with the old, narrower end-of-turn widening; the current one
+  makes the hint's search about 8% slower (native, 2,000 simulations:
+  28.6 ms before, 30.9 ms after), and the advisor's has not been re-timed.
+  More on the
+  <a href="benchmarks.html#search">benchmarks page</a>.</p>
+</section>
+
+<section id="hidden">
+  <h2>Hidden information</h2>
+  <p>The engine knows the true order of the draw pile and the state of every
+  random stream. A search that reads them is clairvoyant: it would know
+  which card comes next and what the enemy will roll. The deployed search
+  instead starts from a <em>belief root</em> built from what the player can
+  see:</p>
+  <figure class="fig">
+    <div class="canvas"><svg viewBox="0 0 760 300" role="img" aria-label="The real draw pile order is hidden from the search: only cards the player knows the position of stay put; the rest become chance nodes"><defs><marker id="ah-bel" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead"/></marker><marker id="aa-bel" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead-acc"/></marker></defs><text x="20" y="52" class="m" text-anchor="start">What the</text><text x="20" y="68" class="tb" text-anchor="start">engine knows</text><text x="20" y="172" class="m" text-anchor="start">Where the</text><text x="20" y="188" class="tb" text-anchor="start">search starts</text><rect x="150" y="18" width="74" height="92" rx="8" class="hot"/><text x="187.0" y="69.0" class="t" text-anchor="middle">Bash</text><rect x="150" y="138" width="74" height="92" rx="8" class="hot"/><text x="187.0" y="189.0" class="t" text-anchor="middle">Bash</text><rect x="234" y="18" width="74" height="92" rx="8" class="box2"/><text x="271.0" y="69.0" class="t" text-anchor="middle">Strike</text><rect x="234" y="138" width="74" height="92" rx="8" class="box"/><text x="271.0" y="189.0" class="m" text-anchor="middle">?</text><rect x="318" y="18" width="74" height="92" rx="8" class="box2"/><text x="355.0" y="69.0" class="t" text-anchor="middle">Defend</text><rect x="318" y="138" width="74" height="92" rx="8" class="box"/><text x="355.0" y="189.0" class="m" text-anchor="middle">?</text><rect x="402" y="18" width="74" height="92" rx="8" class="box2"/><text x="439.0" y="69.0" class="t" text-anchor="middle">Anger</text><rect x="402" y="138" width="74" height="92" rx="8" class="box"/><text x="439.0" y="189.0" class="m" text-anchor="middle">?</text><rect x="486" y="18" width="74" height="92" rx="8" class="box2"/><text x="523.0" y="69.0" class="t" text-anchor="middle">Strike</text><rect x="486" y="138" width="74" height="92" rx="8" class="box"/><text x="523.0" y="189.0" class="m" text-anchor="middle">?</text><rect x="570" y="18" width="74" height="92" rx="8" class="box2"/><text x="607.0" y="69.0" class="t" text-anchor="middle">Defend</text><rect x="570" y="138" width="74" height="92" rx="8" class="box"/><text x="607.0" y="189.0" class="m" text-anchor="middle">?</text><rect x="654" y="18" width="74" height="92" rx="8" class="box2"/><text x="691.0" y="69.0" class="t" text-anchor="middle">Strike</text><rect x="654" y="138" width="74" height="92" rx="8" class="box"/><text x="691.0" y="189.0" class="m" text-anchor="middle">?</text><text x="187.0" y="128" class="s" text-anchor="middle">known</text><text x="187.0" y="248" class="s" text-anchor="middle">pinned on top</text><text x="481.0" y="252" class="m" text-anchor="middle">unknown cards: canonical order; each draw is a chance node</text><path d="M136,20 L136,110" class="line-m" marker-end="url(#ah-bel)"/><text x="130" y="116" class="s" text-anchor="end">draw order</text><text x="742" y="290" class="s" text-anchor="end">Random streams: the true cursors are discarded and reseeded from the search's own seed.</text></svg></div>
+    <figcaption>The search never sees the real draw order. Cards whose position the player knows stay put; the rest are drawn as chance outcomes.</figcaption>
+  </figure>
+
+  <ul class="facts">
+    <li>the unknown part of the draw pile is put into a canonical order, so no
+    real order is committed;</li>
+    <li>each draw from it is decided at draw time, as a chance node;</li>
+    <li>every combat random stream is reseeded from the search's own seed,
+    discarding the true cursors;</li>
+    <li>cards the player knows the position of, such as a card put on top of
+    the pile, stay where they are.</li>
+  </ul>
+  <p>The chosen action is therefore a function of player-observable
+  information only. Enemy intents for the current turn are visible, as they
+  are in the game; later enemy moves are chance nodes.</p>
+  <p>Honesty costs a lot, and the project measured how much. On 2,000 paired
+  Ironclad A0 runs, the PPO champion of the time won <strong>81.25%</strong>
+  with a clairvoyant search and <strong>55.75%</strong> with the honest one,
+  a 25.5-point gap. Honest search became the default on 2026-07-12. Every
+  champion on this site was trained and measured with it, and win rates from
+  before that date are not comparable.</p>
+</section>
+
+<section id="values">
+  <h2>What a fight is worth</h2>
+  <p>The search does not score a fight as a bare win or loss. Values are
+  arranged in bands, so that a certain loss never outranks an uncertain line
+  and a win is still a win however it looks:</p>
+  <figure class="fig">
+    <div class="canvas"><svg viewBox="0 0 760 150" role="img" aria-label="Fight values: losses between −1.45 and −1.05, unfinished positions between −1 and +1, wins between +1.0 and +1.5"><defs><marker id="ah-val" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead"/></marker><marker id="aa-val" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead-acc"/></marker></defs><line x1="60" y1="70" x2="720" y2="70" class="line"/><line x1="60.0" y1="66" x2="60.0" y2="74" class="line"/><text x="60.0" y="92" class="s num" text-anchor="middle">−1.5</text><line x1="170.0" y1="66" x2="170.0" y2="74" class="line"/><text x="170.0" y="92" class="s num" text-anchor="middle">−1.0</text><line x1="280.0" y1="66" x2="280.0" y2="74" class="line"/><text x="280.0" y="92" class="s num" text-anchor="middle">−0.5</text><line x1="390.0" y1="66" x2="390.0" y2="74" class="line"/><text x="390.0" y="92" class="s num" text-anchor="middle">0</text><line x1="500.0" y1="66" x2="500.0" y2="74" class="line"/><text x="500.0" y="92" class="s num" text-anchor="middle">+0.5</text><line x1="610.0" y1="66" x2="610.0" y2="74" class="line"/><text x="610.0" y="92" class="s num" text-anchor="middle">+1.0</text><line x1="720.0" y1="66" x2="720.0" y2="74" class="line"/><text x="720.0" y="92" class="s num" text-anchor="middle">+1.5</text><rect x="71.00000000000001" y="44" width="87.99999999999999" height="20" rx="4" class="mutedfill"/><text x="115.0" y="118" class="tb" text-anchor="middle">lost</text><text x="115.0" y="134" class="s" text-anchor="middle">more damage dealt ranks higher</text><rect x="170.0" y="44" width="440.0" height="20" rx="4" class="faint"/><text x="390.0" y="118" class="tb" text-anchor="middle">search stopped mid-fight</text><text x="390.0" y="134" class="s" text-anchor="middle">tanh(evaluation of 216 features)</text><rect x="610.0" y="44" width="110.0" height="20" rx="4" class="hot"/><text x="665.0" y="118" class="tb" text-anchor="middle">won</text><text x="665.0" y="134" class="s" text-anchor="middle">HP and potions kept</text><text x="60" y="22" class="m" text-anchor="start">Every lost fight scores below every unfinished one; every win above.</text></svg></div>
+    <figcaption>The three value bands do not overlap, so the ordering between them is absolute.</figcaption>
+  </figure>
+
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Outcome</th><th class="num">Value</th><th>Ranked by</th></tr></thead>
+    <tbody>
+      <tr><td>Won the fight</td><td class="num">+1.0 to +1.5</td><td>HP left, potions kept (one potion ≈ 8 HP), a small bonus for finishing early; minus a penalty if a thief escaped with gold or cards</td></tr>
+      <tr><td>Search stopped mid-fight</td><td class="num">−1 to +1</td><td><code>tanh</code> of a linear evaluation over 216 features of the position, fitted to outcomes</td></tr>
+      <tr><td>Lost the fight</td><td class="num">−1.45 to −1.05</td><td>enemy HP removed (60%), own HP kept (25%), turns survived (15%)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>In short, the search maximises the chance of winning the fight first,
+  then the resources carried out of it. Potions are ordinary actions inside
+  the search, priced by the same potion term.</p>
+</section>
+
+<section id="policy">
+  <h2>The run policy</h2>
+  <p>Everything outside combat with two or more options goes to a
+  transformer, one per character. It decides:</p>
+  <ul class="facts">
+    <li>the path on the map;</li>
+    <li>card rewards (including skipping), relic rewards, boss relics and
+    treasure;</li>
+    <li>shop purchases and card removal;</li>
+    <li>rest sites (rest or smith, and which card to upgrade);</li>
+    <li>event options;</li>
+    <li>deck changes the game asks for: remove, upgrade, transform, enchant;</li>
+    <li>which potion to drop when the belt is full.</li>
+  </ul>
+
+  <h3>How it learned</h3>
+  <p>Nobody wrote down which choices are good. The network was trained with
+  reinforcement learning (PPO): it played hundreds of thousands of
+  simulated runs, with the combat search fighting every fight, and after
+  each batch it made the choices that had led to better-than-expected runs
+  a little more likely and the others a little less likely. A second output,
+  the value head, learned alongside it to predict how well a run will go
+  from a given situation; that prediction is what decides whether an
+  outcome counts as better or worse than expected. Each update is kept
+  small, which is the "proximal" in Proximal Policy Optimization. The
+  <a href="training.html#primer">training page</a> walks through this step
+  by step.</p>
+
+  <h3>What it sees</h3>
+  <p>The state is a set of tokens. Each token is the sum of a section
+  embedding, up to twelve categorical embeddings and a projection of
+  continuous features. There is no positional encoding: apart from its
+  section, a token's place in the sequence carries no meaning.</p>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Token</th><th>Carries</th></tr></thead>
+    <tbody>
+      <tr><td>State (one)</td><td>decision type, act boss, HP, gold, act, floor, ascension</td></tr>
+      <tr><td>Deck card (one per card)</td><td>card identity, upgrade, enchantment</td></tr>
+      <tr><td>Relic, potion</td><td>identity</td></tr>
+      <tr><td>Map node</td><td>room type, position relative to the player, reachability, elites ahead (min/max), distance to the next rest site</td></tr>
+      <tr><td>Candidate action (one per option)</td><td>what the option is: a path step with its forward-cone features, a card or relic with its shop price, an event option with its gold, HP, relic, potion and card effects</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Vocabularies cover 580 cards, 297 relics, 63 potions, 69 events, 23
+  enchantments and 12 act bosses.</p>
+
+  <h3>The network</h3>
+  <figure class="fig">
+    <div class="canvas"><svg viewBox="0 0 800 272" role="img" aria-label="The run policy: state, deck, relic, potion, map and option tokens are embedded and passed through a 3-layer transformer; each option token is scored by a shared linear layer, and a pooled value head estimates the return"><defs><marker id="ah-net" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead"/></marker><marker id="aa-net" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead-acc"/></marker></defs><text x="20" y="33" class="tb" text-anchor="start">State</text><rect x="92" y="21" width="12" height="16" rx="3" class="box2"/><text x="114" y="33" class="s" text-anchor="start">decision, act boss, HP, gold, floor, ascension</text><text x="20" y="73" class="tb" text-anchor="start">Deck</text><rect x="92" y="61" width="12" height="16" rx="3" class="box2"/><rect x="108" y="61" width="12" height="16" rx="3" class="box2"/><rect x="124" y="61" width="12" height="16" rx="3" class="box2"/><rect x="140" y="61" width="12" height="16" rx="3" class="box2"/><rect x="156" y="61" width="12" height="16" rx="3" class="box2"/><rect x="172" y="61" width="12" height="16" rx="3" class="box2"/><text x="194" y="73" class="s" text-anchor="start">one token per card</text><text x="20" y="113" class="tb" text-anchor="start">Relics</text><rect x="92" y="101" width="12" height="16" rx="3" class="box2"/><rect x="108" y="101" width="12" height="16" rx="3" class="box2"/><rect x="124" y="101" width="12" height="16" rx="3" class="box2"/><text x="20" y="153" class="tb" text-anchor="start">Potions</text><rect x="92" y="141" width="12" height="16" rx="3" class="box2"/><rect x="108" y="141" width="12" height="16" rx="3" class="box2"/><text x="20" y="193" class="tb" text-anchor="start">Map</text><rect x="92" y="181" width="12" height="16" rx="3" class="box2"/><rect x="108" y="181" width="12" height="16" rx="3" class="box2"/><rect x="124" y="181" width="12" height="16" rx="3" class="box2"/><rect x="140" y="181" width="12" height="16" rx="3" class="box2"/><rect x="156" y="181" width="12" height="16" rx="3" class="box2"/><text x="178" y="193" class="s" text-anchor="start">one per map node</text><text x="20" y="233" class="tb" text-anchor="start">Options</text><rect x="92" y="221" width="12" height="16" rx="3" class="hot"/><rect x="108" y="221" width="12" height="16" rx="3" class="hot"/><rect x="124" y="221" width="12" height="16" rx="3" class="hot"/><text x="146" y="233" class="s" text-anchor="start">one per candidate action</text><path d="M262,130 L318,130" class="line-m" marker-end="url(#ah-net)"/><rect x="322" y="40" width="120" height="180" rx="10" class="box"/><text x="382" y="98" class="h" text-anchor="middle">embed</text><text x="382" y="122" class="s" text-anchor="middle">section</text><text x="382" y="140" class="s" text-anchor="middle">+ 12 categorical</text><text x="382" y="158" class="s" text-anchor="middle">+ 25 continuous</text><path d="M442,130 L478,130" class="line-m" marker-end="url(#ah-net)"/><rect x="482" y="40" width="120" height="164" rx="10" class="box2"/><rect x="490" y="48" width="120" height="164" rx="10" class="box2"/><rect x="498" y="56" width="120" height="164" rx="10" class="box2"/><text x="558" y="112" class="h" text-anchor="middle">transformer</text><text x="558" y="134" class="s" text-anchor="middle">3 layers · 4 heads</text><text x="558" y="150" class="s" text-anchor="middle">d 192 · SwiGLU</text><text x="558" y="166" class="s" text-anchor="middle">no positions</text><path d="M620,90 L652,62" class="line-m" marker-end="url(#ah-net)"/><text x="660" y="30" class="s" text-anchor="start">each option token</text><text x="660" y="44" class="s" text-anchor="start">→ shared linear → logit</text><rect x="660" y="60" width="52.2" height="14" rx="3" class="acc"/><text x="718.2" y="72" class="s num" text-anchor="start">Inflame 0.58</text><rect x="660" y="84" width="27.9" height="14" rx="3" class="mutedfill"/><text x="693.9" y="96" class="s num" text-anchor="start">Pommel Strike 0.31</text><rect x="660" y="108" width="9.9" height="14" rx="3" class="mutedfill"/><text x="675.9" y="120" class="s num" text-anchor="start">Skip 0.11</text><text x="660" y="146" class="s" text-anchor="start">softmax; play takes the top</text><path d="M620,190 L652,212" class="line-m" marker-end="url(#ah-net)"/><text x="660" y="214" class="s" text-anchor="start">mean-pool all tokens</text><text x="660" y="230" class="s" text-anchor="start">→ value V (training</text><text x="660" y="244" class="s" text-anchor="start">return, not a win %)</text><text x="20" y="262" class="m" text-anchor="start">≤ 320 tokens and ≤ 160 options per decision; about 2 million parameters.</text></svg></div>
+    <figcaption>The run policy. The option probabilities shown are illustrative; at play time the top option is taken.</figcaption>
+  </figure>
+  <div class="table-wrap">
+  <table class="kv">
+    <tbody>
+      <tr><td>Architecture</td><td>pre-norm transformer: RMSNorm, multi-head attention, SwiGLU MLP (4× width)</td></tr>
+      <tr><td>Size</td><td>d<sub>model</sub> 192, 3 layers, 4 heads; about 2.05 M parameters</td></tr>
+      <tr><td>Policy head</td><td>one shared linear layer scores each candidate-action token; illegal slots are masked; softmax over the candidates</td></tr>
+      <tr><td>Value head</td><td>mean-pool over all tokens; predicts the training return, not a win probability</td></tr>
+      <tr><td>Fixed shapes</td><td>320 tokens, 160 action slots. Overflow is a hard error, never a silent truncation; each promotion gate checks peak use stays well inside (the Regent gate peaked at 164 tokens and 48 slots)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Scoring candidates with a shared head over their own tokens is what lets
+  one network handle a three-way event, a twelve-item shop and a forty-card
+  removal screen with the same weights.</p>
+
+  <h3>Choosing</h3>
+  <p>At play time the policy is greedy: it takes the highest-probability
+  option. (During training it samples from the probabilities instead, so it
+  keeps trying options it is unsure about.) Options that differ only in their target (remove <em>which</em>
+  card, smith <em>which</em> card) first pool their probability by kind, so a
+  well-liked action is not out-voted because its mass was split across many
+  targets. One rule sits on top: an event choice that would kill the player
+  outright is vetoed.</p>
+</section>
+
+<section id="run">
+  <h2>One run, in order</h2>
+  <ol>
+    <li><strong>Map.</strong> The policy picks the next node.</li>
+    <li><strong>Fight.</strong> Every action with more than one legal option
+    is searched: 1,000 simulations, or 4,000 in a boss room.</li>
+    <li><strong>Rewards, shops, rest sites, events, treasure, deck
+    changes.</strong> One forward pass each.</li>
+    <li>Repeat to the final boss, or until the character dies.</li>
+  </ol>
+  <p>Fallbacks are counted, never silent. If a search returns nothing usable,
+  a fixed heuristic decides and the fallback counter records it; the release
+  smoke test saw 1 such case in 2,527 combat decisions. In training there is
+  no fallback class at all: every decision is the net, an automatic single
+  option, or the combat agent.</p>
+</section>
+
+<section id="screen">
+  <h2>The numbers on screen</h2>
+  <ul class="facts">
+    <li><strong>"est. win" in the mod, and percentages on cards in the
+    workbench,</strong> come from the search: of the simulations that started
+    with this move, the fraction that reached a won fight within the rollout.
+    It is a fight-level number, measured on belief samples, and not
+    calibrated.</li>
+    <li><strong>The mod's evaluation bar</strong> shows the search's mean
+    value for the recommended move.</li>
+    <li><strong>The policy's <code>V</code></strong> is the value head's
+    estimate of the training return. It is shown as a score, never as a
+    percentage, because it is not a win probability.</li>
+  </ul>
+</section>
+
+<section id="serving">
+  <h2>Where it runs</h2>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Host</th><th>Search</th><th>Policy</th></tr></thead>
+    <tbody>
+      <tr><td>Simulator and gates</td><td>native Rust</td><td>ONNX via <em>tract</em>, pure Rust, CPU, batch 1</td></tr>
+      <tr><td>Browser workbench</td><td>the same Rust crate compiled to WebAssembly, in a Web Worker</td><td>the same <em>tract</em> runtime inside the WebAssembly module; the ~8.5 MB model is fetched once and cached for offline use</td></tr>
+      <tr><td>Spire Mentor mod</td><td colspan="2">The mod itself only reads the game and draws the HUD. It starts a separate advisor process that bundles the Rust engine and the champion models, mirrors the live state into the engine and answers over a local socket.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The models are pinned by SHA-256 in
+  <code>sts2-pycli/data/ppo/champions.toml</code>. A missing or mismatched
+  champion is a load error, not a silent swap to something weaker. The Rust
+  encoder matches the Python one exactly, and <em>tract</em> matches PyTorch
+  to within 1e-4.</p>
+</section>
+
+</main>
+</div>
+
+<footer class="foot"><span>spire-mentor · MIT licence</span><span>Not affiliated with Mega Crit</span><a href="https://github.com/tfriedel/spire-mentor">Source on GitHub</a></footer>
+<script src="site.js?v=4"></script>
+</body>
+</html>

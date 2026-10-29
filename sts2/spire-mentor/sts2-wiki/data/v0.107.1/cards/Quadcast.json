@@ -1,0 +1,19 @@
+{
+  "class_name": "Quadcast",
+  "title": "Quadcast",
+  "character": "Defect",
+  "energy_cost": 1,
+  "type": "Skill",
+  "rarity": "Ancient",
+  "target": "Self",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Repeat",
+      "base_value": 4
+    }
+  ],
+  "description": "[gold]Evoke[/gold] your rightmost Orb 4 times.",
+  "upgraded_cost": 0,
+  "notes": "Evokes orbs from the Front position (rightmost). Upgraded from 1 to 0 energy cost."
+}

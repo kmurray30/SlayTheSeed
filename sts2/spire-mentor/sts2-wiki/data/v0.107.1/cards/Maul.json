@@ -1,0 +1,26 @@
+{
+  "class_name": "Maul",
+  "title": "Maul",
+  "character": "Ironclad",
+  "energy_cost": 1,
+  "type": "Attack",
+  "rarity": "Ancient",
+  "target": "Single",
+  "keywords": [],
+  "vars": [
+    {
+      "type": "Damage",
+      "base_value": 5,
+      "upgraded_value": 6
+    },
+    {
+      "type": "Magic",
+      "base_value": 1,
+      "upgraded_value": 2
+    }
+  ],
+  "description": "Deal 5 damage twice.\nIncrease the damage of ALL Maul cards by 1 this combat.",
+  "upgraded_description": "Deal 6 damage twice.\nIncrease the damage of ALL Maul cards by 2 this combat.",
+  "x_cost": false,
+  "notes": "Each time Maul is played, all other Maul cards in the current combat have their damage increased by the Increase amount for the rest of combat. This stacks—playing Maul three times increases all Maul cards' damage by 3 cumulatively."
+}

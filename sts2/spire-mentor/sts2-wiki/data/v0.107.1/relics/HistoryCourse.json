@@ -1,0 +1,8 @@
+{
+  "class_name": "HistoryCourse",
+  "title": "History Course",
+  "rarity": "Event",
+  "description": "At the start of your turn, play a copy of your last played Attack or Skill.",
+  "flavor": "[red]Details for this relic will be revealed in the future...[/red]",
+  "notes": "Triggers at the start of each turn (except turn 1). Searches combat history for the most recent Attack or Skill played by you on your previous turn, excluding duplicate cards. If found, automatically plays a copy of that card."
+}

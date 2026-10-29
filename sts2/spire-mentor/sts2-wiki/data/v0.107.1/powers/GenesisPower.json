@@ -1,0 +1,9 @@
+{
+  "class_name": "GenesisPower",
+  "title": "Genesis",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the start of your turn, gain 1 star.",
+  "smart_description": "At the start of your turn, gain [stars equal to counter value].",
+  "notes": "Counter-type buff that scales with its stack. Each turn grants stars equal to the current counter value via the AfterEnergyReset hook."
+}

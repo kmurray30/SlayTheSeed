@@ -1,0 +1,9 @@
+{
+  "class_name": "SlumberPower",
+  "title": "Slumber",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Awakens upon taking turns or losing HP 3 times.",
+  "smart_description": "Awakens upon taking turns or losing HP [blue]3[/blue] times.",
+  "notes": "Applied to Slumbering Beetle. Decrements when the owner takes unblocked damage or after a turn ends. When counter reaches 0, the beetle wakes up and performs its WakeUpMove."
+}

@@ -1,0 +1,25 @@
+{
+  "class_name": "Parafright",
+  "title": "Parafright",
+  "min_hp": 21,
+  "max_hp": 21,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "SLAM_MOVE",
+      "title": "Slam",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 17,
+          "damage_base": 16,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 16/17 damage"]
+    }
+  ],
+  "move_pattern": "Repeatedly uses Slam",
+  "powers_on_spawn": ["Illusion"],
+  "notes": "Spawns with Illusion power, which provides revival protection. Damage scales at Ascension 9 (Deadly Enemies)."
+}

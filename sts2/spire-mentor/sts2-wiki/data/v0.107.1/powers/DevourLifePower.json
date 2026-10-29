@@ -1,0 +1,9 @@
+{
+  "class_name": "DevourLifePower",
+  "title": "Devour Life",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Whenever you play a [gold]Soul[/gold], [gold]Summon[/gold] [blue]1[/blue].",
+  "smart_description": "Whenever you play a [gold]Soul[/gold], [gold]Summon[/gold] [blue]{Amount}[/blue].",
+  "notes": "This power summons based on the counter value. Each time a Soul card is played while this power is active, the player summons minions equal to the current stack counter."
+}

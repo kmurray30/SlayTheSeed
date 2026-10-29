@@ -1,0 +1,22 @@
+{
+  "class_name": "Sacrifice",
+  "title": "Sacrifice",
+  "character": "Necrobinder",
+  "energy_cost": 1,
+  "type": "Skill",
+  "rarity": "Rare",
+  "target": "Self",
+  "keywords": ["Retain"],
+  "vars": [
+    {
+      "type": "Block",
+      "base_value": 0,
+      "note": "Dynamically calculated as 2× Osty's Max HP if alive"
+    }
+  ],
+  "description": "If [gold]Osty[/gold] is alive, he dies and you gain [gold]Block[/gold] equal to double his Max HP.",
+  "upgraded_cost": 0,
+  "x_cost": false,
+  "referenced_powers": [],
+  "notes": "Retain keyword ensures this card is not discarded after playing. Block gain is conditional on Osty being alive at play time. Calculated as 2× Osty's Max HP."
+}

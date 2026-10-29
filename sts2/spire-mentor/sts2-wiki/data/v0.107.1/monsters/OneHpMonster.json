@@ -1,0 +1,22 @@
+{
+  "class_name": "OneHpMonster",
+  "title": "One HP Monster",
+  "min_hp": 1,
+  "max_hp": 1,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "NOTHING",
+      "title": "Nothing",
+      "intents": [
+        {
+          "type": "hidden"
+        }
+      ],
+      "effects": []
+    }
+  ],
+  "move_pattern": "Cycles: Nothing (infinite loop)",
+  "powers_on_spawn": [],
+  "notes": "Test/debug monster with 1 HP. Performs no actions and is primarily used for testing and debugging purposes. The source code references BIG_DUMMY.name for localization, which suggests shared localization with the BigDummy monster."
+}

@@ -1,0 +1,21 @@
+{
+  "class_name": "SpoilsMap",
+  "title": "Spoils Map",
+  "character": "Quest",
+  "energy_cost": -1,
+  "type": "Quest",
+  "rarity": "Quest",
+  "target": "Self",
+  "keywords": [
+    "Unplayable"
+  ],
+  "vars": [
+    {
+      "type": "Gold",
+      "base_value": 600
+    }
+  ],
+  "description": "Marks a site of +600 extra [gold]Gold[/gold] in the next Act.",
+  "x_cost": false,
+  "notes": "Quest card that marks a treasure location in the map. When the marked treasure is collected, the player gains bonus gold. The quest is automatically removed from the deck after the bonus is claimed."
+}

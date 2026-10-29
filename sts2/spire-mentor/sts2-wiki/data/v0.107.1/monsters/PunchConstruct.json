@@ -1,0 +1,56 @@
+{
+  "class_name": "PunchConstruct",
+  "title": "Punch Construct",
+  "min_hp": 60,
+  "max_hp": 60,
+  "min_hp_base": 55,
+  "max_hp_base": 55,
+  "hp_ascension": 8,
+  "is_companion": false,
+  "moves": [
+    {
+      "id": "READY_MOVE",
+      "title": "READY",
+      "intents": [
+        {
+          "type": "block",
+          "amount": 10
+        }
+      ],
+      "effects": ["Gain 10 Block"]
+    },
+    {
+      "id": "STRONG_PUNCH_MOVE",
+      "title": "Strong Punch",
+      "intents": [
+        {
+          "type": "attack",
+          "damage": 16,
+          "damage_base": 14,
+          "ascension": 9
+        }
+      ],
+      "effects": ["Deal 14/16 damage"]
+    },
+    {
+      "id": "FAST_PUNCH_MOVE",
+      "title": "Fast Punch",
+      "intents": [
+        {
+          "type": "multi_attack",
+          "damage": 6,
+          "damage_base": 5,
+          "hits": 2,
+          "ascension": 9
+        },
+        {
+          "type": "debuff"
+        }
+      ],
+      "effects": ["Deal 5/6 damage", "2 hits", "Apply 1 Frail"]
+    }
+  ],
+  "move_pattern": "Cycles: Ready (Gain 10 Block) → Fast Punch (2 hits of 5/6 damage, apply Frail) → Strong Punch (Deal 14/16 damage) → Ready",
+  "powers_on_spawn": ["Artifact"],
+  "notes": "Punch Construct can optionally start with Fast Punch instead of Ready via the StartsWithFastPunch property. Starting HP can be reduced via StartingHpReduction property (minimum 1 HP)."
+}

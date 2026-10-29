@@ -1,0 +1,3 @@
+---
+notes: "The card rarity exactly matches the potion rarity: Rare or Event potion \u2192 [gold]Rare[/gold] cards, Uncommon \u2192 [gold]Uncommon[/gold], Common or Token \u2192 [gold]Common[/gold].<br><br>The card type (Attack/Skill/Power) is chosen randomly for each potion. [gold]Common[/gold] and [gold]Token[/gold] potions cannot produce [gold]Power[/gold] cards. All 3 offered cards share the same type and rarity, drawn from your character's pool, and are pre-upgraded.<br><br>Up to [gold]3[/gold] options are shown \u2014 one for each of your first 3 potions. You may only pick one; the event ends immediately after your choice.<br><br>Potions cannot be removed or discarded during this event."
+---

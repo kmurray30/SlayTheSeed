@@ -1,0 +1,19 @@
+{
+  "class_name": "Wisp",
+  "title": "Wisp",
+  "character": "Defect",
+  "energy_cost": 0,
+  "type": "Skill",
+  "rarity": "Common",
+  "target": "Self",
+  "keywords": ["Exhaust"],
+  "vars": [
+    {
+      "type": "Energy",
+      "base_value": 1
+    }
+  ],
+  "description": "Gain 1 Energy.",
+  "upgraded_keywords": ["Exhaust", "Retain"],
+  "notes": "Exhaust on play. Upgrade adds Retain, allowing the card to be kept in hand and replayed next turn."
+}

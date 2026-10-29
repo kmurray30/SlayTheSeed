@@ -1,0 +1,9 @@
+{
+  "class_name": "WitheringPresencePower",
+  "title": "Withering Presence",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "Every [blue]6[/blue] cards you play, add a [gold]Wither[/gold] to your [gold]Hand[/gold].",
+  "smart_description": "Every [blue]6[/blue] cards you play, add a [gold]Wither[/gold] to your [gold]Hand[/gold].",
+  "notes": "Tracks a counter starting at 6. Decrements after each card the power owner plays. When the counter reaches 0, adds a Wither card to the owner's hand and resets the counter to 6. For Aeonglass monsters, the added Wither cards are matched to the monster's upgrade count."
+}

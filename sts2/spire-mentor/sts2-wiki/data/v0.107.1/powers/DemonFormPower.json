@@ -1,0 +1,9 @@
+{
+  "class_name": "DemonFormPower",
+  "title": "Demon Form",
+  "power_type": "Buff",
+  "stack_type": "Counter",
+  "description": "At the start of your turn, gain [blue]2[/blue] [gold]Strength[/gold].",
+  "smart_description": "At the start of your turn, gain [blue]{Amount}[/blue] [gold]Strength[/gold].",
+  "notes": "This power uses a Counter stack type. At the start of each turn, the player gains Strength equal to the power's current counter value. Each application of this power increments the counter."
+}
