@@ -14,6 +14,7 @@ Searches through Slay the Spire seeds. For how to run the seed searcher, see the
 | `search_results/` | YAML output from seed searches (gitignored; created at runtime) |
 | `sendToDevs/` | Corrupt prefs and logs preserved for debugging (gitignored; created at runtime) |
 | `spire_src/` | Decompiled Slay the Spire source code (the simulator) |
+| `sts2/` | Slay the Spire 2 seed finder / explorer work, built on Spire Mentor; see [`sts2/README.md`](sts2/README.md) |
 | `src/main/java/seedsearch/` | Seed searcher Java packages |
 | `  └── core/` | Simulation kernel, models, bootstrap; no deps on seed_search or web_app |
 | `  └── seed_search/` | CLI batch search (SeedSearch, SeedRunner, RegressionTest) |
